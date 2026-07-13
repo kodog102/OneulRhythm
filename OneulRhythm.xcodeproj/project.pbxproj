@@ -6,7 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6A1FA59C300516AF00A43855 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 6A1FA59B300516A000A43855 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		6A1FA59B300516A000A43855 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = README.md; sourceTree = "<group>"; };
 		6A8E25C02FD1473F0043111D /* OneulRhythm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneulRhythm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -32,6 +37,7 @@
 		6A8E25B72FD1473F0043111D = {
 			isa = PBXGroup;
 			children = (
+				6A1FA59B300516A000A43855 /* README.md */,
 				6A8E25C22FD1473F0043111D /* OneulRhythm */,
 				6A8E25C12FD1473F0043111D /* Products */,
 			);
@@ -119,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A1FA59C300516AF00A43855 /* README.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
