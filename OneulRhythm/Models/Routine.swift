@@ -5,18 +5,18 @@
 
 import Foundation
 
-enum RoutineCategory {
-    case morning
-    case focus
-    case movement
-    case rest
-    case evening
+enum RoutineCategory: String, Codable, CaseIterable {
+    case morning = "morning"
+    case focus = "focus"
+    case movement = "movement"
+    case rest = "rest"
+    case evening = "evening"
 }
 
-enum RoutineStatus {
-    case upcoming
-    case current
-    case completed
+enum RoutineStatus: String, Codable, CaseIterable {
+    case upcoming = "upcoming"
+    case current = "current"
+    case completed = "completed"
 }
 
 struct Routine: Identifiable {
