@@ -11,6 +11,7 @@ struct TodayView: View {
     @State private var isAddRoutinePresented = false
 
     private let onSaveRoutine: (RoutineCreationInput) throws -> Void
+    private let nowProvider: () -> Date
 
     init(
         repository: RoutineRepository,
@@ -24,6 +25,7 @@ struct TodayView: View {
             )
         )
         self.onSaveRoutine = onSaveRoutine
+        self.nowProvider = nowProvider
     }
 
     var body: some View {
@@ -44,10 +46,13 @@ struct TodayView: View {
             .safeAreaPadding(.top, ORSpacing.screenTop)
             .background(ORColors.background.ignoresSafeArea())
             .navigationDestination(isPresented: $isAddRoutinePresented) {
-                AddRoutineView { input in
-                    try onSaveRoutine(input)
-                    viewModel.loadRoutines()
-                }
+                AddRoutineView(
+                    onSave: { input in
+                        try onSaveRoutine(input)
+                        viewModel.loadRoutines()
+                    },
+                    nowProvider: nowProvider
+                )
             }
         }
         .onAppear(perform: viewModel.loadRoutines)

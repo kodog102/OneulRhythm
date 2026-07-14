@@ -17,8 +17,11 @@ struct AddRoutineView: View {
     @State private var reminderMinutes: Int
     @State private var isSaving = false
     @State private var isShowingSaveError = false
+    @State private var isShowingPastTimeConfirmation = false
 
     private let onSave: (RoutineCreationInput) throws -> Void
+    private let nowProvider: () -> Date
+    private let calendar: Calendar
 
     private let categoryOptions = [
         CategoryOption(title: "아침", category: .morning),
@@ -37,7 +40,9 @@ struct AddRoutineView: View {
         category: RoutineCategory = .morning,
         reminderEnabled: Bool = false,
         reminderMinutes: Int = 10,
-        onSave: @escaping (RoutineCreationInput) throws -> Void = { _ in }
+        onSave: @escaping (RoutineCreationInput) throws -> Void = { _ in },
+        nowProvider: @escaping () -> Date = Date.init,
+        calendar: Calendar = .current
     ) {
         _title = State(initialValue: title)
         _startTime = State(initialValue: startTime)
@@ -47,6 +52,8 @@ struct AddRoutineView: View {
         _reminderEnabled = State(initialValue: reminderEnabled)
         _reminderMinutes = State(initialValue: reminderMinutes)
         self.onSave = onSave
+        self.nowProvider = nowProvider
+        self.calendar = calendar
     }
 
     var body: some View {
@@ -71,6 +78,28 @@ struct AddRoutineView: View {
             Button("확인", role: .cancel) {}
         } message: {
             Text("잠시 후 다시 시도해주세요.")
+        }
+        .confirmationDialog(
+            "선택한 시간이 이미 지났어요",
+            isPresented: $isShowingPastTimeConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("내일로 등록") {
+                saveRoutine(for: .tomorrow)
+            }
+            .accessibilityLabel("내일로 등록")
+            .accessibilityHint("같은 시간으로 내일의 리듬을 만듭니다")
+
+            Button("오늘로 등록") {
+                saveRoutine(for: .today)
+            }
+            .accessibilityLabel("오늘로 등록")
+            .accessibilityHint("오늘 지나간 리듬으로 등록합니다")
+
+            Button("취소", role: .cancel) {}
+                .accessibilityLabel("취소")
+        } message: {
+            Text("오늘의 지나간 리듬으로 등록하거나,\n내일 같은 시간으로 이어갈 수 있어요.")
         }
     }
 
@@ -170,7 +199,7 @@ struct AddRoutineView: View {
     }
 
     private var saveButton: some View {
-        Button(action: saveRoutine) {
+        Button(action: handleSaveTapped) {
             Group {
                 if isSaving {
                     ProgressView()
@@ -258,16 +287,48 @@ struct AddRoutineView: View {
         isTitleEmpty || isSaving
     }
 
-    private func saveRoutine() {
+    private func handleSaveTapped() {
         guard !isSaving else { return }
 
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedTitle.isEmpty else { return }
 
+        if isSelectedStartTimeInPastToday() {
+            isShowingPastTimeConfirmation = true
+            return
+        }
+
+        saveRoutine(for: .today)
+    }
+
+    private func saveRoutine(for dayChoice: PastTimeDayChoice) {
+        guard !isSaving else { return }
+
+        let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedTitle.isEmpty else { return }
+
+        let now = nowProvider()
+        let targetDay: Date
+        switch dayChoice {
+        case .today:
+            targetDay = now
+        case .tomorrow:
+            guard let tomorrow = calendar.date(byAdding: .day, value: 1, to: now) else {
+                isShowingSaveError = true
+                return
+            }
+            targetDay = tomorrow
+        }
+
+        let resolvedStart = date(on: targetDay, copyingTimeFrom: startTime)
+        let resolvedEnd = hasEndTime
+            ? date(on: targetDay, copyingTimeFrom: endTime)
+            : nil
+
         let input = RoutineCreationInput(
             title: trimmedTitle,
-            startTime: startTime,
-            endTime: hasEndTime ? endTime : nil,
+            startTime: resolvedStart,
+            endTime: resolvedEnd,
             category: selectedCategory,
             reminderMinutes: reminderEnabled ? reminderMinutes : nil
         )
@@ -282,6 +343,31 @@ struct AddRoutineView: View {
             isShowingSaveError = true
         }
     }
+
+    private func isSelectedStartTimeInPastToday() -> Bool {
+        let now = nowProvider()
+        let todayStart = date(on: now, copyingTimeFrom: startTime)
+        return todayStart < now
+    }
+
+    private func date(on day: Date, copyingTimeFrom source: Date) -> Date {
+        let timeComponents = calendar.dateComponents(
+            [.hour, .minute, .second],
+            from: source
+        )
+
+        return calendar.date(
+            bySettingHour: timeComponents.hour ?? 0,
+            minute: timeComponents.minute ?? 0,
+            second: timeComponents.second ?? 0,
+            of: day
+        ) ?? source
+    }
+}
+
+private enum PastTimeDayChoice {
+    case today
+    case tomorrow
 }
 
 private struct CategoryOption: Identifiable {
@@ -293,7 +379,9 @@ private struct CategoryOption: Identifiable {
 
 #Preview("빈 양식") {
     NavigationStack {
-        AddRoutineView()
+        AddRoutineView(
+            nowProvider: { MockRoutineData.date(hour: 10, minute: 0) }
+        )
     }
 }
 
@@ -301,10 +389,23 @@ private struct CategoryOption: Identifiable {
     NavigationStack {
         AddRoutineView(
             title: "따뜻한 차 한잔 마시기",
+            startTime: MockRoutineData.date(hour: 7, minute: 30),
             hasEndTime: true,
+            endTime: MockRoutineData.date(hour: 7, minute: 45),
             category: .morning,
             reminderEnabled: true,
-            reminderMinutes: 10
+            reminderMinutes: 10,
+            nowProvider: { MockRoutineData.date(hour: 10, minute: 0) }
+        )
+    }
+}
+
+#Preview("미래 시간") {
+    NavigationStack {
+        AddRoutineView(
+            title: "가벼운 산책",
+            startTime: MockRoutineData.date(hour: 18, minute: 0),
+            nowProvider: { MockRoutineData.date(hour: 10, minute: 0) }
         )
     }
 }
