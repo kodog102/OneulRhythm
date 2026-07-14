@@ -6,6 +6,8 @@
 import SwiftUI
 
 struct AddRoutineView: View {
+    @Environment(\.dismiss) private var dismiss
+
     @State private var title: String
     @State private var startTime: Date
     @State private var hasEndTime: Bool
@@ -13,6 +15,10 @@ struct AddRoutineView: View {
     @State private var selectedCategory: RoutineCategory
     @State private var reminderEnabled: Bool
     @State private var reminderMinutes: Int
+    @State private var isSaving = false
+    @State private var isShowingSaveError = false
+
+    private let onSave: (RoutineCreationInput) throws -> Void
 
     private let categoryOptions = [
         CategoryOption(title: "아침", category: .morning),
@@ -30,7 +36,8 @@ struct AddRoutineView: View {
         endTime: Date = Date().addingTimeInterval(30 * 60),
         category: RoutineCategory = .morning,
         reminderEnabled: Bool = false,
-        reminderMinutes: Int = 10
+        reminderMinutes: Int = 10,
+        onSave: @escaping (RoutineCreationInput) throws -> Void = { _ in }
     ) {
         _title = State(initialValue: title)
         _startTime = State(initialValue: startTime)
@@ -39,6 +46,7 @@ struct AddRoutineView: View {
         _selectedCategory = State(initialValue: category)
         _reminderEnabled = State(initialValue: reminderEnabled)
         _reminderMinutes = State(initialValue: reminderMinutes)
+        self.onSave = onSave
     }
 
     var body: some View {
@@ -59,6 +67,11 @@ struct AddRoutineView: View {
         .navigationBarTitleDisplayMode(.inline)
         .tint(ORColors.primary)
         .environment(\.locale, Locale(identifier: "ko_KR"))
+        .alert("리듬을 저장하지 못했어요", isPresented: $isShowingSaveError) {
+            Button("확인", role: .cancel) {}
+        } message: {
+            Text("잠시 후 다시 시도해주세요.")
+        }
     }
 
     private var titleSection: some View {
@@ -157,22 +170,30 @@ struct AddRoutineView: View {
     }
 
     private var saveButton: some View {
-        Button(action: printRoutine) {
-            Text("리듬 저장하기")
-                .orTypography(.body, weight: .semibold)
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: ORSpacing.primaryButtonHeight)
-                .background(ORColors.primary)
-                .clipShape(
-                    RoundedRectangle(
-                        cornerRadius: ORRadius.button,
-                        style: .continuous
-                    )
+        Button(action: saveRoutine) {
+            Group {
+                if isSaving {
+                    ProgressView()
+                        .tint(.white)
+                        .accessibilityLabel("저장 중")
+                } else {
+                    Text("리듬 저장하기")
+                        .orTypography(.body, weight: .semibold)
+                        .foregroundStyle(.white)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: ORSpacing.primaryButtonHeight)
+            .background(ORColors.primary)
+            .clipShape(
+                RoundedRectangle(
+                    cornerRadius: ORRadius.button,
+                    style: .continuous
                 )
+            )
         }
         .buttonStyle(.plain)
-        .disabled(isTitleEmpty)
+        .disabled(isSaveDisabled)
         .opacity(isTitleEmpty ? 0.45 : 1)
     }
 
@@ -233,16 +254,33 @@ struct AddRoutineView: View {
         title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
-    private func printRoutine() {
-        print(
-            """
-            리듬 이름: \(title.trimmingCharacters(in: .whitespacesAndNewlines))
-            시작 시간: \(startTime.formatted(date: .omitted, time: .shortened))
-            종료 시간: \(hasEndTime ? endTime.formatted(date: .omitted, time: .shortened) : "설정 안 함")
-            카테고리: \(selectedCategory)
-            알림: \(reminderEnabled ? "\(reminderMinutes)분 전" : "설정 안 함")
-            """
+    private var isSaveDisabled: Bool {
+        isTitleEmpty || isSaving
+    }
+
+    private func saveRoutine() {
+        guard !isSaving else { return }
+
+        let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedTitle.isEmpty else { return }
+
+        let input = RoutineCreationInput(
+            title: trimmedTitle,
+            startTime: startTime,
+            endTime: hasEndTime ? endTime : nil,
+            category: selectedCategory,
+            reminderMinutes: reminderEnabled ? reminderMinutes : nil
         )
+
+        isSaving = true
+        defer { isSaving = false }
+
+        do {
+            try onSave(input)
+            dismiss()
+        } catch {
+            isShowingSaveError = true
+        }
     }
 }
 

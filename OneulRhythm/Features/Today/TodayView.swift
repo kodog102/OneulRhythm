@@ -9,12 +9,23 @@ struct TodayView: View {
     @StateObject private var viewModel: TodayViewModel
     @State private var isAddRoutinePresented = false
 
-    init(viewModel: TodayViewModel) {
+    private let onSaveRoutine: (RoutineCreationInput) throws -> Void
+
+    init(
+        viewModel: TodayViewModel,
+        onSaveRoutine: @escaping (RoutineCreationInput) throws -> Void = { _ in }
+    ) {
         _viewModel = StateObject(wrappedValue: viewModel)
+        self.onSaveRoutine = onSaveRoutine
     }
 
-    init() {
-        self.init(viewModel: TodayViewModel())
+    init(
+        onSaveRoutine: @escaping (RoutineCreationInput) throws -> Void = { _ in }
+    ) {
+        self.init(
+            viewModel: TodayViewModel(),
+            onSaveRoutine: onSaveRoutine
+        )
     }
 
     var body: some View {
@@ -48,7 +59,7 @@ struct TodayView: View {
             .safeAreaPadding(.top, ORSpacing.screenTop)
             .background(ORColors.background.ignoresSafeArea())
             .navigationDestination(isPresented: $isAddRoutinePresented) {
-                AddRoutineView()
+                AddRoutineView(onSave: onSaveRoutine)
             }
         }
     }

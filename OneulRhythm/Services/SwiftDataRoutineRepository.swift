@@ -25,6 +25,23 @@ final class SwiftDataRoutineRepository: RoutineRepository {
         return try modelContext.fetch(descriptor)
     }
 
+    func insert(_ input: RoutineCreationInput) throws {
+        let now = Date()
+        let routine = RoutineEntity(
+            id: UUID(),
+            title: input.title,
+            startTime: input.startTime,
+            endTime: input.endTime,
+            category: input.category,
+            status: .upcoming,
+            reminderMinutes: input.reminderMinutes,
+            createdAt: now,
+            updatedAt: now
+        )
+
+        try insert(routine)
+    }
+
     func insert(_ routine: RoutineEntity) throws {
         modelContext.insert(routine)
         try modelContext.save()
