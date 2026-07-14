@@ -49,5 +49,4 @@ extension RoutineEntity {
         date: .omitted,
         time: .shortened
     )
-    .locale(Locale(identifier: "ko_KR"))
 }

@@ -26,15 +26,21 @@ struct OneulRhythmApp: App {
 
     var body: some Scene {
         WindowGroup {
-            TodayView(onSaveRoutine: saveRoutine)
+            TodayView(
+                repository: makeRoutineRepository(),
+                onSaveRoutine: saveRoutine
+            )
         }
         .modelContainer(sharedModelContainer)
     }
 
     private func saveRoutine(_ input: RoutineCreationInput) throws {
-        let repository = SwiftDataRoutineRepository(
+        try makeRoutineRepository().insert(input)
+    }
+
+    private func makeRoutineRepository() -> SwiftDataRoutineRepository {
+        SwiftDataRoutineRepository(
             modelContext: sharedModelContainer.mainContext
         )
-        try repository.insert(input)
     }
 }

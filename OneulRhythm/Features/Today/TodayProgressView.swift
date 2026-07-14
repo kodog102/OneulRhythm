@@ -8,13 +8,7 @@ import SwiftUI
 struct TodayProgressView: View {
     let title: String
     let description: String
-    let completedCount: Int
-    let totalCount: Int
-
-    private var progress: Double {
-        guard totalCount > 0 else { return 0 }
-        return Double(completedCount) / Double(totalCount)
-    }
+    let progress: Double
 
     var body: some View {
         VStack(alignment: .leading, spacing: ORSpacing.md) {
@@ -59,7 +53,7 @@ private struct FlowProgressBar: View {
                         )
                     )
                     .frame(
-                        width: max(geometry.size.width * progress, ORSpacing.progressBarHeight),
+                        width: geometry.size.width * min(max(progress, 0), 1),
                         height: ORSpacing.progressBarHeight
                     )
             }
@@ -72,8 +66,7 @@ private struct FlowProgressBar: View {
     TodayProgressView(
         title: "오늘의 흐름",
         description: "오늘의 흐름이 차분하게 이어지고 있어요",
-        completedCount: 2,
-        totalCount: 5
+        progress: 0.4
     )
     .padding(ORSpacing.screenHorizontal)
     .background(ORColors.background)

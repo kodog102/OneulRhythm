@@ -73,6 +73,8 @@ struct RoutineCardView: View {
                 .clipShape(RoundedRectangle(cornerRadius: ORRadius.button, style: .continuous))
         }
         .buttonStyle(.plain)
+        .disabled(onComplete == nil)
+        .opacity(onComplete == nil ? 0.45 : 1)
     }
 
     private var secondaryButton: some View {
@@ -84,6 +86,8 @@ struct RoutineCardView: View {
                 .padding(.vertical, ORSpacing.xs)
         }
         .buttonStyle(.plain)
+        .disabled(onSnooze == nil)
+        .opacity(onSnooze == nil ? 0.45 : 1)
     }
 }
 
