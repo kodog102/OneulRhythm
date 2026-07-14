@@ -7,6 +7,7 @@ import SwiftUI
 
 struct TodayView: View {
     @StateObject private var viewModel: TodayViewModel
+    @State private var isAddRoutinePresented = false
 
     init(viewModel: TodayViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -17,31 +18,39 @@ struct TodayView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: ORSpacing.sectionGap) {
-                header
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: ORSpacing.sectionGap) {
+                    header
 
-                RoutineCardView(
-                    routine: viewModel.currentRoutine,
-                    onComplete: viewModel.completeCurrentRoutine,
-                    onSnooze: viewModel.snoozeCurrentRoutine
-                )
-                RoutineCardView(routine: viewModel.nextRoutine)
+                    RoutineCardView(
+                        routine: viewModel.currentRoutine,
+                        onComplete: viewModel.completeCurrentRoutine,
+                        onSnooze: viewModel.snoozeCurrentRoutine
+                    )
+                    RoutineCardView(routine: viewModel.nextRoutine)
 
-                TodayProgressView(
-                    title: "오늘의 흐름",
-                    description: "오늘의 흐름이 차분하게 이어지고 있어요",
-                    completedCount: 2,
-                    totalCount: 5
-                )
+                    TodayProgressView(
+                        title: "오늘의 흐름",
+                        description: "오늘의 흐름이 차분하게 이어지고 있어요",
+                        completedCount: 2,
+                        totalCount: 5
+                    )
 
-                AddRoutineCardView(title: "리듬 추가하기")
+                    AddRoutineCardView(
+                        title: "리듬 추가하기",
+                        action: { isAddRoutinePresented = true }
+                    )
+                }
+                .padding(.horizontal, ORSpacing.screenHorizontal)
+                .padding(.bottom, ORSpacing.scrollBottom)
             }
-            .padding(.horizontal, ORSpacing.screenHorizontal)
-            .padding(.bottom, ORSpacing.scrollBottom)
+            .safeAreaPadding(.top, ORSpacing.screenTop)
+            .background(ORColors.background.ignoresSafeArea())
+            .navigationDestination(isPresented: $isAddRoutinePresented) {
+                AddRoutineView()
+            }
         }
-        .safeAreaPadding(.top, ORSpacing.screenTop)
-        .background(ORColors.background.ignoresSafeArea())
     }
 
     private var header: some View {

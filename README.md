@@ -1,10 +1,3 @@
-//
-//  README.md
-//  OneulRhythm
-//
-//  Created by 이유진 on 7/13/26.
-//
-
 🌿 OneulRhythm
 
 오늘을 차분하게 이어가는 루틴 앱

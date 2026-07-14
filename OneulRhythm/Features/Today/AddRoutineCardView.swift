@@ -7,9 +7,10 @@ import SwiftUI
 
 struct AddRoutineCardView: View {
     let title: String
+    let action: () -> Void
 
     var body: some View {
-        Button(action: {}) {
+        Button(action: action) {
             HStack(spacing: ORSpacing.sm) {
                 Image(systemName: "plus")
                     .font(ORTypography.font(for: .body, weight: .medium))
@@ -31,11 +32,13 @@ struct AddRoutineCardView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(title)
+        .accessibilityAddTraits(.isButton)
     }
 }
 
 #Preview {
-    AddRoutineCardView(title: "리듬 추가하기")
+    AddRoutineCardView(title: "리듬 추가하기", action: {})
         .padding(ORSpacing.screenHorizontal)
         .background(ORColors.background)
 }
