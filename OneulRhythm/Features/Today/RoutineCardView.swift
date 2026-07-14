@@ -7,24 +7,61 @@ import SwiftUI
 
 struct RoutineCardView: View {
     let routine: Routine
+    var scheduleRole: RoutineScheduleRole? = nil
+    var showsSectionLabel: Bool = true
     var primaryButtonTitle: String = "완료했어요"
     var secondaryActionTitle: String = "10분 뒤에 하기"
+    var isCompleting: Bool = false
     var onComplete: (() -> Void)?
     var onSnooze: (() -> Void)?
 
-    private var sectionLabel: String {
+    private var resolvedRole: RoutineScheduleRole {
+        if let scheduleRole {
+            return scheduleRole
+        }
+
         switch routine.status {
-        case .current, .completed: "현재 리듬"
-        case .upcoming: "다음 리듬"
+        case .current:
+            return .current
+        case .completed:
+            return .completed
+        case .upcoming:
+            return .next
+        }
+    }
+
+    private var sectionLabel: String {
+        switch resolvedRole {
+        case .current:
+            return "현재 리듬"
+        case .overdue:
+            return "지나간 리듬"
+        case .next:
+            return "다음 리듬"
+        case .completed:
+            return "현재 리듬"
         }
     }
 
     private var showsActions: Bool {
-        routine.status == .current
+        switch resolvedRole {
+        case .current, .overdue:
+            return true
+        case .next, .completed:
+            return false
+        }
+    }
+
+    private var showsSecondaryAction: Bool {
+        resolvedRole == .current
+    }
+
+    private var isPrimaryDisabled: Bool {
+        onComplete == nil || isCompleting
     }
 
     private var showsCompletionMessage: Bool {
-        routine.status == .completed
+        resolvedRole == .completed || routine.isCompleted
     }
 
     private var contentSpacing: CGFloat {
@@ -33,7 +70,9 @@ struct RoutineCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: ORSpacing.md) {
-            ORSectionLabel(text: sectionLabel)
+            if showsSectionLabel {
+                ORSectionLabel(text: sectionLabel)
+            }
 
             VStack(alignment: .leading, spacing: contentSpacing) {
                 Text(routine.title)
@@ -47,7 +86,10 @@ struct RoutineCardView: View {
 
                 if showsActions {
                     primaryButton
-                    secondaryButton
+
+                    if showsSecondaryAction {
+                        secondaryButton
+                    }
                 }
 
                 if showsCompletionMessage {
@@ -59,22 +101,31 @@ struct RoutineCardView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(ORSpacing.cardPadding)
             .orCard()
+            .opacity(resolvedRole == .overdue ? 0.92 : 1)
         }
     }
 
     private var primaryButton: some View {
         Button(action: { onComplete?() }) {
-            Text(primaryButtonTitle)
-                .orTypography(.body, weight: .semibold)
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: ORSpacing.primaryButtonHeight)
-                .background(ORColors.primary)
-                .clipShape(RoundedRectangle(cornerRadius: ORRadius.button, style: .continuous))
+            Group {
+                if isCompleting {
+                    ProgressView()
+                        .tint(.white)
+                        .accessibilityLabel("완료 저장 중")
+                } else {
+                    Text(primaryButtonTitle)
+                        .orTypography(.body, weight: .semibold)
+                        .foregroundStyle(.white)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: ORSpacing.primaryButtonHeight)
+            .background(ORColors.primary)
+            .clipShape(RoundedRectangle(cornerRadius: ORRadius.button, style: .continuous))
         }
         .buttonStyle(.plain)
-        .disabled(onComplete == nil)
-        .opacity(onComplete == nil ? 0.45 : 1)
+        .disabled(isPrimaryDisabled)
+        .opacity(isPrimaryDisabled ? 0.45 : 1)
     }
 
     private var secondaryButton: some View {
@@ -92,20 +143,37 @@ struct RoutineCardView: View {
 }
 
 #Preview("Current Routine") {
-    RoutineCardView(routine: MockRoutineData.currentRoutine)
-        .padding(ORSpacing.screenHorizontal)
-        .background(ORColors.background)
+    RoutineCardView(
+        routine: MockRoutineData.currentRoutine,
+        scheduleRole: .current
+    )
+    .padding(ORSpacing.screenHorizontal)
+    .background(ORColors.background)
+}
+
+#Preview("Overdue Routine") {
+    RoutineCardView(
+        routine: MockRoutineData.currentRoutine.updatingStatus(.upcoming),
+        scheduleRole: .overdue,
+        onComplete: {}
+    )
+    .padding(ORSpacing.screenHorizontal)
+    .background(ORColors.background)
 }
 
 #Preview("Next Routine") {
-    RoutineCardView(routine: MockRoutineData.nextRoutine)
-        .padding(ORSpacing.screenHorizontal)
-        .background(ORColors.background)
+    RoutineCardView(
+        routine: MockRoutineData.nextRoutine,
+        scheduleRole: .next
+    )
+    .padding(ORSpacing.screenHorizontal)
+    .background(ORColors.background)
 }
 
 #Preview("Completed Routine") {
     RoutineCardView(
-        routine: MockRoutineData.currentRoutine.updatingStatus(.completed)
+        routine: MockRoutineData.currentRoutine.updatingStatus(.completed),
+        scheduleRole: .completed
     )
     .padding(ORSpacing.screenHorizontal)
     .background(ORColors.background)

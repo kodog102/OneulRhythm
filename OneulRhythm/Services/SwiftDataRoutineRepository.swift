@@ -47,6 +47,20 @@ final class SwiftDataRoutineRepository: RoutineRepository {
         try modelContext.save()
     }
 
+    func updateStatus(id: UUID, status: RoutineStatus) throws {
+        let descriptor = FetchDescriptor<RoutineEntity>(
+            predicate: #Predicate { $0.id == id }
+        )
+
+        guard let routine = try modelContext.fetch(descriptor).first else {
+            throw RoutineRepositoryError.routineNotFound
+        }
+
+        routine.statusRawValue = status.rawValue
+        routine.updatedAt = Date()
+        try modelContext.save()
+    }
+
     func delete(_ routine: RoutineEntity) throws {
         modelContext.delete(routine)
         try modelContext.save()

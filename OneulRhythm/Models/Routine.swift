@@ -22,16 +22,16 @@ enum RoutineStatus: String, Codable, CaseIterable {
 struct Routine: Identifiable {
     let id: UUID
     let title: String
-    let startTime: String
-    let endTime: String?
+    let startTime: Date
+    let endTime: Date?
     let category: RoutineCategory
     let status: RoutineStatus
 
     init(
         id: UUID = UUID(),
         title: String,
-        startTime: String,
-        endTime: String?,
+        startTime: Date,
+        endTime: Date?,
         category: RoutineCategory,
         status: RoutineStatus
     ) {
@@ -52,10 +52,13 @@ struct Routine: Identifiable {
     }
 
     var formattedTime: String {
-        if let endTime {
-            return "\(startTime) - \(endTime)"
+        let timeText = startTime.formatted(Self.displayTimeFormat)
+
+        guard let endTime else {
+            return timeText
         }
-        return startTime
+
+        return "\(timeText) - \(endTime.formatted(Self.displayTimeFormat))"
     }
 
     func updatingStatus(_ status: RoutineStatus) -> Routine {
@@ -68,4 +71,9 @@ struct Routine: Identifiable {
             status: status
         )
     }
+
+    private static let displayTimeFormat = Date.FormatStyle(
+        date: .omitted,
+        time: .shortened
+    )
 }

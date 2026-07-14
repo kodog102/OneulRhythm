@@ -1,13 +1,9 @@
 # 🌿 OneulRhythm Roadmap
 
 > Living roadmap for the OneulRhythm project.
-
 >
-
 > This document tracks the current development progress, future milestones, and overall project direction.
-
 >
-
 > It should be updated whenever a Sprint is completed.
 
 ---
@@ -15,52 +11,38 @@
 # Project Status
 
 | Item | Status |
-
 |------|--------|
-
 | Version | Prototype |
-
 | Build | ✅ Passing |
-
 | Architecture | ✅ Stable |
-
 | Design System | ✅ Complete |
-
 | Navigation | ✅ Complete |
-
-| SwiftData | 🚧 In Progress |
-
+| SwiftData | ✅ Integrated |
+| Smart Routine Engine | ✅ Complete |
 | Notifications | ⏳ Planned |
-
 | WidgetKit | ⏳ Planned |
-
 | Live Activities | ⏳ Planned |
-
 | Apple Watch | 💡 Future |
-
 | GitHub | ✅ Connected |
-
 | Documentation | ✅ Complete |
 
 ---
 
 # Current Focus
 
-Current Sprint
+### Current Sprint
 
-**Sprint 2 — Persistence**
+**Sprint 3 — Experience**
 
-Current Task
+### Current Task
 
-➡️ Persist routine completion status
+➡️ Improve Today's experience
 
-Next Task
+### Next Tasks
 
-- Automatic Current Routine
-
-- Automatic Next Routine
-
-- Smart Progress Calculation
+- Progress UI refinement
+- Smart routine creation
+- Notification scheduling
 
 ---
 
@@ -73,96 +55,67 @@ Build the project foundation and establish the overall architecture.
 ### Completed
 
 - [x] Xcode Project
-
 - [x] GitHub Repository
-
 - [x] Documentation Structure
-
-- [x] [README.md](http://README.md)
-
-- [x] [DESIGN.md](http://DESIGN.md)
-
-- [x] [ARCHITECTURE.md](http://ARCHITECTURE.md)
-
-- [x] [AGENTS.md](http://AGENTS.md)
-
-- [x] [ROADMAP.md](http://ROADMAP.md)
-
+- [x] README.md
+- [x] DESIGN.md
+- [x] ARCHITECTURE.md
+- [x] AGENTS.md
+- [x] ROADMAP.md
 - [x] Cursor Project Rules
-
 - [x] Design System
-
 - [x] Today Screen
-
 - [x] MVVM Architecture
-
 - [x] Routine Model
-
 - [x] RoutineCardView
-
 - [x] AddRoutineView
-
 - [x] Navigation
 
 ---
 
-# Sprint 2 — Persistence 🚧
+# Sprint 2 — Persistence & Smart Routine Engine ✅
 
 ## Goal
 
-Replace all mock data with SwiftData and establish the persistence layer.
+Replace mock data with SwiftData and introduce the scheduling engine.
 
 ### Completed
 
 - [x] SwiftData Integration
-
 - [x] RoutineEntity
-
 - [x] Domain ↔ Entity Mapping
-
 - [x] Repository Protocol
-
 - [x] SwiftData Repository
-
 - [x] Save Routine
-
 - [x] Load Routine
-
-- [x] Today Screen Refresh
-
+- [x] Today Refresh
 - [x] Remove Runtime Mock Data
-
-### In Progress
-
-- [ ] Persist Completion Status
-
-### Planned
-
-- [ ] Delete Routine
-
-- [ ] Edit Routine
+- [x] Persist Completion Status
+- [x] Smart Routine Engine
+- [x] Current Routine Resolution
+- [x] Overdue Routine Resolution
+- [x] Next Routine Resolution
+- [x] Runtime-derived Current State
+- [x] Today Progress Calculation
 
 ---
 
-# Sprint 3 — Smart Routine Engine
+# Sprint 3 — Experience 🚧
 
 ## Goal
 
-Automatically determine today's routine flow based on time.
+Refine the daily experience and make the app feel calm, natural, and delightful.
 
 ### Planned
 
-- [ ] Automatic Current Routine
-
-- [ ] Automatic Next Routine
-
-- [ ] Smart Progress Calculation
-
-- [ ] Daily Timeline
-
-- [ ] Better Empty State
-
-- [ ] Time-based Routine Status
+- [ ] Today header improvement
+- [ ] Current date presentation
+- [ ] Better progress UI
+- [ ] Progress message refinement
+- [ ] Smart routine creation
+- [ ] Improve empty state
+- [ ] Better routine card polish
+- [ ] Micro animations
 
 ---
 
@@ -170,19 +123,15 @@ Automatically determine today's routine flow based on time.
 
 ## Goal
 
-Help users follow their routines naturally.
+Help users naturally continue today's rhythm.
 
 ### Planned
 
 - [ ] Local Notifications
-
 - [ ] Reminder Settings
-
 - [ ] Notification Permission Flow
-
 - [ ] Snooze
-
-- [ ] Missed Routine Handling
+- [ ] Missed Routine Reminder
 
 ---
 
@@ -190,16 +139,13 @@ Help users follow their routines naturally.
 
 ## Goal
 
-Bring today's routine to the Home Screen.
+Bring today's rhythm to the Home Screen.
 
 ### Planned
 
 - [ ] WidgetKit
-
 - [ ] Home Screen Widget
-
 - [ ] Lock Screen Widget
-
 - [ ] Interactive Widget
 
 ---
@@ -213,11 +159,8 @@ Keep the current routine visible throughout the day.
 ### Planned
 
 - [ ] Live Activity
-
 - [ ] Dynamic Island
-
 - [ ] Lock Screen Activity
-
 - [ ] Activity Updates
 
 ---
@@ -231,17 +174,11 @@ Prepare the application for production.
 ### Planned
 
 - [ ] Accessibility
-
 - [ ] Animation Polish
-
 - [ ] Performance Optimization
-
 - [ ] Error Handling Improvements
-
 - [ ] Localization
-
 - [ ] Unit Tests
-
 - [ ] UI Tests
 
 ---
@@ -255,13 +192,9 @@ Prepare for App Store release.
 ### Planned
 
 - [ ] TestFlight
-
 - [ ] App Store Assets
-
-- [ ] App Privacy
-
+- [ ] Privacy Policy
 - [ ] Release Notes
-
 - [ ] Version 1.0
 
 ---
@@ -270,39 +203,31 @@ Prepare for App Store release.
 
 Future ideas after Version 1.0.
 
-### AI
+## AI
 
 - [ ] AI Routine Recommendation
-
 - [ ] Personalized Daily Suggestions
 
-### Cloud
+## Cloud
 
 - [ ] iCloud Sync
-
 - [ ] Multi-device Sync
 
-### Health
+## Health
 
 - [ ] Apple Health Integration
-
 - [ ] Sleep Analysis
-
 - [ ] Activity Integration
 
-### Apple Ecosystem
+## Apple Ecosystem
 
 - [ ] Apple Watch App
-
 - [ ] Focus Mode Integration
-
 - [ ] Siri Shortcuts
 
 ---
 
 # Development Workflow
-
-Every Sprint follows the same workflow.
 
 ChatGPT (CTO)
 
@@ -353,17 +278,11 @@ Next Sprint
 Every Sprint should:
 
 - Keep the project buildable.
-
 - Keep previews working.
-
 - Keep commits small and focused.
-
 - Preserve MVVM architecture.
-
 - Preserve the Design System.
-
 - Preserve documentation quality.
-
 - Update ROADMAP after each completed Sprint.
 
 One completed Sprint is better than several unfinished features.
@@ -372,5 +291,5 @@ One completed Sprint is better than several unfinished features.
 
 Last Updated
 
-Sprint 2 — Persistence
-
+Sprint 2 Completed
+Sprint 3 Started

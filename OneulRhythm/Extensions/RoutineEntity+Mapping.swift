@@ -17,8 +17,8 @@ extension RoutineEntity {
         return Routine(
             id: id,
             title: title,
-            startTime: startTime.formatted(Self.domainTimeFormat),
-            endTime: endTime?.formatted(Self.domainTimeFormat),
+            startTime: startTime,
+            endTime: endTime,
             category: category,
             status: status
         )
@@ -26,8 +26,6 @@ extension RoutineEntity {
 
     convenience init(
         routine: Routine,
-        startTime: Date,
-        endTime: Date?,
         reminderMinutes: Int? = nil,
         createdAt: Date = Date(),
         updatedAt: Date = Date()
@@ -35,18 +33,13 @@ extension RoutineEntity {
         self.init(
             id: routine.id,
             title: routine.title,
-            startTime: startTime,
-            endTime: endTime,
+            startTime: routine.startTime,
+            endTime: routine.endTime,
             category: routine.category,
-            status: routine.status,
+            status: routine.status == .current ? .upcoming : routine.status,
             reminderMinutes: reminderMinutes,
             createdAt: createdAt,
             updatedAt: updatedAt
         )
     }
-
-    private static let domainTimeFormat = Date.FormatStyle(
-        date: .omitted,
-        time: .shortened
-    )
 }
