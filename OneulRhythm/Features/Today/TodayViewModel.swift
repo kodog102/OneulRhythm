@@ -34,14 +34,43 @@ final class TodayViewModel: ObservableObject {
         self.calendar = calendar
     }
 
+    var formattedTodayDate: String {
+        nowProvider().formatted(Self.todayDateFormat)
+    }
+
     var completedRoutineCount: Int {
         routines.filter(\.isCompleted).count
     }
 
-    var progress: Double {
-        guard !routines.isEmpty else { return 0 }
-        return Double(completedRoutineCount) / Double(routines.count)
+    var totalRoutineCount: Int {
+        routines.count
     }
+
+    var progress: Double {
+        guard totalRoutineCount > 0 else { return 0 }
+        return Double(completedRoutineCount) / Double(totalRoutineCount)
+    }
+
+    var progressMessage: String {
+        guard totalRoutineCount > 0 else {
+            return "오늘의 첫 리듬을 만들어보세요."
+        }
+
+        if completedRoutineCount == 0 {
+            return "첫 리듬부터 천천히 시작해보세요."
+        }
+
+        if completedRoutineCount == totalRoutineCount {
+            return "오늘의 리듬을 모두 이어냈어요."
+        }
+
+        return "오늘의 흐름이 차분하게 이어지고 있어요."
+    }
+
+    private static let todayDateFormat = Date.FormatStyle()
+        .month(.wide)
+        .day()
+        .weekday(.wide)
 
     func loadRoutines() {
         isLoading = true

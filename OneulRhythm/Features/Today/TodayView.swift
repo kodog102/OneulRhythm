@@ -74,10 +74,17 @@ struct TodayView: View {
     }
 
     private var header: some View {
-        Text("오늘 당신의 리듬은\n어떤가요")
-            .orTypography(.largeTitle)
-            .foregroundStyle(ORColors.textPrimary)
-            .padding(.bottom, ORSpacing.xs)
+        VStack(alignment: .leading, spacing: ORSpacing.xs) {
+            Text(viewModel.formattedTodayDate)
+                .orTypography(.caption)
+                .foregroundStyle(ORColors.textSecondary)
+                .accessibilityAddTraits(.isHeader)
+
+            Text("오늘 당신의 리듬은\n어떤가요")
+                .orTypography(.largeTitle)
+                .foregroundStyle(ORColors.textPrimary)
+        }
+        .padding(.bottom, ORSpacing.xs)
     }
 
     @ViewBuilder
@@ -155,7 +162,9 @@ struct TodayView: View {
 
         TodayProgressView(
             title: "오늘의 흐름",
-            description: "오늘의 흐름이 차분하게 이어지고 있어요",
+            completedCount: viewModel.completedRoutineCount,
+            totalCount: viewModel.totalRoutineCount,
+            message: viewModel.progressMessage,
             progress: viewModel.progress
         )
     }
@@ -175,7 +184,14 @@ struct TodayView: View {
     }
 }
 
-#Preview("Current + Overdue + Next") {
+#Preview("Empty Day") {
+    TodayView(
+        repository: PreviewRoutineRepository(),
+        nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
+    )
+}
+
+#Preview("None Completed") {
     TodayView(
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.currentOverdueNextEntities()
@@ -184,21 +200,12 @@ struct TodayView: View {
     )
 }
 
-#Preview("Multiple Overdue") {
+#Preview("Partially Completed") {
     TodayView(
         repository: PreviewRoutineRepository(
-            entities: TodayPreviewData.multipleOverdueEntities()
+            entities: TodayPreviewData.partiallyCompletedEntities()
         ),
-        nowProvider: { TodayPreviewData.nowAfterMorningRoutines }
-    )
-}
-
-#Preview("Overdue Only") {
-    TodayView(
-        repository: PreviewRoutineRepository(
-            entities: TodayPreviewData.overdueOnlyEntities()
-        ),
-        nowProvider: { TodayPreviewData.nowAfterMorningRoutines }
+        nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
 }
 
@@ -211,9 +218,11 @@ struct TodayView: View {
     )
 }
 
-#Preview("Empty") {
+#Preview("Current + Overdue + Next") {
     TodayView(
-        repository: PreviewRoutineRepository(),
+        repository: PreviewRoutineRepository(
+            entities: TodayPreviewData.currentOverdueNextEntities()
+        ),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
 }
@@ -255,10 +264,6 @@ private enum TodayPreviewData {
         MockRoutineData.date(hour: 7, minute: 35)
     }
 
-    static var nowAfterMorningRoutines: Date {
-        MockRoutineData.date(hour: 9, minute: 30)
-    }
-
     @MainActor
     static func currentOverdueNextEntities() -> [RoutineEntity] {
         [
@@ -281,7 +286,7 @@ private enum TodayPreviewData {
     }
 
     @MainActor
-    static func multipleOverdueEntities() -> [RoutineEntity] {
+    static func partiallyCompletedEntities() -> [RoutineEntity] {
         [
             RoutineEntity(
                 routine: Routine(
@@ -289,29 +294,14 @@ private enum TodayPreviewData {
                     startTime: MockRoutineData.date(hour: 6, minute: 30),
                     endTime: MockRoutineData.date(hour: 6, minute: 45),
                     category: .morning,
-                    status: .upcoming
+                    status: .completed
                 )
             ),
             RoutineEntity(
                 routine: MockRoutineData.currentRoutine.updatingStatus(.upcoming)
             ),
             RoutineEntity(
-                routine: Routine(
-                    title: "물 한 잔 마시기",
-                    startTime: MockRoutineData.date(hour: 8, minute: 0),
-                    endTime: MockRoutineData.date(hour: 8, minute: 10),
-                    category: .morning,
-                    status: .upcoming
-                )
-            )
-        ]
-    }
-
-    @MainActor
-    static func overdueOnlyEntities() -> [RoutineEntity] {
-        [
-            RoutineEntity(
-                routine: MockRoutineData.currentRoutine.updatingStatus(.upcoming)
+                routine: MockRoutineData.nextRoutine
             )
         ]
     }
