@@ -35,7 +35,13 @@ final class TodayViewModel: ObservableObject {
     }
 
     var formattedTodayDate: String {
-        nowProvider().formatted(Self.todayDateFormat)
+        var format = Date.FormatStyle()
+            .month(.wide)
+            .day()
+            .weekday(.wide)
+            .locale(Locale(identifier: "ko_KR"))
+        format.calendar = calendar
+        return nowProvider().formatted(format)
     }
 
     var completedRoutineCount: Int {
@@ -66,11 +72,6 @@ final class TodayViewModel: ObservableObject {
 
         return "오늘의 흐름이 차분하게 이어지고 있어요."
     }
-
-    private static let todayDateFormat = Date.FormatStyle()
-        .month(.wide)
-        .day()
-        .weekday(.wide)
 
     func loadRoutines() {
         isLoading = true

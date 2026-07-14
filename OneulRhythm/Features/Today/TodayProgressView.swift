@@ -17,16 +17,19 @@ struct TodayProgressView: View {
     }
 
     private var accessibilitySummary: String {
-        "\(title). \(countText). \(message)"
+        "\(totalCount)개의 리듬 중 \(completedCount)개 완료. \(message)"
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: ORSpacing.md) {
-            VStack(alignment: .leading, spacing: ORSpacing.xs) {
-                Text(title)
-                    .orTypography(.title)
-                    .foregroundStyle(ORColors.textPrimary)
+            Text(title)
+                .orTypography(.title)
+                .foregroundStyle(ORColors.textPrimary)
 
+            FlowProgressBar(progress: progress)
+                .accessibilityHidden(true)
+
+            VStack(alignment: .leading, spacing: ORSpacing.xs) {
                 Text(countText)
                     .orTypography(.caption)
                     .foregroundStyle(ORColors.textSecondary)
@@ -36,15 +39,13 @@ struct TodayProgressView: View {
                     .foregroundStyle(ORColors.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
-
-            FlowProgressBar(progress: progress)
-                .accessibilityHidden(true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(ORSpacing.cardPadding)
         .orCard()
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(accessibilitySummary)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(title)
+        .accessibilityValue(accessibilitySummary)
     }
 }
 
