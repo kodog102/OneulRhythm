@@ -287,6 +287,62 @@ Shared UI behavior.
 
 
 
+# DR-007
+
+
+
+## Live Activity Reflects the Current Rhythm
+
+**Date**
+
+2026-07-15
+
+**Status**
+
+Accepted
+
+### Context
+
+Many productivity apps use Live Activities to push users toward completing more tasks by emphasizing remaining work, completion percentages, or urgency.
+
+OneulRhythm has a different philosophy.
+
+Its purpose is not to pressure users into being more productive, but to help them stay connected with the rhythm of their day.
+
+### Decision
+
+Live Activity focuses on the user's current rhythm.
+
+When the current rhythm is close to finishing, it may gently preview the next rhythm to help users transition naturally.
+
+Live Activity intentionally avoids displaying:
+
+- Completion percentages
+- Remaining task counts
+- Productivity scores
+- Streaks
+- Urgent or warning-style messaging
+
+
+
+### Principles
+
+- Focus on the present.
+- Gently introduce what comes next.
+- Never pressure the user.
+
+
+
+### Consequences
+
+Lock Screen, Dynamic Island, Widget, Apple Watch, and future surfaces should all follow the same philosophy.
+
+The primary purpose of Live Activity is to quietly support the user's daily flow rather than manage or evaluate it.
+
+---
+
+
+
 # Future Decisions
 
 Examples
