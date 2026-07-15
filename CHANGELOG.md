@@ -1,169 +1,124 @@
 # 🌿 CHANGELOG
 
-All notable changes to OneulRhythm will be documented in this file.
+All notable changes to OneulRhythm are documented in this file.
 
-This project follows a Sprint-based development workflow.
-
-The format is inspired by Keep a Changelog while remaining lightweight for iterative MVP development.
+This project follows a milestone-based changelog rather than strict semantic versioning.
 
 ---
 
-# Sprint 1 — Foundation
+# Unreleased
 
-## Added
+## Planned
 
-- Initial SwiftUI project
+### Live Activity
 
-- MVVM architecture
+- Introduce `TodayRhythmSnapshot`
+- Add `LiveActivityCoordinator`
+- Lock Screen UI
+- Dynamic Island UI
+- Interactive completion
+- Shared snapshot architecture
 
-- Design System
+### Notifications
 
-- Routine domain model
-
-- Today screen
-
-- Add Routine screen
-
-- Navigation
-
-- GitHub repository
-
-- Project documentation
-
-    - README
-
-    - DESIGN
-
-    - ARCHITECTURE
-
-    - ROADMAP
-
-    - AGENTS
-
-- Cursor AI workflow
+- Cancel notification on completion
+- Cancel notification on delete
+- Reschedule notification on edit
 
 ---
 
-# Sprint 2 — Persistence & Smart Routine Engine
+# 2026-07-15
 
-## Added
+## Sprint 4 — Notification Foundation
 
-- SwiftData persistence
+### Added
 
-- RoutineEntity
+- Introduced `NotificationScheduling` protocol.
+- Added `NotificationService`.
+- Local notification authorization support.
+- One-shot calendar notification scheduling.
+- Pending notification inspection.
+- Notification cancellation API.
 
-- Repository pattern
 
-- SwiftDataRoutineRepository
 
-- Domain ↔ Entity mapping
+### Added
 
-- Smart Routine Engine
+Reminder permission flow.
 
-- Current routine resolution
+- Permission requested only when Reminder is enabled.
+- No permission request at app launch.
+- Calm Settings guidance after denial.
+- Reminder remains optional.
 
-- Overdue routine resolution
 
-- Next routine resolution
 
-- Today progress calculation
+### Added
 
-- Persisted completion status
+Notification scheduling after routine creation.
 
-## Changed
+Rules:
 
-- Removed runtime mock data
+- Reminder enabled
+- Permission granted
+- Reminder time is still in the future
 
-- Today screen now loads persisted routines
+Routine creation always succeeds even if scheduling fails.
 
----
-
-# Sprint 3 — Experience
-
-## Added
-
-- Korean Today header
-
-- Progress messages
-
-- Progress count
-
-- Improved empty state
-
-- Smart past-time routine creation
-
-- Today / Tomorrow selection dialog
-
-## Changed
-
-- Today experience refined
-
-- Progress card hierarchy improved
-
-- Reminder creation flow feels more natural
-
-## Philosophy
-
-OneulRhythm is a calm daily rhythm companion.
-
-Users are gently guided toward tomorrow instead of being punished for selecting past times.
-
----
-
-# Sprint 4 — Notifications (In Progress)
-
-## Added
-
-- NotificationService foundation
-
-- NotificationScheduling protocol
-
-- Reminder permission flow
-
-## Changed
-
-- Notification permission is requested only when users explicitly enable reminders.
-
-- Notifications remain optional.
-
-## Philosophy
+### Product Decision
 
 Notifications are optional.
 
-The primary experience is the Today screen and Live Activity.
+Live Activity will become the primary experience.
 
-Permission is requested only when users clearly understand why it is needed.
+Notifications exist only to gently invite users into today's rhythm.
 
 ---
 
-# Upcoming
 
-## Sprint 4
 
-- Notification scheduling
+# 2026-07-14
 
-- Cancel on completion
 
-- Snooze
 
-## Sprint 5
+## Sprint 3 — Experience
 
-- Live Activities
 
-- Dynamic Island
 
-- Lock Screen support
+### Added
 
-## Sprint 6
+Today experience improvements.
 
-- WidgetKit
+- Current rhythm
+- Overdue rhythm
+- Next rhythm
+- Progress messaging
+- Empty state
+- Korean date formatting
 
-- Home Screen widgets
 
-## Future
 
-- Apple Watch
+### Added
 
-- iCloud Sync
+Smart past-time routine creation.
 
-- AI Routine Suggestions
+If the selected time has already passed:
+
+- Register for Today
+- or
+- Register for Tomorrow
+
+The user decides.
+
+### Changed
+
+Progress card messaging.
+
+Progress now feels calmer and more supportive.
+
+---
+
+
+
+# 2026
+

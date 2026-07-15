@@ -1,295 +1,362 @@
-# 🌿 OneulRhythm Roadmap
+# 🌿 ROADMAP
 
-> Living roadmap for the OneulRhythm project.
->
-> This document tracks the current development progress, future milestones, and overall project direction.
->
-> It should be updated whenever a Sprint is completed.
+This roadmap tracks the evolution of OneulRhythm from a local MVP into a calm daily rhythm companion.
 
 ---
 
-# Project Status
+# Product Vision
 
-| Item | Status |
-|------|--------|
-| Version | Prototype |
-| Build | ✅ Passing |
-| Architecture | ✅ Stable |
-| Design System | ✅ Complete |
-| Navigation | ✅ Complete |
-| SwiftData | ✅ Integrated |
-| Smart Routine Engine | ✅ Complete |
-| Notifications | ⏳ Planned |
-| WidgetKit | ⏳ Planned |
-| Live Activities | ⏳ Planned |
-| Apple Watch | 💡 Future |
-| GitHub | ✅ Connected |
-| Documentation | ✅ Complete |
+OneulRhythm is not a task manager.
 
----
+It is a calm companion that helps users stay connected with today's rhythm.
 
-# Current Focus
+The long-term vision is:
 
-### Current Sprint
+```text
 
-**Sprint 3 — Experience**
+Today
 
-### Current Task
+↓
 
-➡️ Improve Today's experience
+Live Activity
 
-### Next Tasks
+↓
 
-- Progress UI refinement
-- Smart routine creation
-- Notification scheduling
+Widget
+
+↓
+
+Apple Watch
+
+↓
+
+Ambient Computing
+
+```
+
+The application should require less attention over time, not more.
 
 ---
 
-# Sprint 1 — Foundation ✅
+# Sprint 1 — Foundation
 
-## Goal
+Status
 
-Build the project foundation and establish the overall architecture.
+✅ Complete
 
-### Completed
+## Goals
 
-- [x] Xcode Project
-- [x] GitHub Repository
-- [x] Documentation Structure
-- [x] README.md
-- [x] DESIGN.md
-- [x] ARCHITECTURE.md
-- [x] AGENTS.md
-- [x] ROADMAP.md
-- [x] Cursor Project Rules
-- [x] Design System
-- [x] Today Screen
-- [x] MVVM Architecture
-- [x] Routine Model
-- [x] RoutineCardView
-- [x] AddRoutineView
-- [x] Navigation
+- SwiftUI project
+- MVVM
+- Design System
+- Today screen
+- Add Routine screen
+- Domain models
+- Project documentation
+- GitHub
+- AI workflow
 
 ---
 
-# Sprint 2 — Persistence & Smart Routine Engine ✅
 
-## Goal
 
-Replace mock data with SwiftData and introduce the scheduling engine.
+# Sprint 2 — Persistence & Smart Routine Engine
 
-### Completed
+Status
 
-- [x] SwiftData Integration
-- [x] RoutineEntity
-- [x] Domain ↔ Entity Mapping
-- [x] Repository Protocol
-- [x] SwiftData Repository
-- [x] Save Routine
-- [x] Load Routine
-- [x] Today Refresh
-- [x] Remove Runtime Mock Data
-- [x] Persist Completion Status
-- [x] Smart Routine Engine
-- [x] Current Routine Resolution
-- [x] Overdue Routine Resolution
-- [x] Next Routine Resolution
-- [x] Runtime-derived Current State
-- [x] Today Progress Calculation
+✅ Complete
+
+## Goals
+
+- SwiftData
+- Repository
+- RoutineEntity
+- Smart Schedule Engine
+- Current rhythm
+- Overdue rhythm
+- Next rhythm
+- Completion persistence
+- Progress calculation
 
 ---
 
-# Sprint 3 — Experience 🚧
 
-## Goal
 
-Refine the daily experience and make the app feel calm, natural, and delightful.
+# Sprint 3 — Experience
 
-### Planned
+Status
 
-- [ ] Today header improvement
-- [ ] Current date presentation
-- [ ] Better progress UI
-- [ ] Progress message refinement
-- [ ] Smart routine creation
-- [ ] Improve empty state
-- [ ] Better routine card polish
-- [ ] Micro animations
+✅ Complete
+
+## Goals
+
+- Today experience refinement
+- Korean UX
+- Progress messaging
+- Empty state
+- Smart past-time creation
+- Today / Tomorrow decision flow
 
 ---
+
+
 
 # Sprint 4 — Notifications
 
-## Goal
+Status
 
-Help users naturally continue today's rhythm.
+🚧 In Progress
 
-### Planned
+## Completed
 
-- [ ] Local Notifications
-- [ ] Reminder Settings
-- [ ] Notification Permission Flow
-- [ ] Snooze
-- [ ] Missed Routine Reminder
+- NotificationService
+- Permission Flow
+- Reminder scheduling
 
----
 
-# Sprint 5 — Widgets
 
-## Goal
+## Remaining
 
-Bring today's rhythm to the Home Screen.
-
-### Planned
-
-- [ ] WidgetKit
-- [ ] Home Screen Widget
-- [ ] Lock Screen Widget
-- [ ] Interactive Widget
+- Notification cancellation on completion
+- Notification cancellation on delete
+- Notification rescheduling on edit
 
 ---
 
-# Sprint 6 — Live Activities
 
-## Goal
 
-Keep the current routine visible throughout the day.
+# Sprint 5 — Shared Snapshot & Live Activity
 
-### Planned
+Status
 
-- [ ] Live Activity
-- [ ] Dynamic Island
-- [ ] Lock Screen Activity
-- [ ] Activity Updates
+🟡 Planned
 
----
+## Goals
 
-# Sprint 7 — Polish
+- TodayRhythmSnapshot
+- Shared presentation layer
+- LiveActivityCoordinator
+- Lock Screen UI
+- Dynamic Island compact UI
+- Dynamic Island expanded UI
+- Between Rhythms state
+- Day Complete state
 
-## Goal
 
-Prepare the application for production.
 
-### Planned
+### Philosophy
 
-- [ ] Accessibility
-- [ ] Animation Polish
-- [ ] Performance Optimization
-- [ ] Error Handling Improvements
-- [ ] Localization
-- [ ] Unit Tests
-- [ ] UI Tests
+One Live Activity represents one day.
+
+Not one routine.
 
 ---
 
-# Sprint 8 — Release
 
-## Goal
 
-Prepare for App Store release.
+# Sprint 6 — Interactive Live Activity
 
-### Planned
+Status
 
-- [ ] TestFlight
-- [ ] App Store Assets
-- [ ] Privacy Policy
-- [ ] Release Notes
-- [ ] Version 1.0
+🟡 Planned
 
----
+## Goals
 
-# Long-Term Vision
-
-Future ideas after Version 1.0.
-
-## AI
-
-- [ ] AI Routine Recommendation
-- [ ] Personalized Daily Suggestions
-
-## Cloud
-
-- [ ] iCloud Sync
-- [ ] Multi-device Sync
-
-## Health
-
-- [ ] Apple Health Integration
-- [ ] Sleep Analysis
-- [ ] Activity Integration
-
-## Apple Ecosystem
-
-- [ ] Apple Watch App
-- [ ] Focus Mode Integration
-- [ ] Siri Shortcuts
+- Interactive completion
+- Deep link into current rhythm
+- Live updates
+- Notification cancellation integration
+- Activity lifecycle optimization
 
 ---
 
-# Development Workflow
 
-ChatGPT (CTO)
 
-↓
+# Sprint 7 — Widgets
 
-Sprint Planning
+Status
 
-↓
+🟡 Planned
 
-Implementation Agent (Auto)
+## Goals
 
-↓
-
-Implementation
-
-↓
-
-Build
-
-↓
-
-Preview
-
-↓
-
-Manual QA
-
-↓
-
-Git Commit
-
-↓
-
-Git Push
-
-↓
-
-ChatGPT Review
-
-↓
-
-Next Sprint
+- Home Screen widget
+- Lock Screen widget
+- Shared TodayRhythmSnapshot
+- Timeline optimization
 
 ---
 
-# Development Principles
 
-Every Sprint should:
 
-- Keep the project buildable.
-- Keep previews working.
-- Keep commits small and focused.
-- Preserve MVVM architecture.
-- Preserve the Design System.
-- Preserve documentation quality.
-- Update ROADMAP after each completed Sprint.
+# Sprint 8 — Apple Watch
 
-One completed Sprint is better than several unfinished features.
+Status
+
+🟡 Planned
+
+## Goals
+
+- Watch companion
+- Complications
+- Quick completion
+- Shared snapshot
 
 ---
 
-Last Updated
 
-Sprint 2 Completed
-Sprint 3 Started
+
+# Sprint 9 — Siri & App Intents
+
+Status
+
+🟡 Planned
+
+## Goals
+
+- Complete current rhythm
+- Open today's rhythm
+- Current rhythm shortcut
+- Siri integration
+
+---
+
+
+
+# Sprint 10 — Polish
+
+Status
+
+🟡 Planned
+
+## Goals
+
+- Animation polish
+- Haptics
+- Accessibility
+- VoiceOver
+- Dynamic Type
+- Localization
+- Performance optimization
+
+---
+
+
+
+# Future
+
+
+
+## iCloud Sync
+
+Multiple device synchronization.
+
+---
+
+
+
+## Shared Routines
+
+Family sharing.
+
+---
+
+
+
+## Calendar Integration
+
+Apple Calendar.
+
+Google Calendar.
+
+---
+
+
+
+## HealthKit
+
+Read-only integrations.
+
+---
+
+
+
+## AI Suggestions
+
+Rhythm recommendations.
+
+Routine optimization.
+
+Reflection summaries.
+
+---
+
+
+
+# Product Principles
+
+Every Sprint should improve at least one of:
+
+- Calmness
+- Clarity
+- Rhythm
+- Accessibility
+- Consistency
+
+Never introduce features simply because they are technically possible.
+
+---
+
+
+
+# Current Priority
+
+```text
+
+TodayRhythmSnapshot
+
+        ↓
+
+LiveActivityCoordinator
+
+        ↓
+
+Lock Screen
+
+        ↓
+
+Dynamic Island
+
+        ↓
+
+Interactive Completion
+
+        ↓
+
+Widgets
+
+        ↓
+
+Apple Watch
+
+```
+
+---
+
+
+
+# Success Criteria
+
+OneulRhythm succeeds when users no longer need to repeatedly open the app.
+
+Instead,
+
+they naturally understand today's rhythm from wherever they are.
+
+- Today screen
+- Lock Screen
+- Dynamic Island
+- Widget
+- Apple Watch
+
+The experience should always feel calm, lightweight and quietly supportive.

@@ -1,375 +1,430 @@
-DESIGN.md
+# **🌿 DESIGN**
 
-OneulRhythm Design System
+## **Design Vision**
 
-This document defines the visual language of OneulRhythm.
+OneulRhythm is not a productivity application.
 
-Every screen should follow these principles.
+It is a calm daily rhythm companion.
 
-⸻
+The app should quietly accompany users throughout the day instead of demanding attention.
 
-Design Philosophy
+The experience should always feel warm, spacious and peaceful.
 
-OneulRhythm is not a productivity app.
+---
 
-It is a calm lifestyle companion.
+# **Design Principles**
 
-The interface should help users feel:
+## **Calm over Productivity**
 
-* Relaxed
-* Focused
-* Comfortable
-* Unhurried
+The app should never pressure users.
 
-Every screen should feel clean, warm and breathable.
+Avoid:
 
-⸻
+- urgency
+- anxiety
+- guilt
+- punishment
+- gamification
 
-Keywords
+Prefer:
 
-Warm
+- calm
+- encouragement
+- rhythm
+- gentle guidance
 
-Minimal
+---
 
-Calm
+## **Today is More Important than History**
 
-Premium
+The focus is always:
 
-Spacious
+Current Rhythm.
 
-Human
+History exists for reflection, not judgement.
 
-Natural
+The first screen should answer:
 
-Apple-like
+“What is my rhythm right now?”
 
-⸻
+not
 
-Visual Identity
+“How much did I fail today?”
 
-Inspired by:
+---
 
-* Apple Health
-* Apple Journal
-* Apple Reminders
-* Apple Fitness
+## **Rhythm over Tasks**
 
-Avoid copying these apps directly.
+Users should experience a flow.
 
-Instead, capture their feeling of simplicity and quality.
+Never a checklist.
 
-⸻
+The UI should feel like:
 
-Color Palette
+```text
+Current
 
-Background
+↓
 
-Warm Cream
+Next
 
-Purpose:
+↓
 
-Comfortable reading
+Today
+```
 
-Low eye fatigue
+instead of
+
+```text
+Task
+
+↓
+
+Task
+
+↓
+
+Task
+```
+
+---
+
+# **Notification Philosophy**
+
+Notifications are optional.
+
+Live Activity is primary.
+
+Notifications simply invite users into the current rhythm.
+
+They should never repeatedly interrupt.
+
+Notification lifecycle:
+
+```text
+Reminder
+
+↓
+
+One notification
+
+↓
+
+Live Activity
+```
+
+No reminder spam.
+
+No completion reminders.
+
+No overdue notifications.
+
+---
+
+# **Live Activity Philosophy**
+
+Live Activity represents today.
+
+Not an individual task.
+
+One Live Activity exists for one day.
+
+Its content changes naturally as the day progresses.
+
+Current rhythm
+
+↓
+
+Between rhythms
+
+↓
+
+Current rhythm
+
+↓
+
+Day complete
+
+The Live Activity should feel like a quiet companion.
+
+---
+
+# **Current Rhythm**
+
+Highest priority.
+
+The current rhythm is the heart of the experience.
+
+Always emphasize:
+
+- title
+- remaining time
+- progress
+- completion
+
+Avoid unnecessary controls.
+
+---
+
+# **Overdue Rhythm**
+
+Overdue does not mean failure.
+
+A missed rhythm should remain available.
+
+Never use alarming language.
+
+Avoid:
+
+❌ Missed
+
+❌ Failed
+
+❌ Late
+
+Prefer:
+
+지나간 리듬
+
+오늘 안에 이어갈 수 있어요.
+
+---
+
+# **Between Rhythms**
+
+The application should never feel empty.
+
+When no rhythm is active:
+
+Show a gentle transition.
+
+Example:
+
+```text
+잠시 쉬어가는 시간
+
+다음 리듬
+
+독서
+
+18:00
+```
+
+The user should feel prepared.
+
+Not idle.
+
+---
+
+# **Day Complete**
+
+Completing all rhythms should feel peaceful.
+
+Example:
+
+```text
+오늘의 리듬을
+
+잘 마무리했어요.
+
+내일
+
+다시 만나요 🌿
+```
+
+Never celebrate with excessive animations.
+
+Never score the user.
+
+---
+
+# **Completion UX**
+
+Completion should appear naturally.
+
+Recommended flow:
+
+Before start
+
+↓
+
+No completion button
+
+After active for one minute
+
+↓
+
+완료했어요
+
+After planned end
+
+↓
+
+마무리하셨나요?
+
+Completion remains the same action.
+
+Only the wording changes.
+
+---
+
+# **Progress**
+
+Progress exists to visualize today’s rhythm.
+
+It is not a score.
+
+Do not emphasize percentages.
+
+Instead:
+
+```text
+2 / 5 리듬 완료
+```
+
+is preferred.
+
+---
+
+# **Color Direction**
 
 Primary
 
 Sage Green
 
-Purpose:
+Background
 
-Positive actions
+Warm Cream
 
-Completion
+Surface
 
-Progress
-
-Secondary
-
-Soft Gray
-
-Purpose:
-
-Supporting information
-
-Disabled state
+Soft White
 
 Accent
 
-Warm Yellow (Future)
+Natural Green
 
-Purpose:
+Avoid saturated colors.
 
-Highlights
+Avoid strong reds.
 
-Achievements
+---
 
-Special routines
+# **Typography**
 
-Never use highly saturated colors.
+Large rhythm titles.
 
-⸻
+Readable remaining time.
 
-Cards
+Quiet secondary labels.
 
-Cards are the primary interaction surface.
+Generous spacing.
 
-Rules
+---
 
-Large corner radius
+# **Motion**
 
-Soft shadow
-
-Comfortable padding
-
-Clear hierarchy
-
-Cards should feel like physical paper.
-
-Avoid sharp edges.
-
-⸻
-
-Spacing
-
-Large whitespace is encouraged.
-
-Recommended spacing scale
-
-XS
-
-SM
-
-MD
-
-LG
-
-XL
-
-XXL
-
-Always use ORSpacing.
-
-Never hardcode spacing values.
-
-⸻
-
-Typography
-
-Use:
-
-Rounded System Font
-
-Hierarchy
-
-Large Title
-
-Title
-
-Headline
-
-Body
-
-Caption
-
-Prefer semibold over heavy.
-
-Avoid excessive bold text.
-
-Use generous line spacing.
-
-⸻
-
-Buttons
-
-Primary
-
-Filled Sage Green
-
-White text
-
-Rounded corners
-
-Medium height
-
-Secondary
-
-Text only
-
-Subtle
-
-Never compete visually with the primary action.
-
-⸻
-
-Forms
-
-Keep forms simple.
-
-Prefer cards over grouped table layouts.
-
-Avoid overwhelming users with too many inputs.
-
-Reveal advanced options progressively.
-
-⸻
-
-Lists
-
-Avoid dense table views.
-
-Prefer vertical cards.
-
-Each card should communicate one clear purpose.
-
-⸻
-
-Navigation
-
-Navigation should be shallow.
-
-Avoid deep navigation stacks.
-
-Most important actions should be reachable within two taps.
-
-⸻
-
-Icons
-
-Use SF Symbols.
-
-Avoid decorative icons.
-
-Icons should support understanding.
+Animation should communicate state.
 
 Not decoration.
 
-⸻
+Preferred:
 
-Animations
-
-Animations should feel calm.
-
-Prefer:
-
-Fade
-
-Scale
-
-Slide
+- fade
+- gentle slide
+- smooth progress
 
 Avoid:
 
-Bounce
+- bounce
+- spring explosions
+- confetti
+- shaking
 
-Spring-heavy effects
+---
 
-Fast spinning animations
+# **Cards**
 
-Animation duration
+Cards should feel like paper.
 
-Approximately 0.2–0.35 seconds.
+Rounded.
 
-⸻
+Spacious.
 
-Empty States
+Soft shadows only.
 
-Every empty state should feel encouraging.
+---
 
-Never blame the user.
+# **Voice**
 
-Example
+Always calm.
+
+Always warm.
+
+Never commanding.
+
+Examples:
 
 Good
 
-“오늘의 첫 리듬을 만들어보세요.”
+오늘의 리듬
+
+다음 리듬
+
+잠시 쉬어가는 시간
+
+잘 마무리했어요
 
 Bad
 
-“등록된 데이터가 없습니다.”
+해야 합니다
 
-⸻
+놓쳤습니다
 
-Progress
+실패했습니다
 
-Progress should feel supportive.
+경고
 
-Not competitive.
+---
 
-Avoid percentages whenever possible.
+# **Accessibility**
 
-Prefer messages like:
+Support:
 
-“오늘의 리듬이 차분하게 이어지고 있어요.”
+- Dynamic Type
+- VoiceOver
+- High Contrast
 
-⸻
+Touch targets should always remain comfortable.
 
-Accessibility
+---
 
-Support Dynamic Type.
+# **Design Goal**
 
-Touch targets should be at least 44pt.
+OneulRhythm should feel closer to
 
-Maintain strong text contrast.
+Calendar
 
-Never rely on color alone.
+Weather
 
-⸻
+Apple Fitness
 
-Dark Mode
+than
 
-Dark Mode should feel soft.
+Todo Lists
 
-Avoid pure black.
+Habit Gamification
 
-Prefer warm dark gray backgrounds.
+Task Managers
 
-Reduce shadow intensity.
+---
 
-Maintain the warm atmosphere.
+# **Guiding Question**
 
-⸻
+When making any design decision, always ask:
 
-Future Screens
+Does this help the user stay connected to today’s rhythm?
 
-All future screens should follow this visual language.
+If not,
 
-Examples
-
-Today
-
-Routine Detail
-
-Add Routine
-
-History
-
-Settings
-
-Widgets
-
-Live Activities
-
-Apple Watch
-
-Every screen should feel like it belongs to the same family.
-
-⸻
-
-Design Principle
-
-When choosing between two designs:
-
-Choose the simpler one.
-
-When choosing between two layouts:
-
-Choose the calmer one.
-
-When choosing between two interactions:
-
-Choose the one requiring less cognitive effort.
-
-The user should always feel:
-
-“I know exactly what to do next.”
+it probably does not belong in OneulRhythm.

@@ -1,410 +1,445 @@
-ARCHITECTURE.md
+# **🌿 ARCHITECTURE**
 
-OneulRhythm Architecture Guide
+## **Overview**
 
-This document defines the architectural principles of the OneulRhythm project.
+OneulRhythm follows a layered architecture built around a single source of truth for today’s rhythm.
 
-Every new feature should follow these guidelines.
+Business logic remains independent from SwiftUI.
 
-⸻
+Views never communicate directly with persistence, notifications or ActivityKit.
 
-Philosophy
+The architecture is designed so that Today, Live Activity, WidgetKit and Apple Watch can all share the same domain state.
 
-OneulRhythm is intentionally simple.
+---
 
-We prioritize:
+# **Architecture Layers**
 
-* Readability
-* Maintainability
-* Incremental growth
-* Small reusable components
+```text
+SwiftData
+        │
+        ▼
+SwiftDataRoutineRepository
+        │
+        ▼
+RoutineScheduleEngine
+        │
+        ▼
+TodayRhythmSnapshot
+        │
+        ├──────────────┐
+        ▼              ▼
+TodayView         Live Activity
+        │              │
+        ▼              ▼
+WidgetKit      Apple Watch
+```
 
-Avoid unnecessary abstraction.
+Every presentation layer should consume the same snapshot.
 
-Prefer simple solutions that scale naturally.
+No presentation layer calculates schedule state independently.
 
-⸻
+---
 
-Architecture
+# **Layer Responsibilities**
+
+## **SwiftData**
+
+Responsible for:
+
+- persistence
+- storage
+- entity lifecycle
+
+Never:
+
+- calculate schedule
+- calculate UI state
+- interact with notifications
+
+---
+
+## **Repository**
+
+Responsible for:
+
+- CRUD
+- mapping
+- persistence abstraction
+
+Never:
+
+- scheduling
+- ActivityKit
+- View logic
+
+---
+
+## **RoutineScheduleEngine**
+
+Responsible for deriving today’s schedule.
+
+Produces:
+
+- current rhythm
+- overdue rhythm
+- next rhythm
+- completed rhythm
+- progress
+
+Pure domain logic.
+
+No SwiftUI.
+
+No ActivityKit.
+
+No UserNotifications.
+
+---
+
+## **TodayRhythmSnapshot**
+
+This is the shared presentation model.
+
+Purpose:
+
+Represent today’s rhythm for every surface.
+
+Consumers:
+
+- TodayView
+- Live Activity
+- WidgetKit
+- Apple Watch
+- Siri / App Intents
+
+Typical contents:
+
+- current rhythm
+- overdue rhythm
+- next rhythm
+- progress
+- completion state
+- current phase
+
+Only this layer is shared across UI surfaces.
+
+---
+
+## **ViewModels**
+
+Responsible for:
+
+- user interaction
+- orchestration
+- repository calls
+- schedule refresh
+- snapshot generation
+
+Never:
+
+- persistence implementation
+- ActivityKit implementation
+- notification implementation
+
+---
+
+## **Views**
+
+Responsible only for:
+
+- layout
+- interaction
+- accessibility
+- animation
+
+Views never calculate business rules.
+
+Views never access repositories.
+
+Views never access ActivityKit directly.
+
+---
+
+# **Notification Architecture**
+
+```text
+ViewModel
+        │
+        ▼
+NotificationScheduling
+        │
+        ▼
+NotificationService
+        │
+        ▼
+UNUserNotificationCenter
+```
+
+NotificationService knows:
+
+How to send notifications.
+
+It never decides:
+
+- when to send
+- whether reminders should exist
+- product rules
+
+Those decisions belong to ViewModels.
+
+---
+
+# **Live Activity Architecture**
+
+```text
+ViewModel
+        │
+        ▼
+LiveActivityCoordinator
+        │
+        ▼
+ActivityKit
+```
+
+The coordinator owns:
+
+- start
+- update
+- end
+
+Views never communicate with ActivityKit.
+
+---
+
+# **Live Activity Lifecycle**
+
+```text
+Inactive
+
+↓
+
+Day Session Starts
+
+↓
+
+Upcoming
+
+↓
 
 Current
 
-SwiftUI
+↓
 
-MVVM
+Between Rhythms
 
-ObservableObject
+↓
 
-Future
+Current
 
-SwiftData
+↓
 
-Repository Pattern
+Day Complete
 
-WidgetKit
+↓
 
-Live Activity
+End Activity
+```
 
-Apple Watch
+Only one Live Activity represents one day.
 
-AI Recommendation
+Never create one activity per routine.
 
-⸻
+---
 
-Layer Structure
+# **Product State**
 
+The application recognizes these presentation states:
+
+```text
+Current
+
+Overdue
+
+Next
+
+Between Rhythms
+
+Day Complete
+```
+
+These are presentation concepts.
+
+Persistence stores only necessary business state.
+
+---
+
+# **Completion Flow**
+
+```text
+Current Rhythm
+
+↓
+
+User completes
+
+↓
+
+Repository update
+
+↓
+
+Schedule Engine refresh
+
+↓
+
+Snapshot update
+
+↓
+
+Live Activity update
+
+↓
+
+Today refresh
+```
+
+Notification cancellation happens after completion.
+
+---
+
+# **Notification Flow**
+
+```text
+Reminder Enabled
+
+↓
+
+Permission Granted
+
+↓
+
+Routine Saved
+
+↓
+
+Schedule Notification
+```
+
+If scheduling fails:
+
+Routine creation must still succeed.
+
+Notifications are optional.
+
+---
+
+# **Design Principles**
+
+Always prefer:
+
+Single source of truth.
+
+Pure domain logic.
+
+Dependency injection.
+
+Small services.
+
+Composable ViewModels.
+
+Shared presentation models.
+
+---
+
+# **Future Components**
+
+Planned:
+
+- LiveActivityCoordinator
+- TodayRhythmSnapshot
+- WidgetProvider
+- AppGroupStore
+- AppleWatchSync
+- AppIntentsHandler
+
+All future features should consume today’s snapshot instead of rebuilding schedule logic.
+
+---
+
+# **Dependency Rule**
+
+```text
 Views
-        │
-        ▼
+
+↓
+
 ViewModels
-        │
-        ▼
-Repositories (Future)
-        │
-        ▼
+
+↓
+
+Repositories
+
+↓
+
 SwiftData
+```
 
-Views should never know where data comes from.
+Cross-cutting services:
 
-Changing the storage layer should not require changing the UI.
+```text
+NotificationService
 
-⸻
+LiveActivityCoordinator
+```
 
-Folder Responsibilities
+These are injected where required.
 
-App
+---
 
-Application entry point.
+# **Testing Strategy**
 
-Contains:
+Priority:
 
-* App lifecycle
-* App configuration
+1. 1.
 
-⸻
+RoutineScheduleEngine
 
-DesignSystem
+1. 2.
 
-Reusable visual resources.
+TodayRhythmSnapshot
 
-Contains:
-
-* ORColors
-* ORSpacing
-* ORTypography
-
-Never place business logic here.
-
-⸻
-
-Features
-
-Feature-based organization.
-
-Example
-
-Features
-    Today
-    Routines
-    Onboarding
-
-Each feature owns:
-
-* Views
-* ViewModels
-* Local helper types
-
-⸻
-
-Models
-
-Pure domain models.
-
-Example
-
-Routine
-
-RoutineCategory
-
-RoutineStatus
-
-Models should contain minimal business logic.
-
-No UI code.
-
-⸻
-
-Services
-
-Application services.
-
-Current
-
-MockRoutineData
-
-Future
+1. 3.
 
 NotificationService
 
-RoutineRepository
+1. 4.
 
-WidgetService
+Repository Mapping
 
-HealthKitService
-
-Services should be reusable across features.
-
-⸻
-
-Extensions
-
-Small reusable extensions.
-
-Avoid large utility files.
-
-⸻
-
-MVVM Rules
-
-Views
-
-Responsible for:
-
-* Layout
-* User interaction
-* Binding
-
-Views should never contain business logic.
-
-⸻
+1. 5.
 
 ViewModels
 
-Responsible for:
+Views should require minimal testing.
 
-* Screen state
-* User actions
-* Business rules
-* Formatting for UI when appropriate
+---
 
-ViewModels should never know about SwiftUI layout.
+# **Architecture Goal**
 
-⸻
+Every surface in OneulRhythm should answer the same question:
 
-Models
+“What is today’s current rhythm?”
 
-Represent application data.
+No matter where users look—
 
-Models should be immutable whenever practical.
+Today screen,
 
-Prefer value types.
+Lock Screen,
 
-Example
+Dynamic Island,
 
-routine.updatingStatus(.completed)
+Widget,
 
-instead of mutating internal values.
+or Apple Watch—
 
-⸻
-
-State Management
-
-Current
-
-ObservableObject
-
-@Published
-
-@StateObject
-
-Use:
-
-View
-
-↓
-
-ViewModel
-
-↓
-
-Model
-
-Avoid passing state across unrelated screens.
-
-⸻
-
-Data Flow
-
-Current
-
-MockRoutineData
-        │
-        ▼
-TodayViewModel
-        │
-        ▼
-TodayView
-
-Future
-
-SwiftData
-        │
-        ▼
-RoutineRepository
-        │
-        ▼
-TodayViewModel
-        │
-        ▼
-TodayView
-
-The UI should not notice when Mock data is replaced by SwiftData.
-
-⸻
-
-Reusable Components
-
-Prefer reusable components.
-
-Example
-
-RoutineCardView
-
-instead of:
-
-CurrentRoutineCardView
-
-NextRoutineCardView
-
-if the layout is nearly identical.
-
-⸻
-
-Navigation
-
-Each feature owns its navigation.
-
-Avoid centralizing all navigation.
-
-Keep navigation shallow.
-
-⸻
-
-Dependency Rules
-
-Allowed
-
-View
-
-↓
-
-ViewModel
-
-↓
-
-Repository
-
-↓
-
-SwiftData
-
-Not allowed
-
-View
-
-↓
-
-SwiftData
-
-View
-
-↓
-
-NotificationManager
-
-View
-
-↓
-
-HealthKit
-
-Views should communicate only with ViewModels.
-
-⸻
-
-Async Work
-
-Future async work should use:
-
-Swift Concurrency
-
-async/await
-
-Avoid callback-based APIs when possible.
-
-⸻
-
-Testing Philosophy
-
-Business logic should be testable without SwiftUI.
-
-ViewModels should be easy to instantiate using mock data.
-
-Future repositories should support mock implementations.
-
-⸻
-
-Preview Strategy
-
-Every reusable View should support Preview.
-
-Examples:
-
-* Default
-* Completed
-* Empty
-* Large Dynamic Type
-* Dark Mode
-
-Preview should never depend on production data.
-
-⸻
-
-Performance
-
-Prefer value types.
-
-Avoid unnecessary ObservableObjects.
-
-Avoid deeply nested SwiftUI views.
-
-Extract reusable components early.
-
-⸻
-
-Future Growth
-
-The architecture should support:
-
-* SwiftData
-* Local notifications
-* WidgetKit
-* Live Activities
-* Apple Watch
-* AI-generated routines
-
-without major refactoring.
-
-⸻
-
-Decision Making
-
-When multiple implementations are possible:
-
-1. Choose the simplest solution.
-2. Prefer readability over cleverness.
-3. Optimize only when necessary.
-4. Keep ViewModels lightweight.
-5. Avoid creating abstractions before they are needed.
-
-Architecture should evolve gradually with the project, never ahead of it.
+they should always see the same rhythm derived from the same snapshot.

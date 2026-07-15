@@ -1,356 +1,364 @@
-AGENTS.md
+# 🌿 AGENTS
 
-OneulRhythm AI Development Guide
+This document defines how AI agents collaborate while developing OneulRhythm.
 
-This document defines how AI coding assistants should work on the OneulRhythm project.
+The goal is consistency.
 
-Always follow these rules unless explicitly instructed otherwise.
+Every implementation should preserve the product philosophy, architecture and long-term vision.
 
-⸻
+---
 
-Project Overview
+# Team
 
-OneulRhythm is a calm Korean lifestyle routine app built with SwiftUI.
+The project currently uses three primary AI roles.
 
-The purpose of the app is not productivity.
+## Architect (ChatGPT)
 
-The purpose is helping users continue today’s rhythm in a calm and natural way.
+Responsibilities
 
-Every design and engineering decision should support this philosophy.
+- Product planning
+- UX decisions
+- Architecture
+- Long-term roadmap
+- Technical direction
+- Sprint planning
+- Reviewing major design decisions
 
-⸻
+Architect never edits code directly.
 
-Core Philosophy
+---
 
-Prefer:
+## Implementation Agent
 
-* Calm
-* Warm
-* Minimal
-* Spacious
-* Simple
+Responsibilities
 
-Avoid:
+- Implement approved tasks
+- Preserve architecture
+- Keep changes as small as possible
+- Build after every task
+- Never introduce unrelated refactoring
 
-* Gamification
-* Busy layouts
-* Aggressive colors
-* Complex interactions
-* Productivity dashboard feeling
+Implementation Agent must finish every task with:
 
-This should feel closer to Apple Health or Apple Journal than a task manager.
+- Implementation Summary
+- Build Status
+- Preview Status
+- Architecture Status
+- Risks
+- Technical Debt
+- Manual Verification
+- Next Recommended Step
 
-⸻
+Implementation Agent never commits.
 
-Architecture
+Implementation Agent never pushes.
 
-Current architecture:
+---
 
-SwiftUI
 
-MVVM
 
-ObservableObject
+## QA Agent
 
-Later:
+Responsibilities
 
-SwiftData
+- Review implementation
+- Verify architecture boundaries
+- Detect regressions
+- Review Git diff
+- Review Release readiness
+- Produce manual verification checklist
 
-Repository Pattern
+QA never changes production code.
 
-WidgetKit
+QA never rewrites architecture.
 
-Live Activity
+QA validates.
 
-Apple Watch
+---
 
-Always prepare the code so new features can be added without major refactoring.
 
-⸻
 
-Folder Structure
+# Workflow
 
-App
+Every feature follows the same pipeline.
 
-DesignSystem
+```text
+Planning
 
-Features
+↓
 
-Models
+Architect
 
-Services
+↓
 
-Resources
+Implementation
 
-Extensions
+↓
 
-Do not create unnecessary folders.
+Build
 
-Keep the project structure simple.
+↓
 
-⸻
+QA
 
-SwiftUI Rules
+↓
 
-Prefer small reusable Views.
+Manual Test
 
-Do not create massive Views.
+↓
 
-One View should generally stay below 200 lines.
+Commit
 
-Extract reusable components whenever duplication appears.
+↓
 
-Use:
+Push
+```
 
-RoutineCardView
+No step should be skipped.
 
-instead of multiple similar card implementations.
+---
 
-⸻
 
-State Management
 
-Current
+# Product Philosophy
 
-ObservableObject
+Agents must preserve these principles.
 
-@Published
+## Calm
 
-@StateObject
+Never introduce stressful UX.
 
-Future
+---
 
-SwiftData
 
-Avoid global state.
 
-Avoid singleton managers unless absolutely necessary.
+## Rhythm
 
-⸻
+The application is about today's rhythm.
 
-Design System
+Not productivity.
 
-Always use:
+---
 
-ORColors
 
-ORSpacing
 
-ORTypography
+## Simplicity
 
-Do NOT hardcode:
+Prefer small changes.
 
-colors
+Avoid large rewrites.
 
-spacing
+---
 
-font sizes
 
-corner radius
 
-unless absolutely necessary.
+## Shared Source of Truth
 
-If a new design token is required, add it to the DesignSystem.
+Schedule logic belongs inside:
 
-⸻
+RoutineScheduleEngine
 
-UI Style
+Presentation state belongs inside:
 
-Background
+TodayRhythmSnapshot
 
-Warm cream
+Never duplicate schedule logic.
 
-Primary
+---
 
-Sage green
 
-Cards
 
-Rounded
+# Architecture Rules
 
-Soft shadow
+Views
 
-Large spacing
+- layout only
+- accessibility
+- animation
 
-Typography
+ViewModels
 
-Rounded system font
-
-Minimal
-
-Apple-like
-
-Premium
-
-Never create overly decorative interfaces.
-
-⸻
-
-Components
-
-Prefer composition.
-
-Large Views should be composed from smaller reusable components.
-
-Avoid duplicated UI.
-
-⸻
-
-Models
-
-Models should be immutable whenever possible.
-
-Prefer creating updated copies rather than mutating properties.
-
-Example:
-
-Routine.updatingStatus(…)
-
-instead of mutating internal values.
-
-⸻
-
-View Models
-
-Views should focus on layout.
-
-Business logic belongs inside ViewModels.
-
-Networking and persistence should never exist directly inside Views.
-
-⸻
-
-Data Layer
-
-Current:
-
-MockRoutineData
-
-Future:
-
-SwiftData
+- orchestration
+- interaction
+- state
 
 Repository
 
-Do not tightly couple Views to data sources.
+- persistence only
 
-⸻
+Services
 
-Preview
+- infrastructure
 
-Every reusable View should have Preview support.
+Never mix responsibilities.
 
-Provide multiple previews when meaningful.
+---
 
-Examples:
 
-Current
 
-Completed
+# Live Activity Rules
 
-Dark Mode
+One Live Activity per day.
 
-Large Dynamic Type
+Never one Live Activity per routine.
 
-⸻
+Live Activity represents:
 
-Accessibility
+- Current rhythm
+- Next rhythm
+- Today's flow
 
-Support:
+Notifications remain secondary.
 
-Dynamic Type
+---
 
-VoiceOver friendly labels where appropriate
 
-Reasonable touch targets
 
-Avoid tiny buttons.
+# Notification Rules
 
-⸻
+Notifications are optional.
 
-Performance
+Never:
 
-Avoid unnecessary View updates.
+- repeated reminders
+- completion nagging
+- overdue alerts
 
-Prefer value types.
+One reminder is enough.
 
-Avoid deeply nested View hierarchies.
+Live Activity becomes the ongoing experience.
 
-⸻
+---
 
-Code Style
 
-Readable over clever.
 
-Simple over abstract.
+# UX Rules
 
-Explicit over magic.
+Avoid words like:
 
-Favor maintainability.
+- failed
+- missed
+- warning
+- urgent
 
-⸻
+Prefer:
 
-Naming
+- current rhythm
+- next rhythm
+- today
+- gently
+- continue
 
-Use clear English type names.
+---
 
-Example:
 
-Routine
 
-TodayView
+# Commit Rules
 
-RoutineCardView
+One task
 
-TodayViewModel
+↓
 
-User-facing text should remain Korean.
+One commit
 
-⸻
+Every commit should be reviewable.
 
-Comments
+Avoid mixing unrelated work.
 
-Avoid unnecessary comments.
+---
 
-Write self-explanatory code.
 
-Only comment when business rules are not obvious.
 
-⸻
+# Documentation Rules
 
-Future Features
+Whenever architecture changes:
 
-SwiftData
+Update
 
-Notifications
+- README
+- ARCHITECTURE
+- ROADMAP
 
-Routine Scheduling
+Whenever product philosophy changes:
 
-WidgetKit
+Update
 
-Live Activities
+- DESIGN
+- DECISIONS
 
-Apple Watch
+Whenever a Sprint completes:
 
-Routine Statistics
+Update
 
-AI Recommendations
+- CHANGELOG
 
-Every new feature should integrate naturally into the existing architecture.
+---
 
-⸻
 
-AI Instructions
 
-When modifying the project:
+# QA Rules
 
-* Preserve the existing architecture.
-* Preserve the calm design language.
-* Reuse existing components.
-* Avoid unnecessary abstraction.
-* Avoid premature optimization.
-* Prefer incremental improvements over large rewrites.
+Never claim verification that was not actually performed.
 
-If multiple solutions exist, choose the simplest solution that scales well.
+Always distinguish:
 
-The project should always feel handcrafted rather than generated.
+✅ Verified
+
+⚠️ Not Verified
+
+Manual Simulator verification is required for:
+
+- permissions
+- notifications
+- ActivityKit
+- WidgetKit
+
+---
+
+
+
+# Coding Rules
+
+Prefer
+
+- small functions
+- dependency injection
+- protocol abstraction
+- immutable models
+
+Avoid
+
+- singleton abuse
+- duplicated logic
+- business logic inside Views
+
+---
+
+
+
+# Definition of Done
+
+A task is complete only if:
+
+- Code implemented
+- Build passed
+- Architecture preserved
+- QA reviewed
+- Manual verification completed
+- Documentation updated (if needed)
+
+Only then should the task be committed.
+
+---
+
+
+
+# Guiding Question
+
+Every agent should ask:
+
+> Does this implementation help users stay connected with today's rhythm?
+
+If the answer is no,
+
+the implementation probably does not belong in OneulRhythm.
