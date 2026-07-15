@@ -403,13 +403,56 @@ struct AddRoutineView: View {
         )
 
         isSaving = true
-        defer { isSaving = false }
+
+        Task { @MainActor in
+            defer { isSaving = false }
+
+            do {
+                try onSave(input)
+                await scheduleReminderIfNeeded(
+                    routineID: input.id,
+                    title: input.title,
+                    startTime: input.startTime,
+                    reminderMinutes: input.reminderMinutes
+                )
+                dismiss()
+            } catch {
+                isShowingSaveError = true
+            }
+        }
+    }
+
+    @MainActor
+    private func scheduleReminderIfNeeded(
+        routineID: UUID,
+        title: String,
+        startTime: Date,
+        reminderMinutes: Int?
+    ) async {
+        guard let reminderMinutes else { return }
+
+        let status = await notificationScheduler.authorizationStatus()
+        guard status == .authorized else { return }
+
+        guard let triggerDate = calendar.date(
+            byAdding: .minute,
+            value: -reminderMinutes,
+            to: startTime
+        ) else {
+            return
+        }
+
+        guard triggerDate > nowProvider() else { return }
 
         do {
-            try onSave(input)
-            dismiss()
+            try await notificationScheduler.schedule(
+                identifier: routineID.uuidString,
+                title: "리듬 시작",
+                body: "\"\(title)\" 리듬을 시작할 시간이에요.",
+                at: triggerDate
+            )
         } catch {
-            isShowingSaveError = true
+            // Save already succeeded; notification failure must not block the flow.
         }
     }
 

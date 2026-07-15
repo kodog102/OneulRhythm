@@ -28,7 +28,7 @@ final class SwiftDataRoutineRepository: RoutineRepository {
     func insert(_ input: RoutineCreationInput) throws {
         let now = Date()
         let routine = RoutineEntity(
-            id: UUID(),
+            id: input.id,
             title: input.title,
             startTime: input.startTime,
             endTime: input.endTime,
