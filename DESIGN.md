@@ -1,22 +1,38 @@
-# **🌿 DESIGN**
+# 🌿 DESIGN
 
-## **Design Vision**
+# Design Vision
 
 OneulRhythm is not a productivity application.
 
 It is a calm daily rhythm companion.
 
-The app should quietly accompany users throughout the day instead of demanding attention.
+The app helps users stay connected with the natural rhythm of their day rather than encouraging them to accomplish more.
 
-The experience should always feel warm, spacious and peaceful.
+Every interaction should feel warm, spacious, peaceful, and effortless.
 
 ---
 
-# **Design Principles**
+# Core Philosophy
 
-## **Calm over Productivity**
+OneulRhythm is designed around a simple idea:
 
-The app should never pressure users.
+> Help users stay connected to the rhythm of today.
+
+The application should never pressure, judge, or evaluate the user.
+
+Instead, it quietly accompanies the present moment and gently introduces what comes next.
+
+---
+
+
+
+# Design Principles
+
+
+
+## Calm over Productivity
+
+The app should never create pressure.
 
 Avoid:
 
@@ -35,33 +51,32 @@ Prefer:
 
 ---
 
-## **Today is More Important than History**
 
-The focus is always:
 
-Current Rhythm.
+## Today is More Important than History
 
-History exists for reflection, not judgement.
+The primary question is always:
 
-The first screen should answer:
-
-“What is my rhythm right now?”
+> **What is my rhythm right now?**
 
 not
 
-“How much did I fail today?”
+> **How much did I accomplish today?**
+
+History exists for reflection, never for judgement.
 
 ---
 
-## **Rhythm over Tasks**
 
-Users should experience a flow.
+
+## Rhythm over Tasks
+
+Users should experience a continuous flow.
 
 Never a checklist.
 
-The UI should feel like:
+Preferred flow:
 
-```text
 Current
 
 ↓
@@ -71,37 +86,33 @@ Next
 ↓
 
 Today
-```
 
-instead of
-
-```text
-Task
-
-↓
+Avoid:
 
 Task
 
 ↓
 
 Task
-```
+
+↓
+
+Task
 
 ---
 
-# **Notification Philosophy**
+
+
+# Notification Philosophy
 
 Notifications are optional.
 
-Live Activity is primary.
+Live Activity is the primary experience.
 
 Notifications simply invite users into the current rhythm.
 
-They should never repeatedly interrupt.
+Lifecycle:
 
-Notification lifecycle:
-
-```text
 Reminder
 
 ↓
@@ -111,138 +122,147 @@ One notification
 ↓
 
 Live Activity
-```
-
-No reminder spam.
-
-No completion reminders.
-
-No overdue notifications.
-
----
-
-# **Live Activity Philosophy**
-
-Live Activity represents today.
-
-Not an individual task.
-
-One Live Activity exists for one day.
-
-Its content changes naturally as the day progresses.
-
-Current rhythm
-
-↓
-
-Between rhythms
-
-↓
-
-Current rhythm
-
-↓
-
-Day complete
-
-The Live Activity should feel like a quiet companion.
-
----
-
-# **Current Rhythm**
-
-Highest priority.
-
-The current rhythm is the heart of the experience.
-
-Always emphasize:
-
-- title
-- remaining time
-- progress
-- completion
-
-Avoid unnecessary controls.
-
----
-
-# **Overdue Rhythm**
-
-Overdue does not mean failure.
-
-A missed rhythm should remain available.
-
-Never use alarming language.
 
 Avoid:
 
-❌ Missed
-
-❌ Failed
-
-❌ Late
-
-Prefer:
-
-지나간 리듬
-
-오늘 안에 이어갈 수 있어요.
+- repeated reminders
+- completion notifications
+- overdue notifications
 
 ---
 
-# **Between Rhythms**
 
-The application should never feel empty.
 
-When no rhythm is active:
+# Live Activity Philosophy
 
-Show a gentle transition.
+
+
+## A Quiet Companion
+
+Live Activity is not a dashboard.
+
+It quietly accompanies the user's current rhythm.
+
+Its purpose is to help users naturally notice the present and gently prepare for what comes next.
+
+---
+
+
+
+## Focus on the Present
+
+The current rhythm is always the highest priority.
+
+Always emphasize:
+
+- rhythm title
+- remaining time
+
+Avoid displaying:
+
+- completion percentage
+- remaining task count
+- productivity score
+- streak
+- gamification metrics
+
+---
+
+
+
+## Gentle Transition
+
+When the current rhythm is close to ending (approximately the final five minutes),
+
+Live Activity may quietly preview the next rhythm.
+
+The purpose is not to rush the user.
+
+It simply helps the next rhythm arrive naturally.
+
+---
+
+
+
+## Between Rhythms
+
+When no rhythm is currently active,
+
+Live Activity should not feel empty.
+
+Show only the next rhythm.
 
 Example:
 
-```text
-잠시 쉬어가는 시간
-
+```
 다음 리듬
 
 독서
 
-18:00
+12분 후 시작
 ```
 
-The user should feel prepared.
+Avoid phrases like:
 
-Not idle.
+- 쉬는 시간
+
+because users may simply be between rhythms, not resting.
 
 ---
 
-# **Day Complete**
 
-Completing all rhythms should feel peaceful.
+
+## Overdue Rhythm
+
+Overdue does not mean failure.
+
+A rhythm that has passed remains part of today.
+
+Preferred wording:
+
+- 지나간 리듬
+- 마무리하셨나요?
+
+Avoid:
+
+- Missed
+- Failed
+- Late
+- Warning
+- Urgent
+
+---
+
+
+
+## Day Complete
+
+Completion should feel peaceful.
 
 Example:
 
-```text
+```
 오늘의 리듬을
 
 잘 마무리했어요.
 
-내일
-
-다시 만나요 🌿
+내일 다시 만나요 🌿
 ```
 
-Never celebrate with excessive animations.
+Avoid:
 
-Never score the user.
+- fireworks
+- confetti
+- scores
+- streak celebrations
 
 ---
 
-# **Completion UX**
+
+
+## Completion UX
 
 Completion should appear naturally.
-
-Recommended flow:
 
 Before start
 
@@ -262,47 +282,53 @@ After planned end
 
 마무리하셨나요?
 
-Completion remains the same action.
-
 Only the wording changes.
+
+The action remains identical.
 
 ---
 
-# **Progress**
 
-Progress exists to visualize today’s rhythm.
 
-It is not a score.
+## Progress
 
-Do not emphasize percentages.
+Progress exists only to visualize today's rhythm.
 
-Instead:
+It is not a performance score.
 
-```text
+Preferred:
+
+```
 2 / 5 리듬 완료
 ```
 
-is preferred.
+Avoid emphasizing percentages.
 
 ---
 
-# **Color Direction**
+
+
+# Visual Design
+
+
+
+## Color Direction
 
 Primary
 
-Sage Green
+- Sage Green
 
 Background
 
-Warm Cream
+- Warm Cream
 
 Surface
 
-Soft White
+- Soft White
 
 Accent
 
-Natural Green
+- Natural Green
 
 Avoid saturated colors.
 
@@ -310,21 +336,22 @@ Avoid strong reds.
 
 ---
 
-# **Typography**
 
-Large rhythm titles.
 
-Readable remaining time.
+## Typography
 
-Quiet secondary labels.
-
-Generous spacing.
+- Large rhythm titles
+- Readable remaining time
+- Quiet secondary labels
+- Generous spacing
 
 ---
 
-# **Motion**
 
-Animation should communicate state.
+
+## Motion
+
+Animation communicates state.
 
 Not decoration.
 
@@ -337,25 +364,27 @@ Preferred:
 Avoid:
 
 - bounce
-- spring explosions
+- spring explosion
 - confetti
 - shaking
 
 ---
 
-# **Cards**
+
+
+## Cards
 
 Cards should feel like paper.
 
-Rounded.
-
-Spacious.
-
-Soft shadows only.
+- rounded corners
+- generous spacing
+- soft shadows only
 
 ---
 
-# **Voice**
+
+
+# Voice
 
 Always calm.
 
@@ -363,31 +392,25 @@ Always warm.
 
 Never commanding.
 
-Examples:
+Good:
 
-Good
+- 오늘의 리듬
+- 다음 리듬
+- 지나간 리듬
+- 잘 마무리했어요
 
-오늘의 리듬
+Avoid:
 
-다음 리듬
-
-잠시 쉬어가는 시간
-
-잘 마무리했어요
-
-Bad
-
-해야 합니다
-
-놓쳤습니다
-
-실패했습니다
-
-경고
+- 해야 합니다
+- 놓쳤습니다
+- 실패했습니다
+- 경고
 
 ---
 
-# **Accessibility**
+
+
+# Accessibility
 
 Support:
 
@@ -395,35 +418,36 @@ Support:
 - VoiceOver
 - High Contrast
 
-Touch targets should always remain comfortable.
+Touch targets should remain comfortable.
 
 ---
 
-# **Design Goal**
 
-OneulRhythm should feel closer to
 
-Calendar
+# Design Goal
 
-Weather
+OneulRhythm should feel closer to:
 
-Apple Fitness
+- Calendar
+- Weather
+- Apple Fitness
+- Mindfulness
 
-than
+than:
 
-Todo Lists
-
-Habit Gamification
-
-Task Managers
+- Todo Lists
+- Habit Gamification
+- Task Managers
 
 ---
 
-# **Guiding Question**
 
-When making any design decision, always ask:
 
-Does this help the user stay connected to today’s rhythm?
+# Guiding Question
+
+Whenever making a design decision, ask:
+
+> **Does this help the user stay connected to today's rhythm?**
 
 If not,
 
