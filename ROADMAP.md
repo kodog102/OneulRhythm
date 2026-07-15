@@ -129,18 +129,18 @@ Status
 
 Status
 
-🟡 Planned
+🚧 In Progress
 
 ## Goals
 
-- TodayRhythmSnapshot
-- Shared presentation layer
-- LiveActivityCoordinator
-- Lock Screen UI
-- Dynamic Island compact UI
-- Dynamic Island expanded UI
-- Between Rhythms state
-- Day Complete state
+- [x] TodayRhythmSnapshot
+- [x] TodayViewModel Snapshot Adoption
+- [ ] TodayView Snapshot Consumer
+- [ ] LiveActivityCoordinator
+- [ ] Lock Screen UI
+- [ ] Dynamic Island
+- [ ] Between Rhythms state
+- [ ] Day Complete state
 
 
 
