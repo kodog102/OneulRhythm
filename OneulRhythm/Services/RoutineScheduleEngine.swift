@@ -21,7 +21,7 @@ struct RoutineSchedule {
 
 struct RoutineScheduleEngine {
     /// Temporary active window used when a routine has no end time.
-    static let defaultActiveDuration: TimeInterval = 30 * 60
+    static let defaultActiveDuration: TimeInterval = RoutineTimingPolicy.defaultActiveDuration
 
     func resolve(
         routines: [Routine],
@@ -81,16 +81,11 @@ struct RoutineScheduleEngine {
     }
 
     private func isActive(_ routine: Routine, at now: Date) -> Bool {
-        let endTime = activeEndTime(for: routine)
+        let endTime = RoutineTimingPolicy.activeEndTime(for: routine)
         return routine.startTime <= now && now < endTime
     }
 
     private func hasEnded(_ routine: Routine, at now: Date) -> Bool {
-        now >= activeEndTime(for: routine)
-    }
-
-    private func activeEndTime(for routine: Routine) -> Date {
-        routine.endTime
-            ?? routine.startTime.addingTimeInterval(Self.defaultActiveDuration)
+        now >= RoutineTimingPolicy.activeEndTime(for: routine)
     }
 }
