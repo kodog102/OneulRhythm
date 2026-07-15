@@ -199,9 +199,13 @@ Accepted
 
 Live Activity emphasizes the user's current rhythm.
 
-It may gently preview the next rhythm when the current rhythm is approaching completion.
+It may gently preview the next rhythm only while the current rhythm is naturally approaching completion.
 
-It intentionally avoids displaying:
+Once a rhythm becomes overdue, the experience returns to a single focus.
+
+The next rhythm is intentionally hidden to reduce cognitive load and encourage a calm return to the present.
+
+The Live Activity intentionally avoids displaying:
 
 - completion percentage
 - remaining task count
@@ -215,7 +219,8 @@ It intentionally avoids displaying:
 ### Principles
 
 - Focus on the present.
-- Gently introduce what comes next.
+- Gently introduce what comes next only near natural transitions.
+- When a rhythm becomes overdue, return to a single focus.
 - Never pressure the user.
 
 
@@ -252,7 +257,14 @@ Presentation Policy owns product behavior such as:
 - when a day-complete state should end
 - presentation modes shared across surfaces
 
-Presentation Policy does **not** determine layout, typography, spacing, colors, animations, or component hierarchy.
+Presentation Policy does **not** determine:
+
+- layout
+- typography
+- spacing
+- colors
+- animations
+- component hierarchy
 
 Those remain the responsibility of each individual surface.
 
@@ -287,4 +299,54 @@ The same policy should be reused by:
 
 Keeping presentation behavior in one place prevents product rules from being duplicated across multiple UI implementations.
 
-This ensures every surface behaves consistently while remaining free to present information differently.
+Every surface should behave consistently while remaining free to present information differently.
+
+---
+
+
+
+# DR-009
+
+
+
+## One Primary Focus per Surface
+
+**Status**
+
+Accepted
+
+### Decision
+
+Every OneulRhythm surface presents only one primary focus at a time.
+
+Secondary information may support the current context,
+
+but it must never compete with the primary rhythm.
+
+### Examples
+
+
+| Phase           | Primary Focus    | Secondary                 |
+| --------------- | ---------------- | ------------------------- |
+| Active          | Current rhythm   | None                      |
+| Transition      | Current rhythm   | Quiet next rhythm preview |
+| Between Rhythms | Next rhythm      | None                      |
+| Overdue         | Current rhythm   | None                      |
+| Day Complete    | Completion state | None                      |
+
+
+
+
+### Rationale
+
+Reducing competing information helps users remain connected to today's rhythm.
+
+The user's attention should naturally flow from one rhythm to the next rather than being divided across multiple competing pieces of information.
+
+This principle applies consistently across:
+
+- Lock Screen
+- Dynamic Island
+- Apple Watch
+- Future Widget surfaces
+
