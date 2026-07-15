@@ -1,72 +1,30 @@
-# 🌿 DECISIONS
+# 🌿 Architectural Decisions
 
-This document records important architectural and product decisions made during the development of OneulRhythm.
+This document records product and architecture decisions that guide the long-term evolution of OneulRhythm.
 
-Unlike the roadmap, this document explains **why** a decision was made.
-
-When future discussions arise, always check this file before changing an established direction.
-
----
-
-# Decision Record Format
-
-Every decision should contain:
-
-- Date
-- Status
-- Context
-- Decision
-- Consequences
+These decisions are intentionally stable and should change only when the product philosophy changes.
 
 ---
 
 # DR-001
 
-## One Live Activity Per Day
-
-**Date**
-
-2026-07-15
+## One Live Activity Represents One Day
 
 **Status**
 
 Accepted
 
-### Context
-
-We evaluated two approaches.
-
-Option A
-
-One Live Activity for every routine.
-
-Option B
-
-One Live Activity representing the entire day.
-
 ### Decision
 
-Adopt Option B.
+One Live Activity represents the user's entire day.
 
-One Live Activity represents today's rhythm.
+Individual routines never create their own Live Activities.
 
-The content changes throughout the day as the schedule changes.
+The content of a single Live Activity changes naturally as the user's day progresses.
 
-### Consequences
+### Rationale
 
-Advantages
-
-- Cleaner Dynamic Island
-- Better battery usage
-- Simpler lifecycle
-- Shared snapshot architecture
-- Better Widget reuse
-- Better Apple Watch reuse
-
-Trade-offs
-
-- Requires richer state updates.
-- Requires a coordinator.
+This creates a calm, continuous experience and avoids Lock Screen clutter.
 
 ---
 
@@ -78,43 +36,29 @@ Trade-offs
 
 ## Notifications Are Optional
 
-**Date**
-
-2026-07-15
-
 **Status**
 
 Accepted
 
-### Context
-
-Repeated reminders easily become noise.
-
-The core experience should stay calm.
-
 ### Decision
 
-Notifications are optional.
+Notifications support Live Activity.
 
-If enabled:
+They do not drive the experience.
 
-One reminder is delivered before a rhythm starts.
+A reminder may be sent before a rhythm begins.
 
-After that,
+No additional notifications should be sent for:
 
-Live Activity becomes the primary experience.
+- completion
+- overdue rhythms
+- repeated reminders
 
-### Consequences
 
-No repeated reminders.
 
-No completion reminders.
+### Rationale
 
-No overdue reminders.
-
-Less interruption.
-
-Better long-term usability.
+The Lock Screen should feel peaceful rather than demanding.
 
 ---
 
@@ -126,31 +70,19 @@ Better long-term usability.
 
 ## Overdue Is Derived
 
-**Date**
-
-2026-07-14
-
 **Status**
 
 Accepted
 
-### Context
-
-An overdue rhythm changes naturally with time.
-
-Persisting this state would require unnecessary updates.
-
 ### Decision
 
-Overdue is calculated by `RoutineScheduleEngine`.
+An overdue rhythm is never persisted.
 
-It is never stored.
+Its state is always derived by `RoutineScheduleEngine`.
 
-### Consequences
+### Rationale
 
-Persistence stays simple.
-
-Business logic stays deterministic.
+Overdue is a temporary presentation state rather than stored business data.
 
 ---
 
@@ -160,41 +92,29 @@ Business logic stays deterministic.
 
 
 
-## Progress Represents Today's Flow
-
-**Date**
-
-2026-07-14
+## Progress Represents Today's Rhythm
 
 **Status**
 
 Accepted
 
-### Context
-
-Many productivity apps treat progress as a score.
-
-OneulRhythm should avoid this feeling.
-
 ### Decision
 
-Progress is:
+Progress visualizes today's rhythm.
 
-Completed Today
+It is never treated as a productivity score.
 
-divided by
+Preferred representation:
 
-Scheduled Today
+```
+2 / 5 리듬 완료
+```
 
-It exists only to help users understand today's rhythm.
+Avoid emphasizing percentages or performance.
 
-### Consequences
+### Rationale
 
-No gamification.
-
-No streak mentality.
-
-Progress remains calm.
+The goal is awareness rather than evaluation.
 
 ---
 
@@ -204,38 +124,26 @@ Progress remains calm.
 
 
 
-## Smart Past-Time Creation
-
-**Date**
-
-2026-07-15
+## Past-Time Creation Requires User Choice
 
 **Status**
 
 Accepted
 
-### Context
-
-Users often create routines after the intended time has already passed.
-
-Automatically moving them to tomorrow feels surprising.
-
 ### Decision
 
-Ask the user.
+When a user creates a rhythm whose start time has already passed today,
 
-Options
+the application asks whether it should belong to:
 
-- Register for Today
-- Register for Tomorrow
+- Today
+- Tomorrow
 
+The application never decides automatically.
 
+### Rationale
 
-### Consequences
-
-Users stay in control.
-
-The application remains predictable.
+The user understands today's intent better than the application.
 
 ---
 
@@ -245,43 +153,33 @@ The application remains predictable.
 
 
 
-## TodayRhythmSnapshot Becomes the Shared Presentation Layer
-
-**Date**
-
-2026-07-15
+## TodayRhythmSnapshot Is the Shared Presentation Model
 
 **Status**
 
 Accepted
 
-### Context
-
-Today screen,
-
-Live Activity,
-
-Widget,
-
-Apple Watch,
-
-and Siri all need identical schedule information.
-
-Duplicating logic across these surfaces would increase maintenance cost.
-
 ### Decision
 
-Introduce `TodayRhythmSnapshot`.
+`TodayRhythmSnapshot` is the single presentation model shared across all user-facing surfaces.
 
-Every presentation surface consumes the same snapshot.
+Consumers include:
 
-### Consequences
+- Today View
+- Live Activity
+- Widget
+- Apple Watch
+- App Intents
 
-Single source of truth.
 
-Simpler maintenance.
 
-Shared UI behavior.
+### Rationale
+
+Schedule logic remains inside `RoutineScheduleEngine`.
+
+Presentation logic remains inside `TodayRhythmSnapshot`.
+
+Every surface observes the same interpretation of today's rhythm.
 
 ---
 
@@ -293,35 +191,24 @@ Shared UI behavior.
 
 ## Live Activity Reflects the Current Rhythm
 
-**Date**
-
-2026-07-15
-
 **Status**
 
 Accepted
 
-### Context
-
-Many productivity apps use Live Activities to push users toward completing more tasks by emphasizing remaining work, completion percentages, or urgency.
-
-OneulRhythm has a different philosophy.
-
-Its purpose is not to pressure users into being more productive, but to help them stay connected with the rhythm of their day.
-
 ### Decision
 
-Live Activity focuses on the user's current rhythm.
+Live Activity emphasizes the user's current rhythm.
 
-When the current rhythm is close to finishing, it may gently preview the next rhythm to help users transition naturally.
+It may gently preview the next rhythm when the current rhythm is approaching completion.
 
-Live Activity intentionally avoids displaying:
+It intentionally avoids displaying:
 
-- Completion percentages
-- Remaining task counts
-- Productivity scores
-- Streaks
-- Urgent or warning-style messaging
+- completion percentage
+- remaining task count
+- productivity score
+- streak
+- category
+- urgency
 
 
 
@@ -333,43 +220,71 @@ Live Activity intentionally avoids displaying:
 
 
 
-### Consequences
+### Rationale
 
-Lock Screen, Dynamic Island, Widget, Apple Watch, and future surfaces should all follow the same philosophy.
+Live Activity is not a productivity dashboard.
 
-The primary purpose of Live Activity is to quietly support the user's daily flow rather than manage or evaluate it.
-
----
-
-
-
-# Future Decisions
-
-Examples
-
-- Repeating routines
-- HealthKit strategy
-- iCloud Sync
-- Apple Watch interactions
-- Interactive Live Activity
-- Widget timelines
-- Calendar integration
-- AI recommendations
+It is a quiet companion for today's rhythm.
 
 ---
 
 
 
-# Guiding Principle
+# DR-008
 
-If a future discussion contradicts an accepted decision,
 
-do not immediately change the implementation.
 
-First,
+## Presentation Policy Owns Product Behavior
 
-update this document.
+**Status**
 
-Architecture follows Decisions.
+Accepted
 
-Code follows Architecture.
+### Decision
+
+A shared Presentation Policy determines **what** should be presented across Live Activity surfaces.
+
+Presentation Policy owns product behavior such as:
+
+- when the next rhythm becomes visible
+- when completion becomes available
+- how overdue should be presented
+- when a day-complete state should end
+- presentation modes shared across surfaces
+
+Presentation Policy does **not** determine layout, typography, spacing, colors, animations, or component hierarchy.
+
+Those remain the responsibility of each individual surface.
+
+### Responsibilities
+
+Presentation Policy decides:
+
+- What should be shown
+- When it should be shown
+- Which semantic presentation mode is active
+
+UI decides:
+
+- How it looks
+- How it is animated
+- How it fits each surface
+
+
+
+### Shared Consumers
+
+The same policy should be reused by:
+
+- Lock Screen
+- Dynamic Island
+- Apple Watch
+- Future Widget surfaces
+
+
+
+### Rationale
+
+Keeping presentation behavior in one place prevents product rules from being duplicated across multiple UI implementations.
+
+This ensures every surface behaves consistently while remaining free to present information differently.
