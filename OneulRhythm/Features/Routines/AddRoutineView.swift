@@ -4,9 +4,11 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct AddRoutineView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
 
     @State private var title: String
     @State private var startTime: Date
@@ -18,8 +20,11 @@ struct AddRoutineView: View {
     @State private var isSaving = false
     @State private var isShowingSaveError = false
     @State private var isShowingPastTimeConfirmation = false
+    @State private var isShowingNotificationSettingsPrompt = false
+    @State private var isResolvingReminderPermission = false
 
     private let onSave: (RoutineCreationInput) throws -> Void
+    private let notificationScheduler: NotificationScheduling
     private let nowProvider: () -> Date
     private let calendar: Calendar
 
@@ -41,6 +46,7 @@ struct AddRoutineView: View {
         reminderEnabled: Bool = false,
         reminderMinutes: Int = 10,
         onSave: @escaping (RoutineCreationInput) throws -> Void = { _ in },
+        notificationScheduler: NotificationScheduling = NotificationService(),
         nowProvider: @escaping () -> Date = Date.init,
         calendar: Calendar = .current
     ) {
@@ -52,6 +58,7 @@ struct AddRoutineView: View {
         _reminderEnabled = State(initialValue: reminderEnabled)
         _reminderMinutes = State(initialValue: reminderMinutes)
         self.onSave = onSave
+        self.notificationScheduler = notificationScheduler
         self.nowProvider = nowProvider
         self.calendar = calendar
     }
@@ -79,6 +86,24 @@ struct AddRoutineView: View {
         } message: {
             Text("잠시 후 다시 시도해주세요.")
         }
+        .alert(
+            "알림이 비활성화되어 있어요.",
+            isPresented: $isShowingNotificationSettingsPrompt
+        ) {
+            Button("설정으로 이동") {
+                reminderEnabled = false
+                openNotificationSettings()
+            }
+            .accessibilityLabel("설정으로 이동")
+            .accessibilityHint("앱 알림 설정 화면을 엽니다")
+
+            Button("취소", role: .cancel) {
+                reminderEnabled = false
+            }
+            .accessibilityLabel("취소")
+        } message: {
+            Text("리마인더를 사용하려면\n설정에서 알림을 허용해주세요.")
+        }
         .confirmationDialog(
             "선택한 시간이 이미 지났어요",
             isPresented: $isShowingPastTimeConfirmation,
@@ -100,6 +125,12 @@ struct AddRoutineView: View {
                 .accessibilityLabel("취소")
         } message: {
             Text("오늘의 지나간 리듬으로 등록하거나,\n내일 같은 시간으로 이어갈 수 있어요.")
+        }
+        .onChange(of: reminderEnabled) { _, isEnabled in
+            guard isEnabled else { return }
+            Task {
+                await resolveReminderPermission()
+            }
         }
     }
 
@@ -170,6 +201,9 @@ struct AddRoutineView: View {
                     .orTypography(.body)
                     .foregroundStyle(ORColors.textPrimary)
                     .tint(ORColors.primary)
+                    .disabled(isResolvingReminderPermission)
+                    .accessibilityLabel("시작 전에 알려주기")
+                    .accessibilityHint("리마인더는 선택 사항이며, 알림 권한이 필요할 수 있어요")
 
                 if reminderEnabled {
                     Divider()
@@ -299,6 +333,41 @@ struct AddRoutineView: View {
         }
 
         saveRoutine(for: .today)
+    }
+
+    @MainActor
+    private func resolveReminderPermission() async {
+        guard reminderEnabled else { return }
+        guard !isResolvingReminderPermission else { return }
+
+        isResolvingReminderPermission = true
+        defer { isResolvingReminderPermission = false }
+
+        let status = await notificationScheduler.authorizationStatus()
+
+        switch status {
+        case .authorized:
+            break
+        case .notDetermined:
+            do {
+                let granted = try await notificationScheduler.requestAuthorization()
+                if !granted {
+                    reminderEnabled = false
+                }
+            } catch {
+                reminderEnabled = false
+            }
+        case .denied:
+            isShowingNotificationSettingsPrompt = true
+        }
+    }
+
+    private func openNotificationSettings() {
+        guard let url = URL(string: UIApplication.openNotificationSettingsURLString) else {
+            return
+        }
+
+        openURL(url)
     }
 
     private func saveRoutine(for dayChoice: PastTimeDayChoice) {

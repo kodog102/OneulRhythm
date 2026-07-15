@@ -13,7 +13,14 @@ struct PendingNotificationRequest: Equatable {
     let triggerDate: Date?
 }
 
+enum NotificationAuthorizationStatus: Equatable {
+    case notDetermined
+    case denied
+    case authorized
+}
+
 protocol NotificationScheduling {
+    func authorizationStatus() async -> NotificationAuthorizationStatus
     func requestAuthorization() async throws -> Bool
     func schedule(
         identifier: String,
@@ -36,6 +43,21 @@ final class NotificationService: NotificationScheduling {
     ) {
         self.center = center
         self.calendar = calendar
+    }
+
+    func authorizationStatus() async -> NotificationAuthorizationStatus {
+        let settings = await center.notificationSettings()
+
+        switch settings.authorizationStatus {
+        case .notDetermined:
+            return .notDetermined
+        case .denied:
+            return .denied
+        case .authorized, .provisional, .ephemeral:
+            return .authorized
+        @unknown default:
+            return .denied
+        }
     }
 
     func requestAuthorization() async throws -> Bool {
