@@ -8,10 +8,7 @@ import Foundation
 
 @MainActor
 final class TodayViewModel: ObservableObject {
-    @Published private(set) var routines: [Routine] = []
-    @Published private(set) var currentRoutine: Routine?
-    @Published private(set) var overdueRoutines: [Routine] = []
-    @Published private(set) var nextRoutine: Routine?
+    @Published private(set) var snapshot: TodayRhythmSnapshot
     @Published private(set) var isLoading = false
     @Published private(set) var completingRoutineID: UUID?
     @Published private(set) var loadErrorMessage: String?
@@ -32,6 +29,47 @@ final class TodayViewModel: ObservableObject {
         self.scheduleEngine = scheduleEngine
         self.nowProvider = nowProvider
         self.calendar = calendar
+        self.snapshot = TodayRhythmSnapshot(
+            schedule: RoutineSchedule(
+                routines: [],
+                currentRoutine: nil,
+                overdueRoutines: [],
+                nextRoutine: nil
+            ),
+            date: nowProvider()
+        )
+    }
+
+    var routines: [Routine] {
+        snapshot.routines
+    }
+
+    var currentRoutine: Routine? {
+        snapshot.currentRoutine
+    }
+
+    var overdueRoutines: [Routine] {
+        snapshot.overdueRoutines
+    }
+
+    var nextRoutine: Routine? {
+        snapshot.nextRoutine
+    }
+
+    var completedRoutineCount: Int {
+        snapshot.completedCount
+    }
+
+    var totalRoutineCount: Int {
+        snapshot.totalCount
+    }
+
+    var progress: Double {
+        snapshot.progress
+    }
+
+    var isComplete: Bool {
+        snapshot.isComplete
     }
 
     var formattedTodayDate: String {
@@ -44,29 +82,16 @@ final class TodayViewModel: ObservableObject {
         return nowProvider().formatted(format)
     }
 
-    var completedRoutineCount: Int {
-        routines.filter(\.isCompleted).count
-    }
-
-    var totalRoutineCount: Int {
-        routines.count
-    }
-
-    var progress: Double {
-        guard totalRoutineCount > 0 else { return 0 }
-        return Double(completedRoutineCount) / Double(totalRoutineCount)
-    }
-
     var progressMessage: String {
-        guard totalRoutineCount > 0 else {
+        guard snapshot.totalCount > 0 else {
             return "오늘의 첫 리듬을 만들어보세요."
         }
 
-        if completedRoutineCount == 0 {
+        if snapshot.completedCount == 0 {
             return "첫 리듬부터 천천히 시작해보세요."
         }
 
-        if completedRoutineCount == totalRoutineCount {
+        if snapshot.isComplete {
             return "오늘의 리듬을 모두 이어냈어요."
         }
 
@@ -113,15 +138,13 @@ final class TodayViewModel: ObservableObject {
 
     private func refreshRoutines() throws {
         let persisted = try repository.fetchRoutines().map { $0.toDomain() }
+        let now = nowProvider()
         let schedule = scheduleEngine.resolve(
             routines: persisted,
-            now: nowProvider(),
+            now: now,
             calendar: calendar
         )
 
-        routines = schedule.routines
-        currentRoutine = schedule.currentRoutine
-        overdueRoutines = schedule.overdueRoutines
-        nextRoutine = schedule.nextRoutine
+        snapshot = TodayRhythmSnapshot(schedule: schedule, date: now)
     }
 }
