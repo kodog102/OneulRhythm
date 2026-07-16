@@ -2,9 +2,9 @@
 
 This document defines how AI agents collaborate while developing OneulRhythm.
 
-The goal is consistency.
+Its purpose is to ensure every implementation remains consistent with the product philosophy, architecture, and long-term vision.
 
-Every implementation should preserve the product philosophy, architecture and long-term vision.
+Agents should optimize for clarity, consistency, and maintainability over short-term convenience.
 
 ---
 
@@ -22,9 +22,9 @@ Responsibilities
 - Long-term roadmap
 - Technical direction
 - Sprint planning
-- Reviewing major design decisions
+- Reviewing architectural changes
 
-Architect never edits code directly.
+Architect defines direction but does not modify production code.
 
 ---
 
@@ -33,12 +33,12 @@ Architect never edits code directly.
 Responsibilities
 
 - Implement approved tasks
-- Preserve architecture
-- Keep changes as small as possible
-- Build after every task
-- Never introduce unrelated refactoring
+- Preserve architectural boundaries
+- Keep changes focused and minimal
+- Build after every completed task
+- Avoid unrelated refactoring
 
-Implementation Agent must finish every task with:
+Every implementation should conclude with:
 
 - Implementation Summary
 - Build Status
@@ -49,38 +49,34 @@ Implementation Agent must finish every task with:
 - Manual Verification
 - Next Recommended Step
 
-Implementation Agent never commits.
+Implementation Agents never:
 
-Implementation Agent never pushes.
+- commit
+- push
+- redesign architecture without approval
 
 ---
-
-
 
 ## QA Agent
 
 Responsibilities
 
 - Review implementation
-- Verify architecture boundaries
+- Verify architectural boundaries
 - Detect regressions
-- Review Git diff
-- Review Release readiness
-- Produce manual verification checklist
+- Review Git changes
+- Validate release readiness
+- Produce manual verification checklists
 
-QA never changes production code.
+QA Agents validate.
 
-QA never rewrites architecture.
-
-QA validates.
+They never modify production code or redefine architecture.
 
 ---
 
-
-
 # Workflow
 
-Every feature follows the same pipeline.
+Every feature follows the same workflow.
 
 ```text
 Planning
@@ -99,11 +95,11 @@ Build
 
 ↓
 
-QA
+QA Review
 
 ↓
 
-Manual Test
+Manual Verification
 
 ↓
 
@@ -114,65 +110,75 @@ Commit
 Push
 ```
 
-No step should be skipped.
+No stage should be skipped.
 
 ---
-
-
 
 # Product Philosophy
 
-Agents must preserve these principles.
+Every implementation should preserve the core principles of OneulRhythm.
 
 ## Calm
 
-Never introduce stressful UX.
+Avoid stressful or productivity-driven experiences.
+
+The application should feel peaceful.
 
 ---
-
-
 
 ## Rhythm
 
-The application is about today's rhythm.
+The application focuses on today's rhythm.
 
-Not productivity.
+It is not a task manager.
 
 ---
-
-
 
 ## Simplicity
 
-Prefer small changes.
+Prefer small, incremental improvements.
 
-Avoid large rewrites.
-
----
-
-
-
-## Shared Source of Truth
-
-Schedule logic belongs inside:
-
-RoutineScheduleEngine
-
-Presentation state belongs inside:
-
-TodayRhythmSnapshot
-
-Never duplicate schedule logic.
+Avoid unnecessary abstraction and large rewrites.
 
 ---
 
+## Present Moment
 
+Always prioritize what matters now.
 
-# Architecture Rules
+Current rhythm should receive the highest emphasis.
+
+---
+
+# Architecture Principles
+
+## Single Source of Truth
+
+Routine timing belongs exclusively to:
+
+- RoutineScheduleEngine
+
+Presentation state belongs exclusively to:
+
+- TodayRhythmSnapshot
+
+Every presentation surface must consume the same snapshot.
+
+Never calculate schedule state independently inside:
+
+- TodayView
+- Live Activity
+- Widget Extension
+- future Apple Watch features
+
+---
+
+## Layer Responsibilities
 
 Views
 
-- layout only
+- presentation
+- layout
 - accessibility
 - animation
 
@@ -180,178 +186,205 @@ ViewModels
 
 - orchestration
 - interaction
-- state
+- presentation state
 
-Repository
+Repositories
 
-- persistence only
+- persistence
+- data access
 
 Services
 
 - infrastructure
+- platform integration
 
-Never mix responsibilities.
+Business logic should never appear inside Views.
 
 ---
 
+# Shared Module Rules
 
+ActivityKit contracts belong inside:
+
+OneulRhythmShared
+
+Never duplicate:
+
+- ActivityAttributes
+- ContentState
+- presentation policies
+- shared Activity models
+
+The shared module is the only source of truth for ActivityKit definitions.
+
+---
 
 # Live Activity Rules
 
-One Live Activity per day.
+Only one logical Live Activity may exist for a calendar day.
 
-Never one Live Activity per routine.
+The LiveActivityCoordinator owns the complete Activity lifecycle.
 
-Live Activity represents:
+It is responsible for:
 
-- Current rhythm
-- Next rhythm
-- Today's flow
-
-Notifications remain secondary.
-
----
-
-
-
-# Notification Rules
-
-Notifications are optional.
+- creation
+- update
+- reconciliation
+- cleanup
+- completion
 
 Never:
 
-- repeated reminders
-- completion nagging
-- overdue alerts
+- create Activities directly from Views
+- calculate Activity state outside the coordinator
+- duplicate reconciliation logic
+- modify already-ended Activities
 
-One reminder is enough.
+Day completion always uses immediate dismissal.
 
-Live Activity becomes the ongoing experience.
+No delayed dismissal or lingering behavior should be introduced.
 
 ---
 
+# Notification Rules
 
+Notifications remain optional.
+
+Avoid:
+
+- repeated reminders
+- overdue warnings
+- completion nagging
+- anxiety-inducing messaging
+
+One reminder is sufficient.
+
+The Live Activity provides the continuous experience.
+
+---
 
 # UX Rules
 
-Avoid words like:
+Language should remain calm and encouraging.
+
+Avoid:
 
 - failed
 - missed
 - warning
+- overdue
 - urgent
 
 Prefer:
 
+- today's rhythm
 - current rhythm
 - next rhythm
-- today
-- gently
 - continue
+- gently
 
 ---
-
-
-
-# Commit Rules
-
-One task
-
-↓
-
-One commit
-
-Every commit should be reviewable.
-
-Avoid mixing unrelated work.
-
----
-
-
 
 # Documentation Rules
 
-Whenever architecture changes:
+Documentation is part of the implementation.
 
-Update
+Whenever architectural decisions change, update:
 
-- README
-- ARCHITECTURE
-- ROADMAP
+- DECISIONS.md
+- ARCHITECTURE.md
+- DESIGN.md
+- README.md
 
-Whenever product philosophy changes:
+Whenever a Sprint completes, update:
 
-Update
+- CHANGELOG.md
+- ROADMAP.md
 
-- DESIGN
-- DECISIONS
-
-Whenever a Sprint completes:
-
-Update
-
-- CHANGELOG
+Documentation should never fall behind implementation.
 
 ---
 
-
-
 # QA Rules
 
-Never claim verification that was not actually performed.
+Never claim verification that has not been performed.
 
-Always distinguish:
+Always distinguish between:
 
 ✅ Verified
 
 ⚠️ Not Verified
 
-Manual Simulator verification is required for:
+Manual verification is required for:
 
-- permissions
-- notifications
 - ActivityKit
 - WidgetKit
+- notifications
+- permissions
+- every user-visible feature
+
+A successful build is never proof of correctness.
 
 ---
 
+# Git Rules
 
+One task.
+
+One commit.
+
+Every commit should represent a complete, reviewable change.
+
+Before completing a Sprint:
+
+- working tree should be clean
+- every new file must be tracked
+- documentation should be updated
+
+---
 
 # Coding Rules
 
-Prefer
+Prefer:
 
 - small functions
 - dependency injection
-- protocol abstraction
+- protocol abstractions
 - immutable models
+- explicit responsibilities
 
-Avoid
+Avoid:
 
 - singleton abuse
 - duplicated logic
 - business logic inside Views
+- architecture leakage between layers
+
+When duplicated business logic appears, reconsider the architecture before implementing.
 
 ---
-
-
 
 # Definition of Done
 
-A task is complete only if:
+A task is complete only when:
 
-- Code implemented
+- Implementation finished
 - Build passed
 - Architecture preserved
-- QA reviewed
+- Documentation updated (when required)
+- QA review completed
 - Manual verification completed
-- Documentation updated (if needed)
 
-Only then should the task be committed.
+A Sprint is complete only when:
+
+- all tasks are complete
+- documentation reflects the current architecture
+- Git working tree is clean
+- release readiness has been reviewed
+
+Only then should work be committed.
 
 ---
-
-
 
 # Guiding Question
 

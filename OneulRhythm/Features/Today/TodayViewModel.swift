@@ -16,17 +16,21 @@ final class TodayViewModel: ObservableObject {
 
     private let repository: RoutineRepository
     private let scheduleEngine: RoutineScheduleEngine
+    private let liveActivityCoordinator: LiveActivityCoordinating
     private let nowProvider: () -> Date
     private let calendar: Calendar
 
     init(
         repository: RoutineRepository,
         scheduleEngine: RoutineScheduleEngine = RoutineScheduleEngine(),
+        liveActivityCoordinator: LiveActivityCoordinating? = nil,
         nowProvider: @escaping () -> Date = Date.init,
         calendar: Calendar = .current
     ) {
         self.repository = repository
         self.scheduleEngine = scheduleEngine
+        self.liveActivityCoordinator = liveActivityCoordinator
+            ?? LiveActivityCoordinator(calendar: calendar, nowProvider: nowProvider)
         self.nowProvider = nowProvider
         self.calendar = calendar
         self.snapshot = TodayRhythmSnapshot(
@@ -146,5 +150,6 @@ final class TodayViewModel: ObservableObject {
         )
 
         snapshot = TodayRhythmSnapshot(schedule: schedule, date: now)
+        liveActivityCoordinator.sync(snapshot: snapshot)
     }
 }

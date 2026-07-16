@@ -16,11 +16,13 @@ struct TodayView: View {
     init(
         repository: RoutineRepository,
         onSaveRoutine: @escaping (RoutineCreationInput) throws -> Void = { _ in },
+        liveActivityCoordinator: LiveActivityCoordinating? = nil,
         nowProvider: @escaping () -> Date = Date.init
     ) {
         _viewModel = StateObject(
             wrappedValue: TodayViewModel(
                 repository: repository,
+                liveActivityCoordinator: liveActivityCoordinator,
                 nowProvider: nowProvider
             )
         )
@@ -192,6 +194,7 @@ struct TodayView: View {
 #Preview("Empty Day") {
     TodayView(
         repository: PreviewRoutineRepository(),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
 }
@@ -201,6 +204,7 @@ struct TodayView: View {
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.currentOverdueNextEntities()
         ),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
 }
@@ -210,6 +214,7 @@ struct TodayView: View {
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.partiallyCompletedEntities()
         ),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
 }
@@ -219,6 +224,7 @@ struct TodayView: View {
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.completedEntities()
         ),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
 }
@@ -228,6 +234,7 @@ struct TodayView: View {
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.currentOverdueNextEntities()
         ),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
 }
@@ -262,6 +269,13 @@ private final class PreviewRoutineRepository: RoutineRepository {
     func delete(_ routine: RoutineEntity) throws {
         entities.removeAll { $0.id == routine.id }
     }
+}
+
+/// Keeps previews deterministic and side-effect free.
+/// Real Live Activity behavior is exercised in the app and widget targets, not previews.
+private struct PreviewLiveActivityCoordinator: LiveActivityCoordinating {
+    func sync(snapshot: TodayRhythmSnapshot) {}
+    func end() {}
 }
 
 private enum TodayPreviewData {

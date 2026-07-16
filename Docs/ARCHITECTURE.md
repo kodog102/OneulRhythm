@@ -1,445 +1,266 @@
-# **🌿 ARCHITECTURE**
+# Architecture
 
-## **Overview**
+This document describes the runtime architecture of OneulRhythm.
 
-OneulRhythm follows a layered architecture built around a single source of truth for today’s rhythm.
-
-Business logic remains independent from SwiftUI.
-
-Views never communicate directly with persistence, notifications or ActivityKit.
-
-The architecture is designed so that Today, Live Activity, WidgetKit and Apple Watch can all share the same domain state.
+Implementation details may evolve over time, but the architectural boundaries described here are intended to remain stable.
 
 ---
 
-# **Architecture Layers**
+# High-Level Architecture
 
-```text
-SwiftData
-        │
-        ▼
-SwiftDataRoutineRepository
-        │
-        ▼
-RoutineScheduleEngine
-        │
-        ▼
-TodayRhythmSnapshot
-        │
-        ├──────────────┐
-        ▼              ▼
-TodayView         Live Activity
-        │              │
-        ▼              ▼
-WidgetKit      Apple Watch
+OneulRhythm follows a layered architecture.
+
+```
+                SwiftUI Views
+                      │
+                      ▼
+                ViewModels
+                      │
+                      ▼
+                 Repository
+                      │
+                      ▼
+             RoutineScheduleEngine
+                      │
+                      ▼
+              Schedule Snapshot
+                 │          │
+                 │          ▼
+                 │   LiveActivityCoordinator
+                 │          │
+                 ▼          ▼
+             TodayView   ActivityKit
+                              │
+                              ▼
+                     Widget Extension
 ```
 
-Every presentation layer should consume the same snapshot.
-
-No presentation layer calculates schedule state independently.
+Every presentation surface is driven from the same schedule snapshot.
 
 ---
 
-# **Layer Responsibilities**
+# Architectural Principles
 
-## **SwiftData**
+## Single Source of Truth
 
-Responsible for:
+The schedule snapshot represents the current application state.
 
-- persistence
-- storage
-- entity lifecycle
-
-Never:
-
-- calculate schedule
-- calculate UI state
-- interact with notifications
+Views, Live Activities, and future widgets never calculate scheduling independently.
 
 ---
 
-## **Repository**
+## Layered Responsibilities
 
-Responsible for:
+Each layer owns exactly one responsibility.
 
-- CRUD
-- mapping
-- persistence abstraction
+### Views
 
-Never:
+Responsible only for presentation and user interaction.
 
-- scheduling
-- ActivityKit
-- View logic
+Views never calculate routine timing.
 
 ---
 
-## **RoutineScheduleEngine**
+### ViewModels
 
-Responsible for deriving today’s schedule.
+Coordinate UI actions and expose presentation data.
 
-Produces:
+They never implement scheduling algorithms.
 
-- current rhythm
-- overdue rhythm
-- next rhythm
-- completed rhythm
+---
+
+### Repository
+
+Provides persistence access.
+
+Business logic is isolated from SwiftData.
+
+---
+
+### Schedule Engine
+
+Calculates:
+
+- today's routines
+- current routine
+- next routine
+- completed routines
 - progress
 
-Pure domain logic.
-
-No SwiftUI.
-
-No ActivityKit.
-
-No UserNotifications.
+The engine owns all scheduling rules.
 
 ---
 
-## **TodayRhythmSnapshot**
+### Live Activity Coordinator
 
-This is the shared presentation model.
+Synchronizes ActivityKit with the latest schedule snapshot.
 
-Purpose:
+Responsibilities include:
 
-Represent today’s rhythm for every surface.
+- create activities
+- update activities
+- reconcile duplicates
+- cleanup stale activities
+- end completed-day activities
 
-Consumers:
+The coordinator never owns business logic.
 
-- TodayView
+---
+
+# Shared Module
+
+ActivityKit definitions are shared between the application target and the widget extension.
+
+```
+App
+     │
+     ▼
+OneulRhythmShared
+     ▲
+     │
+Widget Extension
+```
+
+The shared module contains:
+
+- ActivityAttributes
+- ContentState
+- presentation policies
+- shared Activity models
+
+This guarantees identical interpretation across targets.
+
+---
+
+# Widget Extension
+
+The widget extension is a rendering layer.
+
+It receives ActivityKit state from the system and renders:
+
+- Lock Screen
+- Dynamic Island
 - Live Activity
-- WidgetKit
-- Apple Watch
-- Siri / App Intents
 
-Typical contents:
+The extension never accesses:
 
-- current rhythm
-- overdue rhythm
-- next rhythm
-- progress
-- completion state
-- current phase
+- SwiftData
+- repositories
+- schedule engine
 
-Only this layer is shared across UI surfaces.
+Rendering remains completely independent.
 
 ---
 
-## **ViewModels**
+# Runtime Flow
 
-Responsible for:
+A typical routine completion follows this sequence.
 
-- user interaction
-- orchestration
-- repository calls
-- schedule refresh
-- snapshot generation
+```
+User taps Complete
 
-Never:
+↓
 
-- persistence implementation
-- ActivityKit implementation
-- notification implementation
+Repository updates completion
 
----
+↓
 
-## **Views**
+Schedule Engine creates new snapshot
 
-Responsible only for:
+↓
 
-- layout
-- interaction
-- accessibility
-- animation
+TodayView refreshes
 
-Views never calculate business rules.
+↓
 
-Views never access repositories.
+LiveActivityCoordinator synchronizes
 
-Views never access ActivityKit directly.
+↓
 
----
+ActivityKit updates
 
-# **Notification Architecture**
+↓
 
-```text
-ViewModel
-        │
-        ▼
-NotificationScheduling
-        │
-        ▼
-NotificationService
-        │
-        ▼
-UNUserNotificationCenter
+Widget Extension renders new state
 ```
 
-NotificationService knows:
-
-How to send notifications.
-
-It never decides:
-
-- when to send
-- whether reminders should exist
-- product rules
-
-Those decisions belong to ViewModels.
+The same flow is used after application launch and schedule reconciliation.
 
 ---
 
-# **Live Activity Architecture**
+# Day Completion Flow
 
-```text
-ViewModel
-        │
-        ▼
-LiveActivityCoordinator
-        │
-        ▼
-ActivityKit
+When every routine has been completed:
+
+```
+Routine completed
+
+↓
+
+Schedule Snapshot
+
+↓
+
+Phase = Day Complete
+
+↓
+
+TodayView shows completed day
+
+↓
+
+Coordinator ends Live Activity
+
+↓
+
+Immediate dismissal
 ```
 
-The coordinator owns:
+No delayed dismissal or lingering state exists.
 
-- start
+---
+
+# Activity Lifecycle
+
+The coordinator maintains one logical Live Activity for each calendar day.
+
+Lifecycle operations include:
+
+- create
 - update
-- end
+- reconcile
+- cleanup
+- immediate end
 
-Views never communicate with ActivityKit.
+Only eligible runtime activities participate in reconciliation.
 
----
-
-# **Live Activity Lifecycle**
-
-```text
-Inactive
-
-↓
-
-Day Session Starts
-
-↓
-
-Upcoming
-
-↓
-
-Current
-
-↓
-
-Between Rhythms
-
-↓
-
-Current
-
-↓
-
-Day Complete
-
-↓
-
-End Activity
-```
-
-Only one Live Activity represents one day.
-
-Never create one activity per routine.
+Previously ended activities are never modified again.
 
 ---
 
-# **Product State**
+# Error Handling
 
-The application recognizes these presentation states:
+Live Activity synchronization is best-effort.
 
-```text
-Current
+Failures never interrupt:
 
-Overdue
+- repository updates
+- schedule generation
+- TodayView rendering
 
-Next
-
-Between Rhythms
-
-Day Complete
-```
-
-These are presentation concepts.
-
-Persistence stores only necessary business state.
+The application state always remains authoritative.
 
 ---
 
-# **Completion Flow**
+# Future Architecture
 
-```text
-Current Rhythm
+Future features are expected to integrate into the existing architecture.
 
-↓
+Examples include:
 
-User completes
+- Apple Watch
+- interactive widgets
+- notifications
+- cloud synchronization
 
-↓
-
-Repository update
-
-↓
-
-Schedule Engine refresh
-
-↓
-
-Snapshot update
-
-↓
-
-Live Activity update
-
-↓
-
-Today refresh
-```
-
-Notification cancellation happens after completion.
-
----
-
-# **Notification Flow**
-
-```text
-Reminder Enabled
-
-↓
-
-Permission Granted
-
-↓
-
-Routine Saved
-
-↓
-
-Schedule Notification
-```
-
-If scheduling fails:
-
-Routine creation must still succeed.
-
-Notifications are optional.
-
----
-
-# **Design Principles**
-
-Always prefer:
-
-Single source of truth.
-
-Pure domain logic.
-
-Dependency injection.
-
-Small services.
-
-Composable ViewModels.
-
-Shared presentation models.
-
----
-
-# **Future Components**
-
-Planned:
-
-- LiveActivityCoordinator
-- TodayRhythmSnapshot
-- WidgetProvider
-- AppGroupStore
-- AppleWatchSync
-- AppIntentsHandler
-
-All future features should consume today’s snapshot instead of rebuilding schedule logic.
-
----
-
-# **Dependency Rule**
-
-```text
-Views
-
-↓
-
-ViewModels
-
-↓
-
-Repositories
-
-↓
-
-SwiftData
-```
-
-Cross-cutting services:
-
-```text
-NotificationService
-
-LiveActivityCoordinator
-```
-
-These are injected where required.
-
----
-
-# **Testing Strategy**
-
-Priority:
-
-1. 1.
-
-RoutineScheduleEngine
-
-1. 2.
-
-TodayRhythmSnapshot
-
-1. 3.
-
-NotificationService
-
-1. 4.
-
-Repository Mapping
-
-1. 5.
-
-ViewModels
-
-Views should require minimal testing.
-
----
-
-# **Architecture Goal**
-
-Every surface in OneulRhythm should answer the same question:
-
-“What is today’s current rhythm?”
-
-No matter where users look—
-
-Today screen,
-
-Lock Screen,
-
-Dynamic Island,
-
-Widget,
-
-or Apple Watch—
-
-they should always see the same rhythm derived from the same snapshot.
+New presentation surfaces should consume schedule snapshots rather than implementing independent scheduling logic.

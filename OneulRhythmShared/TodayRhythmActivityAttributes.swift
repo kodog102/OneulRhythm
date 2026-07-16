@@ -38,3 +38,31 @@ struct TodayRhythmActivityAttributes: ActivityAttributes {
     /// Start of the calendar day represented by this Live Activity.
     var calendarDayStart: Date
 }
+
+#if DEBUG
+extension TodayRhythmActivityAttributes {
+    static var preview: TodayRhythmActivityAttributes {
+        TodayRhythmActivityAttributes(
+            dayID: "2026-07-16",
+            calendarDayStart: Calendar.current.startOfDay(for: Date())
+        )
+    }
+}
+
+extension TodayRhythmActivityAttributes.ContentState {
+    static var previewActive: TodayRhythmActivityAttributes.ContentState {
+        let now = Date()
+        return TodayRhythmActivityAttributes.ContentState(
+            phase: .active,
+            focusRoutineID: UUID().uuidString,
+            focusTitle: "따뜻한 차 한잔 마시기",
+            focusStart: now.addingTimeInterval(-10 * 60),
+            focusEnd: now.addingTimeInterval(20 * 60),
+            nextRoutineID: UUID().uuidString,
+            nextTitle: "가벼운 산책",
+            nextStart: now.addingTimeInterval(30 * 60),
+            updatedAt: now
+        )
+    }
+}
+#endif

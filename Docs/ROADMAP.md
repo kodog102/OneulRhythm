@@ -1,362 +1,155 @@
-# 🌿 ROADMAP
+# Roadmap
 
-This roadmap tracks the evolution of OneulRhythm from a local MVP into a calm daily rhythm companion.
+This roadmap outlines the planned evolution of OneulRhythm.
 
----
-
-# Product Vision
-
-OneulRhythm is not a task manager.
-
-It is a calm companion that helps users stay connected with today's rhythm.
-
-The long-term vision is:
-
-```text
-
-Today
-
-↓
-
-Live Activity
-
-↓
-
-Widget
-
-↓
-
-Apple Watch
-
-↓
-
-Ambient Computing
-
-```
-
-The application should require less attention over time, not more.
+It focuses on product milestones rather than individual implementation tasks.
 
 ---
 
-# Sprint 1 — Foundation
+# Vision
 
-Status
+OneulRhythm helps users focus on what matters now.
 
-✅ Complete
+The product aims to provide a calm, distraction-free routine experience across iPhone, Lock Screen, Dynamic Island, and future Apple platforms.
 
-## Goals
+---
 
-- SwiftUI project
-- MVVM
-- Design System
-- Today screen
+# Completed Milestones
+
+## Sprint 1 — Foundation ✅
+
+Completed
+
+- SwiftUI project setup
+- SwiftData integration
+- Basic project structure
+- MVVM foundation
+
+---
+
+## Sprint 2 — Routine Creation ✅
+
+Completed
+
+- Routine model
+- Routine creation flow
 - Add Routine screen
-- Domain models
-- Project documentation
-- GitHub
-- AI workflow
+- Repository abstraction
 
 ---
 
+## Sprint 3 — Today Experience ✅
 
+Completed
 
-# Sprint 2 — Persistence & Smart Routine Engine
+- TodayView
+- Current routine
+- Upcoming routine
+- Daily progress
+- Empty state
 
-Status
+---
 
-✅ Complete
+## Sprint 4 — Schedule Engine ✅
 
-## Goals
+Completed
 
-- SwiftData
-- Repository
-- RoutineEntity
-- Smart Schedule Engine
-- Current rhythm
-- Overdue rhythm
-- Next rhythm
-- Completion persistence
+- RoutineScheduleEngine
+- Snapshot generation
+- Current/Upcoming calculation
 - Progress calculation
 
 ---
 
+## Sprint 5 — Routine Completion ✅
 
+Completed
 
-# Sprint 3 — Experience
-
-Status
-
-✅ Complete
-
-## Goals
-
-- Today experience refinement
-- Korean UX
-- Progress messaging
-- Empty state
-- Smart past-time creation
-- Today / Tomorrow decision flow
+- Routine completion persistence
+- TodayView refresh
+- Repository integration
+- Snapshot-driven updates
 
 ---
 
+## Sprint 6-1 — Live Activity MVP ✅
 
+Completed
 
-# Sprint 4 — Notifications
+- Widget Extension
+- Shared Activity definitions
+- Live Activity synchronization
+- One Activity Per Day policy
+- Canonical reconciliation
+- Immediate day-complete dismissal
+- Snapshot-driven Activity updates
 
-Status
+---
 
-🚧 In Progress
+# Next Milestones
 
-## Completed
+## Sprint 6-2 — Routine Timeline
 
-- NotificationService
-- Permission Flow
+Planned
+
+- Improve handling of past incomplete routines
+- Timeline refinements
+- Additional TodayView polish
+- Expanded preview coverage
+
+---
+
+## Sprint 7 — Notifications
+
+Planned
+
+- Local notifications
 - Reminder scheduling
-
-
-
-## Remaining
-
-- Notification cancellation on completion
-- Notification cancellation on delete
-- Notification rescheduling on edit
+- Snooze support
+- Notification permissions
 
 ---
 
+## Sprint 8 — Widgets
 
+Planned
 
-# Sprint 5 — Shared Snapshot & Live Activity
-
-Status
-
-🚧 In Progress
-
-## Goals
-
-- [x] TodayRhythmSnapshot
-- [x] TodayViewModel Snapshot Adoption
-- [ ] TodayView Snapshot Consumer
-- [ ] LiveActivityCoordinator
-- [ ] Lock Screen UI
-- [ ] Dynamic Island
-- [ ] Between Rhythms state
-- [ ] Day Complete state
-
-
-
-### Philosophy
-
-One Live Activity represents one day.
-
-Not one routine.
+- Home Screen widgets
+- Interactive widgets
+- Widget timeline improvements
 
 ---
 
+## Sprint 9 — Apple Watch
 
+Planned
 
-# Sprint 6 — Interactive Live Activity
-
-Status
-
-🟡 Planned
-
-## Goals
-
-- Interactive completion
-- Deep link into current rhythm
-- Live updates
-- Notification cancellation integration
-- Activity lifecycle optimization
+- Watch companion app
+- Wrist-based routine reminders
+- Shared schedule presentation
 
 ---
 
+## Sprint 10 — User Experience
 
+Planned
 
-# Sprint 7 — Widgets
-
-Status
-
-🟡 Planned
-
-## Goals
-
-- Home Screen widget
-- Lock Screen widget
-- Shared TodayRhythmSnapshot
-- Timeline optimization
-
----
-
-
-
-# Sprint 8 — Apple Watch
-
-Status
-
-🟡 Planned
-
-## Goals
-
-- Watch companion
-- Complications
-- Quick completion
-- Shared snapshot
-
----
-
-
-
-# Sprint 9 — Siri & App Intents
-
-Status
-
-🟡 Planned
-
-## Goals
-
-- Complete current rhythm
-- Open today's rhythm
-- Current rhythm shortcut
-- Siri integration
-
----
-
-
-
-# Sprint 10 — Polish
-
-Status
-
-🟡 Planned
-
-## Goals
-
+- Accessibility improvements
+- VoiceOver refinement
 - Animation polish
-- Haptics
-- Accessibility
-- VoiceOver
-- Dynamic Type
-- Localization
 - Performance optimization
 
 ---
 
-
-
 # Future
 
+Potential future directions include:
 
+- iCloud synchronization
+- Family routine sharing
+- Health integration expansion
+- Focus Mode automation
+- Shortcuts support
+- Cross-device continuity
 
-## iCloud Sync
-
-Multiple device synchronization.
-
----
-
-
-
-## Shared Routines
-
-Family sharing.
-
----
-
-
-
-## Calendar Integration
-
-Apple Calendar.
-
-Google Calendar.
-
----
-
-
-
-## HealthKit
-
-Read-only integrations.
-
----
-
-
-
-## AI Suggestions
-
-Rhythm recommendations.
-
-Routine optimization.
-
-Reflection summaries.
-
----
-
-
-
-# Product Principles
-
-Every Sprint should improve at least one of:
-
-- Calmness
-- Clarity
-- Rhythm
-- Accessibility
-- Consistency
-
-Never introduce features simply because they are technically possible.
-
----
-
-
-
-# Current Priority
-
-```text
-
-TodayRhythmSnapshot
-
-        ↓
-
-LiveActivityCoordinator
-
-        ↓
-
-Lock Screen
-
-        ↓
-
-Dynamic Island
-
-        ↓
-
-Interactive Completion
-
-        ↓
-
-Widgets
-
-        ↓
-
-Apple Watch
-
-```
-
----
-
-
-
-# Success Criteria
-
-OneulRhythm succeeds when users no longer need to repeatedly open the app.
-
-Instead,
-
-they naturally understand today's rhythm from wherever they are.
-
-- Today screen
-- Lock Screen
-- Dynamic Island
-- Widget
-- Apple Watch
-
-The experience should always feel calm, lightweight and quietly supportive.
+These items are exploratory and are not currently scheduled.

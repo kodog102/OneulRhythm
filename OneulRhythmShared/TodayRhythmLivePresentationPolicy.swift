@@ -67,9 +67,6 @@ enum TodayRhythmLivePresentationPolicy {
     /// Completion unlocks after the focus has been active this long.
     static let completionUnlockDelay: TimeInterval = 1 * 60
 
-    /// Keep day-complete visible this long before signaling end.
-    static let dayCompleteLingerDuration: TimeInterval = 3 * 60
-
     /// Evaluates presentation decisions from Activity content and an explicit clock.
     static func evaluate(
         contentState: TodayRhythmActivityAttributes.ContentState,
@@ -161,14 +158,11 @@ enum TodayRhythmLivePresentationPolicy {
         contentState: TodayRhythmActivityAttributes.ContentState,
         now: Date
     ) -> TodayRhythmLivePresentationDecision {
-        let secondary: TodayRhythmLiveSecondaryFocus =
-            isNextWithinActivePreviewThreshold(contentState: contentState, now: now)
-            ? .nextPreview
-            : .none
-
-        return TodayRhythmLivePresentationDecision(
+        // DR-007: once overdue, the experience returns to a single focus.
+        // The next rhythm stays hidden until a new active/upcoming phase begins.
+        TodayRhythmLivePresentationDecision(
             primaryFocus: .focusRhythm,
-            secondaryFocus: secondary,
+            secondaryFocus: .none,
             remainingTimeMode: .hidden,
             completionAffordance: .softClosing,
             style: .focused,
@@ -233,16 +227,15 @@ enum TodayRhythmLivePresentationPolicy {
         contentState: TodayRhythmActivityAttributes.ContentState,
         now: Date
     ) -> TodayRhythmLivePresentationDecision {
-        let elapsed = now.timeIntervalSince(contentState.updatedAt)
-        let shouldEnd = elapsed >= dayCompleteLingerDuration
-
-        return TodayRhythmLivePresentationDecision(
+        // Day complete semantically means the Live Activity ends immediately.
+        // The peaceful completion experience continues in TodayView, not here.
+        TodayRhythmLivePresentationDecision(
             primaryFocus: .dayComplete,
             secondaryFocus: .none,
             remainingTimeMode: .hidden,
             completionAffordance: .hidden,
             style: .completion,
-            shouldEndActivity: shouldEnd
+            shouldEndActivity: true
         )
     }
 
@@ -290,17 +283,5 @@ enum TodayRhythmLivePresentationPolicy {
         contentState.nextRoutineID != nil
             || contentState.nextTitle != nil
             || contentState.nextStart != nil
-    }
-
-    private static func isNextWithinActivePreviewThreshold(
-        contentState: TodayRhythmActivityAttributes.ContentState,
-        now: Date
-    ) -> Bool {
-        guard hasNextRhythm(contentState), let nextStart = contentState.nextStart else {
-            return false
-        }
-
-        let untilNext = nextStart.timeIntervalSince(now)
-        return untilNext > 0 && untilNext <= activeNextPreviewThreshold
     }
 }

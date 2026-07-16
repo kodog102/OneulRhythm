@@ -1,352 +1,254 @@
-# 🌿 Architectural Decisions
+# Architecture Decisions
 
-This document records product and architecture decisions that guide the long-term evolution of OneulRhythm.
-
-These decisions are intentionally stable and should change only when the product philosophy changes.
-
----
-
-# DR-001
-
-## One Live Activity Represents One Day
-
-**Status**
-
-Accepted
-
-### Decision
-
-One Live Activity represents the user's entire day.
-
-Individual routines never create their own Live Activities.
-
-The content of a single Live Activity changes naturally as the user's day progresses.
-
-### Rationale
-
-This creates a calm, continuous experience and avoids Lock Screen clutter.
+This document records long-lived architectural decisions for OneulRhythm.
+It intentionally captures *why* decisions were made rather than implementation details.
 
 ---
 
+# ADR-001 — SwiftUI + SwiftData
 
-
-# DR-002
-
-
-
-## Notifications Are Optional
-
-**Status**
+## Status
 
 Accepted
 
-### Decision
+## Decision
 
-Notifications support Live Activity.
+The application uses SwiftUI for the UI layer and SwiftData as the primary persistence layer.
 
-They do not drive the experience.
+## Rationale
 
-A reminder may be sent before a rhythm begins.
+The project targets iOS 17 and later.
 
-No additional notifications should be sent for:
+SwiftUI and SwiftData provide:
 
-- completion
-- overdue rhythms
-- repeated reminders
+- Native Apple platform integration
+- Simple state-driven UI updates
+- Reduced boilerplate
+- Good compatibility with WidgetKit and ActivityKit
+- Long-term maintainability
 
-
-
-### Rationale
-
-The Lock Screen should feel peaceful rather than demanding.
+No third-party persistence framework is introduced unless future requirements clearly justify it.
 
 ---
 
+# ADR-002 — Repository Pattern
 
-
-# DR-003
-
-
-
-## Overdue Is Derived
-
-**Status**
+## Status
 
 Accepted
 
-### Decision
+## Decision
 
-An overdue rhythm is never persisted.
+Business logic never communicates directly with SwiftData models.
 
-Its state is always derived by `RoutineScheduleEngine`.
+A repository abstraction is used between the application layer and persistence.
 
-### Rationale
+## Rationale
 
-Overdue is a temporary presentation state rather than stored business data.
+Benefits include:
+
+- Separation of concerns
+- Easier testing
+- Storage implementation can evolve independently
+- ViewModels remain persistence-agnostic
 
 ---
 
+# ADR-003 — Schedule Engine
 
-
-# DR-004
-
-
-
-## Progress Represents Today's Rhythm
-
-**Status**
+## Status
 
 Accepted
 
-### Decision
+## Decision
 
-Progress visualizes today's rhythm.
+Routine scheduling logic is centralized inside `RoutineScheduleEngine`.
 
-It is never treated as a productivity score.
+ViewModels do not calculate routine state themselves.
 
-Preferred representation:
+## Rationale
 
-```
-2 / 5 리듬 완료
-```
+Keeping scheduling logic in a dedicated engine:
 
-Avoid emphasizing percentages or performance.
-
-### Rationale
-
-The goal is awareness rather than evaluation.
+- avoids duplicated rules
+- improves consistency
+- simplifies testing
+- allows future scheduling policies without changing UI code
 
 ---
 
+# ADR-004 — Snapshot-Driven UI
 
-
-# DR-005
-
-
-
-## Past-Time Creation Requires User Choice
-
-**Status**
+## Status
 
 Accepted
 
-### Decision
+## Decision
 
-When a user creates a rhythm whose start time has already passed today,
+TodayView renders immutable schedule snapshots produced by the schedule engine.
 
-the application asks whether it should belong to:
+The UI never derives its own interpretation of routine timing.
 
-- Today
-- Tomorrow
+## Rationale
 
-The application never decides automatically.
+A single source of truth prevents inconsistencies between:
 
-### Rationale
-
-The user understands today's intent better than the application.
-
----
-
-
-
-# DR-006
-
-
-
-## TodayRhythmSnapshot Is the Shared Presentation Model
-
-**Status**
-
-Accepted
-
-### Decision
-
-`TodayRhythmSnapshot` is the single presentation model shared across all user-facing surfaces.
-
-Consumers include:
-
-- Today View
+- Today screen
 - Live Activity
-- Widget
-- Apple Watch
-- App Intents
-
-
-
-### Rationale
-
-Schedule logic remains inside `RoutineScheduleEngine`.
-
-Presentation logic remains inside `TodayRhythmSnapshot`.
-
-Every surface observes the same interpretation of today's rhythm.
+- Widgets
+- Future Apple Watch surfaces
 
 ---
 
+# ADR-005 — One Logical Live Activity Per Day
 
-
-# DR-007
-
-
-
-## Live Activity Reflects the Current Rhythm
-
-**Status**
+## Status
 
 Accepted
 
-### Decision
+## Decision
 
-Live Activity emphasizes the user's current rhythm.
+At most one logical Live Activity exists for a calendar day.
 
-It may gently preview the next rhythm only while the current rhythm is naturally approaching completion.
+Duplicate activities are automatically reconciled.
 
-Once a rhythm becomes overdue, the experience returns to a single focus.
+## Rationale
 
-The next rhythm is intentionally hidden to reduce cognitive load and encourage a calm return to the present.
+This provides:
 
-The Live Activity intentionally avoids displaying:
-
-- completion percentage
-- remaining task count
-- productivity score
-- streak
-- category
-- urgency
-
-
-
-### Principles
-
-- Focus on the present.
-- Gently introduce what comes next only near natural transitions.
-- When a rhythm becomes overdue, return to a single focus.
-- Never pressure the user.
-
-
-
-### Rationale
-
-Live Activity is not a productivity dashboard.
-
-It is a quiet companion for today's rhythm.
+- predictable behavior
+- clean Lock Screen presentation
+- deterministic synchronization
+- simplified recovery after app relaunch
 
 ---
 
+# ADR-006 — Canonical Activity Selection
 
-
-# DR-008
-
-
-
-## Presentation Policy Owns Product Behavior
-
-**Status**
+## Status
 
 Accepted
 
-### Decision
+## Decision
 
-A shared Presentation Policy determines **what** should be presented across Live Activity surfaces.
+If multiple activities exist for the same day, one canonical activity is selected.
 
-Presentation Policy owns product behavior such as:
+Selection rules:
 
-- when the next rhythm becomes visible
-- when completion becomes available
-- how overdue should be presented
-- when a day-complete state should end
-- presentation modes shared across surfaces
+1. Latest `updatedAt`
+2. Lexicographically smallest identifier as tie-breaker
 
-Presentation Policy does **not** determine:
+Non-canonical activities are immediately ended.
 
-- layout
-- typography
-- spacing
-- colors
-- animations
-- component hierarchy
+## Rationale
 
-Those remain the responsibility of each individual surface.
-
-### Responsibilities
-
-Presentation Policy decides:
-
-- What should be shown
-- When it should be shown
-- Which semantic presentation mode is active
-
-UI decides:
-
-- How it looks
-- How it is animated
-- How it fits each surface
-
-
-
-### Shared Consumers
-
-The same policy should be reused by:
-
-- Lock Screen
-- Dynamic Island
-- Apple Watch
-- Future Widget surfaces
-
-
-
-### Rationale
-
-Keeping presentation behavior in one place prevents product rules from being duplicated across multiple UI implementations.
-
-Every surface should behave consistently while remaining free to present information differently.
+The selection algorithm must always produce a deterministic result.
 
 ---
 
+# ADR-007 — Shared Activity Definitions
 
-
-# DR-009
-
-
-
-## One Primary Focus per Surface
-
-**Status**
+## Status
 
 Accepted
 
-### Decision
+## Decision
 
-Every OneulRhythm surface presents only one primary focus at a time.
+ActivityKit models and presentation policies are shared between the app target and widget extension.
 
-Secondary information may support the current context,
+## Rationale
 
-but it must never compete with the primary rhythm.
+Shared definitions prevent:
 
-### Examples
+- duplicate models
+- inconsistent Activity state
+- extension/app drift
 
+The shared module is the single source of truth for ActivityKit contracts.
 
-| Phase           | Primary Focus    | Secondary                 |
-| --------------- | ---------------- | ------------------------- |
-| Active          | Current rhythm   | None                      |
-| Transition      | Current rhythm   | Quiet next rhythm preview |
-| Between Rhythms | Next rhythm      | None                      |
-| Overdue         | Current rhythm   | None                      |
-| Day Complete    | Completion state | None                      |
+---
 
+# ADR-008 — Immediate Day Completion
 
+## Status
 
+Accepted
 
-### Rationale
+## Decision
 
-Reducing competing information helps users remain connected to today's rhythm.
+When every routine for the current day is completed:
 
-The user's attention should naturally flow from one rhythm to the next rather than being divided across multiple competing pieces of information.
+- the Live Activity ends immediately
+- no lingering state is kept
+- no delayed dismissal is scheduled
 
-This principle applies consistently across:
+## Rationale
 
-- Lock Screen
-- Dynamic Island
-- Apple Watch
-- Future Widget surfaces
+The completion experience belongs to the application itself.
 
+Using immediate dismissal:
+
+- relies only on documented ActivityKit behavior
+- avoids cancellation complexity
+- avoids undocumented end-state transitions
+- guarantees deterministic lifecycle behavior
+
+---
+
+# ADR-009 — Eligible Activity Cleanup
+
+## Status
+
+Accepted
+
+## Decision
+
+Lifecycle operations only target activities in eligible runtime states.
+
+Ended activities are never modified again.
+
+## Rationale
+
+ActivityKit does not guarantee behavior when re-ending an already-ended activity.
+
+Restricting operations to active/stale activities produces deterministic behavior.
+
+---
+
+# ADR-010 — Best-Effort Live Activity Synchronization
+
+## Status
+
+Accepted
+
+## Decision
+
+Live Activity synchronization is non-blocking.
+
+Application state is always considered the source of truth.
+
+Failures to create, update, or end Activities never interrupt application behavior.
+
+## Rationale
+
+The routine experience must remain functional even when:
+
+- Live Activities are disabled
+- Activity authorization changes
+- system limits prevent Activity creation
+
+---
+
+# Superseded Decisions
+
+## Former Day-Complete Linger
+
+Previous versions kept the Live Activity visible for approximately three minutes after all routines completed.
+
+This behavior has been removed.
+
+Reason:
+
+- depended on delayed dismissal scheduling
+- introduced unnecessary lifecycle complexity
+- provided no functional benefit over immediate completion

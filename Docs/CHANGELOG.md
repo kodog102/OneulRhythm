@@ -1,124 +1,111 @@
-# 🌿 CHANGELOG
+# Changelog
 
 All notable changes to OneulRhythm are documented in this file.
 
-This project follows a milestone-based changelog rather than strict semantic versioning.
+The format loosely follows Keep a Changelog and documents meaningful user-facing or architectural changes.
 
 ---
 
 # Unreleased
 
-## Planned
+## Added
 
 ### Live Activity
 
-- Introduce `TodayRhythmSnapshot`
-- Add `LiveActivityCoordinator`
-- Lock Screen UI
-- Dynamic Island UI
-- Interactive completion
-- Shared snapshot architecture
+- Introduced ActivityKit-based Live Activity support.
+- Added Widget Extension for Live Activity rendering.
+- Introduced shared ActivityKit models through `OneulRhythmShared`.
+- Added shared presentation policies for consistent Activity rendering.
 
-### Notifications
+### Architecture
 
-- Cancel notification on completion
-- Cancel notification on delete
-- Reschedule notification on edit
+- Introduced `LiveActivityCoordinator` as the single synchronization layer between schedule snapshots and ActivityKit.
+- Centralized Activity reconciliation and cleanup.
+- Shared Activity definitions across the app target and widget extension.
 
 ---
 
-# 2026-07-15
+## Changed
 
-## Sprint 4 — Notification Foundation
+### Day Completion
 
-### Added
+- Live Activities now end immediately when all routines for the current day are completed.
+- Removed delayed dismissal behavior.
+- TodayView remains the primary completion experience.
 
-- Introduced `NotificationScheduling` protocol.
-- Added `NotificationService`.
-- Local notification authorization support.
-- One-shot calendar notification scheduling.
-- Pending notification inspection.
-- Notification cancellation API.
+### Activity Lifecycle
 
+- Enforced one logical Live Activity per calendar day.
+- Canonical activity selection now uses:
+  1. Latest `updatedAt`
+  2. Lexicographically smallest identifier
 
+- Cleanup operations now target only eligible runtime activities.
 
-### Added
+### Synchronization
 
-Reminder permission flow.
-
-- Permission requested only when Reminder is enabled.
-- No permission request at app launch.
-- Calm Settings guidance after denial.
-- Reminder remains optional.
-
-
-
-### Added
-
-Notification scheduling after routine creation.
-
-Rules:
-
-- Reminder enabled
-- Permission granted
-- Reminder time is still in the future
-
-Routine creation always succeeds even if scheduling fails.
-
-### Product Decision
-
-Notifications are optional.
-
-Live Activity will become the primary experience.
-
-Notifications exist only to gently invite users into today's rhythm.
+- Live Activity synchronization remains best-effort.
+- Application state continues to be the single source of truth.
+- Serialization continues through the FIFO task chain.
 
 ---
 
+## Removed
 
-
-# 2026-07-14
-
-
-
-## Sprint 3 — Experience
-
-
-
-### Added
-
-Today experience improvements.
-
-- Current rhythm
-- Overdue rhythm
-- Next rhythm
-- Progress messaging
-- Empty state
-- Korean date formatting
-
-
-
-### Added
-
-Smart past-time routine creation.
-
-If the selected time has already passed:
-
-- Register for Today
-- or
-- Register for Tomorrow
-
-The user decides.
-
-### Changed
-
-Progress card messaging.
-
-Progress now feels calmer and more supportive.
+- Three-minute day-complete lingering behavior.
+- Delayed dismissal scheduling using `.after(...)`.
+- Internal waiting logic based on `Task.sleep`.
+- Re-ending previously ended activities.
 
 ---
 
+# Sprint History
 
+## Sprint 6-1
 
-# 2026
+### Completed
 
+- Widget Extension
+- Shared Activity definitions
+- Live Activity runtime architecture
+- Immediate day-complete dismissal
+- Canonical reconciliation
+- Duplicate cleanup
+- Previous-day cleanup
+- Eligible activity cleanup
+- Snapshot-driven synchronization
+
+---
+
+## Previous Sprints
+
+### Sprint 5
+
+- Routine repository
+- Schedule Engine
+- TodayViewModel integration
+- Progress calculation
+- Routine completion persistence
+
+### Sprint 4
+
+- SwiftData integration
+- Repository abstraction
+- Today screen implementation
+
+### Sprint 3
+
+- Routine creation flow
+- Add Routine UI
+- Routine entity mapping
+
+### Sprint 2
+
+- Project structure
+- MVVM foundation
+
+### Sprint 1
+
+- Initial application setup
+- SwiftUI
+- SwiftData project configuration
