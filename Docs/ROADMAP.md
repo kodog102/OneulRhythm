@@ -1,155 +1,123 @@
 # Roadmap
 
-This roadmap outlines the planned evolution of OneulRhythm.
+This roadmap tracks the long-term evolution of OneulRhythm.
 
-It focuses on product milestones rather than individual implementation tasks.
-
----
-
-# Vision
-
-OneulRhythm helps users focus on what matters now.
-
-The product aims to provide a calm, distraction-free routine experience across iPhone, Lock Screen, Dynamic Island, and future Apple platforms.
+Completed work remains documented to preserve project history and architectural intent.
 
 ---
 
-# Completed Milestones
+# Current Status
 
-## Sprint 1 — Foundation ✅
+## ✅ Sprint 6-1 — Live Activity Lifecycle
 
 Completed
 
-- SwiftUI project setup
-- SwiftData integration
-- Basic project structure
-- MVVM foundation
-
----
-
-## Sprint 2 — Routine Creation ✅
-
-Completed
-
-- Routine model
-- Routine creation flow
-- Add Routine screen
-- Repository abstraction
-
----
-
-## Sprint 3 — Today Experience ✅
-
-Completed
-
-- TodayView
-- Current routine
-- Upcoming routine
-- Daily progress
-- Empty state
-
----
-
-## Sprint 4 — Schedule Engine ✅
-
-Completed
-
-- RoutineScheduleEngine
-- Snapshot generation
-- Current/Upcoming calculation
-- Progress calculation
-
----
-
-## Sprint 5 — Routine Completion ✅
-
-Completed
-
-- Routine completion persistence
-- TodayView refresh
-- Repository integration
-- Snapshot-driven updates
-
----
-
-## Sprint 6-1 — Live Activity MVP ✅
-
-Completed
+Highlights
 
 - Widget Extension
-- Shared Activity definitions
-- Live Activity synchronization
-- One Activity Per Day policy
-- Canonical reconciliation
+- Shared Activity models
+- Live Activity coordinator
+- One logical Live Activity per day
 - Immediate day-complete dismissal
-- Snapshot-driven Activity updates
+- Empty snapshot cleanup
+- Activity reconciliation
 
 ---
 
-# Next Milestones
+## ✅ Sprint 6-2 — Past Rhythm Experience
 
-## Sprint 6-2 — Routine Timeline
+Completed
 
-Planned
+Highlights
 
-- Improve handling of past incomplete routines
-- Timeline refinements
-- Additional TodayView polish
-- Expanded preview coverage
+- Single primary rhythm presentation
+- Current → Past Incomplete → Next priority
+- Past incomplete completion flow
+- Lightweight Next Rhythm preview
+- Primary routine promotion animation
+- Visual polish
+- Manual QA completed
 
----
+Known follow-up
 
-## Sprint 7 — Notifications
-
-Planned
-
-- Local notifications
-- Reminder scheduling
-- Snooze support
-- Notification permissions
+- Localize Live Activity time presentation
 
 ---
 
-## Sprint 8 — Widgets
+# Upcoming
 
-Planned
+## Sprint 6-3 — Notification Experience
+
+Goals
+
+- Notification scheduling
+- Reminder generation
+- Snooze behavior
+- Notification authorization flow
+- Notification testing
+
+Constraints
+
+- Notifications remain secondary.
+- Live Activity continues to be the primary ongoing experience.
+
+---
+
+## Sprint 6-4 — Widget Experience
+
+Goals
 
 - Home Screen widgets
-- Interactive widgets
-- Widget timeline improvements
+- Lock Screen widgets
+- Timeline updates
+- Widget polish
 
 ---
 
-## Sprint 9 — Apple Watch
+## Sprint 6-5 — Apple Watch
 
-Planned
+Goals
 
-- Watch companion app
-- Wrist-based routine reminders
-- Shared schedule presentation
+- Watch companion experience
+- Wrist-based reminders
+- Lightweight Today view
+- Watch synchronization
 
 ---
 
-## Sprint 10 — User Experience
+## Future Improvements
 
-Planned
+UX
 
-- Accessibility improvements
-- VoiceOver refinement
+- Localize Live Activity time formatting
+- Accessibility polish
 - Animation polish
-- Performance optimization
+- Empty-state refinement
+
+Architecture
+
+- Unit tests
+- Snapshot tests
+- CI pipeline
+- Performance monitoring
+
+Quality
+
+- Expanded manual QA scenarios
+- Automated regression tests
+- Preview coverage improvements
+- Documentation maintenance
 
 ---
 
-# Future
+# Long-Term Vision
 
-Potential future directions include:
+OneulRhythm should remain:
 
-- iCloud synchronization
-- Family routine sharing
-- Health integration expansion
-- Focus Mode automation
-- Shortcuts support
-- Cross-device continuity
+- Calm
+- Lightweight
+- Timeline-driven
+- Snapshot-driven
+- Single-focus
 
-These items are exploratory and are not currently scheduled.
+Every new feature should reinforce today's rhythm rather than compete for the user's attention.

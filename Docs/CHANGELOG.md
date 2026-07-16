@@ -1,111 +1,158 @@
 # Changelog
 
-All notable changes to OneulRhythm are documented in this file.
+All notable changes to OneulRhythm are documented here.
 
-The format loosely follows Keep a Changelog and documents meaningful user-facing or architectural changes.
+The project follows an incremental sprint-based development process.
 
 ---
 
-# Unreleased
+# Sprint 6-2 — Past Rhythm Experience
+
+## Summary
+
+Completed the Past Rhythm Experience by introducing a single-primary presentation model while preserving the existing schedule architecture.
+
+The Today screen now guides users naturally through today's rhythm without presenting a backlog of unfinished routines.
+
+---
 
 ## Added
 
-### Live Activity
-
-- Introduced ActivityKit-based Live Activity support.
-- Added Widget Extension for Live Activity rendering.
-- Introduced shared ActivityKit models through `OneulRhythmShared`.
-- Added shared presentation policies for consistent Activity rendering.
-
-### Architecture
-
-- Introduced `LiveActivityCoordinator` as the single synchronization layer between schedule snapshots and ActivityKit.
-- Centralized Activity reconciliation and cleanup.
-- Shared Activity definitions across the app target and widget extension.
+- Past Incomplete Rhythm presentation.
+- Lightweight Next Rhythm preview beneath the primary rhythm.
+- Gentle primary-routine promotion animation after completion.
+- Visual connection between the current rhythm and the upcoming rhythm using a subtle accent indicator.
+- Korean-localized time formatting within the Today screen.
 
 ---
 
 ## Changed
 
-### Day Completion
+- Introduced presentation priority:
 
-- Live Activities now end immediately when all routines for the current day are completed.
-- Removed delayed dismissal behavior.
-- TodayView remains the primary completion experience.
+  1. Current Rhythm
+  2. Past Incomplete Rhythm
+  3. Next Rhythm
 
-### Activity Lifecycle
-
-- Enforced one logical Live Activity per calendar day.
-- Canonical activity selection now uses:
-  1. Latest `updatedAt`
-  2. Lexicographically smallest identifier
-
-- Cleanup operations now target only eligible runtime activities.
-
-### Synchronization
-
-- Live Activity synchronization remains best-effort.
-- Application state continues to be the single source of truth.
-- Serialization continues through the FIFO task chain.
+- Removed backlog-style presentation of multiple past incomplete routines.
+- Only one primary routine card is shown at any time.
+- Past incomplete routines now appear one at a time.
+- Updated preview terminology from "Overdue" to "Past Incomplete".
+- Primary past-incomplete cards now share the same visual emphasis as other primary cards.
+- Next Rhythm is now presented as a lightweight preview instead of a competing card.
 
 ---
 
-## Removed
+## Architecture
 
-- Three-minute day-complete lingering behavior.
-- Delayed dismissal scheduling using `.after(...)`.
-- Internal waiting logic based on `Task.sleep`.
-- Re-ending previously ended activities.
+No architectural changes.
+
+The following components remain unchanged:
+
+- RoutineScheduleEngine
+- Repository
+- RoutineStatus
+- LiveActivityCoordinator
+- Activity lifecycle
+- Widget architecture
+
+Presentation composition is handled by TodayViewModel while TodayRhythmSnapshot continues to expose schedule facts only.
 
 ---
 
-# Sprint History
+## Verification
 
-## Sprint 6-1
+Completed:
 
-### Completed
+- Architecture Review
+- Implementation Review
+- QA Review
+- QA Fix
+- QA Re-check
+- Manual Simulator Verification
+- Visual QA
 
-- Widget Extension
-- Shared Activity definitions
-- Live Activity runtime architecture
-- Immediate day-complete dismissal
-- Canonical reconciliation
+Verified scenarios:
+
+- Current Rhythm priority
+- Past Incomplete priority
+- Next Rhythm priority
+- Completion promotion
+- Multiple past routines
+- Day Complete
+- Live Activity immediate dismissal
+- Relaunch persistence
+
+---
+
+## Known Issues
+
+- Live Activity currently displays times using the system default format (e.g. `4:02 PM`) instead of the Korean presentation used by TodayView (`오후 4:02`).
+- This is a UX consistency issue only and has been deferred to a future sprint.
+
+---
+
+# Sprint 6-1 — Live Activity Lifecycle
+
+## Summary
+
+Completed the production Live Activity architecture.
+
+The project now supports a single logical Live Activity for each day using ActivityKit and WidgetKit.
+
+---
+
+## Added
+
+- Widget Extension.
+- Shared ActivityKit models.
+- Shared presentation policy.
+- Live Activity coordinator.
+- Activity reconciliation.
+- Immediate day-complete dismissal.
+- Empty snapshot cleanup.
+- Canonical one-activity-per-day lifecycle.
+
+---
+
+## Changed
+
+- Removed delayed day-complete dismissal.
+- Removed Activity linger behavior.
+- Shared Activity definitions between app and widget.
+- Improved lifecycle reconciliation.
+
+---
+
+## Verification
+
+Completed:
+
+- Architecture Review
+- Implementation Review
+- QA Review
+- Manual Simulator Verification
+
+Verified:
+
+- Single Activity per day
+- Immediate dismissal
 - Duplicate cleanup
 - Previous-day cleanup
-- Eligible activity cleanup
-- Snapshot-driven synchronization
+- Empty snapshot cleanup
+- Widget rendering
 
 ---
 
-## Previous Sprints
+# Previous Sprints
 
-### Sprint 5
+Earlier sprint changes focused on establishing the project's foundation, including:
 
-- Routine repository
-- Schedule Engine
-- TodayViewModel integration
-- Progress calculation
-- Routine completion persistence
-
-### Sprint 4
-
-- SwiftData integration
+- SwiftData persistence
 - Repository abstraction
-- Today screen implementation
-
-### Sprint 3
-
-- Routine creation flow
-- Add Routine UI
-- Routine entity mapping
-
-### Sprint 2
-
-- Project structure
-- MVVM foundation
-
-### Sprint 1
-
-- Initial application setup
-- SwiftUI
-- SwiftData project configuration
+- Today screen
+- Schedule Engine
+- Live Activity integration
+- Widget infrastructure
+- Preview infrastructure
+- Documentation

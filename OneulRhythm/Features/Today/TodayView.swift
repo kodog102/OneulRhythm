@@ -147,25 +147,7 @@ struct TodayView: View {
 
     @ViewBuilder
     private var routineContent: some View {
-        if let currentRoutine = viewModel.currentRoutine {
-            RoutineCardView(
-                routine: currentRoutine,
-                scheduleRole: .current,
-                isCompleting: viewModel.isCompleting(currentRoutine),
-                onComplete: { viewModel.completeRoutine(currentRoutine) }
-            )
-        }
-
-        if !viewModel.overdueRoutines.isEmpty {
-            overdueSection
-        }
-
-        if let nextRoutine = viewModel.nextRoutine {
-            RoutineCardView(
-                routine: nextRoutine,
-                scheduleRole: .next
-            )
-        }
+        primaryRoutineCard
 
         TodayProgressView(
             title: "오늘의 흐름",
@@ -176,17 +158,78 @@ struct TodayView: View {
         )
     }
 
-    private var overdueSection: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.md) {
-            ForEach(Array(viewModel.overdueRoutines.enumerated()), id: \.element.id) { index, routine in
+    /// Renders exactly one primary routine card, chosen by
+    /// `TodayViewModel.primaryRole` (current → past incomplete → next).
+    /// The next routine, when not primary itself, may appear only as quiet
+    /// secondary information — never as a second competing card.
+    @ViewBuilder
+    private var primaryRoutineCard: some View {
+        if let primaryRoutine = viewModel.primaryRoutine, let primaryRole = viewModel.primaryRole {
+            VStack(alignment: .leading, spacing: ORSpacing.xs) {
                 RoutineCardView(
-                    routine: routine,
-                    scheduleRole: .overdue,
-                    showsSectionLabel: index == 0,
-                    isCompleting: viewModel.isCompleting(routine),
-                    onComplete: { viewModel.completeRoutine(routine) }
+                    routine: primaryRoutine,
+                    scheduleRole: primaryRole.scheduleRole,
+                    isCompleting: viewModel.isCompleting(primaryRoutine),
+                    onComplete: { viewModel.completeRoutine(primaryRoutine) }
                 )
+
+                if primaryRole == .pastIncomplete {
+                    Text("지금 이어가도 괜찮아요")
+                        .orTypography(.caption)
+                        .foregroundStyle(ORColors.textSecondary)
+                        .padding(.horizontal, ORSpacing.xs)
+                }
+
+                if let secondaryNextRoutine = viewModel.secondaryNextRoutine {
+                    nextRhythmPreview(for: secondaryNextRoutine)
+                }
             }
+            .animation(.easeInOut(duration: 0.25), value: primaryRoutine.id)
+        }
+    }
+
+    /// A lightweight, non-interactive preview of the next rhythm shown
+    /// beneath the primary card. Deliberately card-less and button-less so
+    /// it never competes with the one primary routine. A subtle vertical
+    /// accent visually connects it to the primary rhythm above.
+    private func nextRhythmPreview(for routine: Routine) -> some View {
+        HStack(alignment: .top, spacing: ORSpacing.xs) {
+            Capsule()
+                .fill(ORColors.divider)
+                .frame(width: 2)
+                .frame(maxHeight: .infinity)
+
+            VStack(alignment: .leading, spacing: ORSpacing.xxs) {
+                Text("다음 리듬")
+                    .orTypography(.caption, weight: .medium)
+                    .foregroundStyle(ORColors.textTertiary)
+
+                Text(routine.title)
+                    .orTypography(.body)
+                    .foregroundStyle(ORColors.textSecondary)
+
+                Text(routine.formattedTime)
+                    .orTypography(.caption)
+                    .foregroundStyle(ORColors.textTertiary)
+            }
+        }
+        .padding(.horizontal, ORSpacing.xs)
+        .padding(.top, ORSpacing.xxs)
+    }
+}
+
+private extension TodayPrimaryRole {
+    /// Maps the ViewModel's presentation role onto `RoutineCardView`'s
+    /// existing role-driven styling. `.pastIncomplete` reuses the card's
+    /// current "지나간 리듬" section label and completion flow unchanged.
+    var scheduleRole: RoutineScheduleRole {
+        switch self {
+        case .current:
+            return .current
+        case .pastIncomplete:
+            return .overdue
+        case .next:
+            return .next
         }
     }
 }
@@ -229,10 +272,53 @@ struct TodayView: View {
     )
 }
 
-#Preview("Current + Overdue + Next") {
+#Preview("Current + Past Incomplete + Next") {
     TodayView(
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.currentOverdueNextEntities()
+        ),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
+        nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
+    )
+}
+
+#Preview("Past Incomplete Only") {
+    TodayView(
+        repository: PreviewRoutineRepository(
+            entities: TodayPreviewData.pastIncompleteOnlyEntities()
+        ),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
+        nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
+    )
+}
+
+#Preview("Multiple Past Incomplete") {
+    TodayView(
+        repository: PreviewRoutineRepository(
+            entities: TodayPreviewData.multiplePastIncompleteEntities()
+        ),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
+        nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
+    )
+}
+
+#Preview("Current + Past Incomplete") {
+    TodayView(
+        repository: PreviewRoutineRepository(
+            entities: TodayPreviewData.currentAndPastIncompleteEntities()
+        ),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
+        nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
+    )
+}
+
+/// Interactive: tap "완료했어요" on the past incomplete card to verify it
+/// promotes to the next routine (past incomplete → next), with no backlog
+/// card left behind.
+#Preview("Completion Promotion") {
+    TodayView(
+        repository: PreviewRoutineRepository(
+            entities: TodayPreviewData.pastIncompleteOnlyEntities()
         ),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
@@ -321,6 +407,77 @@ private enum TodayPreviewData {
             ),
             RoutineEntity(
                 routine: MockRoutineData.nextRoutine
+            )
+        ]
+    }
+
+    /// No current routine — only a past incomplete routine and a future
+    /// next routine. The next routine should appear as quiet secondary
+    /// information beneath the past incomplete card.
+    @MainActor
+    static func pastIncompleteOnlyEntities() -> [RoutineEntity] {
+        [
+            RoutineEntity(
+                routine: Routine(
+                    title: "아침 스트레칭",
+                    startTime: MockRoutineData.date(hour: 6, minute: 30),
+                    endTime: MockRoutineData.date(hour: 6, minute: 45),
+                    category: .morning,
+                    status: .upcoming
+                )
+            ),
+            RoutineEntity(
+                routine: MockRoutineData.nextRoutine
+            )
+        ]
+    }
+
+    /// Two past incomplete routines. Only the earliest should appear as the
+    /// primary card — there is no backlog list of the remaining one.
+    @MainActor
+    static func multiplePastIncompleteEntities() -> [RoutineEntity] {
+        [
+            RoutineEntity(
+                routine: Routine(
+                    title: "아침 스트레칭",
+                    startTime: MockRoutineData.date(hour: 6, minute: 0),
+                    endTime: MockRoutineData.date(hour: 6, minute: 15),
+                    category: .morning,
+                    status: .upcoming
+                )
+            ),
+            RoutineEntity(
+                routine: Routine(
+                    title: "물 한잔 마시기",
+                    startTime: MockRoutineData.date(hour: 6, minute: 30),
+                    endTime: MockRoutineData.date(hour: 6, minute: 45),
+                    category: .morning,
+                    status: .upcoming
+                )
+            ),
+            RoutineEntity(
+                routine: MockRoutineData.nextRoutine
+            )
+        ]
+    }
+
+    /// A current routine together with an earlier past incomplete routine
+    /// and no future routine. Current must win priority — the past
+    /// incomplete routine stays a fact in the snapshot but is not rendered.
+    @MainActor
+    static func currentAndPastIncompleteEntities() -> [RoutineEntity] {
+        [
+            RoutineEntity(
+                routine: Routine(
+                    title: "아침 스트레칭",
+                    startTime: MockRoutineData.date(hour: 6, minute: 30),
+                    endTime: MockRoutineData.date(hour: 6, minute: 45),
+                    category: .morning,
+                    status: .upcoming
+                )
+            ),
+            RoutineEntity(
+                routine: MockRoutineData.currentRoutine.updatingStatus(.upcoming)
             )
         ]
     }

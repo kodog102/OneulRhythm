@@ -72,8 +72,13 @@ struct Routine: Identifiable {
         )
     }
 
+    // Explicitly locale-pinned to ko_KR, matching the rest of the app's
+    // Korean-only presentation (e.g. `TodayViewModel.formattedTodayDate`).
+    // Still fully locale-aware formatting — Foundation resolves the
+    // AM/PM ("오전"/"오후") and ordering itself; no strings are hardcoded.
     private static let displayTimeFormat = Date.FormatStyle(
         date: .omitted,
         time: .shortened
     )
+    .locale(Locale(identifier: "ko_KR"))
 }

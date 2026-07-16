@@ -6,6 +6,16 @@
 import Combine
 import Foundation
 
+/// The single primary routine role `TodayView` should render.
+///
+/// `TodayViewModel` owns this presentation priority so `TodayView` never
+/// selects between schedule facts itself: current → past incomplete → next.
+enum TodayPrimaryRole: Equatable {
+    case current
+    case pastIncomplete
+    case next
+}
+
 @MainActor
 final class TodayViewModel: ObservableObject {
     @Published private(set) var snapshot: TodayRhythmSnapshot
@@ -58,6 +68,44 @@ final class TodayViewModel: ObservableObject {
 
     var nextRoutine: Routine? {
         snapshot.nextRoutine
+    }
+
+    var pastIncompleteRoutine: Routine? {
+        snapshot.pastIncompleteRoutine
+    }
+
+    /// The one routine `TodayView` should render as its primary card.
+    ///
+    /// Priority: current → past incomplete → next. This is presentation
+    /// composition, not schedule interpretation — the underlying facts still
+    /// come entirely from `TodayRhythmSnapshot`.
+    var primaryRoutine: Routine? {
+        snapshot.currentRoutine ?? snapshot.pastIncompleteRoutine ?? snapshot.nextRoutine
+    }
+
+    var primaryRole: TodayPrimaryRole? {
+        if snapshot.currentRoutine != nil {
+            return .current
+        }
+
+        if snapshot.pastIncompleteRoutine != nil {
+            return .pastIncomplete
+        }
+
+        if snapshot.nextRoutine != nil {
+            return .next
+        }
+
+        return nil
+    }
+
+    /// The next routine, shown only as quiet secondary information when a
+    /// different routine (current or past incomplete) is already primary.
+    var secondaryNextRoutine: Routine? {
+        guard primaryRole == .current || primaryRole == .pastIncomplete else {
+            return nil
+        }
+        return snapshot.nextRoutine
     }
 
     var completedRoutineCount: Int {

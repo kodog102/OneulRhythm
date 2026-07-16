@@ -31,7 +31,7 @@ enum TodayRhythmActivityMapper {
             calendarDayStart: calendarDayStart
         )
 
-        let focusRoutine = snapshot.currentRoutine ?? snapshot.overdueRoutines.first
+        let focusRoutine = snapshot.currentRoutine ?? snapshot.pastIncompleteRoutine
         let nextRoutine = snapshot.nextRoutine
 
         let contentState = TodayRhythmActivityAttributes.ContentState(

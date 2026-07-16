@@ -101,7 +101,6 @@ struct RoutineCardView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(ORSpacing.cardPadding)
             .orCard()
-            .opacity(resolvedRole == .overdue ? 0.92 : 1)
         }
     }
 
@@ -151,7 +150,7 @@ struct RoutineCardView: View {
     .background(ORColors.background)
 }
 
-#Preview("Overdue Routine") {
+#Preview("Past Incomplete Routine") {
     RoutineCardView(
         routine: MockRoutineData.currentRoutine.updatingStatus(.upcoming),
         scheduleRole: .overdue,

@@ -23,6 +23,10 @@ struct TodayRhythmSnapshot {
     let routines: [Routine]
     let currentRoutine: Routine?
     let overdueRoutines: [Routine]
+    /// The earliest past-due, not-yet-completed routine — a fact about
+    /// today's schedule, not a presentation choice. Presentation priority
+    /// (current → past incomplete → next) is decided by `TodayViewModel`.
+    let pastIncompleteRoutine: Routine?
     let nextRoutine: Routine?
     let completedCount: Int
     let totalCount: Int
@@ -42,6 +46,7 @@ struct TodayRhythmSnapshot {
         self.routines = routines
         self.currentRoutine = schedule.currentRoutine
         self.overdueRoutines = schedule.overdueRoutines
+        self.pastIncompleteRoutine = schedule.overdueRoutines.first
         self.nextRoutine = schedule.nextRoutine
         self.completedCount = completedCount
         self.totalCount = totalCount
