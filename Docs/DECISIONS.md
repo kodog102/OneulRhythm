@@ -1,123 +1,137 @@
-# DR-011 — Separate Rhythm Definition from Daily Completion State
+# # Decision Records
 
-## Status
+This document records architectural and product decisions that intentionally shape the long-term direction of OneulRhythm.
+
+---
+
+# DR-010 — Single Primary Rhythm Presentation
+
+Status
 
 Accepted
+
+Sprint
+
+Sprint 6-2
 
 ---
 
 ## Context
 
-Early versions of OneulRhythm stored completion directly on the rhythm itself.
+As routines progress throughout the day, users may have:
 
-This approach worked for one-time rhythms but became problematic once recurring rhythms were introduced.
+- a current routine
 
-A recurring rhythm represents a long-term lifestyle pattern.
+- one or more past incomplete routines
 
-Completion, however, belongs to a specific day.
+- future routines
 
-Treating them as the same concept causes unnecessary complexity and makes recurrence difficult to support.
+Displaying multiple unfinished routines at once created a backlog-like experience that conflicted with OneulRhythm's calm, timeline-first philosophy.
+
+The product should always encourage the next meaningful action without overwhelming the user.
 
 ---
 
 ## Decision
 
-Separate rhythm definition from daily completion state.
+Today presents exactly one primary rhythm.
 
-A rhythm represents what should happen.
+Presentation priority is fixed:
 
-Completion represents what happened today.
+1. Current Rhythm
 
-Rhythm Definition
+2. Past Incomplete Rhythm
 
-- Title
-- Time
-- Category
-- Recurrence
-- Reminder
-- Active
+3. Next Rhythm
 
-Daily Completion
+4. Day Complete / Empty
 
-- Rhythm Identifier
-- Date
-- Completed At
+Only one primary routine card is displayed.
 
-The application derives today's experience by combining both datasets.
+Past incomplete routines are surfaced one at a time.
+
+Future routines may appear only as lightweight preview information beneath the current primary rhythm.
 
 ---
 
+## Architecture
 
+Schedule interpretation remains the responsibility of:
 
-## MVP Recurrence
+- RoutineScheduleEngine
 
-The initial release intentionally limits recurrence options.
+TodayRhythmSnapshot exposes schedule facts only.
 
-Supported
+Presentation composition belongs to:
 
-- Daily
-- Weekdays
-- Weekends
-- No Repeat
+- TodayViewModel
 
-Not Supported
+TodayView never performs:
 
-- Custom weekdays
-- Monthly recurrence
-- Interval recurrence
-- End dates
-- Exception dates
-- Holiday rules
+- schedule interpretation
 
-The goal is to minimize user input while supporting the majority of daily use cases.
+- sorting
+
+- filtering
+
+- priority selection
 
 ---
-
-
-
-## Rationale
-
-Most users repeatedly perform the same rhythms.
-
-Recreating those rhythms every day introduces unnecessary friction.
-
-The application should remember the rhythm so the user does not have to.
-
-Less Input.
-
-More Presence.
-
----
-
-
 
 ## Consequences
 
+Benefits
 
+- Single focus throughout the day.
 
-### Benefits
+- Calm experience without backlog pressure.
 
-- Recurring rhythms become natural.
-- Daily completion automatically resets.
-- Schedule Engine remains deterministic.
-- Live Activity consumes today's occurrence without additional logic.
-- Notification scheduling becomes significantly simpler.
-- Future recurrence patterns can be added without redesigning the architecture.
+- Consistent presentation across TodayView and Live Activity.
 
+- Clear separation between schedule logic and presentation logic.
 
+Trade-offs
 
-### Trade-offs
+- Only one past incomplete routine is visible at a time.
 
-- Existing persistence requires migration.
-- Completion is no longer stored directly on the rhythm.
-- The Schedule Engine becomes responsible for composing today's state.
+- Users cannot review every unfinished routine directly from TodayView.
+
+- Additional history or list-based views, if introduced in the future, should remain secondary experiences.
 
 ---
 
+## Alternatives Considered
 
+### Add new RoutineStatus values
+
+Rejected.
+
+Past incomplete is derived from time and completion state.
+
+Persisting this information would duplicate schedule logic.
+
+---
+
+### Multiple primary cards
+
+Rejected.
+
+Multiple prominent cards compete for attention and violate the product philosophy.
+
+---
+
+### Presentation priority inside TodayView
+
+Rejected.
+
+Presentation logic belongs in TodayViewModel.
+
+TodayView should remain a passive rendering layer.
+
+---
 
 ## Related Decisions
 
-- DR-009 — Day Complete Lifecycle
-- DR-010 — Single Primary Rhythm
+- DR-009 — Immediate Day Complete Live Activity dismissal.
 
+- DR-008 — One logical Live Activity per day.

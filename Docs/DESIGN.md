@@ -1,204 +1,207 @@
-# OneulRhythm Design
+# Design
 
-## Vision
+This document describes the user-facing behavior and runtime design of OneulRhythm.
 
-OneulRhythm is not a task management application.
-
-Its purpose is not to help users remember what they have to do.
-
-Its purpose is to help users naturally stay connected with today's rhythm.
-
-Users define a rhythm once.
-
-The application quietly brings that rhythm back every day.
-
-Less Input.
-
-More Presence.
+Implementation details are documented elsewhere.
+This document focuses on how the application behaves.
 
 ---
 
-# Product Philosophy
+# Overview
 
-Today's rhythm is more important than today's tasks.
+OneulRhythm is designed around a single concept:
 
-The application should reduce the amount of management users perform.
+> Show only what matters right now.
 
-Instead, it should gently stay with the user throughout the day.
+Instead of presenting every routine equally, the application emphasizes the user's current rhythm while keeping future tasks visible and completed tasks unobtrusive.
 
-Technology exists to support calm experiences.
-
-Architecture exists to support simplicity.
+The experience is intentionally calm, lightweight, and timeline-driven.
 
 ---
-
-
-
-# Core Experience
-
-The Today screen should never feel like an empty management screen.
-
-It should always present the rhythm that matters most right now.
-
-Priority
-
-Current Rhythm
-
-↓
-
-Past Incomplete Rhythm
-
-↓
-
-Next Rhythm
-
-↓
-
-Day Complete
-
-Only one primary rhythm should be presented at any time.
-
-Showing fewer things creates more focus.
-
----
-
-
-
-# Calm UX
-
-OneulRhythm should feel calm.
-
-Never busy.
-
-Avoid long lists.
-
-Avoid information overload.
-
-Avoid multiple competing actions.
-
-The user should always understand what deserves attention right now.
-
----
-
-
-
-# Recurring Rhythm
-
-Rhythms represent ongoing habits.
-
-Users should not recreate the same rhythm every day.
-
-Instead, a rhythm defines how it repeats.
-
-MVP recurrence options
-
-- Daily
-- Weekdays
-- Weekends
-- No Repeat
-
-Advanced recurrence rules are intentionally postponed.
-
-Examples
-
-Future versions may support
-
-- Custom weekdays
-- Monthly recurrence
-- Interval recurrence
-- End dates
-- Exception dates
-
----
-
-
 
 # Design Principles
 
+The application follows several core principles.
 
+## One current focus
 
-## Reduce Input
+Only one routine is considered the current rhythm.
 
-Whenever possible, prefer reducing user input over adding configuration.
-
-Simple choices should solve the majority of daily use cases.
-
----
-
-
-
-## Progressive Complexity
-
-Advanced customization should appear only when users genuinely need it.
-
-The first experience should always remain simple.
+The interface avoids presenting multiple competing primary actions.
 
 ---
 
+## Timeline first
 
+The schedule itself determines what is shown.
 
-## One Primary Focus
-
-Only one rhythm deserves primary attention.
-
-Users should never have to decide which card matters most.
-
-The application makes that decision.
+Views do not interpret time independently.
 
 ---
 
+## Calm completion
 
+Completing a routine should feel peaceful rather than celebratory.
 
-## Consistency
+Completion is reflected immediately inside TodayView.
 
-Every consumer should present the same rhythm.
-
-Consumers include
-
-- Today Screen
-- Live Activity
-- Notifications
-- Widgets
-- Apple Watch
-
-They all consume the same schedule.
-
-They never implement their own scheduling logic.
+The Live Activity disappears once its purpose has finished.
 
 ---
 
+## Progressive disclosure
 
+Information appears only when relevant.
 
-## Day Completion
+Examples include:
 
-Completing every rhythm should create a peaceful ending.
+- Current routine
+- Upcoming routine
+- Daily progress
+- Empty state
 
-When the final rhythm is completed
-
-- Today displays Day Complete.
-- Live Activity ends immediately.
-- The next valid rhythm appears on the next applicable day.
+Past information never competes with current work.
 
 ---
 
+# Daily Routine Lifecycle
 
+A routine progresses through the following logical states.
 
-## Future Expansion
+```
 
-Future features should extend the experience without changing the product philosophy.
+Upcoming
 
-Examples
+↓
 
-- Notifications
-- Widgets
-- Apple Watch
-- Statistics
-- Subscription Features
+Current
 
-Every new feature should answer one question.
+↓
 
-Does this help users stay connected with today's rhythm?
+Completed
 
-If not,
+```
 
-it probably does not belong in OneulRhythm.
+The Schedule Engine determines these states from the current time and stored completion status.
+
+---
+
+# Schedule Engine
+
+RoutineScheduleEngine is responsible for producing a schedule snapshot.
+
+Each snapshot contains:
+
+- today's routines
+- current routine
+- next routine
+- completed routines
+- progress information
+
+The engine acts as the single source of truth for routine timing.
+
+Views never calculate schedule state themselves.
+
+---
+
+# Today Screen
+
+The Today screen displays the current schedule snapshot.
+
+Its responsibilities include:
+
+- current routine
+- upcoming routine
+- daily progress
+- empty state
+- routine completion
+
+Completing a routine updates the underlying data and requests a new schedule snapshot.
+
+---
+
+# Live Activity
+
+The Live Activity mirrors the current schedule.
+
+Its purpose is to provide glanceable information outside the application.
+
+The coordinator automatically keeps the Activity synchronized with the latest schedule snapshot.
+
+Only one logical Live Activity exists for each day.
+
+---
+
+## Day completion
+
+When all routines are completed:
+
+- TodayView continues showing the completed day
+- Live Activity ends immediately
+- No delayed dismissal is scheduled
+
+The completion experience belongs to the application rather than the Lock Screen.
+
+---
+
+# Widget Extension
+
+The widget extension renders ActivityKit content using shared models.
+
+Shared Activity definitions ensure:
+
+- identical state interpretation
+- consistent presentation
+- independent rendering process
+
+The extension never owns scheduling logic.
+
+---
+
+# State Flow
+
+```
+
+SwiftData
+
+↓
+
+Repository
+
+↓
+
+Schedule Engine
+
+↓
+
+Schedule Snapshot
+
+↓
+
+TodayView
+
+↓
+
+Live Activity Coordinator
+
+↓
+
+Widget Extension
+
+```
+
+Every presentation surface is derived from the same schedule snapshot.
+
+---
+
+# Future Evolution
+
+Planned future improvements include:
+
+- Snooze support
+- Interactive widgets
+- Apple Watch integration
+- Notification scheduling
+- Rich Dynamic Island layouts
+
+These features will extend the existing snapshot architecture rather than introducing parallel scheduling systems.

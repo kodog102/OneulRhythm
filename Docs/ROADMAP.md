@@ -1,334 +1,123 @@
-# OneulRhythm Roadmap
+# Roadmap
 
-## Product Vision
+This roadmap tracks the long-term evolution of OneulRhythm.
 
-OneulRhythm helps users stay connected with today's rhythm.
-
-The application should minimize management and maximize presence throughout the day.
+Completed work remains documented to preserve project history and architectural intent.
 
 ---
 
-# Completed
+# Current Status
 
-## Sprint 1
-
-Project Foundation
-
-- SwiftUI project
-- SwiftData setup
-- Project structure
-
-Status
-
-✅ Completed
-
----
-
-## Sprint 2
-
-Routine Management
-
-- Create Rhythm
-- Edit Rhythm
-- Delete Rhythm
-- Repository
-
-Status
-
-✅ Completed
-
----
-
-## Sprint 3
-
-Today Experience
-
-- Today Screen
-- Current Rhythm
-- Next Rhythm
-- Progress
-
-Status
-
-✅ Completed
-
----
-
-## Sprint 4
-
-Persistence
-
-- SwiftData integration
-- Repository abstraction
-- ViewModel integration
-
-Status
-
-✅ Completed
-
----
-
-
-
-## Sprint 5
-
-Schedule Engine
-
-- RoutineScheduleEngine
-- Current Rhythm
-- Next Rhythm
-- Progress calculation
-
-Status
-
-✅ Completed
-
----
-
-
-
-# Sprint 6
-
-
-
-## Sprint 6-1
-
-
-
-### Live Activity Lifecycle
-
-Goal
-
-Introduce Live Activity using a stable architecture.
+## ✅ Sprint 6-1 — Live Activity Lifecycle
 
 Completed
 
-- Shared Activity Model
-- Activity Lifecycle
-- Coordinator
-- Immediate Dismissal
+Highlights
+
 - Widget Extension
-
-Status
-
-✅ Completed
+- Shared Activity models
+- Live Activity coordinator
+- One logical Live Activity per day
+- Immediate day-complete dismissal
+- Empty snapshot cleanup
+- Activity reconciliation
 
 ---
 
-
-
-## Sprint 6-2
-
-
-
-### Past Rhythm Experience
-
-Goal
-
-Create a calm Today experience by presenting only one primary rhythm.
+## ✅ Sprint 6-2 — Past Rhythm Experience
 
 Completed
 
-- Single Primary Rhythm
-- Past Rhythm
-- Completion Promotion
-- Next Rhythm Preview
-- Live Activity integration
+Highlights
 
-Status
+- Single primary rhythm presentation
+- Current → Past Incomplete → Next priority
+- Past incomplete completion flow
+- Lightweight Next Rhythm preview
+- Primary routine promotion animation
+- Visual polish
+- Manual QA completed
 
-✅ Completed
+Known follow-up
 
----
-
-
-
-## Sprint 6-3
-
-
-
-### Recurring Rhythm Foundation
-
-Goal
-
-Users should define a rhythm once.
-
-The application should automatically present it again according to its recurrence.
-
-Scope
-
-- Daily
-- Weekdays
-- Weekends
-- No Repeat
-- Daily completion state
-- Schedule Engine update
-
-Success Criteria
-
-- No daily recreation
-- Daily completion resets correctly
-- Current → Past → Next flow preserved
-- Live Activity continues to consume today's rhythm
-
-Out of Scope
-
-- Notifications
-- Snooze
-- Statistics
-- Apple Watch
-- Widgets
-- Advanced recurrence
-
-Status
-
-🚧 Planned
+- Localize Live Activity time presentation
 
 ---
 
+# Upcoming
 
+## Sprint 6-3 — Notification Experience
 
-## Sprint 6-4
+Goals
 
+- Notification scheduling
+- Reminder generation
+- Snooze behavior
+- Notification authorization flow
+- Notification testing
 
+Constraints
 
-### Notification Architecture
-
-Goal
-
-Notification becomes another consumer of today's schedule.
-
-Notification should consume recurring rhythm occurrences.
-
-Notification must never define recurrence itself.
-
-Scope
-
-- Permission
-- NotificationScheduler
-- NotificationPlan
-- Schedule synchronization
-
-Status
-
-📅 Planned
+- Notifications remain secondary.
+- Live Activity continues to be the primary ongoing experience.
 
 ---
 
+## Sprint 6-4 — Widget Experience
 
+Goals
 
-## Sprint 6-5
-
-
-
-### Widget Experience
-
-Goal
-
-Bring today's rhythm to the Home Screen.
-
-Scope
-
-- Home Widget
-- Timeline
-- Shared Snapshot
-
-Status
-
-📅 Planned
+- Home Screen widgets
+- Lock Screen widgets
+- Timeline updates
+- Widget polish
 
 ---
 
+## Sprint 6-5 — Apple Watch
 
+Goals
 
-## Sprint 6-6
-
-
-
-### Apple Watch
-
-Goal
-
-Bring today's rhythm to Apple Watch.
-
-Scope
-
-- Watch App
-- Watch Complication
-- Shared Schedule
-
-Status
-
-📅 Planned
+- Watch companion experience
+- Wrist-based reminders
+- Lightweight Today view
+- Watch synchronization
 
 ---
 
+## Future Improvements
 
+UX
 
-# Future
+- Localize Live Activity time formatting
+- Accessibility polish
+- Animation polish
+- Empty-state refinement
 
+Architecture
 
+- Unit tests
+- Snapshot tests
+- CI pipeline
+- Performance monitoring
 
-## Advanced Recurrence
+Quality
 
-Examples
-
-- Custom weekdays
-- Monthly
-- Every N days
-- End date
-- Exception dates
-- Holiday support
-
----
-
-
-
-## Statistics
-
-Examples
-
-- Completion history
-- Weekly trend
-- Monthly trend
-- Consistency score
+- Expanded manual QA scenarios
+- Automated regression tests
+- Preview coverage improvements
+- Documentation maintenance
 
 ---
 
+# Long-Term Vision
 
+OneulRhythm should remain:
 
-## Smart Reminder
+- Calm
+- Lightweight
+- Timeline-driven
+- Snapshot-driven
+- Single-focus
 
-Examples
-
-- Adaptive reminder
-- Missed rhythm reminder
-- Context-aware reminder
-
----
-
-
-
-## Subscription
-
-Examples
-
-- Advanced recurrence
-- Statistics
-- Multiple themes
-- Premium widgets
-- Cloud Sync
-
----
-
-
-
-# Product Principles
-
-Every new feature should answer one question.
-
-**Does this help users stay connected with today's rhythm?**
-
-If the answer is no,
-
-the feature probably does not belong in OneulRhythm.
+Every new feature should reinforce today's rhythm rather than compete for the user's attention.
