@@ -12,7 +12,6 @@ import SwiftData
 struct OneulRhythmApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
             RoutineEntity.self,
             RecurringRhythmEntity.self,
         ])
