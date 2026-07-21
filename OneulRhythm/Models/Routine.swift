@@ -26,6 +26,12 @@ struct Routine: Identifiable {
     let endTime: Date?
     let category: RoutineCategory
     let status: RoutineStatus
+    /// Originating recurring definition id when this rhythm was materialized
+    /// from a recurring template. `nil` for one-time routines.
+    let recurringRhythmID: UUID?
+    /// Normalized local calendar day for a materialized occurrence.
+    /// `nil` for one-time routines.
+    let occurrenceDate: Date?
 
     init(
         id: UUID = UUID(),
@@ -33,7 +39,9 @@ struct Routine: Identifiable {
         startTime: Date,
         endTime: Date?,
         category: RoutineCategory,
-        status: RoutineStatus
+        status: RoutineStatus,
+        recurringRhythmID: UUID? = nil,
+        occurrenceDate: Date? = nil
     ) {
         self.id = id
         self.title = title
@@ -41,6 +49,8 @@ struct Routine: Identifiable {
         self.endTime = endTime
         self.category = category
         self.status = status
+        self.recurringRhythmID = recurringRhythmID
+        self.occurrenceDate = occurrenceDate
     }
 
     var isCurrent: Bool {
@@ -68,7 +78,9 @@ struct Routine: Identifiable {
             startTime: startTime,
             endTime: endTime,
             category: category,
-            status: status
+            status: status,
+            recurringRhythmID: recurringRhythmID,
+            occurrenceDate: occurrenceDate
         )
     }
 

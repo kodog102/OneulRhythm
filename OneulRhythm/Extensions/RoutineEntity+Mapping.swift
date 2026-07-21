@@ -20,7 +20,9 @@ extension RoutineEntity {
             startTime: startTime,
             endTime: endTime,
             category: category,
-            status: status
+            status: status,
+            recurringRhythmID: recurringRhythmID,
+            occurrenceDate: occurrenceDate
         )
     }
 
@@ -38,6 +40,8 @@ extension RoutineEntity {
             category: routine.category,
             status: routine.status == .current ? .upcoming : routine.status,
             reminderMinutes: reminderMinutes,
+            recurringRhythmID: routine.recurringRhythmID,
+            occurrenceDate: routine.occurrenceDate,
             createdAt: createdAt,
             updatedAt: updatedAt
         )

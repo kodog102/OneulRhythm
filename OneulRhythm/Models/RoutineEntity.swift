@@ -15,6 +15,13 @@ final class RoutineEntity {
     var categoryRawValue: String
     var statusRawValue: String
     var reminderMinutes: Int?
+    /// Originating `RecurringRhythmEntity.id` when this row is a materialized
+    /// recurring occurrence. `nil` for one-time routines.
+    var recurringRhythmID: UUID?
+    /// Normalized local calendar day for a materialized occurrence
+    /// (`CalendarDayPolicy.day(for:)`). `nil` for one-time routines.
+    /// Normalization is owned by callers — this entity stores the value as-is.
+    var occurrenceDate: Date?
     var createdAt: Date
     var updatedAt: Date
 
@@ -26,6 +33,8 @@ final class RoutineEntity {
         category: RoutineCategory,
         status: RoutineStatus,
         reminderMinutes: Int? = nil,
+        recurringRhythmID: UUID? = nil,
+        occurrenceDate: Date? = nil,
         createdAt: Date = Date(),
         updatedAt: Date = Date()
     ) {
@@ -36,6 +45,8 @@ final class RoutineEntity {
         self.categoryRawValue = category.rawValue
         self.statusRawValue = status.rawValue
         self.reminderMinutes = reminderMinutes
+        self.recurringRhythmID = recurringRhythmID
+        self.occurrenceDate = occurrenceDate
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }
