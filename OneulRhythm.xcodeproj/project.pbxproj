@@ -18,6 +18,13 @@
 			remoteGlobalIDString = 6A9F10032FD2000100A43855;
 			remoteInfo = OneulRhythmWidgetsExtension;
 		};
+		939ADD04FD937F6E61368062 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6A8E25B82FD1473F0043111D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6A8E25BF2FD1473F0043111D;
+			remoteInfo = OneulRhythm;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,6 +42,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3522CB9D4034C34F87DB33A0 /* OneulRhythmTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneulRhythmTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A8E25C02FD1473F0043111D /* OneulRhythm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneulRhythm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A9F10002FD2000100A43855 /* OneulRhythmWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneulRhythmWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -50,13 +58,24 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		2F22059DA4FC381454CA2540 /* OneulRhythmTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			path = OneulRhythmTests;
+			sourceTree = "<group>";
+		};
 		6A8E25C22FD1473F0043111D /* OneulRhythm */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = OneulRhythm;
 			sourceTree = "<group>";
 		};
 		6A9F10062FD2000100A43855 /* OneulRhythmShared */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = OneulRhythmShared;
 			sourceTree = "<group>";
 		};
@@ -71,6 +90,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3572F6B35AB1CDAF2E76C865 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6A8E25BD2FD1473F0043111D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -94,6 +120,7 @@
 				6A8E25C22FD1473F0043111D /* OneulRhythm */,
 				6A9F10062FD2000100A43855 /* OneulRhythmShared */,
 				6A9F10072FD2000100A43855 /* OneulRhythmWidgets */,
+				2F22059DA4FC381454CA2540 /* OneulRhythmTests */,
 				6A8E25C12FD1473F0043111D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,6 +130,7 @@
 			children = (
 				6A8E25C02FD1473F0043111D /* OneulRhythm.app */,
 				6A9F10002FD2000100A43855 /* OneulRhythmWidgetsExtension.appex */,
+				3522CB9D4034C34F87DB33A0 /* OneulRhythmTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -129,8 +157,6 @@
 				6A9F10062FD2000100A43855 /* OneulRhythmShared */,
 			);
 			name = OneulRhythm;
-			packageProductDependencies = (
-			);
 			productName = OneulRhythm;
 			productReference = 6A8E25C02FD1473F0043111D /* OneulRhythm.app */;
 			productType = "com.apple.product-type.application";
@@ -152,11 +178,30 @@
 				6A9F10072FD2000100A43855 /* OneulRhythmWidgets */,
 			);
 			name = OneulRhythmWidgetsExtension;
-			packageProductDependencies = (
-			);
 			productName = OneulRhythmWidgetsExtension;
 			productReference = 6A9F10002FD2000100A43855 /* OneulRhythmWidgetsExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		6B2893B6E4E2F94F2F91C6F5 /* OneulRhythmTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 447E369761D8D2BF174B0CB4 /* Build configuration list for PBXNativeTarget "OneulRhythmTests" */;
+			buildPhases = (
+				5CAF70AE9D5F60A864869504 /* Sources */,
+				3572F6B35AB1CDAF2E76C865 /* Frameworks */,
+				B517F9CA756AECC9B974C265 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8B26D83FE1176971DD59FD8F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				2F22059DA4FC381454CA2540 /* OneulRhythmTests */,
+			);
+			name = OneulRhythmTests;
+			productName = OneulRhythmTests;
+			productReference = 3522CB9D4034C34F87DB33A0 /* OneulRhythmTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -173,6 +218,10 @@
 					};
 					6A9F10032FD2000100A43855 = {
 						CreatedOnToolsVersion = 26.5;
+					};
+					6B2893B6E4E2F94F2F91C6F5 = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 6A8E25BF2FD1473F0043111D;
 					};
 				};
 			};
@@ -192,6 +241,7 @@
 			targets = (
 				6A8E25BF2FD1473F0043111D /* OneulRhythm */,
 				6A9F10032FD2000100A43855 /* OneulRhythmWidgetsExtension */,
+				6B2893B6E4E2F94F2F91C6F5 /* OneulRhythmTests */,
 			);
 		};
 /* End PBXProject section */
@@ -211,9 +261,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B517F9CA756AECC9B974C265 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5CAF70AE9D5F60A864869504 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6A8E25BC2FD1473F0043111D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -236,9 +300,29 @@
 			target = 6A9F10032FD2000100A43855 /* OneulRhythmWidgetsExtension */;
 			targetProxy = 6A9F10022FD2000100A43855 /* PBXContainerItemProxy */;
 		};
+		8B26D83FE1176971DD59FD8F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OneulRhythm;
+			target = 6A8E25BF2FD1473F0043111D /* OneulRhythm */;
+			targetProxy = 939ADD04FD937F6E61368062 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		15587C018840155819AFECF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MY345AX6MW;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yiu0905.OneulRhythmTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		6A8E25CB2FD147400043111D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -486,9 +570,32 @@
 			};
 			name = Release;
 		};
+		DA4A6C4DE4C2F7BF636CE76F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MY345AX6MW;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yiu0905.OneulRhythmTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		447E369761D8D2BF174B0CB4 /* Build configuration list for PBXNativeTarget "OneulRhythmTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA4A6C4DE4C2F7BF636CE76F /* Debug */,
+				15587C018840155819AFECF8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		6A8E25BB2FD1473F0043111D /* Build configuration list for PBXProject "OneulRhythm" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
