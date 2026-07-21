@@ -43,27 +43,79 @@ SwiftUI, SwiftData, ActivityKit을 활용해
 
 ## 🚀 Features
 
+OneulRhythm은
+
+하루의 흐름을 자연스럽게 이어갈 수 있도록,
+
+지금 가장 중요한 하나의 리듬에 집중하는 경험을 제공합니다.
+
+### 🎯 Primary Rhythm
+
+지금 가장 중요한 하나의 리듬에만 집중할 수 있도록 도와줍니다.
+
 ---
+
+
+
+### 📅 Smart Scheduling
+
+시간과 루틴 상태를 바탕으로
+
+오늘의 리듬을 자연스럽게 연결합니다.
+
+---
+
+
+
+### 📱 Live Activity
+
+앱을 열지 않아도
+
+잠금 화면에서 현재 리듬을 이어갈 수 있습니다.
+
+---
+
+
+
+### 🔔 Smart Reminder
+
+필요할 때만 알려주는,
+
+부담 없는 알림 경험을 제공합니다.
+
+---
+
+
 
 ## 🏗 Architecture
 
 ---
 
+
+
 ## 🤖 AI-assisted Development
 
 ---
+
+
 
 ## 🛠 Tech Stack
 
 ---
 
+
+
 ## 📚 Documentation
 
 ---
 
+
+
 ## 🗺 Roadmap
 
 ---
+
+
 
 ## 🌱 Philosophy
 
