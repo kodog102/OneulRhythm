@@ -312,6 +312,7 @@
 		15587C018840155819AFECF8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MY345AX6MW;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -320,6 +321,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OneulRhythm.app/OneulRhythm";
 			};
 			name = Release;
 		};
@@ -573,6 +575,7 @@
 		DA4A6C4DE4C2F7BF636CE76F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MY345AX6MW;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -581,6 +584,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OneulRhythm.app/OneulRhythm";
 			};
 			name = Debug;
 		};
