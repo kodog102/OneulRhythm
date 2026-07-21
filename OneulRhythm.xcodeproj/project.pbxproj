@@ -60,22 +60,16 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		2F22059DA4FC381454CA2540 /* OneulRhythmTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = OneulRhythmTests;
 			sourceTree = "<group>";
 		};
 		6A8E25C22FD1473F0043111D /* OneulRhythm */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = OneulRhythm;
 			sourceTree = "<group>";
 		};
 		6A9F10062FD2000100A43855 /* OneulRhythmShared */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = OneulRhythmShared;
 			sourceTree = "<group>";
 		};
