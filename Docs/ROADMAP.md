@@ -8,228 +8,304 @@ The application should minimize management and maximize presence throughout the 
 
 ---
 
+# Current Status
+
+**Current Phase**
+
+Implementation
+
+**Architecture**
+
+✅ Stable
+
+**Documentation**
+
+✅ Stable
+
+**Current Sprint**
+
+Sprint 6-4 — Recurring Rhythm
+
+---
+
 # Completed
 
-## Sprint 1
+## Sprint 1 — Project Foundation
 
-Project Foundation
+### Goal
 
-- SwiftUI project
-- SwiftData setup
-- Project structure
+Establish the technical foundation of the application.
 
-Status
+### Completed
+
+- SwiftUI project setup
+- SwiftData integration
+- Initial project structure
+- Core application architecture
+
+**Status**
 
 ✅ Completed
 
 ---
 
-## Sprint 2
+## Sprint 2 — Rhythm Management
 
-Routine Management
+### Goal
+
+Allow users to create and manage their rhythms.
+
+### Completed
 
 - Create Rhythm
 - Edit Rhythm
 - Delete Rhythm
-- Repository
+- Repository introduction
+- Basic data persistence
 
-Status
+**Status**
 
 ✅ Completed
 
 ---
 
-## Sprint 3
+## Sprint 3 — Today Experience
 
-Today Experience
+### Goal
+
+Introduce today's rhythm experience.
+
+### Completed
 
 - Today Screen
 - Current Rhythm
 - Next Rhythm
-- Progress
+- Daily Progress
+- Initial presentation flow
 
-Status
+**Status**
 
 ✅ Completed
 
 ---
 
-## Sprint 4
+## Sprint 4 — Persistence
 
-Persistence
+### Goal
 
-- SwiftData integration
+Separate persistence from business logic.
+
+### Completed
+
+- SwiftData Repository
 - Repository abstraction
 - ViewModel integration
+- Domain model mapping
 
-Status
+**Status**
 
 ✅ Completed
 
 ---
 
-## Sprint 5
+## Sprint 5 — Schedule Engine
 
-Schedule Engine
+### Goal
 
-- RoutineScheduleEngine
-- Current Rhythm
-- Next Rhythm
+Introduce deterministic schedule resolution.
+
+### Completed
+
+- Schedule Engine
+- Current Rhythm resolution
+- Next Rhythm resolution
 - Progress calculation
+- Business schedule interpretation
 
-Status
+**Status**
 
 ✅ Completed
 
 ---
 
-# Sprint 6
+## Sprint 6-1 — Live Activity Lifecycle
 
-## Sprint 6-1
-
-### Live Activity Lifecycle
-
-Goal
+### Goal
 
 Introduce Live Activity using a stable architecture.
 
-Completed
+### Completed
 
 - Shared Activity Model
+- Activity Coordinator
 - Activity Lifecycle
-- Coordinator
-- Immediate Dismissal
+- Immediate Day Complete
 - Widget Extension
+- Activity reconciliation
 
-Status
+**Status**
 
 ✅ Completed
 
 ---
 
-## Sprint 6-2
+## Sprint 6-2 — Single Primary Rhythm
 
-### Past Rhythm Experience
-
-Goal
+### Goal
 
 Create a calm Today experience by presenting only one primary rhythm.
 
-Completed
+### Completed
 
 - Single Primary Rhythm
 - Past Rhythm
 - Completion Promotion
 - Next Rhythm Preview
 - Live Activity integration
+- Calm presentation flow
 
-Status
+**Status**
 
 ✅ Completed
 
 ---
 
-## Sprint 6-3
+## Sprint 6-3 — Documentation Architecture
 
-### Recurring Rhythm Foundation
+### Goal
 
-Goal
+Establish a long-term documentation system for the project.
 
-Users should define a rhythm once.
+### Completed
 
-The application should automatically present it again according to its recurrence.
+#### Architecture
 
-Scope
+- Architecture documentation
+- Product Principles
 
-- Daily
-- Weekdays
-- Weekends
-- No Repeat
-- Daily completion state
-- Schedule Engine update
+#### Decisions
 
-Success Criteria
+- Decision Record system
+- DR-001 ~ DR-011
 
-- No daily recreation
-- Daily completion resets correctly
-- Current → Past → Next flow preserved
-- Live Activity continues to consume today's rhythm
+#### Design
 
-Out of Scope
+- Mapper
+- Scheduling
+- Persistence
+- Presentation
+- Live Activity
 
-- Notifications
-- Snooze
-- Statistics
-- Apple Watch
-- Widgets
-- Advanced recurrence
+#### Extensions
 
-Status
+- Extensions documentation
+- Recurring Rhythm architecture
 
-🚧 Planned
+#### Documentation
+
+- Documentation hierarchy
+- Glossary
+- Documentation standards
+
+**Status**
+
+✅ Completed
 
 ---
 
-## Sprint 6-4
+# Current
 
-### Notification Architecture
+## Sprint 6-4 — Recurring Rhythm
 
-Goal
+### Goal
 
-Notification becomes another consumer of today's schedule.
+Users define a rhythm once.
 
-Notification should consume recurring rhythm occurrences.
+The application automatically presents today's occurrence.
 
-Notification must never define recurrence itself.
+### Scope
 
-Scope
+- No Repeat
+- Daily
+- Weekdays
+- Weekends
+- Daily completion reset
+- Schedule Engine integration
 
-- Permission
-- NotificationScheduler
-- NotificationPlan
+### Success Criteria
+
+- Users never recreate recurring rhythms.
+- Daily completion resets automatically.
+- Existing Today experience remains unchanged.
+- Live Activity continues to consume today's rhythm.
+- Future consumers reuse the same scheduling pipeline.
+
+### Out of Scope
+
+- Notifications
+- Widgets
+- Apple Watch
+- Statistics
+- Advanced recurrence
+
+**Status**
+
+🚧 In Progress
+
+---
+
+# Planned
+
+## Sprint 6-5 — Notification Architecture
+
+### Goal
+
+Notifications become another consumer of today's schedule.
+
+### Scope
+
+- Notification permission
+- Notification Scheduler
+- Notification Plan
 - Schedule synchronization
 
-Status
+**Status**
 
 📅 Planned
 
 ---
 
-## Sprint 6-5
+## Sprint 6-6 — Widget Experience
 
-### Widget Experience
-
-Goal
+### Goal
 
 Bring today's rhythm to the Home Screen.
 
-Scope
+### Scope
 
 - Home Widget
 - Timeline
 - Shared Snapshot
 
-Status
+**Status**
 
 📅 Planned
 
 ---
 
-## Sprint 6-6
+## Sprint 6-7 — Apple Watch
 
-### Apple Watch
-
-Goal
+### Goal
 
 Bring today's rhythm to Apple Watch.
 
-Scope
+### Scope
 
 - Watch App
 - Watch Complication
 - Shared Schedule
 
-Status
+**Status**
 
 📅 Planned
 
@@ -242,7 +318,7 @@ Status
 Examples
 
 - Custom weekdays
-- Monthly
+- Monthly recurrence
 - Every N days
 - End date
 - Exception dates
@@ -261,25 +337,26 @@ Examples
 
 ---
 
-## Smart Reminder
-
-Examples
-
-- Adaptive reminder
-- Missed rhythm reminder
-- Context-aware reminder
-
----
-
 ## Subscription
 
 Examples
 
 - Advanced recurrence
 - Statistics
-- Multiple themes
+- Premium themes
 - Premium widgets
+
+---
+
+## Platform Extensions
+
+Examples
+
 - Cloud Sync
+- Calendar Integration
+- Siri
+- Shortcuts
+- Family Sharing
 
 ---
 
@@ -287,8 +364,23 @@ Examples
 
 Every new feature should answer one question.
 
-**Does this help users stay connected with today's rhythm?**
+> **Does this help users stay connected with today's rhythm?**
 
 If the answer is no,
 
 the feature probably does not belong in OneulRhythm.
+
+---
+
+# Documentation
+
+The project documentation is considered stable.
+
+Future architectural changes should follow this process:
+
+1. Update the relevant Decision Record.
+2. Update the Design documentation if implementation changes.
+3. Implement the feature.
+4. Record the completed work in the Changelog.
+
+The Roadmap tracks product evolution rather than implementation details.

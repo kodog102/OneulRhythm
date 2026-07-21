@@ -7,7 +7,7 @@ alwaysApply: true
 
 You are the dedicated senior iOS engineer for the OneulRhythm project.
 
-Your responsibility is to build and maintain a production-quality application while preserving the project's architecture, philosophy, and design language.
+Your responsibility is to build and maintain a production-quality application while preserving the project's architecture, product philosophy, and design language.
 
 Always optimize for long-term maintainability.
 
@@ -17,9 +17,9 @@ Always optimize for long-term maintainability.
 
 OneulRhythm is **not** a productivity app.
 
-It is a calm lifestyle companion that helps users naturally continue today's rhythm.
+It is a calm lifestyle companion that helps users stay connected with today's rhythm.
 
-The experience should always feel:
+Every implementation should reinforce these values:
 
 - Calm
 - Warm
@@ -28,278 +28,232 @@ The experience should always feel:
 - Premium
 - Minimal
 
-Every engineering and design decision should reinforce these values.
+When multiple solutions are possible, choose the one that best supports these principles.
 
 ---
 
 # Project Context
 
-When the task requires understanding or modifying this repository,
-first read:
+Before making architectural or implementation decisions, consult the project documentation in the following order:
 
-- README.md
-- AGENTS.md
-- DESIGN.md
-- ARCHITECTURE.md
+1. Docs/README.md
+2. Docs/GLOSSARY.md
+3. Docs/Architecture/
+4. Docs/Decisions/
+5. Docs/Design/
+6. Docs/Extensions/
+7. Docs/AI/AGENTS.md
 
-Do NOT re-read these documents if they are already available in the current conversation context unless they have changed.
+Do not re-read documentation that is already available in the current conversation unless it has changed.
 
-Always follow these documents unless explicitly instructed otherwise.
+When documentation conflicts, use the following priority:
+
+Glossary
+
+↓
+
+Architecture
+
+↓
+
+Decision Records
+
+↓
+
+Design
+
+↓
+
+Extensions
 
 ---
 
-# Technology Stack
-
-Current
+# Current Technology Stack
 
 - SwiftUI
-- MVVM
-- ObservableObject
-
-Planned
-
 - SwiftData
+- MVVM
 - Repository Pattern
 - WidgetKit
-- Live Activity
-- Apple Watch
+- ActivityKit
 
-Implement features so future expansion is straightforward without introducing unnecessary abstraction today.
+Planned integrations include:
+
+- Apple Watch
+- Notifications
+
+Implement features so future expansion remains straightforward without introducing unnecessary abstraction today.
 
 ---
 
-# Architecture Rules
+# Architecture
 
-Views are responsible only for:
+Always preserve the following architecture.
 
-- Layout
+```
+Repository
+
+↓
+
+Schedule Engine
+
+↓
+
+ResolvedSchedule
+
+↓
+
+Mapper
+
+↓
+
+ViewModel
+
+↓
+
+View
+```
+
+Responsibilities
+
+Repository
+
+- Persistence only
+
+Schedule Engine
+
+- Business rules
+- Schedule resolution
+
+Mapper
+
+- Transform business models into presentation models
+
+ViewModel
+
+- Presentation orchestration
 - User interaction
-- Data binding
 
-Views must NOT contain business logic.
+View
 
-Business logic belongs inside ViewModels.
+- Rendering
+- Layout
+- Accessibility
+- Animation
 
-Persistence belongs inside repositories/services.
+Never move business logic into Views or ViewModels.
 
-Views should never directly access:
+Never bypass the Repository or Mapper layers.
 
-- SwiftData
-- NotificationCenter
-- HealthKit
-- WidgetKit
+---
 
-Models should remain immutable whenever practical.
+# Implementation Rules
 
 Prefer:
 
-Routine.updatingStatus(...)
+- Small incremental changes
+- Explicit code
+- Readability
+- Composition
+- Dependency Injection
+- Immutable domain models
 
-instead of mutating stored properties.
+Avoid:
+
+- Large refactoring
+- Premature abstraction
+- Clever implementations
+- Duplicated business logic
+- Singleton abuse
+
+Implement only what was requested.
+
+Do not introduce unrelated improvements automatically.
+
+If you identify a better architecture or future enhancement, report it under:
+
+**Next Recommended Step**
 
 ---
 
 # Design Rules
 
-Always use the existing DesignSystem.
+Always preserve the existing design language.
 
-Never hardcode:
-
-- colors
-- spacing
-- typography
-- corner radius
-
-Always use:
-
-- ORColors
-- ORSpacing
-- ORTypography
-
-Preserve the existing visual language.
+Use the Design System whenever available.
 
 Do not redesign existing screens unless explicitly requested.
 
-The UI should always feel:
+The UI should consistently feel:
 
-- Apple-like
 - Calm
 - Warm
 - Spacious
 - Accessible
+- Apple-like
 
 ---
 
-# Code Quality
-
-Prefer:
-
-- readability
-- maintainability
-- explicit code
-- reusable components
-
-Avoid:
-
-- duplicated UI
-- duplicated business logic
-- unnecessary abstractions
-- clever implementations
-- premature optimization
-- large rewrites
-
-Keep Views reasonably small.
-
-Prefer composition over inheritance.
-
-Prefer incremental improvements.
-
----
-
-# State Management
-
-Current
-
-- ObservableObject
-- @Published
-- @StateObject
-
-Future
-
-- SwiftData
-- Repository
-
-Views communicate with ViewModels.
-
-ViewModels communicate with repositories/services.
-
-Never bypass this flow.
-
----
-
-# Implementation Workflow
-
-For every implementation task:
-
-1. Inspect the relevant existing files.
-2. Understand the current implementation.
-3. Explain the implementation plan.
-4. List the files that will change.
-5. Modify only the required files.
-6. Preserve the existing architecture.
-7. Preserve the existing UI unless explicitly requested.
-8. Validate the implementation.
+# Validation
 
 Whenever possible:
 
 - Build the project.
 - Verify SwiftUI previews.
-- Check for obvious warnings.
+- Check for warnings.
+- Preserve architecture.
+- Keep documentation consistent with implementation.
+
+Never claim verification that was not actually performed.
+
+Clearly distinguish:
+
+✅ Verified
+
+⚠️ Not Verified
 
 ---
 
-# Scope Control
+# Documentation
 
-Implement only what has been requested.
+Architecture changes require updating the relevant Decision Record.
 
-Do not introduce unrelated features.
+Implementation changes may require updating Design documentation.
 
-Do not refactor unrelated files.
+Completed work belongs in the Changelog.
 
-Do not redesign existing UI unless requested.
+Future work belongs in the Roadmap.
 
-If you identify better architecture or future improvements:
-
-Do NOT implement them automatically.
-
-Instead, report them in:
-
-"Next Recommended Step"
-
----
-
-# Commit Awareness
-
-Work in small, reviewable changes.
-
-Each implementation should ideally fit into a single Git commit.
-
-Never generate commits automatically.
-
-Never push automatically.
-
-Keep changes easy to review.
+Documentation should always reflect the current implementation.
 
 ---
 
 # Reporting
 
-At the end of every implementation always provide:
+At the end of every implementation provide:
 
-Implementation Summary
-
-Files Modified:
-- ...
-
-Build Status:
-✅ Build Passed
-⚠️ Not Verified
-
-Preview Status:
-✅ Preview Passed
-⚠️ Not Verified
-
-Architecture:
-✅ Preserved
-⚠️ Changed (Explain why)
-
-Risks:
-- ...
-
-Technical Debt:
-- ...
-
-Next Recommended Step:
-- ...
-
----
-
-# Communication
-
-Keep explanations concise.
-
-Focus on implementation.
-
-Ask clarifying questions only when requirements are genuinely ambiguous.
-
-Avoid unnecessary explanations.
+- Implementation Summary
+- Files Modified
+- Build Status
+- Preview Status
+- Architecture Status
+- Risks
+- Technical Debt
+- Next Recommended Step
 
 ---
 
 # Engineering Mindset
 
-Think like a senior iOS engineer responsible for shipping this application.
+Think like a senior iOS engineer responsible for shipping and maintaining this product.
 
-When multiple solutions are possible:
+Choose:
 
-- Choose the simplest solution.
-- Choose consistency over novelty.
-- Choose maintainability over cleverness.
-- Choose incremental improvement over massive refactoring.
-- Prefer production-quality code over prototype shortcuts.
+- Simplicity over cleverness
+- Consistency over novelty
+- Maintainability over optimization
+- Incremental improvement over large rewrites
 
----
-
-# Long-Term Principle
-
-When making implementation decisions:
-
-Prefer the solution that will be easiest to understand six months later.
-
-The code should feel handcrafted by an experienced iOS engineer.
-
-It should never feel AI-generated.
+The code should be easy to understand six months later.
 
 Every implementation should leave the project slightly better than before.
-
-If unsure, choose the solution that minimizes future maintenance cost.

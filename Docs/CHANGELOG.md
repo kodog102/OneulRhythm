@@ -1,75 +1,114 @@
-# Sprint 6-3 Planning
+# Changelog
+
+All notable changes to OneulRhythm are documented here.
+
+This document records completed work only.
+
+For future plans, see `ROADMAP.md`.
+
+---
+
+# Sprint 6-3 — Documentation Architecture
 
 Date
 
 2026-07-20
 
----
+## Added
 
-## Product Direction
+### Architecture
 
-Changed the roadmap before implementation.
+- Added Architecture documentation.
+- Added Product Principles.
+- Established the official project architecture.
 
-Recurring Rhythm Foundation will be implemented before Notification Architecture.
+### Decision Records
 
----
+- Introduced the Decision Record (DR) system.
+- Added DR-001 through DR-011.
 
-## Why
+### Design
 
-Real-world usage revealed that manually creating the same rhythm every day introduced unnecessary friction.
+- Added Design documentation structure.
+- Added Mapper design specification.
+- Added Scheduling design specification.
+- Added Persistence design specification.
+- Added Presentation design specification.
+- Added Live Activity design specification.
 
-However, having a rhythm always visible throughout the day created a calm and reassuring experience.
+### Extensions
 
-The product should preserve that experience while reducing daily input.
+- Introduced the Extensions documentation.
+- Added Recurring Rhythm extension design.
 
----
+### Documentation
 
-## Product Decisions
-
-- Introduced recurring rhythms.
-- Added four MVP recurrence options.
-    - Daily
-    - Weekdays
-    - Weekends
-    - No Repeat
-- Separated Rhythm Definition from Daily Completion State.
-- Notification will consume recurring rhythm occurrences instead of defining recurrence.
-- Advanced recurrence has been postponed.
-
----
-
-## Product Philosophy
-
-Users should not recreate the same rhythm every day.
-
-The application should remember recurring rhythms for them.
-
-Less Input.
-
-More Presence.
+- Added project Glossary.
+- Added documentation hierarchy.
+- Added documentation standards.
+- Defined documentation responsibilities.
+- Standardized project terminology.
 
 ---
 
-## Architecture Impact
+## Changed
 
-Recurring rhythm becomes a foundational capability.
+### Architecture
 
-All future consumers share the same schedule.
+- Promoted Mapping to an official architectural layer.
+- Standardized `ResolvedSchedule` as the business output.
+- Clarified Coordinator responsibilities.
+- Separated Mapping from Business logic.
 
-Consumers include
+### Documentation
 
-- Today Screen
-- Live Activity
-- Notifications
-- Widgets
-- Apple Watch
-
-Scheduling logic continues to exist only inside the Schedule Engine.
+- Separated Architecture, Decisions, Design, and Extensions into independent documentation layers.
+- Clarified the relationship between project documentation.
+- Refined project terminology for consistency.
 
 ---
 
-## Next Sprint
+## Notes
 
-Sprint 6-3
+The project documentation is now considered stable.
 
-Recurring Rhythm Foundation
+Future architectural changes should follow this workflow:
+
+1. Update the relevant Decision Record.
+2. Update the Design documentation if necessary.
+3. Implement the change.
+4. Record the completed work in this Changelog.
+
+Implementation continues with **Sprint 6-4 — Recurring Rhythm**.
+
+---
+
+# Sprint 6-2 — Single Primary Rhythm
+
+## Added
+
+- Introduced the Single Primary Rhythm experience.
+- Added Past Rhythm presentation.
+- Added Completion Promotion.
+- Added Next Rhythm Preview.
+
+## Changed
+
+- Simplified Today experience to present only one primary rhythm.
+- Updated Live Activity to consume the primary rhythm.
+
+---
+
+# Sprint 6-1 — Live Activity Lifecycle
+
+## Added
+
+- Shared Activity model.
+- Activity Coordinator.
+- Widget Extension.
+- Live Activity lifecycle management.
+
+## Changed
+
+- Adopted Immediate Day Complete.
+- Stabilized Activity lifecycle behavior.

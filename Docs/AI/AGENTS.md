@@ -14,7 +14,7 @@ The project currently uses three primary AI roles.
 
 ## Architect
 
-Responsibilities
+### Responsibilities
 
 - Product planning
 - UX decisions
@@ -32,7 +32,7 @@ Architect approves architecture before implementation begins.
 
 ## Implementation Agent
 
-Responsibilities
+### Responsibilities
 
 - Implement approved work
 - Preserve architecture
@@ -60,13 +60,13 @@ Implementation Agent never pushes.
 
 ## QA Agent
 
-Responsibilities
+### Responsibilities
 
 - Review implementation
 - Verify architecture boundaries
 - Detect regressions
 - Review Git diff
-- Review Release readiness
+- Review release readiness
 - Produce manual verification checklists
 
 QA never changes production code.
@@ -151,59 +151,96 @@ Avoid large rewrites.
 
 ## Shared Source of Truth
 
-Schedule logic belongs inside:
+Scheduling logic belongs inside:
 
-- RoutineScheduleEngine
+- Schedule Engine
 
-Presentation facts belong inside:
+Business output is represented by:
 
-- TodayRhythmSnapshot
+- ResolvedSchedule
 
-Presentation composition belongs inside:
+Presentation models are created by:
 
-- TodayViewModel
+- Mappers
 
-Never duplicate schedule logic.
+Presentation orchestration belongs inside:
+
+- ViewModels
+
+Never duplicate scheduling logic.
+
+Never move business logic into presentation.
 
 ---
 
 # Architecture Rules
 
-Views
+## Views
 
-- layout
-- rendering
-- accessibility
-- animation
+Responsible for:
 
-ViewModels
+- Layout
+- Rendering
+- Accessibility
+- Animation
 
-- presentation composition
-- interaction
-- orchestration
+---
 
-Repository
+## ViewModels
 
-- persistence only
+Responsible for:
 
-Services
+- Presentation orchestration
+- User interaction
+- State management
 
-- infrastructure
+ViewModels must not contain business logic.
 
-Never mix responsibilities.
+---
+
+## Mappers
+
+Responsible for:
+
+- Transforming business models into presentation models
+
+Mappers must not contain:
+
+- Business rules
+- Persistence logic
+- Framework lifecycle logic
+
+---
+
+## Repository
+
+Responsible for:
+
+- Persistence only
+
+---
+
+## Services
+
+Responsible for:
+
+- Infrastructure
+- External systems
+
+Never mix responsibilities across layers.
 
 ---
 
 # Live Activity Rules
 
-One Live Activity per day.
+Only one Live Activity may exist per day.
 
-Never one Live Activity per routine.
+Never create one Live Activity per rhythm.
 
 Live Activity represents:
 
 - Current Rhythm
-- Past Incomplete Rhythm (when no current rhythm exists)
+- Past Rhythm (when no current rhythm exists)
 - Next Rhythm
 - Today's flow
 
@@ -217,9 +254,9 @@ Notifications are optional.
 
 Never introduce:
 
-- repeated reminders
-- completion nagging
-- overdue alerts
+- Repeated reminders
+- Completion nagging
+- Overdue alerts
 
 One reminder is enough.
 
@@ -231,20 +268,20 @@ Live Activity remains the primary ongoing experience.
 
 Avoid user-facing words like:
 
-- failed
-- missed
-- overdue
-- urgent
-- warning
+- Failed
+- Missed
+- Overdue
+- Urgent
+- Warning
 
 Prefer:
 
-- current rhythm
-- past rhythm
-- next rhythm
-- today
-- gently
-- continue
+- Current Rhythm
+- Past Rhythm
+- Next Rhythm
+- Today
+- Continue
+- Gently
 
 ---
 
@@ -264,28 +301,84 @@ Avoid mixing unrelated work.
 
 # Documentation Rules
 
-Whenever architecture changes:
+Documentation should always reflect the current implementation.
 
-Update
+## Architecture Changes
 
-- README
-- ARCHITECTURE
-- DECISIONS
+When architecture changes:
 
-Whenever product behavior changes:
+Update:
 
-Update
+- Architecture documentation
+- Decision Records
 
-- DESIGN
+Update Design documentation only if implementation contracts change.
+
+---
+
+## Product Behavior Changes
+
+When product behavior changes:
+
+Update:
+
+- Design documentation
 - CHANGELOG
 
-Whenever a Sprint completes:
+---
 
-Update
+## Sprint Completion
+
+When a Sprint completes:
+
+Update:
 
 - ROADMAP
+- CHANGELOG
 
-Documentation should always reflect the current implementation.
+---
+
+## Documentation Hierarchy
+
+Before making architectural or implementation decisions, consult documentation in the following order:
+
+1. Docs/README.md
+2. Docs/GLOSSARY.md
+3. Docs/Architecture/
+4. Docs/Decisions/
+5. Docs/Design/
+6. Docs/Extensions/
+
+When documentation conflicts, use the following priority:
+
+Glossary
+
+↓
+
+Architecture
+
+↓
+
+Decision Records
+
+↓
+
+Design
+
+↓
+
+Extensions
+
+---
+
+## Documentation Responsibilities
+
+- Architecture defines the system structure.
+- Decision Records explain why architectural decisions exist.
+- Design documents describe how the system is implemented.
+- Extensions describe future architectural capabilities.
+- Roadmap describes product direction.
+- Changelog records completed work.
 
 ---
 
@@ -299,7 +392,7 @@ Always distinguish:
 
 ⚠️ Not Verified
 
-Visual polish must be confirmed by rendering in Xcode Canvas or Simulator.
+Visual polish must be confirmed using Xcode Canvas or Simulator.
 
 Source inspection alone cannot validate perceived UX quality.
 
@@ -307,18 +400,18 @@ Source inspection alone cannot validate perceived UX quality.
 
 # Coding Rules
 
-Prefer
+Prefer:
 
-- small functions
-- dependency injection
-- protocol abstraction
-- immutable models
+- Small functions
+- Dependency Injection
+- Protocol abstraction
+- Immutable models
 
-Avoid
+Avoid:
 
-- singleton abuse
-- duplicated logic
-- business logic inside Views
+- Singleton abuse
+- Duplicated logic
+- Business logic inside Views
 
 ---
 
