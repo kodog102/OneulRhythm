@@ -355,6 +355,16 @@ private final class PreviewRoutineRepository: RoutineRepository {
     func delete(_ routine: RoutineEntity) throws {
         entities.removeAll { $0.id == routine.id }
     }
+
+    func hasOccurrence(
+        recurringRhythmID: UUID,
+        occurrenceDate: Date
+    ) throws -> Bool {
+        entities.contains {
+            $0.recurringRhythmID == recurringRhythmID
+                && $0.occurrenceDate == occurrenceDate
+        }
+    }
 }
 
 /// Keeps previews deterministic and side-effect free.

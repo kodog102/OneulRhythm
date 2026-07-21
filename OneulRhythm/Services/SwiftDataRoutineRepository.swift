@@ -65,4 +65,21 @@ final class SwiftDataRoutineRepository: RoutineRepository {
         modelContext.delete(routine)
         try modelContext.save()
     }
+
+    func hasOccurrence(
+        recurringRhythmID: UUID,
+        occurrenceDate: Date
+    ) throws -> Bool {
+        let targetID = recurringRhythmID
+        let targetDate = occurrenceDate
+
+        var descriptor = FetchDescriptor<RoutineEntity>(
+            predicate: #Predicate {
+                $0.recurringRhythmID == targetID && $0.occurrenceDate == targetDate
+            }
+        )
+        descriptor.fetchLimit = 1
+
+        return try !modelContext.fetch(descriptor).isEmpty
+    }
 }
