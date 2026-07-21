@@ -85,9 +85,42 @@ OneulRhythm은
 
 ---
 
-
-
 ## 🏗 Architecture
+
+OneulRhythm은 기능을 빠르게 추가하는 것보다,
+
+예측 가능한 흐름과 유지보수하기 쉬운 구조를 만드는 것을 우선합니다.
+
+비즈니스 로직, 데이터 저장, 플랫폼 기능을 분리하여
+
+각 영역이 하나의 책임만 가지도록 설계했습니다.
+
+```mermaid
+flowchart TD
+    A[Routine Storage] --> B[Routine Repository]
+
+    P[Calendar Day Policy]
+    P --> C[Routine Schedule Engine]
+    P --> J[Occurrence DateTime Materializer]
+
+    B --> C
+
+    C --> D[Today Rhythm Snapshot]
+    C --> I[Planned Occurrence]
+
+    D --> E[Today ViewModel]
+    E --> F[Today View]
+
+    D --> G[Live Activity Mapper]
+    G --> H[ActivityKit Coordinator]
+
+    I --> J
+    J --> K[Materialized Occurrence]
+```
+
+`Today Rhythm Snapshot`은 **Single Source of Truth**로 동작하며,
+
+Today View와 Live Activity는 동일한 Snapshot을 기반으로 동기화됩니다.
 
 ---
 
