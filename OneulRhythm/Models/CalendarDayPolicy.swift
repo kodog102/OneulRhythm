@@ -15,7 +15,10 @@ import Foundation
 /// The `Calendar` is injected once at initialization rather than read from
 /// global state on every call, so behavior stays deterministic and testable.
 struct CalendarDayPolicy {
-    private let calendar: Calendar
+    /// Injected calendar used for all day-identity and related calculations.
+    /// Exposed so pure domain services (e.g. occurrence materialization) share
+    /// the same calendar without reading `Calendar.current`.
+    let calendar: Calendar
 
     init(calendar: Calendar = .current) {
         self.calendar = calendar
