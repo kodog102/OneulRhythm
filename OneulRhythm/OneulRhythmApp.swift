@@ -14,6 +14,7 @@ struct OneulRhythmApp: App {
         let schema = Schema([
             Item.self,
             RoutineEntity.self,
+            RecurringRhythmEntity.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
