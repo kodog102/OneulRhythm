@@ -15,6 +15,7 @@ struct AddRoutineView: View {
     @State private var hasEndTime: Bool
     @State private var endTime: Date
     @State private var selectedCategory: RoutineCategory
+    @State private var selectedRecurrence: RecurrenceRule?
     @State private var reminderEnabled: Bool
     @State private var reminderMinutes: Int
     @State private var isSaving = false
@@ -35,6 +36,12 @@ struct AddRoutineView: View {
         CategoryOption(title: "휴식", category: .rest),
         CategoryOption(title: "저녁", category: .evening)
     ]
+    private let recurrenceOptions: [RecurrenceOption] = [
+        RecurrenceOption(title: "반복 안 함", rule: nil),
+        RecurrenceOption(title: "매일", rule: .daily),
+        RecurrenceOption(title: "평일", rule: .weekdays),
+        RecurrenceOption(title: "주말", rule: .weekends)
+    ]
     private let reminderOptions = [5, 10, 15, 30]
 
     init(
@@ -43,6 +50,7 @@ struct AddRoutineView: View {
         hasEndTime: Bool = false,
         endTime: Date = Date().addingTimeInterval(30 * 60),
         category: RoutineCategory = .morning,
+        recurrence: RecurrenceRule? = nil,
         reminderEnabled: Bool = false,
         reminderMinutes: Int = 10,
         onSave: @escaping (RoutineCreationInput) throws -> Void = { _ in },
@@ -55,6 +63,7 @@ struct AddRoutineView: View {
         _hasEndTime = State(initialValue: hasEndTime)
         _endTime = State(initialValue: endTime)
         _selectedCategory = State(initialValue: category)
+        _selectedRecurrence = State(initialValue: recurrence)
         _reminderEnabled = State(initialValue: reminderEnabled)
         _reminderMinutes = State(initialValue: reminderMinutes)
         self.onSave = onSave
@@ -69,6 +78,7 @@ struct AddRoutineView: View {
                 titleSection
                 timeSection
                 categorySection
+                recurrenceSection
                 reminderSection
                 saveButton
             }
@@ -186,6 +196,29 @@ struct AddRoutineView: View {
                         isSelected: selectedCategory == option.category
                     ) {
                         selectedCategory = option.category
+                    }
+                }
+            }
+            .padding(ORSpacing.cardPadding)
+            .orCard()
+        }
+    }
+
+    private var recurrenceSection: some View {
+        formSection(title: "반복") {
+            LazyVGrid(
+                columns: [
+                    GridItem(.flexible(), spacing: ORSpacing.sm),
+                    GridItem(.flexible(), spacing: ORSpacing.sm)
+                ],
+                spacing: ORSpacing.sm
+            ) {
+                ForEach(recurrenceOptions) { option in
+                    selectionChip(
+                        title: option.title,
+                        isSelected: selectedRecurrence == option.rule
+                    ) {
+                        selectedRecurrence = option.rule
                     }
                 }
             }
@@ -327,7 +360,8 @@ struct AddRoutineView: View {
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedTitle.isEmpty else { return }
 
-        if isSelectedStartTimeInPastToday() {
+        // Recurring rhythms skip the Today/Tomorrow dialog; they start from today.
+        if selectedRecurrence == nil, isSelectedStartTimeInPastToday() {
             isShowingPastTimeConfirmation = true
             return
         }
@@ -399,7 +433,8 @@ struct AddRoutineView: View {
             startTime: resolvedStart,
             endTime: resolvedEnd,
             category: selectedCategory,
-            reminderMinutes: reminderEnabled ? reminderMinutes : nil
+            reminderMinutes: reminderEnabled ? reminderMinutes : nil,
+            recurrence: selectedRecurrence
         )
 
         isSaving = true
@@ -409,12 +444,15 @@ struct AddRoutineView: View {
 
             do {
                 try onSave(input)
-                await scheduleReminderIfNeeded(
-                    routineID: input.id,
-                    title: input.title,
-                    startTime: input.startTime,
-                    reminderMinutes: input.reminderMinutes
-                )
+                // Recurring reminders are persisted only; scheduling is Sprint 6-5.
+                if input.recurrence == nil {
+                    await scheduleReminderIfNeeded(
+                        routineID: input.id,
+                        title: input.title,
+                        startTime: input.startTime,
+                        reminderMinutes: input.reminderMinutes
+                    )
+                }
                 dismiss()
             } catch {
                 isShowingSaveError = true
@@ -485,6 +523,13 @@ private enum PastTimeDayChoice {
 private struct CategoryOption: Identifiable {
     let title: String
     let category: RoutineCategory
+
+    var id: String { title }
+}
+
+private struct RecurrenceOption: Identifiable {
+    let title: String
+    let rule: RecurrenceRule?
 
     var id: String { title }
 }

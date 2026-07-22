@@ -8,6 +8,37 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 6-4 — Recurring Rhythm
+
+Date
+
+2026-07-22
+
+## Added
+
+### Recurring Rhythm
+
+- Added Recurring Rhythm support.
+- Added Daily, Weekdays, and Weekends recurrence rules.
+- Introduced `RecurringRhythmEntity` as the persisted recurring definition.
+- Added automatic daily occurrence provisioning from active recurring definitions.
+- Added foreground synchronization so today's occurrences stay aligned when the app becomes active.
+
+### Quality
+
+- Runtime QA completed successfully.
+- Unit test suite validated at 102 passing tests.
+
+## Notes
+
+Recurring definitions generate daily rhythms before Schedule Engine resolution.
+
+One-time rhythms remain represented by the absence of a recurrence rule.
+
+See `Docs/SprintReviews/Sprint-6-4.md` for the Sprint Review.
+
+---
+
 # Development Workflow Documentation
 
 Date
@@ -36,8 +67,6 @@ Date
 Sprint process is now defined under `Docs/Development/`.
 
 Product philosophy and architecture rules remain in `Docs/AI/AGENTS.md`.
-
-Implementation continues with **Sprint 6-4 — Recurring Rhythm**.
 
 ---
 

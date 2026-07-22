@@ -12,11 +12,13 @@ struct TodayView: View {
     @State private var isAddRoutinePresented = false
 
     private let onSaveRoutine: (RoutineCreationInput) throws -> Void
+    private let onAppBecomeActive: () -> Void
     private let nowProvider: () -> Date
 
     init(
         repository: RoutineRepository,
         onSaveRoutine: @escaping (RoutineCreationInput) throws -> Void = { _ in },
+        onAppBecomeActive: @escaping () -> Void = {},
         liveActivityCoordinator: LiveActivityCoordinating? = nil,
         nowProvider: @escaping () -> Date = Date.init
     ) {
@@ -28,6 +30,7 @@ struct TodayView: View {
             )
         )
         self.onSaveRoutine = onSaveRoutine
+        self.onAppBecomeActive = onAppBecomeActive
         self.nowProvider = nowProvider
     }
 
@@ -65,6 +68,7 @@ struct TodayView: View {
         .onChange(of: scenePhase) { _, phase in
             guard launchState.didCompleteInitialRhythmSync else { return }
             if phase == .active {
+                onAppBecomeActive()
                 viewModel.loadRoutines()
             }
         }

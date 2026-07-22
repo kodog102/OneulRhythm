@@ -12,6 +12,8 @@ struct RoutineCreationInput {
     let endTime: Date?
     let category: RoutineCategory
     let reminderMinutes: Int?
+    /// `nil` means a one-time rhythm (No Repeat). Never use a `.none` rule.
+    let recurrence: RecurrenceRule?
 
     init(
         id: UUID = UUID(),
@@ -19,7 +21,8 @@ struct RoutineCreationInput {
         startTime: Date,
         endTime: Date?,
         category: RoutineCategory,
-        reminderMinutes: Int?
+        reminderMinutes: Int?,
+        recurrence: RecurrenceRule? = nil
     ) {
         self.id = id
         self.title = title
@@ -27,5 +30,6 @@ struct RoutineCreationInput {
         self.endTime = endTime
         self.category = category
         self.reminderMinutes = reminderMinutes
+        self.recurrence = recurrence
     }
 }

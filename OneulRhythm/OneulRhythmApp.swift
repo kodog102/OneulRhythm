@@ -17,7 +17,8 @@ struct OneulRhythmApp: App {
     )
 
     private let sharedModelContainer: ModelContainer
-    /// Composed at launch; initial sync is triggered once via the root `.task`.
+    private let dayPolicy: CalendarDayPolicy
+    /// Composed at launch; sync is owned exclusively by the App layer.
     private let dailyRhythmSyncCoordinator: DailyRhythmSyncCoordinator
     private let initialDailyRhythmSyncGate = InitialDailyRhythmSyncGate()
     @StateObject private var launchState = AppLaunchState()
@@ -50,6 +51,7 @@ struct OneulRhythmApp: App {
         )
 
         self.sharedModelContainer = container
+        self.dayPolicy = dayPolicy
         self.dailyRhythmSyncCoordinator = DailyRhythmSyncCoordinator(
             provisioner: provisioner
         )
@@ -59,7 +61,8 @@ struct OneulRhythmApp: App {
         WindowGroup {
             TodayView(
                 repository: makeRoutineRepository(),
-                onSaveRoutine: saveRoutine
+                onSaveRoutine: saveRoutine,
+                onAppBecomeActive: syncDailyRhythms
             )
             .environmentObject(launchState)
             .task {
@@ -75,6 +78,12 @@ struct OneulRhythmApp: App {
             launchState.completeInitialRhythmSync()
         }
 
+        syncDailyRhythms()
+    }
+
+    /// Synchronizes recurring definitions into today's routines.
+    /// Safe to call on cold launch and every foreground activation.
+    private func syncDailyRhythms() {
         do {
             try dailyRhythmSyncCoordinator.sync(for: Date())
         } catch {
@@ -85,11 +94,61 @@ struct OneulRhythmApp: App {
     }
 
     private func saveRoutine(_ input: RoutineCreationInput) throws {
-        try makeRoutineRepository().insert(input)
+        if let recurrence = input.recurrence {
+            try saveRecurringRhythm(input, recurrence: recurrence)
+            syncDailyRhythms()
+        } else {
+            try makeRoutineRepository().insert(input)
+        }
+    }
+
+    private func saveRecurringRhythm(
+        _ input: RoutineCreationInput,
+        recurrence: RecurrenceRule
+    ) throws {
+        let calendar = dayPolicy.calendar
+        let startMinutes =
+            calendar.component(.hour, from: input.startTime) * 60
+            + calendar.component(.minute, from: input.startTime)
+
+        let definition = RecurringRhythmEntity(
+            id: input.id,
+            title: input.title,
+            category: input.category,
+            startMinutes: startMinutes,
+            durationMinutes: durationMinutes(for: input),
+            recurrence: recurrence,
+            startDate: dayPolicy.day(for: input.startTime),
+            reminderMinutes: input.reminderMinutes,
+            isActive: true
+        )
+
+        try makeRecurringRhythmRepository().insert(definition)
+    }
+
+    private func durationMinutes(for input: RoutineCreationInput) -> Int {
+        guard let endTime = input.endTime else {
+            return Int(RoutineTimingPolicy.defaultActiveDuration / 60)
+        }
+
+        let seconds = endTime.timeIntervalSince(input.startTime)
+        if seconds > 0 {
+            return max(1, Int((seconds / 60).rounded()))
+        }
+
+        // Same-day pickers with end before start: treat as overnight span.
+        let overnightSeconds = seconds + 24 * 60 * 60
+        return max(1, Int((overnightSeconds / 60).rounded()))
     }
 
     private func makeRoutineRepository() -> SwiftDataRoutineRepository {
         SwiftDataRoutineRepository(
+            modelContext: sharedModelContainer.mainContext
+        )
+    }
+
+    private func makeRecurringRhythmRepository() -> SwiftDataRecurringRhythmRepository {
+        SwiftDataRecurringRhythmRepository(
             modelContext: sharedModelContainer.mainContext
         )
     }

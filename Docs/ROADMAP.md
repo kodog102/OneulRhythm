@@ -24,7 +24,7 @@ Implementation
 
 **Current Sprint**
 
-Sprint 6-4 — Recurring Rhythm
+Sprint 6-5 — Notification Architecture
 
 ---
 
@@ -213,8 +213,6 @@ Establish a long-term documentation system for the project.
 
 ---
 
-# Current
-
 ## Sprint 6-4 — Recurring Rhythm
 
 ### Goal
@@ -223,38 +221,23 @@ Users define a rhythm once.
 
 The application automatically presents today's occurrence.
 
-### Scope
+### Completed
 
-- No Repeat
-- Daily
-- Weekdays
-- Weekends
-- Daily completion reset
-- Schedule Engine integration
-
-### Success Criteria
-
-- Users never recreate recurring rhythms.
-- Daily completion resets automatically.
-- Existing Today experience remains unchanged.
-- Live Activity continues to consume today's rhythm.
-- Future consumers reuse the same scheduling pipeline.
-
-### Out of Scope
-
-- Notifications
-- Widgets
-- Apple Watch
-- Statistics
-- Advanced recurrence
+- Recurring Rhythm support
+- Daily / Weekdays / Weekends recurrence
+- `RecurringRhythmEntity` persistence
+- Automatic daily occurrence provisioning
+- Foreground synchronization
+- Schedule Engine integration for generated daily rhythms
+- Runtime QA completed successfully
 
 **Status**
 
-🚧 In Progress
+✅ Completed
 
 ---
 
-# Planned
+# Current
 
 ## Sprint 6-5 — Notification Architecture
 
@@ -271,9 +254,11 @@ Notifications become another consumer of today's schedule.
 
 **Status**
 
-📅 Planned
+🚧 In Progress
 
 ---
+
+# Planned
 
 ## Sprint 6-6 — Widget Experience
 
