@@ -9,7 +9,11 @@
 </p>
 
 <p align="center">
-지금 가장 중요한 하나의 리듬에 집중하도록 돕는 iOS 앱
+  지금 가장 중요한 하나의 리듬에 집중하도록 돕는 iOS 앱
+</p>
+
+<p align="center">
+  <sub>Built with SwiftUI · SwiftData · ActivityKit</sub>
 </p>
 
 ---
