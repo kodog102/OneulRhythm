@@ -27,7 +27,7 @@ final class DailyRhythmProvisionerSkeletonTests: XCTestCase {
         XCTAssertNotNil(provisioner)
     }
 
-    func testProvisionAPIExists() {
+    func testProvisionAPIExists() throws {
         let dayPolicy = CalendarDayPolicy(
             calendar: {
                 var calendar = Calendar(identifier: .gregorian)
@@ -43,11 +43,8 @@ final class DailyRhythmProvisionerSkeletonTests: XCTestCase {
             dateTimeMaterializer: OccurrenceDateTimeMaterializer(dayPolicy: dayPolicy)
         )
 
-        // Confirms the entry API is present and callable at compile time.
-        // Behavior remains unimplemented in Task 8B-1.
-        let api: (Date) throws -> Void = provisioner.provision(for:)
-        _ = api
-        XCTAssertTrue(true)
+        // Empty active set — orchestration runs without inserting.
+        try provisioner.provision(for: Date(timeIntervalSince1970: 0))
     }
 }
 

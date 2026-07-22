@@ -7,8 +7,9 @@ import Foundation
 
 /// Coordinates daily materialization of recurring rhythm definitions.
 ///
-/// Task 8B-1 introduces only the dependency surface and entry API.
-/// Provisioning behavior is intentionally unimplemented until later tasks.
+/// Orchestrates repository fetch, recurrence planning, datetime materialization,
+/// duplicate lookup, and routine insertion. Contains no date or recurrence
+/// business rules of its own.
 final class DailyRhythmProvisioner {
     private let recurringRhythmRepository: RecurringRhythmRepository
     private let routineRepository: RoutineRepository
@@ -27,20 +28,41 @@ final class DailyRhythmProvisioner {
         self.dateTimeMaterializer = dateTimeMaterializer
     }
 
-    /// Provisions recurring occurrences for the requested calendar day.
-    ///
-    /// Unimplemented in Task 8B-1. Later tasks will fetch active definitions,
-    /// plan occurrences, materialize timestamps, and insert missing routines.
+    /// Provisions missing daily routines for recurring definitions that apply
+    /// to the requested calendar day.
     func provision(for date: Date) throws {
-        // Keep injected dependencies and the requested date referenced so the
-        // skeleton compiles cleanly without performing any provisioning work.
-        _ = (
-            recurringRhythmRepository,
-            routineRepository,
-            recurrenceEngine,
-            dateTimeMaterializer,
-            date
-        )
-        fatalError("DailyRhythmProvisioner.provision(for:) is not implemented yet.")
+        let definitions = try recurringRhythmRepository.fetchActive()
+
+        for definition in definitions {
+            guard let planned = recurrenceEngine.planOccurrence(
+                for: definition,
+                on: date
+            ) else {
+                continue
+            }
+
+            let materialized = dateTimeMaterializer.materialize(planned)
+
+            let alreadyExists = try routineRepository.hasOccurrence(
+                recurringRhythmID: materialized.recurringRhythmID,
+                occurrenceDate: materialized.occurrenceDate
+            )
+            guard !alreadyExists else {
+                continue
+            }
+
+            let routine = RoutineEntity(
+                title: materialized.title,
+                startTime: materialized.startDate,
+                endTime: materialized.endDate,
+                category: materialized.category,
+                status: .upcoming,
+                reminderMinutes: materialized.reminderMinutes,
+                recurringRhythmID: materialized.recurringRhythmID,
+                occurrenceDate: materialized.occurrenceDate
+            )
+
+            try routineRepository.insert(routine)
+        }
     }
 }
