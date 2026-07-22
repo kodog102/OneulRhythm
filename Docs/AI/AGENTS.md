@@ -73,6 +73,7 @@ Related process documents:
 - `Docs/Development/PROMPT_LIBRARY.md`
 - `Docs/Development/CURSOR_GUIDELINES.md`
 - `Docs/Development/SPRINT_CHECKLIST.md`
+- `Docs/Development/QA_PIPELINE.md`
 
 No process step should be skipped without an explicit developer decision.
 

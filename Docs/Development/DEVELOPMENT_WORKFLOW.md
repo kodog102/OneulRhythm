@@ -13,7 +13,7 @@ Related documents:
 - `PROMPT_LIBRARY.md` — reusable prompts for each stage
 - `CURSOR_GUIDELINES.md` — project-wide rules for Cursor
 - `SPRINT_CHECKLIST.md` — Sprint close checklist
-
+- `QA_PIPELINE.md`
 Product and architecture rules for AI agents remain in `Docs/AI/AGENTS.md`.
 
 ---
