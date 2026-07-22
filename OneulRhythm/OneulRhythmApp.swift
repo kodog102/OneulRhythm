@@ -20,6 +20,7 @@ struct OneulRhythmApp: App {
     /// Composed at launch; initial sync is triggered once via the root `.task`.
     private let dailyRhythmSyncCoordinator: DailyRhythmSyncCoordinator
     private let initialDailyRhythmSyncGate = InitialDailyRhythmSyncGate()
+    @StateObject private var launchState = AppLaunchState()
 
     init() {
         let schema = Schema([
@@ -60,6 +61,7 @@ struct OneulRhythmApp: App {
                 repository: makeRoutineRepository(),
                 onSaveRoutine: saveRoutine
             )
+            .environmentObject(launchState)
             .task {
                 performInitialDailyRhythmSyncIfNeeded()
             }
@@ -69,6 +71,9 @@ struct OneulRhythmApp: App {
 
     private func performInitialDailyRhythmSyncIfNeeded() {
         guard initialDailyRhythmSyncGate.markStartedIfNeeded() else { return }
+        defer {
+            launchState.completeInitialRhythmSync()
+        }
 
         do {
             try dailyRhythmSyncCoordinator.sync(for: Date())

@@ -7,6 +7,7 @@ import SwiftUI
 
 struct TodayView: View {
     @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject private var launchState: AppLaunchState
     @StateObject private var viewModel: TodayViewModel
     @State private var isAddRoutinePresented = false
 
@@ -57,8 +58,12 @@ struct TodayView: View {
                 )
             }
         }
-        .onAppear(perform: viewModel.loadRoutines)
+        .task(id: launchState.didCompleteInitialRhythmSync) {
+            guard launchState.didCompleteInitialRhythmSync else { return }
+            viewModel.loadRoutines()
+        }
         .onChange(of: scenePhase) { _, phase in
+            guard launchState.didCompleteInitialRhythmSync else { return }
             if phase == .active {
                 viewModel.loadRoutines()
             }
@@ -240,6 +245,7 @@ private extension TodayPrimaryRole {
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
+    .environmentObject(AppLaunchState.previewCompleted())
 }
 
 #Preview("None Completed") {
@@ -250,6 +256,7 @@ private extension TodayPrimaryRole {
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
+    .environmentObject(AppLaunchState.previewCompleted())
 }
 
 #Preview("Partially Completed") {
@@ -260,6 +267,7 @@ private extension TodayPrimaryRole {
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
+    .environmentObject(AppLaunchState.previewCompleted())
 }
 
 #Preview("All Completed") {
@@ -270,6 +278,7 @@ private extension TodayPrimaryRole {
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
+    .environmentObject(AppLaunchState.previewCompleted())
 }
 
 #Preview("Current + Past Incomplete + Next") {
@@ -280,6 +289,7 @@ private extension TodayPrimaryRole {
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
+    .environmentObject(AppLaunchState.previewCompleted())
 }
 
 #Preview("Past Incomplete Only") {
@@ -290,6 +300,7 @@ private extension TodayPrimaryRole {
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
+    .environmentObject(AppLaunchState.previewCompleted())
 }
 
 #Preview("Multiple Past Incomplete") {
@@ -300,6 +311,7 @@ private extension TodayPrimaryRole {
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
+    .environmentObject(AppLaunchState.previewCompleted())
 }
 
 #Preview("Current + Past Incomplete") {
@@ -310,6 +322,7 @@ private extension TodayPrimaryRole {
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
+    .environmentObject(AppLaunchState.previewCompleted())
 }
 
 /// Interactive: tap "완료했어요" on the past incomplete card to verify it
@@ -323,6 +336,7 @@ private extension TodayPrimaryRole {
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
+    .environmentObject(AppLaunchState.previewCompleted())
 }
 
 @MainActor
