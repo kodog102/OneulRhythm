@@ -10,7 +10,8 @@ import Foundation
 /// Orchestrates repository fetch, recurrence planning, datetime materialization,
 /// duplicate lookup, and routine insertion. Contains no date or recurrence
 /// business rules of its own.
-final class DailyRhythmProvisioner {
+@MainActor
+final class DailyRhythmProvisioner: DailyRhythmProvisioning {
     private let recurringRhythmRepository: RecurringRhythmRepository
     private let routineRepository: RoutineRepository
     private let recurrenceEngine: RecurrenceEngine
