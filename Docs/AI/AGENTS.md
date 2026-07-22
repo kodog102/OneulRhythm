@@ -1,125 +1,80 @@
-# 🌿 AGENTS
+# AGENTS
 
-This document defines how AI agents collaborate while developing OneulRhythm.
+This document defines product philosophy and architecture rules for AI agents contributing to OneulRhythm.
 
-The goal is consistency.
+Sprint process, prompts, Cursor working rules, and close-out checklists are defined in `Docs/Development/`.
 
-Every implementation should preserve the product philosophy, architecture, and long-term vision.
-
----
-
-# Team
-
-The project currently uses three primary AI roles.
-
-## Architect
-
-### Responsibilities
-
-- Product planning
-- UX decisions
-- Architecture
-- Long-term roadmap
-- Technical direction
-- Sprint planning
-- Reviewing major design decisions
-
-Architect does not modify production code.
-
-Architect approves architecture before implementation begins.
+This document does not replace the official Development Workflow.
 
 ---
 
-## Implementation Agent
+# Roles
 
-### Responsibilities
+Collaboration roles match the official Development Workflow.
 
-- Implement approved work
-- Preserve architecture
-- Keep changes as small as possible
-- Build after every task
-- Avoid unrelated refactoring
+## ChatGPT
 
-Every implementation should finish with:
+- Requirement analysis
+- Architecture design
+- Task scope definition
+- Cursor prompt creation
+- Code and architecture review
+- QA result review
+- Documentation review
+- Sprint approval
 
-- Implementation Summary
-- Files Changed
-- Build Status
-- Preview Status
-- Architecture Status
-- Risks
-- Technical Debt
-- Manual Verification
-- Next Recommended Step
+ChatGPT does not modify the repository.
 
-Implementation Agent never commits.
+## Cursor
 
-Implementation Agent never pushes.
+- Code implementation
+- Test implementation
+- Build and test execution
+- Integration QA
+- Documentation updates
+- Structured implementation reports
 
----
+Cursor never commits or pushes unless the developer explicitly requests it.
 
-## QA Agent
+## Developer
 
-### Responsibilities
+- Final decisions
+- Running and visually inspecting the app
+- Approving changes
+- Commit and push
+- Product direction
 
-- Review implementation
-- Verify architecture boundaries
-- Detect regressions
-- Review Git diff
-- Review release readiness
-- Produce manual verification checklists
-
-QA never changes production code.
-
-QA validates implementation against approved architecture.
+Only the developer commits and pushes.
 
 ---
 
 # Development Workflow
 
-Every feature follows the same pipeline.
+Follow the official Sprint pipeline in `Docs/Development/DEVELOPMENT_WORKFLOW.md`.
 
 ```text
 Planning
-
-↓
-
-Architect Review
-
-↓
-
-Architecture Approval
-
-↓
-
-Implementation
-
-↓
-
-QA Review
-
-↓
-
-QA Fix
-
-↓
-
-QA Re-check
-
-↓
-
-Visual QA
-
-↓
-
-Commit
-
-↓
-
-Push
+  → Architecture and Task Design
+  → Implementation
+  → Implementation Report
+  → Code Review
+  → Fixes (as needed)
+  → Integration QA
+  → Final Review
+  → Documentation Pass
+  → Documentation Review
+  → Sprint Retrospective
+  → Commit and Push (Developer)
+  → Next Sprint Kickoff
 ```
 
-No step should be skipped.
+Related process documents:
+
+- `Docs/Development/PROMPT_LIBRARY.md`
+- `Docs/Development/CURSOR_GUIDELINES.md`
+- `Docs/Development/SPRINT_CHECKLIST.md`
+
+No process step should be skipped without an explicit developer decision.
 
 ---
 
@@ -287,13 +242,15 @@ Prefer:
 
 # Commit Rules
 
-One task
+Commit and push are developer-owned steps.
+
+Preferred shape:
+
+One Sprint or one clearly scoped task
 
 ↓
 
-One commit
-
-Every commit should be reviewable.
+One reviewable commit
 
 Avoid mixing unrelated work.
 
@@ -302,6 +259,8 @@ Avoid mixing unrelated work.
 # Documentation Rules
 
 Documentation should always reflect the current implementation.
+
+Process for documentation updates is defined by the Documentation Pass and Documentation Review stages in `Docs/Development/DEVELOPMENT_WORKFLOW.md`.
 
 ## Architecture Changes
 
@@ -348,6 +307,8 @@ Before making architectural or implementation decisions, consult documentation i
 4. Docs/Decisions/
 5. Docs/Design/
 6. Docs/Extensions/
+7. Docs/Development/
+8. Docs/AI/AGENTS.md
 
 When documentation conflicts, use the following priority:
 
@@ -369,6 +330,8 @@ Design
 
 Extensions
 
+Process conflicts are resolved by `Docs/Development/DEVELOPMENT_WORKFLOW.md`.
+
 ---
 
 ## Documentation Responsibilities
@@ -376,7 +339,8 @@ Extensions
 - Architecture defines the system structure.
 - Decision Records explain why architectural decisions exist.
 - Design documents describe how the system is implemented.
-- Extensions describe future architectural capabilities.
+- Extensions describe architectural capabilities beyond the current core.
+- Development documents define the Sprint process.
 - Roadmap describes product direction.
 - Changelog records completed work.
 
@@ -417,18 +381,18 @@ Avoid:
 
 # Definition of Done
 
-A task is complete only when all of the following are true:
+A Sprint task is complete only when the relevant stages of the official Development Workflow are satisfied, including:
 
-- Code implemented
-- Build passed
+- Approved scope implemented
+- Build and relevant tests passed
 - Architecture preserved
-- QA reviewed
-- QA Fix completed (if required)
-- QA Re-check passed (if required)
-- Manual Visual QA completed
-- Documentation updated (when applicable)
+- Code Review completed
+- Integration QA completed
+- Manual Visual QA completed or recorded by the developer
+- Documentation Pass completed when documentation is affected
+- Documentation Review approved when documentation changed
 
-Only then should the work be committed.
+Only then should the developer commit and push.
 
 ---
 

@@ -135,20 +135,16 @@ OneulRhythm은 AI를 단순한 코드 생성 도구가 아니라,
 예측 가능하고 유지보수하기 쉬운 프로젝트를 만드는 것을 목표로 합니다.
 
 ```text
-Idea
-  ↓
-Architecture Review
-  ↓
-Implementation
-  ↓
-Engineering Review
-  ↓
-QA Validation
-  ↓
-Documentation
-  ↓
-Commit & Merge
+Planning
+  → Architecture and Task Design
+  → Implementation
+  → Code Review
+  → Integration QA
+  → Documentation Pass
+  → Commit & Push (Developer)
 ```
+
+공식 Sprint 워크플로우는 `Docs/Development/DEVELOPMENT_WORKFLOW.md`를 따릅니다.
 
 > 설계는 구현보다 먼저 검토하고,
 >
@@ -172,11 +168,13 @@ Commit & Merge
 
 ## 📚 Documentation
 
-프로젝트의 설계와 의사결정 과정은 별도의 문서로 관리합니다.
+프로젝트의 설계와 의사결정 과정은 `Docs/`에서 관리합니다.
 
-- Architecture Decisions (ADR)
-- Design Guidelines
-- Development Notes
+- `Docs/Architecture/` — system structure
+- `Docs/Decisions/` — architectural decisions
+- `Docs/Design/` — subsystem implementation specs
+- `Docs/Development/` — official Sprint workflow
+- `Docs/ROADMAP.md` / `Docs/CHANGELOG.md` — product progress
 
 ---
 
@@ -187,21 +185,23 @@ Commit & Merge
 - Primary Rhythm
 - Today Snapshot
 - Live Activity
-- AI-assisted Engineering Workflow
+- Documentation Architecture
+- Development Workflow
 
 ### 🚧 In Progress
 
-- Reminder Scheduling
-- Apple Watch Experience
-- Widget Enhancements
+- Recurring Rhythm
 
 ### 🔮 Planned
 
+- Notification Architecture
+- Widget Experience
+- Apple Watch
 - Statistics & Insights
 - iCloud Sync
 - Siri & Shortcuts
 
-> 🚀 OneulRhythm은 꾸준한 개선과 함께 이 로드맵도 계속 업데이트됩니다.
+상세 로드맵은 `Docs/ROADMAP.md`를 참고하세요.
 
 ---
 

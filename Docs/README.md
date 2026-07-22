@@ -187,7 +187,7 @@ These principles guide every architectural decision and are formally documented 
 
 # Documentation
 
-Project documentation is organized into three complementary levels.
+Project documentation is organized into complementary levels.
 
 ## Architecture
 
@@ -201,7 +201,7 @@ Topics include:
 - Core architectural concepts
 
 ```
-Architecture.md
+Architecture/
 ```
 
 ---
@@ -229,11 +229,30 @@ Current specifications include:
 - Mapper
 - Presentation
 - Live Activity
-- Recurrence
 
 ```
 Design/
 ```
+
+Recurrence is documented as an extension under `Extensions/`.
+
+---
+
+## Development
+
+Development documents define the official Sprint workflow.
+
+```
+Development/
+  DEVELOPMENT_WORKFLOW.md
+  PROMPT_LIBRARY.md
+  CURSOR_GUIDELINES.md
+  SPRINT_CHECKLIST.md
+```
+
+Product philosophy and architecture rules for AI agents remain in `AI/AGENTS.md`.
+
+The older `DEVELOPMENT-PLAYBOOK.md` is superseded by `Development/DEVELOPMENT_WORKFLOW.md`.
 
 ---
 
@@ -252,9 +271,12 @@ Decision Records
     │
     ▼
 Design
+    │
+    ▼
+Development
 ```
 
-This progresses naturally from project overview to architectural intent and finally to implementation details.
+This progresses from project overview to architectural intent, implementation details, and then the Sprint process.
 
 ---
 
@@ -278,9 +300,12 @@ The current architectural foundation includes:
 
 The architecture is intentionally designed for extension without changing its foundation.
 
+Current product work:
+
+- Recurring rhythms (Sprint 6-4 in progress)
+
 Planned capabilities include:
 
-- Recurring rhythms
 - Local notifications
 - Widgets
 - Apple Watch

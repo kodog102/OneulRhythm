@@ -148,7 +148,8 @@ Individual sections may be omitted if they are not relevant to the subsystem.
 | Persistence.md | Persistence implementation |
 | Presentation.md | Presentation architecture |
 | LiveActivity.md | ActivityKit implementation |
-| Recurrence.md | Recurring rhythm implementation |
+
+Recurring rhythm design lives in `Docs/Extensions/Recurrence.md`.
 
 ---
 

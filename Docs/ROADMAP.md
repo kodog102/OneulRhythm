@@ -374,13 +374,16 @@ the feature probably does not belong in OneulRhythm.
 
 # Documentation
 
-The project documentation is considered stable.
+Product and architecture documentation remain stable.
+
+Sprint process documentation lives under `Docs/Development/`.
 
 Future architectural changes should follow this process:
 
-1. Update the relevant Decision Record.
-2. Update the Design documentation if implementation changes.
-3. Implement the feature.
-4. Record the completed work in the Changelog.
+1. Approve scope and architecture before implementation.
+2. Update or propose Decision Records and Design documentation when architecture or contracts change.
+3. Implement the approved scope.
+4. Run a Documentation Pass to synchronize affected docs with implemented behavior.
+5. Record completed work in the Changelog and update this Roadmap.
 
 The Roadmap tracks product evolution rather than implementation details.

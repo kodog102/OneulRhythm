@@ -8,6 +8,39 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Development Workflow Documentation
+
+Date
+
+2026-07-22
+
+## Added
+
+### Development
+
+- Added `Docs/Development/DEVELOPMENT_WORKFLOW.md` as the official Sprint workflow.
+- Added `Docs/Development/PROMPT_LIBRARY.md`.
+- Added `Docs/Development/CURSOR_GUIDELINES.md`.
+- Added `Docs/Development/SPRINT_CHECKLIST.md`.
+
+## Changed
+
+### Development
+
+- Superseded `Docs/DEVELOPMENT-PLAYBOOK.md` in favor of the official Development Workflow.
+- Aligned `Docs/AI/AGENTS.md` process sections with ChatGPT / Cursor / Developer roles.
+- Linked Development documentation from `Docs/README.md`.
+
+## Notes
+
+Sprint process is now defined under `Docs/Development/`.
+
+Product philosophy and architecture rules remain in `Docs/AI/AGENTS.md`.
+
+Implementation continues with **Sprint 6-4 — Recurring Rhythm**.
+
+---
+
 # Sprint 6-3 — Documentation Architecture
 
 Date
@@ -70,16 +103,9 @@ Date
 
 ## Notes
 
-The project documentation is now considered stable.
+The project documentation architecture from Sprint 6-3 remains the product and design documentation foundation.
 
-Future architectural changes should follow this workflow:
-
-1. Update the relevant Decision Record.
-2. Update the Design documentation if necessary.
-3. Implement the change.
-4. Record the completed work in this Changelog.
-
-Implementation continues with **Sprint 6-4 — Recurring Rhythm**.
+Sprint process documentation was later established under `Docs/Development/` (see Development Workflow Documentation above).
 
 ---
 

@@ -65,9 +65,9 @@ They do not replace it.
 
 # Current Extensions
 
-| Document | Purpose |
-|----------|---------|
-| Recurrence.md | Generate daily rhythms from recurring definitions |
+| Document | Purpose | Status |
+|----------|---------|--------|
+| Recurrence.md | Generate daily rhythms from recurring definitions | Foundation in progress (Sprint 6-4) |
 
 ---
 

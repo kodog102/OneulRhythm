@@ -42,11 +42,14 @@ Before making architectural or implementation decisions, consult the project doc
 4. Docs/Decisions/
 5. Docs/Design/
 6. Docs/Extensions/
-7. Docs/AI/AGENTS.md
+7. Docs/Development/
+8. Docs/AI/AGENTS.md
+
+Sprint process, prompts, Cursor guidelines, and the Sprint checklist live under `Docs/Development/`.
 
 Do not re-read documentation that is already available in the current conversation unless it has changed.
 
-When documentation conflicts, use the following priority:
+When product or architecture documentation conflicts, use the following priority:
 
 Glossary
 
@@ -66,6 +69,7 @@ Design
 
 Extensions
 
+Process conflicts are resolved by `Docs/Development/DEVELOPMENT_WORKFLOW.md`.
 ---
 
 # Current Technology Stack
@@ -226,20 +230,22 @@ Future work belongs in the Roadmap.
 
 Documentation should always reflect the current implementation.
 
+Follow the Documentation Pass rules in `Docs/Development/DEVELOPMENT_WORKFLOW.md`.
+
+Never commit or push unless the developer explicitly requests it.
+
 ---
 
 # Reporting
 
 At the end of every implementation provide:
 
-- Implementation Summary
-- Files Modified
-- Build Status
-- Preview Status
-- Architecture Status
-- Risks
-- Technical Debt
-- Next Recommended Step
+1. Modified Files
+2. Implementation Summary
+3. Architecture Notes
+4. Test and Build Results
+5. Manual Verification Required
+6. Remaining Risks or Issues
 
 ---
 
