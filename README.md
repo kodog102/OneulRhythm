@@ -171,7 +171,7 @@ Planning
 프로젝트의 설계와 의사결정 과정은 `Docs/`에서 관리합니다.
 
 - `Docs/Architecture/` — system structure
-- `Docs/Decisions/` — architectural decisions
+- `Docs/Architecture/Decisions/` — architectural decisions
 - `Docs/Design/` — subsystem implementation specs
 - `Docs/Development/` — official Sprint workflow
 - `Docs/ROADMAP.md` / `Docs/CHANGELOG.md` — product progress
@@ -187,14 +187,15 @@ Planning
 - Live Activity
 - Documentation Architecture
 - Development Workflow
+- Recurring Rhythm
+- Primary Rhythm Ownership
 
 ### 🚧 In Progress
 
-- Recurring Rhythm
+- Notification Architecture
 
 ### 🔮 Planned
 
-- Notification Architecture
 - Widget Experience
 - Apple Watch
 - Statistics & Insights

@@ -31,7 +31,15 @@ enum TodayRhythmActivityMapper {
             calendarDayStart: calendarDayStart
         )
 
-        let focusRoutine = snapshot.currentRoutine ?? snapshot.pastIncompleteRoutine
+        // Live Activity focus follows Current → Past Incomplete only.
+        // When the snapshot primary is Next, focus stays empty and next is projected.
+        let focusRoutine: Routine?
+        switch snapshot.primaryRole {
+        case .current, .pastIncomplete:
+            focusRoutine = snapshot.primaryRhythm
+        case .next, .none:
+            focusRoutine = nil
+        }
         let nextRoutine = snapshot.nextRoutine
 
         let contentState = TodayRhythmActivityAttributes.ContentState(

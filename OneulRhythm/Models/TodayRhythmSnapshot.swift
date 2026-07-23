@@ -16,6 +16,16 @@ enum TodayRhythmPhase: Equatable {
     case dayComplete
 }
 
+/// The single primary routine role surfaces should present.
+///
+/// Priority is owned exclusively by `TodayRhythmSnapshot`:
+/// current → past incomplete → next.
+enum TodayPrimaryRole: Equatable {
+    case current
+    case pastIncomplete
+    case next
+}
+
 /// Shared immutable presentation model for today's rhythm.
 struct TodayRhythmSnapshot {
     let date: Date
@@ -23,11 +33,13 @@ struct TodayRhythmSnapshot {
     let routines: [Routine]
     let currentRoutine: Routine?
     let overdueRoutines: [Routine]
-    /// The earliest past-due, not-yet-completed routine — a fact about
-    /// today's schedule, not a presentation choice. Presentation priority
-    /// (current → past incomplete → next) is decided by `TodayViewModel`.
+    /// The earliest past-due, not-yet-completed routine — a schedule fact.
     let pastIncompleteRoutine: Routine?
     let nextRoutine: Routine?
+    /// The one rhythm that deserves attention right now.
+    let primaryRhythm: Routine?
+    /// Role of `primaryRhythm` in the presentation priority chain.
+    let primaryRole: TodayPrimaryRole?
     let completedCount: Int
     let totalCount: Int
     let progress: Double
@@ -41,13 +53,21 @@ struct TodayRhythmSnapshot {
             ? 0
             : Double(completedCount) / Double(totalCount)
         let isComplete = totalCount > 0 && completedCount == totalCount
+        let pastIncompleteRoutine = schedule.overdueRoutines.first
+        let primary = Self.resolvePrimaryRhythm(
+            currentRoutine: schedule.currentRoutine,
+            pastIncompleteRoutine: pastIncompleteRoutine,
+            nextRoutine: schedule.nextRoutine
+        )
 
         self.date = date
         self.routines = routines
         self.currentRoutine = schedule.currentRoutine
         self.overdueRoutines = schedule.overdueRoutines
-        self.pastIncompleteRoutine = schedule.overdueRoutines.first
+        self.pastIncompleteRoutine = pastIncompleteRoutine
         self.nextRoutine = schedule.nextRoutine
+        self.primaryRhythm = primary?.rhythm
+        self.primaryRole = primary?.role
         self.completedCount = completedCount
         self.totalCount = totalCount
         self.progress = progress
@@ -60,6 +80,27 @@ struct TodayRhythmSnapshot {
             nextRoutine: schedule.nextRoutine,
             completedCount: completedCount
         )
+    }
+
+    /// Selects exactly one primary rhythm: current → past incomplete → next.
+    private static func resolvePrimaryRhythm(
+        currentRoutine: Routine?,
+        pastIncompleteRoutine: Routine?,
+        nextRoutine: Routine?
+    ) -> (rhythm: Routine, role: TodayPrimaryRole)? {
+        if let currentRoutine {
+            return (currentRoutine, .current)
+        }
+
+        if let pastIncompleteRoutine {
+            return (pastIncompleteRoutine, .pastIncomplete)
+        }
+
+        if let nextRoutine {
+            return (nextRoutine, .next)
+        }
+
+        return nil
     }
 
     private static func resolvePhase(

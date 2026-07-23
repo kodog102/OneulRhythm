@@ -24,7 +24,7 @@ Implementation
 
 **Current Sprint**
 
-Sprint 6-5 — Notification Architecture
+Sprint 6-6 — Notification Architecture
 
 ---
 
@@ -237,9 +237,30 @@ The application automatically presents today's occurrence.
 
 ---
 
+## Sprint 6-5 — Primary Rhythm Ownership
+
+### Goal
+
+Refine the Today experience so presentation focus is owned by the Today Snapshot.
+
+### Completed
+
+- Primary Rhythm selection inside `TodayRhythmSnapshot`
+- Priority: Current → Past Incomplete → Next
+- TodayViewModel forwards snapshot primary state
+- TodayView renders only the Primary Rhythm
+- Live Activity consumes the same snapshot primary role
+- Schedule Engine, Repository, and Activity lifecycle left unchanged
+
+**Status**
+
+✅ Completed
+
+---
+
 # Current
 
-## Sprint 6-5 — Notification Architecture
+## Sprint 6-6 — Notification Architecture
 
 ### Goal
 
@@ -260,7 +281,7 @@ Notifications become another consumer of today's schedule.
 
 # Planned
 
-## Sprint 6-6 — Widget Experience
+## Sprint 6-7 — Widget Experience
 
 ### Goal
 
@@ -278,7 +299,7 @@ Bring today's rhythm to the Home Screen.
 
 ---
 
-## Sprint 6-7 — Apple Watch
+## Sprint 6-8 — Apple Watch
 
 ### Goal
 

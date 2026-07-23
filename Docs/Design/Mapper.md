@@ -201,12 +201,16 @@ The same business model must always produce the same presentation model.
 
 Business state may contain multiple valid business objects.
 
-Presentation chooses which object becomes the primary focus.
+The Today Snapshot chooses which object becomes the Primary Rhythm.
 
-Example:
+Priority:
+
+1. Current
+2. Past Incomplete
+3. Next
 
 ```
-ResolvedSchedule
+Resolved schedule state
 
 Current Rhythm
 
@@ -218,7 +222,7 @@ Next Rhythm
 ↓
 
 ```
-Today Snapshot Mapper
+Today Rhythm Snapshot
 ```
 
 ↓
@@ -227,7 +231,7 @@ Today Snapshot Mapper
 Primary Rhythm
 ```
 
-The selection belongs to the Mapping Layer because it is presentation-specific rather than business-specific.
+The selection belongs to the Snapshot because it is presentation-specific rather than a Schedule Engine concern.
 
 ---
 

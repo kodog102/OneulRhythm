@@ -192,4 +192,4 @@ When referring to architectural concepts, use the official names defined in the 
 - Docs/README.md
 - Docs/GLOSSARY.md
 - Docs/Architecture/ARCHITECTURE.md
-- Docs/Decisions/
+- Docs/Architecture/Decisions/

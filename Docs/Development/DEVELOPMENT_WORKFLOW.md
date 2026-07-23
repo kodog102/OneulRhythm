@@ -169,7 +169,7 @@ Not every document must change every Sprint.
 Typical targets when affected:
 
 - `Docs/Design/`
-- `Docs/Decisions/`
+- `Docs/Architecture/Decisions/`
 - `Docs/Architecture/`
 - `Docs/ROADMAP.md`
 - `Docs/CHANGELOG.md`

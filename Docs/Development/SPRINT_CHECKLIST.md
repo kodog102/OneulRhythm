@@ -57,7 +57,7 @@ Documentation notes:
 
 - `Docs/Design/` — Update only when implementation contracts or subsystem behavior change.
 - `Docs/Architecture/` — Update only when system structure or layer responsibilities change.
-- `Docs/Decisions/` — Update only when a lasting architectural decision changes or is added.
+- `Docs/Architecture/Decisions/` — Update only when a lasting architectural decision changes or is added.
 - `Docs/ROADMAP.md` — Update completed Sprint progress.
 - `Docs/CHANGELOG.md` — Record completed user-visible or architectural changes.
 - `Docs/README.md` — Update only when the project overview requires revision.

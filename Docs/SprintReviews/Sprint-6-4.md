@@ -39,4 +39,4 @@ Allow users to define a rhythm once and have the application automatically prese
 
 ## Next Sprint
 
-Sprint 6-5 — Notification Architecture
+Sprint 6-6 — Notification Architecture

@@ -380,27 +380,33 @@ This ensures that:
 
 The Business Layer resolves the available state of the day.
 
-The Mapping Layer determines how that state is represented for a particular presentation surface.
+For the Today experience, selection of the single Primary Rhythm is owned by `TodayRhythmSnapshot`.
 
-For the Today experience, selection of the single primary rhythm is performed while mapping `ResolvedSchedule` into the Today presentation model.
+Priority:
+
+1. Current
+2. Past Incomplete
+3. Next
 
 ```text
-ResolvedSchedule
+Resolved schedule state
         │
         ▼
-Today Snapshot Mapper
+Today Rhythm Snapshot
         │
-        ├── Select presentation focus
-        ├── Assign presentation role
+        ├── Select Primary Rhythm
+        ├── Assign Primary Role
         └── Produce presentation-ready state
         │
         ▼
-Today Snapshot
+Today ViewModel / Live Activity Mapper
 ```
 
 The Schedule Engine does not decide which rhythm receives visual focus.
 
 The View does not choose among business candidates.
+
+The ViewModel forwards snapshot-owned primary state and does not re-select focus.
 
 This preserves the separation between business interpretation and presentation intent.
 

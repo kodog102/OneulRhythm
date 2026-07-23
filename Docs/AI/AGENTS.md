@@ -305,7 +305,7 @@ Before making architectural or implementation decisions, consult documentation i
 1. Docs/README.md
 2. Docs/GLOSSARY.md
 3. Docs/Architecture/
-4. Docs/Decisions/
+4. Docs/Architecture/Decisions/
 5. Docs/Design/
 6. Docs/Extensions/
 7. Docs/Development/

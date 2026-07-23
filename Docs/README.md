@@ -213,9 +213,8 @@ Decision Records explain **why** the architecture looks the way it does.
 They capture long-term architectural intent instead of implementation details.
 
 ```
-Decisions/
+Architecture/Decisions/
 ```
-
 ---
 
 ## Design
@@ -302,11 +301,10 @@ The architecture is intentionally designed for extension without changing its fo
 
 Current product work:
 
-- Recurring rhythms (Sprint 6-4 in progress)
+- Notification Architecture (Sprint 6-6 in progress)
 
 Planned capabilities include:
 
-- Local notifications
 - Widgets
 - Apple Watch
 - Siri & Shortcuts

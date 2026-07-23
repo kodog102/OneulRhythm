@@ -167,19 +167,18 @@ struct TodayView: View {
         )
     }
 
-    /// Renders exactly one primary routine card, chosen by
-    /// `TodayViewModel.primaryRole` (current → past incomplete → next).
-    /// The next routine, when not primary itself, may appear only as quiet
-    /// secondary information — never as a second competing card.
+    /// Renders the snapshot's single primary rhythm.
+    /// Selection lives in `TodayRhythmSnapshot`; the view only presents it.
+    /// When primary is not next, the next rhythm may appear as quiet preview only.
     @ViewBuilder
     private var primaryRoutineCard: some View {
-        if let primaryRoutine = viewModel.primaryRoutine, let primaryRole = viewModel.primaryRole {
+        if let primaryRhythm = viewModel.primaryRhythm, let primaryRole = viewModel.primaryRole {
             VStack(alignment: .leading, spacing: ORSpacing.xs) {
                 RoutineCardView(
-                    routine: primaryRoutine,
+                    routine: primaryRhythm,
                     scheduleRole: primaryRole.scheduleRole,
-                    isCompleting: viewModel.isCompleting(primaryRoutine),
-                    onComplete: { viewModel.completeRoutine(primaryRoutine) }
+                    isCompleting: viewModel.isCompleting(primaryRhythm),
+                    onComplete: { viewModel.completeRoutine(primaryRhythm) }
                 )
 
                 if primaryRole == .pastIncomplete {
@@ -193,7 +192,7 @@ struct TodayView: View {
                     nextRhythmPreview(for: secondaryNextRoutine)
                 }
             }
-            .animation(.easeInOut(duration: 0.25), value: primaryRoutine.id)
+            .animation(.easeInOut(duration: 0.25), value: primaryRhythm.id)
         }
     }
 
@@ -228,9 +227,8 @@ struct TodayView: View {
 }
 
 private extension TodayPrimaryRole {
-    /// Maps the ViewModel's presentation role onto `RoutineCardView`'s
-    /// existing role-driven styling. `.pastIncomplete` reuses the card's
-    /// current "지나간 리듬" section label and completion flow unchanged.
+    /// Maps snapshot presentation role onto `RoutineCardView` styling.
+    /// `.pastIncomplete` reuses the existing overdue card treatment.
     var scheduleRole: RoutineScheduleRole {
         switch self {
         case .current:

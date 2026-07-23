@@ -8,6 +8,30 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 6-5 — Primary Rhythm Ownership
+
+Date
+
+2026-07-23
+
+## Changed
+
+### Today Snapshot
+
+- Moved Primary Rhythm selection into `TodayRhythmSnapshot`.
+- Established presentation priority: Current → Past Incomplete → Next.
+- TodayViewModel now forwards snapshot-owned primary state instead of selecting focus.
+- TodayView renders only the Primary Rhythm without selection logic.
+- Live Activity mapper consumes snapshot `primaryRole` for focus.
+
+## Notes
+
+Schedule Engine, Repository, SwiftData models, and Activity lifecycle remain unchanged.
+
+See `Docs/Architecture/Reviews/Sprint6-5_ArchitectureReview.md` and `Docs/SprintReviews/Sprint-6-5.md`.
+
+---
+
 # Sprint 6-4 — Recurring Rhythm
 
 Date

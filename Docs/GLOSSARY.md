@@ -214,13 +214,13 @@ The next upcoming rhythm after the current time.
 
 현재 Presentation Surface에서 사용자에게 가장 중요하게 보여줄 단 하나의 리듬.
 
-Business Layer가 아니라 Mapping Layer에서 선택된다.
+Today Snapshot이 Current → Past Incomplete → Next 우선순위로 선택한다.
 
 ### English
 
 The single rhythm selected for presentation on a specific surface.
 
-Selection occurs during mapping rather than schedule resolution.
+For Today, selection is owned by `TodayRhythmSnapshot` using the priority Current → Past Incomplete → Next.
 
 ---
 
