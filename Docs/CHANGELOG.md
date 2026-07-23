@@ -8,6 +8,30 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 7 — Notification System (T1)
+
+Date
+
+2026-07-23
+
+## Added
+
+### Notification Trigger Policy
+
+- Introduced `NotificationTriggerPolicy` as the single source of truth for reminder trigger-date calculation.
+- One-time create flow in `AddRoutineView` now schedules via the policy instead of inline date arithmetic.
+- Unit tests cover missing offset, future, exact-now, past, and near-boundary cases.
+
+## Notes
+
+Permission flow and `NotificationScheduling` isolation are unchanged.
+
+Recurring reminder scheduling remains persist-only and out of scope for T1.
+
+Developer verification completed successfully.
+
+---
+
 # Sprint 6-5 — Primary Rhythm Ownership
 
 Date

@@ -444,7 +444,7 @@ struct AddRoutineView: View {
 
             do {
                 try onSave(input)
-                // Recurring reminders are persisted only; scheduling is Sprint 6-5.
+                // Recurring reminders are persisted only; scheduling remains out of scope.
                 if input.recurrence == nil {
                     await scheduleReminderIfNeeded(
                         routineID: input.id,
@@ -467,20 +467,17 @@ struct AddRoutineView: View {
         startTime: Date,
         reminderMinutes: Int?
     ) async {
-        guard let reminderMinutes else { return }
-
-        let status = await notificationScheduler.authorizationStatus()
-        guard status == .authorized else { return }
-
-        guard let triggerDate = calendar.date(
-            byAdding: .minute,
-            value: -reminderMinutes,
-            to: startTime
+        guard let triggerDate = NotificationTriggerPolicy.triggerDate(
+            startTime: startTime,
+            reminderMinutes: reminderMinutes,
+            now: nowProvider(),
+            calendar: calendar
         ) else {
             return
         }
 
-        guard triggerDate > nowProvider() else { return }
+        let status = await notificationScheduler.authorizationStatus()
+        guard status == .authorized else { return }
 
         do {
             try await notificationScheduler.schedule(

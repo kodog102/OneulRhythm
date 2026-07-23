@@ -301,7 +301,10 @@ The architecture is intentionally designed for extension without changing its fo
 
 Current product work:
 
-- Notification Architecture (Sprint 6-6 in progress)
+Sprint 7
+
+- Notification Plan
+- Schedule Synchronization
 
 Planned capabilities include:
 

@@ -4,87 +4,149 @@
 
 This document defines the official Sprint workflow for OneulRhythm.
 
-It is the authoritative source for how development progresses from Sprint planning to Sprint completion.
+It is the authoritative source describing how every Sprint progresses from planning to completion.
 
-The workflow describes how ChatGPT, Cursor, and the developer collaborate from planning through commit.
+Before implementation begins, all AI agents must follow the project governance defined in the repository.
 
 Related documents:
 
-- `PROMPT_LIBRARY.md` — reusable prompts for each stage
-- `CURSOR_GUIDELINES.md` — project-wide rules for Cursor
-- `SPRINT_CHECKLIST.md` — Sprint close checklist
-- `QA_PIPELINE.md`
-Product and architecture rules for AI agents remain in `Docs/AI/AGENTS.md`.
+- `ENGINEERING_CHARTER.md` — engineering principles
+- `CURSOR_GUIDELINES.md` — execution rules for Cursor
+- `PROMPT_LIBRARY.md` — reusable prompts
+- `SPRINT_CHECKLIST.md` — Sprint completion checklist
+- `QA_PIPELINE.md` — QA process
+- `Docs/AI/AGENTS.md` — product and architecture rules
 
 ---
 
-## Roles
+# Workflow Principles
 
+Every Sprint follows these principles.
 
+- Repository First
+- Architecture Before Implementation
+- Scope Before Code
+- Validation Before Approval
+- Documentation Before Completion
 
-### ChatGPT
+Repository documentation always takes precedence over conversational memory.
+
+Implementation should improve existing documentation before introducing new governance.
+
+Task slicing is optional and should only be used when it improves safety, validation, or implementation clarity.
+
+---
+
+# Roles
+
+## ChatGPT
+
+Responsible for:
 
 - Requirement analysis
+- Repository context analysis
 - Architecture design
 - Task scope definition
+- Technical decision support
 - Cursor prompt creation
-- Code and architecture review
-- QA result review
-- Documentation review
-- Sprint approval
+- Architecture validation
+- Sprint planning support
 
-ChatGPT does not modify the repository.
-
-### Cursor
-
-- Code implementation
-- Test implementation
-- Build and test execution
-- Integration QA
-- Documentation updates
-- Structured implementation reports
-- Scope adherence
-
-Cursor never commits or pushes unless the developer explicitly requests it in a later step.
-
-### Developer
-
-- Final decisions
-- Running and visually inspecting the app
-- Approving changes
-- Commit and push
-- Product direction
-
-Only the developer commits and pushes.
+ChatGPT provides architectural guidance but does not replace implementation review or QA performed by Cursor.
 
 ---
 
+## Cursor
 
+Responsible for:
 
-## Sprint Stages
+- Repository inspection
+- Code implementation
+- Test implementation
+- Build execution
+- Code review
+- Integration QA
+- Documentation Pass
+- Documentation updates
+- Structured implementation reports
 
+Cursor must remain inside the approved Sprint scope.
 
+Cursor never commits or pushes.
 
-### 1. Sprint Planning
+---
+
+## Developer
+
+Responsible for:
+
+- Product direction
+- Final decisions
+- Visual verification
+- Device verification
+- Sprint approval
+- Commit
+- Push
+
+The developer owns the final product.
+
+---
+
+# Sprint Lifecycle
+
+## 1. Sprint Planning
 
 ChatGPT and the developer define:
 
 - Sprint goal
 - Success criteria
+- Scope
 - Out of scope
 - Acceptance criteria
 
-Output: approved Sprint intent.
+Output:
 
-### 2. Architecture and Task Design
+Approved Sprint Goal
 
-ChatGPT inspects the current architecture, identifies affected areas, and proposes an implementation direction.
+---
 
-Cursor may be used for a read-only Architecture Review using the Architecture Review Prompt.
+## 2. Repository Context Review
 
-Implementation does not begin until the developer approves the scope and implementation direction.
+Before architecture or implementation begins, review the required project documents.
 
-### 3. Implementation
+Typical required context includes:
+
+- ENGINEERING_CHARTER
+- DEVELOPMENT_WORKFLOW
+- CURSOR_GUIDELINES
+
+Then review Sprint-specific documentation and affected source code.
+
+Output:
+
+Approved implementation context.
+
+---
+
+## 3. Architecture and Task Design
+
+ChatGPT analyzes:
+
+- Current architecture
+- Affected modules
+- Implementation strategy
+
+If the task is sufficiently large or risky, it may be divided into implementation slices.
+
+Task slicing is optional.
+
+Output:
+
+Approved implementation plan.
+
+---
+
+## 4. Implementation
 
 Cursor implements only the approved scope.
 
@@ -92,32 +154,50 @@ Rules:
 
 - Preserve architecture
 - Keep changes small
-- Add or update tests
-- Run build and tests
-- Do not commit or push
+- Follow project governance
+- Update tests when necessary
+- Build successfully
+- Never expand scope
+- Never commit or push
 
-Output: Implementation Report.
+Output:
 
-### 4. Implementation Report
+Implementation Report
+
+---
+
+## 5. Implementation Report
 
 Cursor reports:
 
 1. Modified Files
 2. Implementation Summary
 3. Architecture Notes
-4. Test and Build Results
-5. Manual Verification Required
-6. Remaining Risks or Issues
+4. Test Results
+5. Build Results
+6. Manual Verification Required
+7. Remaining Risks
 
-The developer and ChatGPT review the report before further work.
+---
 
-### 5. Code Review
+## 6. Code Review
 
-ChatGPT reviews architecture preservation, scope control, regressions, and release readiness.
+Cursor reviews:
 
-Return: PASS, PASS WITH CONDITIONS, or FAIL / BLOCK.
+- Architecture preservation
+- Scope adherence
+- Regression risk
+- Release readiness
 
-### 6. Fixes
+Return:
+
+- PASS
+- PASS WITH CONDITIONS
+- FAIL / BLOCK
+
+---
+
+## 7. Fixes
 
 Cursor addresses only approved review findings.
 
@@ -125,122 +205,162 @@ Rules:
 
 - No new features
 - No architecture redesign
-- No scope expansion
 - No speculative improvements
+- No scope expansion
 
+---
 
+## 8. Integration QA
 
-### 7. Integration QA
-
-Cursor runs Integration QA against the approved behavior.
-
-Verify:
+Cursor verifies:
 
 - Functional behavior
-- Launch and lifecycle behavior
+- Lifecycle behavior
 - Persistence
-- Idempotency
+- State transitions
 - Actor isolation
-- Regressions
-- Build and tests
-- Manual verification items
+- Idempotency
+- Build
+- Tests
+- Regression
 
-Return: PASS, PASS WITH CONDITIONS, or FAIL.
+Developer performs:
 
-The developer completes visual and device inspection items that cannot be verified from source alone.
+- Visual QA
+- Device verification
 
-### 8. Final Review
+Return:
 
-ChatGPT reviews remaining conditions, QA results, and readiness to close the Sprint.
+- PASS
+- PASS WITH CONDITIONS
+- FAIL
 
-The developer confirms product acceptance.
+---
 
-### 9. Documentation Pass
+## 9. Sprint Review
 
-Cursor synchronizes affected documentation with implemented behavior.
+ChatGPT verifies:
 
-Rules:
+- Architecture consistency
+- Scope completion
+- Outstanding technical decisions
 
-- Update only documentation affected by the Sprint
-- Avoid unrelated documentation cleanup
+Developer performs:
 
-Not every document must change every Sprint.
+- Final product approval
 
-Typical targets when affected:
+---
 
-- `Docs/Design/`
-- `Docs/Architecture/Decisions/`
-- `Docs/Architecture/`
-- `Docs/ROADMAP.md`
-- `Docs/CHANGELOG.md`
-- `Docs/README.md` (only when necessary)
+## 10. Documentation Pass
 
+Cursor updates only documentation affected by the Sprint.
 
+Typical targets include:
 
-### 10. Documentation Review
+- Docs/Architecture/
+- Docs/Architecture/Decisions/
+- Docs/Design/
+- Docs/ROADMAP.md
+- Docs/CHANGELOG.md
+- README.md (when necessary)
 
-ChatGPT reviews documentation consistency and returns APPROVED or CHANGES REQUIRED.
+Avoid unrelated documentation cleanup.
 
-### 11. Sprint Retrospective
+---
+
+## 11. Documentation Verification
+
+Cursor verifies:
+
+- Documentation consistency
+- Repository consistency
+- Broken references
+
+Developer approves documentation as part of Sprint completion.
+
+---
+
+## 12. Sprint Retrospective
 
 Capture:
 
 - What changed
-- Key decisions
-- Problems encountered
+- Why it changed
+- Lessons learned
 - Technical debt
 - Readiness for the next Sprint
 
+When process improvements are identified, update existing documentation whenever possible.
 
-
-### 12. Commit and Push
-
-The developer commits and pushes after documentation and QA are complete.
-
-Preferred shape: one reviewable commit for the Sprint or one clearly scoped task.
-
-### 13. Next Sprint Kickoff
-
-Confirm remaining technical debt, update Sprint planning materials, and prepare the next Sprint goal.
+Avoid introducing new governance unless repeated evidence shows it is necessary.
 
 ---
 
+## 13. Commit and Push
 
+Developer performs:
 
-## Workflow Diagram
+- Commit
+- Push
+
+Preferred shape:
+
+One Sprint = One reviewable commit
+
+unless multiple commits improve reviewability.
+
+---
+
+## 14. Next Sprint Kickoff
+
+Review:
+
+- Remaining technical debt
+- Remaining roadmap
+- Next Sprint goal
+
+---
+
+# Workflow Diagram
 
 ```mermaid
 flowchart TD
-    A[1. Sprint Planning] --> B[2. Architecture and Task Design]
-    B --> C[3. Implementation]
-    C --> D[4. Implementation Report]
-    D --> E[5. Code Review]
-    E -->|Findings| F[6. Fixes]
-    F --> E
-    E -->|Approved| G[7. Integration QA]
-    G -->|Findings| F
-    G -->|Approved| H[8. Final Review]
-    H --> I[9. Documentation Pass]
-    I --> J[10. Documentation Review]
-    J -->|Changes Required| I
-    J -->|Approved| K[11. Sprint Retrospective]
-    K --> L[12. Commit and Push]
-    L --> M[13. Next Sprint Kickoff]
+    A[1. Sprint Planning]
+    --> B[2. Repository Context Review]
+    --> C[3. Architecture and Task Design]
+    --> D[4. Implementation]
+    --> E[5. Implementation Report]
+    --> F[6. Code Review]
+
+    F -->|Findings| G[7. Fixes]
+    G --> F
+
+    F -->|Approved| H[8. Integration QA]
+    H -->|Findings| G
+
+    H -->|Approved| I[9. Sprint Review]
+    I --> J[10. Documentation Pass]
+    J --> K[11. Documentation Verification]
+
+    K -->|Changes Required| J
+
+    K -->|Approved| L[12. Sprint Retrospective]
+    L --> M[13. Commit and Push]
+    M --> N[14. Next Sprint Kickoff]
 ```
-
-
 
 ```text
 Planning
+  → Repository Context Review
   → Architecture and Task Design
   → Implementation
   → Implementation Report
-  → Code Review
-  → Fixes (as needed)
-  → Integration QA
-  → Final Review
-  → Documentation Pass
-  → Documentation Review
+  → Code Review (Cursor)
+  → Fixes (if needed)
+  → Integration QA (Cursor)
+  → Sprint Review (ChatGPT + Developer)
+  → Documentation Pass (Cursor)
+  → Documentation Verification (Cursor)
   → Sprint Retrospective
   → Commit and Push (Developer)
   → Next Sprint Kickoff
@@ -248,15 +368,16 @@ Planning
 
 ---
 
+# Working Rules
 
-
-## Working Rules
-
+- Repository documentation is the source of truth.
+- Required project documents must be reviewed before implementation.
 - Scope is approved before implementation.
+- ChatGPT owns architecture and technical decisions.
+- Cursor owns implementation quality.
 - Cursor stays inside the approved scope.
-- ChatGPT reviews; the developer decides.
+- The developer owns the final product.
 - Visual QA is performed by the developer.
-- Documentation must match implemented behavior.
-- Commit and push are developer-owned steps.
-- Architecture changes require explicit approval before implementation.
-
+- Documentation must reflect implemented behavior.
+- Architecture changes require explicit approval.
+- Task slicing is optional and should only be used when it improves implementation quality.
