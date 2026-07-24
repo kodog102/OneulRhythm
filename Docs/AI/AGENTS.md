@@ -58,13 +58,18 @@ Responsible for:
 - Technical direction
 - Task scope definition
 - Artifact definition
+- Documentation impact identification
 - Cursor prompt creation
 - Code and architecture review
 - QA result review
 - Documentation review
 - Sprint approval
 
-Before implementation begins, ChatGPT identifies which project artifact should be created or updated.
+Before implementation begins, ChatGPT identifies:
+
+- which project artifact should be created or updated
+- which owner documents are affected
+- whether Product, Design, Architecture/ADR, or process docs must change
 
 ChatGPT does not modify repository code.
 
@@ -78,7 +83,9 @@ Responsible for:
 - Test implementation
 - Build execution
 - Integration QA
-- Documentation updates
+- Owner-document updates during Documentation Pass
+- Hub README maintenance when membership changes
+- Link repair for affected documentation
 - Structured implementation reports
 
 Cursor implements approved Product and Architecture decisions.
@@ -89,7 +96,7 @@ Cursor must not create:
 - Design decisions
 - Architecture decisions
 
-When documentation is incomplete or ambiguous:
+When documentation is incomplete, ambiguous, or ownership is unclear:
 
 - Stop implementation.
 - Report the ambiguity.
@@ -97,7 +104,23 @@ When documentation is incomplete or ambiguous:
 
 Never silently invent Product behavior.
 
+Never treat Archived documents as implementation authority.
+
 Cursor never commits or pushes unless explicitly requested by the developer.
+
+---
+
+## QA
+
+QA verifies that implemented behavior matches Active documentation contracts.
+
+QA must:
+
+- distinguish contract gaps from implementation bugs
+- confirm Archived documents were not used as implementation authority
+- verify documentation consistency when a Documentation Pass occurred
+
+QA does not redefine Product, Design, or Architecture.
 
 ---
 
@@ -109,10 +132,13 @@ Responsible for:
 - Product direction
 - Running the application
 - Manual visual verification
+- Documentation approval
 - Sprint approval
 - Commit and push
 
 Only the developer commits and pushes.
+
+Documentation state transitions (Active, Archived, Superseded ADR, Delete) require developer approval.
 
 ---
 
@@ -132,7 +158,7 @@ Planning
   → Integration QA
   → Final Review
   → Documentation Pass
-  → Documentation Review
+  → Documentation Verification
   → Sprint Retrospective
   → Commit and Push (Developer)
   → Next Sprint Kickoff
@@ -385,15 +411,41 @@ Extensions describe optional capabilities.
 
 Development documents define engineering processes.
 
+Hub READMEs index Active and Historical documents for their folder.
+
 Roadmap defines future direction.
 
 Changelog records completed work.
+
+Archived documents are historical only. They are never implementation authority.
 
 ---
 
 ## Documentation Updates
 
-### Architecture Changes
+Update the owner document only. Link instead of duplicating doctrine.
+
+### Product Behavior Changes
+
+Update:
+
+- Product documentation first
+- CHANGELOG
+
+Update Design only when the implementation contract also changed.
+
+---
+
+### Implementation Contract Changes
+
+Update:
+
+- Design documentation
+- Extensions documentation when an extension contract changed
+
+---
+
+### Architecture Ownership Changes
 
 Update:
 
@@ -402,12 +454,21 @@ Update:
 
 ---
 
-### Product Behavior Changes
+### Hub Membership Changes
+
+When a document is added, archived, moved, or removed:
+
+- Update the owning hub README Active/Historical listing
+- Update `Docs/README.md` only if categories, paths, or role entry points change
+- Repair affected links in the same Documentation Pass
+
+---
+
+### Terminology Changes
 
 Update:
 
-- Design documentation
-- CHANGELOG
+- `Docs/GLOSSARY.md`
 
 ---
 
@@ -419,6 +480,22 @@ Update:
 - CHANGELOG
 
 Documentation should remain synchronized with the current state of the project.
+
+Documentation maintenance follows:
+
+Architect (identify impact)
+
+↓
+
+Cursor (update owner docs and hubs)
+
+↓
+
+QA (verify consistency)
+
+↓
+
+Developer (approve)
 
 ---
 
@@ -469,7 +546,8 @@ Including:
 - Integration QA completed
 - Manual Visual QA completed or explicitly recorded by the developer
 - Documentation Pass completed when documentation changes
-- Documentation Review approved
+- Documentation Verification completed
+- Developer documentation approval
 
 Only then should the developer commit and push.
 

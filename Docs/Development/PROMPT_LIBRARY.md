@@ -172,17 +172,30 @@ Visual polish must always be manually confirmed.
 
 Update documentation only when required.
 
-Examples:
+Owner-document order:
 
-- CHANGELOG
-- ROADMAP
-- Design Documents
-- Architecture
-- Decision Records
+- Product behavior → Product docs first
+- Implementation contracts → Design or Extensions
+- Architecture ownership → Architecture and Decision Records
+- Terminology → Glossary
+- Progress → ROADMAP and CHANGELOG
+
+Also update when needed:
+
+- Owning hub README Active/Historical listings
+- Affected links
+- `Docs/README.md` only when categories, paths, or role entry points change
+
+Documentation Verification must confirm:
+
+- Active docs match implemented behavior
+- Archived docs are not used as implementation authority
+- Hub listings remain accurate
+- Edited documentation links resolve
 
 Implementation must never invalidate approved documentation.
 
-If documentation becomes incorrect,
+If documentation becomes incorrect or ownership is unclear,
 
 stop and request documentation updates.
 
@@ -256,7 +269,9 @@ Clearly distinguish:
 
 ### Documentation Updated
 
-List updated documents.
+List updated owner documents, hub README changes, and link repairs.
+
+Confirm Documentation Verification was completed when documentation changed.
 
 If none:
 

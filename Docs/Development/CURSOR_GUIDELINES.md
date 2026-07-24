@@ -176,6 +176,16 @@ Update documentation only:
 - when requested,
 - or during an approved Documentation Pass.
 
+## Documentation Governance
+
+- Update the owner document only.
+- Avoid duplicated doctrine across Product, Design, Architecture, and Development.
+- Archive before delete unless the document is clearly unnecessary.
+- Archived documents are not implementation authority.
+- Stop when documentation ownership is unclear.
+- Repair affected links before reporting Documentation Pass completion.
+- Update hub README Active/Historical listings when membership changes.
+
 Update existing documentation before introducing new documentation.
 
 Avoid creating new governance unless repeated evidence shows that existing documentation is insufficient.

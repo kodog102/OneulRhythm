@@ -297,15 +297,25 @@ Developer performs:
 
 Cursor updates only documentation affected by the Sprint.
 
-Typical targets include:
+Update owner documents according to what changed:
 
-- Docs/Architecture/
-- Docs/Architecture/Decisions/
-- Docs/Design/
-- Docs/Product/
-- Docs/ROADMAP.md
-- Docs/CHANGELOG.md
-- README.md (when necessary)
+- Product behavior → `Docs/Product/`
+- Implementation contracts → `Docs/Design/` or `Docs/Extensions/`
+- Architecture ownership → `Docs/Architecture/` and Decision Records
+- Terminology → `Docs/GLOSSARY.md`
+- Progress → `Docs/ROADMAP.md` and `Docs/CHANGELOG.md`
+
+Also update when membership or navigation is affected:
+
+- Owning hub README Active/Historical listings
+- `Docs/README.md` only when categories, paths, or role entry points change
+- Root `README.md` only when necessary
+
+Documentation Pass must keep Active vs Archived consistency.
+
+Archived documents remain historical. They are never implementation authority.
+
+Repair affected links in the same pass.
 
 Avoid unrelated documentation cleanup.
 
@@ -315,11 +325,15 @@ Avoid unrelated documentation cleanup.
 
 Cursor verifies:
 
-- Documentation consistency
-- Repository consistency
-- Broken references
+- Owner documents match implemented behavior
+- Hub README Active/Historical listings remain accurate
+- Archived documents are not cited as required contracts
+- Broken references in edited documentation
+- Documentation consistency with the Sprint scope
 
 Developer approves documentation as part of Sprint completion.
+
+Documentation Verification must complete before Sprint completion.
 
 ---
 

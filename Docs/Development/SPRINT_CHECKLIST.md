@@ -43,24 +43,28 @@ Related documents:
 ## Documentation
 
 - [ ] Documentation Pass completed
-- [ ] Documentation Review approved
-- [ ] Design documentation updated (when affected)
-- [ ] Architecture documentation updated (when affected)
-- [ ] Decisions updated (when affected)
+- [ ] Documentation Verification completed
+- [ ] Product documentation updated (when behavior changed)
+- [ ] Design documentation updated (only when implementation contract changed)
+- [ ] Architecture / Decisions updated (when ownership or structure changed)
+- [ ] Hub README updated (when membership changed)
+- [ ] Active / Historical state verified
 - [ ] ROADMAP updated (completed Sprint work)
 - [ ] CHANGELOG updated (completed Sprint work)
-- [ ] README updated (only when necessary)
-- [ ] Terminology reviewed
-- [ ] Obsolete documentation removed
+- [ ] Glossary updated (when terminology changed)
+- [ ] Affected links repaired
 
 Documentation notes:
 
-- `Docs/Design/` — Update only when implementation contracts or subsystem behavior change.
+- `Docs/Product/` — Update first when product behavior or UX contracts change.
+- `Docs/Design/` — Update only when implementation contracts change.
 - `Docs/Architecture/` — Update only when system structure or layer responsibilities change.
 - `Docs/Architecture/Decisions/` — Update only when a lasting architectural decision changes or is added.
+- Hub READMEs — Update Active/Historical listings when documents are added, archived, moved, or removed.
 - `Docs/ROADMAP.md` — Update completed Sprint progress.
 - `Docs/CHANGELOG.md` — Record completed user-visible or architectural changes.
-- `Docs/README.md` — Update only when the project overview requires revision.
+- `Docs/README.md` — Update only when categories, paths, or role entry points change.
+- Archived documents are historical only and are never implementation authority.
 
 ---
 

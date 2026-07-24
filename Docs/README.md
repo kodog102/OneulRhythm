@@ -90,6 +90,19 @@ Historical documents remain in the repository for context. They are not sources 
 
 ---
 
+# Lifecycle
+
+| State | Meaning |
+|-------|---------|
+| Active | Current authority. No archive banner. Listed as Active in the owning hub. |
+| Archived | Historical only. Uses the archive banner. Never implementation authority. |
+| Superseded | ADR status only. Replaced by a newer Decision Record. |
+| Delete | Rare. Use only when a document has no useful history and is safe to remove. Prefer Archive when uncertain. |
+
+Do not invent additional lifecycle states.
+
+---
+
 # Role-Based Entry Points
 
 ## Public visitor
