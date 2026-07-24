@@ -8,6 +8,29 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Planning — Product UI First Strategy
+
+Date
+
+2026-07-24
+
+## Changed
+
+### Roadmap Direction
+
+- Adopted Product UI First as the current development priority after Notification Foundation stability.
+- Reordered upcoming Sprints so Today Product Experience, Routine Management, Settings & Preferences, and UX Polish precede Widget Experience and Apple Watch Integration.
+- Documented that Widget and Apple Watch remain planned surfaces but are intentionally postponed until in-app MVP quality is reached.
+- Recorded the strategic decision in `DR-014-product-ui-first.md`.
+
+## Notes
+
+This is a planning and documentation update only.
+
+No application architecture, Notification pipeline, Snapshot, or production code was changed.
+
+---
+
 # Sprint 7 — Notification System (T3)
 
 Date

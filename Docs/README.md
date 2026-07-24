@@ -293,6 +293,7 @@ The current architectural foundation includes:
 - Today Snapshot
 - Live Activity integration
 - Immediate Day Complete lifecycle
+- Notification Foundation (Trigger Policy, Plan, Synchronization)
 
 ---
 
@@ -300,13 +301,22 @@ The current architectural foundation includes:
 
 The architecture is intentionally designed for extension without changing its foundation.
 
-Current product work:
+## Current Priority — Product UI First
 
-Sprint 7
+Notification Foundation is complete and stable.
 
-- Notification Synchronization available; lifecycle invocation remains open if needed
+Current development prioritizes the in-app Product UI until it reaches MVP quality:
 
-Planned capabilities include:
+- Sprint 8 — Today Product Experience
+- Sprint 9 — Routine Management
+- Sprint 10 — Settings & Preferences
+- Sprint 11 — UX Polish
+
+Widget Experience and Apple Watch Integration are intentionally postponed. They remain planned surfaces and should later consume the existing architecture rather than redefine it.
+
+See `ROADMAP.md` and `Architecture/Decisions/DR-014-product-ui-first.md`.
+
+## Later Platform Capabilities
 
 - Widgets
 - Apple Watch

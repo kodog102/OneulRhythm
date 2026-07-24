@@ -1,48 +1,116 @@
 # AGENTS
 
-This document defines product philosophy and architecture rules for AI agents contributing to OneulRhythm.
+This document defines the collaboration model, product philosophy, and architectural rules for AI agents contributing to OneulRhythm.
 
-Sprint process, prompts, Cursor working rules, and close-out checklists are defined in `Docs/Development/`.
+Sprint workflows, implementation prompts, Cursor guidelines, QA processes, and close-out checklists are defined under `Docs/Development/`.
 
-This document does not replace the official Development Workflow.
+This document complements, but does not replace, the official Development Workflow.
+
+---
+
+# Core Principles
+
+All contributors should follow these principles.
+
+## Documentation First
+
+Implementation follows approved documentation.
+
+Conversation helps decisions.
+
+Documentation preserves decisions.
+
+Never implement directly from conversation alone.
+
+---
+
+## Artifact First
+
+Every meaningful Product, Design, or Architecture discussion must produce or update an approved project artifact before implementation begins.
+
+Conversation is temporary.
+
+Documentation is the project's shared memory.
+
+---
+
+## Product UI First
+
+User experience is designed before implementation.
+
+Implementation exists to express approved Product decisions.
+
+Implementation Agents never redesign the product.
 
 ---
 
 # Roles
 
-Collaboration roles match the official Development Workflow.
+Collaboration roles follow the official Development Workflow.
 
-## ChatGPT
+## ChatGPT (Architect)
+
+Responsible for:
 
 - Requirement analysis
+- Product design facilitation
 - Architecture design
+- Technical direction
 - Task scope definition
+- Artifact definition
 - Cursor prompt creation
 - Code and architecture review
 - QA result review
 - Documentation review
 - Sprint approval
 
-ChatGPT does not modify the repository.
+Before implementation begins, ChatGPT identifies which project artifact should be created or updated.
 
-## Cursor
+ChatGPT does not modify repository code.
+
+---
+
+## Cursor (Implementation Agent)
+
+Responsible for:
 
 - Code implementation
 - Test implementation
-- Build and test execution
+- Build execution
 - Integration QA
 - Documentation updates
 - Structured implementation reports
 
-Cursor never commits or pushes unless the developer explicitly requests it.
+Cursor implements approved Product and Architecture decisions.
+
+Cursor must not create:
+
+- Product decisions
+- Design decisions
+- Architecture decisions
+
+When documentation is incomplete or ambiguous:
+
+- Stop implementation.
+- Report the ambiguity.
+- Request clarification.
+
+Never silently invent Product behavior.
+
+Cursor never commits or pushes unless explicitly requested by the developer.
+
+---
 
 ## Developer
 
+Responsible for:
+
 - Final decisions
-- Running and visually inspecting the app
-- Approving changes
-- Commit and push
 - Product direction
+- Running the application
+- Manual visual verification
+- Sprint approval
+- Commit and push
 
 Only the developer commits and pushes.
 
@@ -50,7 +118,9 @@ Only the developer commits and pushes.
 
 # Development Workflow
 
-Follow the official Sprint pipeline in `Docs/Development/DEVELOPMENT_WORKFLOW.md`.
+Follow the official Sprint pipeline defined in:
+
+`Docs/Development/DEVELOPMENT_WORKFLOW.md`
 
 ```text
 Planning
@@ -58,7 +128,7 @@ Planning
   → Implementation
   → Implementation Report
   → Code Review
-  → Fixes (as needed)
+  → Fixes
   → Integration QA
   → Final Review
   → Documentation Pass
@@ -70,44 +140,46 @@ Planning
 
 Related process documents:
 
-- `Docs/Development/PROMPT_LIBRARY.md`
-- `Docs/Development/CURSOR_GUIDELINES.md`
-- `Docs/Development/SPRINT_CHECKLIST.md`
-- `Docs/Development/QA_PIPELINE.md`
+- Docs/Development/PROMPT_LIBRARY.md
+- Docs/Development/CURSOR_GUIDELINES.md
+- Docs/Development/SPRINT_CHECKLIST.md
+- Docs/Development/QA_PIPELINE.md
 
-No process step should be skipped without an explicit developer decision.
+No process step should be skipped without explicit developer approval.
 
 ---
 
 # Product Philosophy
 
-Agents must preserve these principles.
+Every implementation should preserve these principles.
 
 ## Calm
 
-Never introduce stressful UX.
+Never introduce stressful or attention-seeking UX.
 
 ---
 
 ## Rhythm
 
-The application is about today's rhythm.
+The application exists to support today's rhythm.
 
 Not productivity.
+
+Not task management.
 
 ---
 
 ## Simplicity
 
-Prefer small changes.
+Prefer small improvements.
 
-Avoid large rewrites.
+Avoid unnecessary rewrites.
 
 ---
 
 ## Shared Source of Truth
 
-Scheduling logic belongs inside:
+Scheduling logic belongs to:
 
 - Schedule Engine
 
@@ -119,7 +191,7 @@ Presentation models are created by:
 
 - Mappers
 
-Presentation orchestration belongs inside:
+Presentation orchestration belongs to:
 
 - ViewModels
 
@@ -139,6 +211,8 @@ Responsible for:
 - Rendering
 - Accessibility
 - Animation
+
+Views must remain lightweight.
 
 ---
 
@@ -160,30 +234,25 @@ Responsible for:
 
 - Transforming business models into presentation models
 
-Mappers must not contain:
+Mappers must never contain:
 
 - Business rules
-- Persistence logic
+- Persistence
 - Framework lifecycle logic
 
 ---
 
 ## Repository
 
-Responsible for:
-
-- Persistence only
+Responsible for persistence only.
 
 ---
 
 ## Services
 
-Responsible for:
+Responsible for infrastructure and external systems.
 
-- Infrastructure
-- External systems
-
-Never mix responsibilities across layers.
+Never mix responsibilities across architectural layers.
 
 ---
 
@@ -196,9 +265,9 @@ Never create one Live Activity per rhythm.
 Live Activity represents:
 
 - Current Rhythm
-- Past Rhythm (when no current rhythm exists)
+- Past Rhythm
 - Next Rhythm
-- Today's flow
+- Today's Flow
 
 Notifications remain secondary.
 
@@ -222,7 +291,7 @@ Live Activity remains the primary ongoing experience.
 
 # UX Rules
 
-Avoid user-facing words like:
+Avoid user-facing words such as:
 
 - Failed
 - Missed
@@ -235,72 +304,25 @@ Prefer:
 - Current Rhythm
 - Past Rhythm
 - Next Rhythm
-- Today
 - Continue
+- Today
 - Gently
-
----
-
-# Commit Rules
-
-Commit and push are developer-owned steps.
-
-Preferred shape:
-
-One Sprint or one clearly scoped task
-
-↓
-
-One reviewable commit
-
-Avoid mixing unrelated work.
 
 ---
 
 # Documentation Rules
 
-Documentation should always reflect the current implementation.
+Documentation reflects both implementation and approved decisions.
 
-Process for documentation updates is defined by the Documentation Pass and Documentation Review stages in `Docs/Development/DEVELOPMENT_WORKFLOW.md`.
+Implementation should never become the primary source of truth.
 
-## Architecture Changes
-
-When architecture changes:
-
-Update:
-
-- Architecture documentation
-- Decision Records
-
-Update Design documentation only if implementation contracts change.
-
----
-
-## Product Behavior Changes
-
-When product behavior changes:
-
-Update:
-
-- Design documentation
-- CHANGELOG
-
----
-
-## Sprint Completion
-
-When a Sprint completes:
-
-Update:
-
-- ROADMAP
-- CHANGELOG
+Approved decisions must exist in documentation before implementation begins.
 
 ---
 
 ## Documentation Hierarchy
 
-Before making architectural or implementation decisions, consult documentation in the following order:
+Consult documentation in the following order.
 
 1. Docs/README.md
 2. Docs/GLOSSARY.md
@@ -311,7 +333,7 @@ Before making architectural or implementation decisions, consult documentation i
 7. Docs/Development/
 8. Docs/AI/AGENTS.md
 
-When documentation conflicts, use the following priority:
+When conflicts exist:
 
 Glossary
 
@@ -331,19 +353,62 @@ Design
 
 Extensions
 
-Process conflicts are resolved by `Docs/Development/DEVELOPMENT_WORKFLOW.md`.
+↓
+
+Development
+
+Process conflicts are resolved by:
+
+`Docs/Development/DEVELOPMENT_WORKFLOW.md`
 
 ---
 
 ## Documentation Responsibilities
 
-- Architecture defines the system structure.
-- Decision Records explain why architectural decisions exist.
-- Design documents describe how the system is implemented.
-- Extensions describe architectural capabilities beyond the current core.
-- Development documents define the Sprint process.
-- Roadmap describes product direction.
-- Changelog records completed work.
+Architecture documents define system structure.
+
+Decision Records explain why architectural decisions exist.
+
+Design documents define implementation contracts.
+
+Extensions describe optional capabilities.
+
+Development documents define engineering processes.
+
+Roadmap defines future direction.
+
+Changelog records completed work.
+
+---
+
+## Documentation Updates
+
+### Architecture Changes
+
+Update:
+
+- Architecture documentation
+- Decision Records
+
+---
+
+### Product Behavior Changes
+
+Update:
+
+- Design documentation
+- CHANGELOG
+
+---
+
+### Sprint Completion
+
+Update:
+
+- ROADMAP
+- CHANGELOG
+
+Documentation should remain synchronized with the current state of the project.
 
 ---
 
@@ -357,9 +422,9 @@ Always distinguish:
 
 ⚠️ Not Verified
 
-Visual polish must be confirmed using Xcode Canvas or Simulator.
+Visual polish must be confirmed using Simulator or Xcode Canvas.
 
-Source inspection alone cannot validate perceived UX quality.
+Source inspection alone cannot validate UX quality.
 
 ---
 
@@ -382,27 +447,34 @@ Avoid:
 
 # Definition of Done
 
-A Sprint task is complete only when the relevant stages of the official Development Workflow are satisfied, including:
+A Sprint is complete only when the relevant stages of the Development Workflow have been satisfied.
+
+Including:
 
 - Approved scope implemented
-- Build and relevant tests passed
+- Build completed successfully
+- Relevant tests passed
 - Architecture preserved
 - Code Review completed
 - Integration QA completed
-- Manual Visual QA completed or recorded by the developer
-- Documentation Pass completed when documentation is affected
-- Documentation Review approved when documentation changed
+- Manual Visual QA completed or explicitly recorded by the developer
+- Documentation Pass completed when documentation changes
+- Documentation Review approved
 
 Only then should the developer commit and push.
 
 ---
 
-# Guiding Question
+# Guiding Questions
 
-Every agent should ask:
+Every implementation should answer these questions.
 
 > Does this implementation help users stay connected with today's rhythm?
 
-If the answer is no,
+> Is this behavior already documented?
 
-the implementation probably does not belong in OneulRhythm.
+> Am I implementing an approved decision, or accidentally creating a new one?
+
+If the answer to the final question is "creating a new one,"
+
+implementation should stop until the appropriate documentation has been updated.

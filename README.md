@@ -189,12 +189,18 @@ Planning
 - Development Workflow
 - Recurring Rhythm
 - Primary Rhythm Ownership
+- Notification Foundation
 
-### 🚧 In Progress
+### 📅 Current Priority — Product UI First
 
-- Notification Architecture
+Notification Foundation is stable. Development now prioritizes the in-app experience before additional platform integrations.
 
-### 🔮 Planned
+- Today Product Experience
+- Routine Management
+- Settings & Preferences
+- UX Polish
+
+### 🔮 Later (intentionally postponed)
 
 - Widget Experience
 - Apple Watch

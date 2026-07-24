@@ -1,320 +1,337 @@
 # Prompt Library
 
-Reusable Cursor prompts for the OneulRhythm Sprint workflow.
+This document defines the official prompt templates used throughout the OneulRhythm development workflow.
 
-Copy a template, replace the placeholders, and paste it into Cursor.
+Prompt templates are considered project artifacts.
 
-Placeholders:
-
-- `[SPRINT NAME]`
-- `[TASK NAME]`
-- `[APPROVED SCOPE]`
-- `[EXPECTED BEHAVIOR]`
-- `[REPRODUCTION PATH]`
-- `[FINDINGS TO FIX]`
-- `[AFFECTED DOCUMENTS]`
-
-Related documents:
-
-- `DEVELOPMENT_WORKFLOW.md`
-- `CURSOR_GUIDELINES.md`
-- `SPRINT_CHECKLIST.md`
+All Sprint implementation prompts should follow these templates unless the developer explicitly approves an exception.
 
 ---
 
-## Architecture Review Prompt
+# Sprint Implementation Prompt
 
-```text
-You are performing an Architecture Review for OneulRhythm.
+Every Sprint implementation prompt should follow the structure below.
 
-Sprint: [SPRINT NAME]
-Task: [TASK NAME]
-Proposed Scope: [APPROVED SCOPE]
-
-Inspect the relevant source code and documentation before reviewing.
-
-Do not modify any files unless explicitly instructed.
-
-Deliver:
-
-1. Current Architecture Relevant to This Task
-2. Affected Files and Responsibilities
-3. Risks and Constraints
-4. Recommended Implementation Direction
-5. Out of Scope (What Must Not Change)
-6. Open Questions Requiring Developer Approval
-
-Preserve existing layer boundaries.
-Do not invent architecture.
-Do not commit or push.
-```
+The section order should not be changed.
 
 ---
 
-## Implementation Prompt
+## 1. Sprint Context
 
-```text
-You are implementing an approved task for OneulRhythm.
-
-Sprint: [SPRINT NAME]
-Task: [TASK NAME]
-Approved Scope: [APPROVED SCOPE]
-Expected Behavior: [EXPECTED BEHAVIOR]
-
-Rules:
-
-1. Inspect the relevant source code and documentation first.
-2. Implement only the approved scope.
-3. Preserve the existing architecture.
-4. Do not redesign architecture, rename public APIs, or add dependencies without explicit approval.
-5. Do not perform unrelated cleanup.
-6. Prefer the smallest change that satisfies the approved requirements.
-7. Add or update tests for changed behavior.
-8. Run the relevant build and test suite.
-9. Do not commit or push.
-
-Report:
-
-1. Modified Files
-2. Implementation Summary
-3. Architecture Notes
-4. Key Decisions
-5. Test and Build Results
-6. Manual Verification Required
-7. Remaining Risks or Issues
-```
-
----
-
-## Integration QA Prompt
-
-```text
-You are performing Integration QA for OneulRhythm.
-
-Sprint: [SPRINT NAME]
-Task: [TASK NAME]
-Approved Scope: [APPROVED SCOPE]
-Expected Behavior: [EXPECTED BEHAVIOR]
-
-Verify:
-
-1. Functional behavior matches the approved scope
-2. Launch and lifecycle behavior
-3. Persistence behavior
-4. Idempotency where applicable
-5. MainActor isolation and ModelContext ownership
-6. Regressions in related flows
-7. Build and test results
-8. Manual verification items that still require the developer
-
-Do not expand scope.
-Do not redesign architecture.
-Do not commit or push.
-
-Return one of:
-
-- PASS
-- PASS WITH CONDITIONS
-- FAIL
-
-Report:
-
-1. Result
-2. Verified Items
-3. Manual Verification Required
-4. Findings
-5. Regression Risks
-6. Recommended Fixes (if any)
-```
-
----
-
-## Bug Investigation Prompt
-
-```text
-You are investigating a bug in OneulRhythm.
-
-Sprint: [SPRINT NAME]
-Task: [TASK NAME]
-Observed Behavior: [EXPECTED BEHAVIOR]
-Reproduction Path: [REPRODUCTION PATH]
-
-Do not modify code during the investigation unless explicitly instructed.
-
-Deliver:
-
-1. Reproduction Path
-2. Root Cause
-3. Affected Scope
-4. Evidence
-5. Minimal Fix Proposal
-6. Regression Risks
-7. Open Questions
-
-Do not commit or push.
-```
-
----
-
-## Documentation Pass Prompt
-
-```text
-You are performing a Documentation Pass for OneulRhythm.
-
-Sprint: [SPRINT NAME]
-Task: [TASK NAME]
-Implemented Behavior: [EXPECTED BEHAVIOR]
-Likely Affected Documents: [AFFECTED DOCUMENTS]
-
-Intent:
-
-- Synchronize documentation with the implemented behavior
-- Update only affected documents
-- Verify terminology, architecture, lifecycle, roadmap, and changelog consistency
-- Remove obsolete statements
-- Do not invent architecture
-- Do not modify production code or tests
-- Do not commit or push
-
-Deliver:
-
-1. Modified Files
-2. Summary by File
-3. Consistency Issues
-4. Documentation Debt
-5. Remaining Decisions
-```
-
----
-
-## Documentation Review Prompt
-
-```text
-You are performing a Documentation Review for OneulRhythm.
-
-Sprint: [SPRINT NAME]
-Task: [TASK NAME]
-Expected Behavior: [EXPECTED BEHAVIOR]
-
-Review:
-
-1. Implementation-documentation consistency
-2. Architecture correctness
-3. Terminology consistency with Docs/GLOSSARY.md
-4. Roadmap status accuracy
-5. Changelog completeness
-6. Obsolete statements
-7. Missing design decisions
-
-Do not modify files unless explicitly instructed.
-Do not invent architecture.
-Do not commit or push.
-
-Return one of:
-
-- APPROVED
-- CHANGES REQUIRED
-
-Report:
-
-1. Result
-2. Findings
-3. Required Changes
-```
-
----
-
-## Sprint Retrospective Prompt
-
-```text
-You are writing the Sprint Retrospective for OneulRhythm.
-
-Sprint: [SPRINT NAME]
+Describe the purpose of the Sprint.
 
 Include:
 
-1. Sprint Goal
-2. What Changed
-3. Key Decisions
-4. Problems Found
-5. Solutions Applied
-6. Technical Debt
-7. Lessons Learned
-8. Readiness for the Next Sprint
+- Sprint objective
+- Current project phase
+- Relationship to previous Sprint
+- Whether Product Design is already complete
 
-Keep the report factual and concise.
-Do not present unfinished work as completed.
-Do not commit or push unless explicitly requested by the developer.
-```
+This section answers:
+
+> Why does this Sprint exist?
 
 ---
 
-## Refactoring Prompt
+## 2. Governing Documents
 
-```text
-You are performing a scoped refactor for OneulRhythm.
+List every document Cursor must review before implementation.
 
-Sprint: [SPRINT NAME]
-Task: [TASK NAME]
-Approved Scope: [APPROVED SCOPE]
+Order documents by priority.
 
-Rules:
+Typical order:
 
-1. Do not intentionally change behavior.
-2. Review current test coverage before editing.
-3. Prefer small, reversible changes.
-4. Preserve architecture and public APIs unless explicitly approved.
-5. Run the relevant build and test suite.
-6. Explicitly report any behavior that could not be preserved.
-7. Do not commit or push.
+- Product Experience
+- Product Design
+- UI Specification
+- Decision Records
+- Architecture
+- Development Rules
 
-Report:
-
-1. Modified Files
-2. Refactoring Summary
-3. Behavior Preservation Status
-4. Test and Build Results
-5. Remaining Risks or Issues
-```
+Never implement before reviewing these documents.
 
 ---
 
-## Release QA Prompt
+## 3. Repository Context Summary (Required)
 
-```text
-You are performing Release QA for OneulRhythm.
+Summarize the current repository.
 
-Release / Sprint: [SPRINT NAME]
-Expected Behavior: [EXPECTED BEHAVIOR]
+Do not require Cursor to rediscover existing architecture.
+
+Include:
+
+### Product Context
+
+Summarize approved Product decisions.
+
+### Architecture Context
+
+Summarize important architecture.
+
+### Existing Components
+
+Summarize reusable code.
+
+This section reduces unnecessary exploration.
+
+---
+
+## 4. Sprint Goal
+
+Describe exactly what should be implemented.
+
+Implementation should express approved Product decisions.
+
+It should never redefine them.
+
+---
+
+## 5. Approved Architecture
+
+Describe architectural boundaries.
+
+Include:
+
+- Existing responsibilities
+- Existing data flow
+- Existing layers
+
+Explicitly identify what must remain unchanged.
+
+---
+
+## 6. Implementation Scope
+
+Clearly define:
+
+### In Scope
+
+Everything expected.
+
+### Out of Scope
+
+Everything prohibited.
+
+Avoid ambiguity.
+
+---
+
+## 7. Constraints
+
+List implementation constraints.
+
+Typical examples:
+
+- Preserve architecture.
+- Do not redesign Product behavior.
+- Do not duplicate business logic.
+- Do not reinterpret documentation.
+- Preserve existing naming unless approved.
+
+### Ambiguity Policy
+
+If documentation is incomplete:
+
+- Stop implementation.
+- Report ambiguity.
+- Request clarification.
+
+Never guess Product behavior.
+
+---
+
+## 8. Tests
+
+Describe automated verification.
+
+Include:
+
+- Build
+- Unit Tests
+- Existing regression checks
+
+---
+
+## 9. Manual QA
+
+Describe required manual verification.
+
+Examples:
+
+- Empty
+- Upcoming
+- Current
+- Past Rhythm
+- Day Complete
+
+Visual polish must always be manually confirmed.
+
+---
+
+## 10. Documentation Pass
+
+Update documentation only when required.
+
+Examples:
+
+- CHANGELOG
+- ROADMAP
+- Design Documents
+- Architecture
+- Decision Records
+
+Implementation must never invalidate approved documentation.
+
+If documentation becomes incorrect,
+
+stop and request documentation updates.
+
+---
+
+## 11. Code Review
 
 Verify:
 
-1. Clean build
-2. Test suite
-3. Launch
-4. Persistence
-5. Critical user flows
-6. Notifications and Live Activities (when applicable)
-7. Migration risks
-8. Known limitations
-9. Release-blocking issues
+- Architecture
+- Layer responsibilities
+- Naming consistency
+- Dependency direction
+- Product contract compliance
 
-Clearly distinguish verified items from those that still require developer validation.
+---
 
-Do not expand scope.
-Do not commit or push.
+## 12. Integration QA
 
-Return one of:
+Verify:
 
-- PASS
-- PASS WITH CONDITIONS
-- FAIL
+- Build
+- Runtime behavior
+- Existing features
+- Regression
+- Documentation consistency
 
-Report:
+Implementation is complete only after successful Integration QA.
 
-1. Result
-2. Verified Items
-3. Manual Verification Required
-4. Known Limitations
-5. Release-Blocking Issues
-```
+---
+
+## 13. Required Final Report
+
+Every Sprint implementation must finish with the following report.
+
+### Implementation Summary
+
+Describe completed work.
+
+---
+
+### Files Changed
+
+List modified files.
+
+---
+
+### Build Status
+
+Success / Failed
+
+---
+
+### Tests
+
+Describe executed tests.
+
+---
+
+### Manual QA
+
+Describe manually verified scenarios.
+
+Clearly distinguish:
+
+✅ Verified
+
+⚠️ Not Verified
+
+---
+
+### Documentation Updated
+
+List updated documents.
+
+If none:
+
+State:
+
+"No documentation changes required."
+
+---
+
+### Risks
+
+Describe remaining concerns.
+
+---
+
+### Technical Debt
+
+Describe intentionally postponed improvements.
+
+---
+
+### Open Questions
+
+List unresolved questions.
+
+Never silently make Product or Architecture decisions.
+
+---
+
+# Prompt Principles
+
+Every Sprint prompt should follow these principles.
+
+## Documentation First
+
+Implementation follows approved documentation.
+
+Never implement directly from conversations.
+
+---
+
+## Artifact First
+
+Sprint prompts reference approved project artifacts.
+
+They never replace them.
+
+---
+
+## Product UI First
+
+Implementation expresses approved Product decisions.
+
+Implementation Agents never redesign the product.
+
+---
+
+## No Guessing
+
+When documentation is ambiguous,
+
+stop implementation.
+
+Ask questions.
+
+Never invent Product behavior.
+
+---
+
+## Small, Reviewable Changes
+
+Each Sprint should produce:
+
+- One clear objective
+- One reviewable implementation
+- One reviewable report
+
+Large unrelated changes should be split into multiple Sprints.

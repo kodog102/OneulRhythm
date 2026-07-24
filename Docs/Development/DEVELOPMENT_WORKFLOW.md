@@ -25,6 +25,7 @@ Every Sprint follows these principles.
 
 - Repository First
 - Architecture Before Implementation
+- Product Experience Before UI (when applicable)
 - Scope Before Code
 - Validation Before Approval
 - Documentation Before Completion
@@ -34,6 +35,11 @@ Repository documentation always takes precedence over conversational memory.
 Implementation should improve existing documentation before introducing new governance.
 
 Task slicing is optional and should only be used when it improves safety, validation, or implementation clarity.
+
+When a Sprint primarily delivers user-facing experience,
+Product Experience should be defined before UI implementation.
+
+Engineering-only Sprints do not require Product Experience planning.
 
 ---
 
@@ -81,6 +87,7 @@ Cursor never commits or pushes.
 Responsible for:
 
 - Product direction
+- Product experience approval
 - Final decisions
 - Visual verification
 - Device verification
@@ -103,6 +110,10 @@ ChatGPT and the developer define:
 - Scope
 - Out of scope
 - Acceptance criteria
+
+Sprint goals and sequencing follow the current priorities in `Docs/ROADMAP.md`.
+
+Do not reopen postponed platform work (for example Widget or Apple Watch) unless the Roadmap current priority has changed.
 
 Output:
 
@@ -143,6 +154,30 @@ Task slicing is optional.
 Output:
 
 Approved implementation plan.
+
+---
+
+## 3A. Product Experience Design (When Applicable)
+
+If a Sprint primarily delivers user-facing experience,
+define the intended product experience before implementation.
+
+Typical outputs may include:
+
+- Product Vision
+- UX Principles
+- Information Hierarchy
+- User Flow
+- Component Inventory
+- Out of Scope
+
+This step is required only for Product UI Sprints.
+
+Engineering-only Sprints may skip this step.
+
+Output:
+
+Approved Product Experience.
 
 ---
 
@@ -245,6 +280,13 @@ ChatGPT verifies:
 - Scope completion
 - Outstanding technical decisions
 
+When Product Experience Design was part of the Sprint,
+also verify:
+
+- UX Principle consistency
+- Information hierarchy
+- Alignment with Product Vision
+
 Developer performs:
 
 - Final product approval
@@ -260,6 +302,7 @@ Typical targets include:
 - Docs/Architecture/
 - Docs/Architecture/Decisions/
 - Docs/Design/
+- Docs/Product/
 - Docs/ROADMAP.md
 - Docs/CHANGELOG.md
 - README.md (when necessary)
@@ -316,8 +359,8 @@ unless multiple commits improve reviewability.
 Review:
 
 - Remaining technical debt
-- Remaining roadmap
-- Next Sprint goal
+- Remaining roadmap and current Product UI First priority
+- Next Sprint goal from `Docs/ROADMAP.md`
 
 ---
 
@@ -328,31 +371,39 @@ flowchart TD
     A[1. Sprint Planning]
     --> B[2. Repository Context Review]
     --> C[3. Architecture and Task Design]
-    --> D[4. Implementation]
-    --> E[5. Implementation Report]
-    --> F[6. Code Review]
 
-    F -->|Findings| G[7. Fixes]
-    G --> F
+    C --> D{Product UI Sprint?}
 
-    F -->|Approved| H[8. Integration QA]
-    H -->|Findings| G
+    D -->|Yes| E[3A. Product Experience Design]
+    D -->|No| F[4. Implementation]
 
-    H -->|Approved| I[9. Sprint Review]
-    I --> J[10. Documentation Pass]
-    J --> K[11. Documentation Verification]
+    E --> F
 
-    K -->|Changes Required| J
+    F --> G[5. Implementation Report]
+    G --> H[6. Code Review]
 
-    K -->|Approved| L[12. Sprint Retrospective]
-    L --> M[13. Commit and Push]
-    M --> N[14. Next Sprint Kickoff]
+    H -->|Findings| I[7. Fixes]
+    I --> H
+
+    H -->|Approved| J[8. Integration QA]
+    J -->|Findings| I
+
+    J -->|Approved| K[9. Sprint Review]
+    K --> L[10. Documentation Pass]
+    L --> M[11. Documentation Verification]
+
+    M -->|Changes Required| L
+
+    M -->|Approved| N[12. Sprint Retrospective]
+    N --> O[13. Commit and Push]
+    O --> P[14. Next Sprint Kickoff]
 ```
 
 ```text
 Planning
   → Repository Context Review
   → Architecture and Task Design
+  → Product Experience Design (UI Sprints only)
   → Implementation
   → Implementation Report
   → Code Review (Cursor)
@@ -373,10 +424,12 @@ Planning
 - Repository documentation is the source of truth.
 - Required project documents must be reviewed before implementation.
 - Scope is approved before implementation.
+- Product Experience is defined before UI implementation when applicable.
 - ChatGPT owns architecture and technical decisions.
 - Cursor owns implementation quality.
 - Cursor stays inside the approved scope.
 - The developer owns the final product.
+- Product experience is approved by the developer.
 - Visual QA is performed by the developer.
 - Documentation must reflect implemented behavior.
 - Architecture changes require explicit approval.

@@ -12,35 +12,59 @@ The application should minimize management and maximize presence throughout the 
 
 ## Current Phase
 
-Feature Development
+Feature Development — Product UI First
 
 ## Current Sprint
 
-Sprint 7 — Notification System
+Sprint 8 — Today Product Experience
 
 ## Status
 
-🚧 In Progress
+📅 Ready
 
 ## Current Goal
 
-Notifications become another consumer of today's schedule.
+Elevate the in-app Today experience toward MVP quality before expanding to additional platform surfaces.
 
-## Current Scope
+## Current Priority
 
-- Notification permission
+Product UI First.
 
-- Notification Scheduler
+Notification Foundation is complete and stable.
 
-- Notification Trigger Policy (T1)
-
-- Notification Plan
-
-- Schedule synchronization
+Until the in-app experience reaches MVP quality, development prioritizes Product UI over Widgets, Apple Watch, and other platform integrations.
 
 ## Next Sprint
 
-Sprint 8 — Widget Experience
+Sprint 9 — Routine Management
+
+---
+
+# Strategy
+
+## Product UI First
+
+After Sprint 7, the core architecture has reached a stable point:
+
+- Today Snapshot
+- Notification Pipeline
+- Trigger Policy
+- Notification Plan
+- Notification Synchronization
+- Live Activity foundation
+
+At this stage, Product UI provides more validation value than immediately expanding platform integrations.
+
+Widget and Apple Watch remain intentional long-term surfaces. They are postponed—not cancelled—so that:
+
+- In-app UX can be validated faster
+- Existing architecture stays stable
+- Widget and Watch can reuse a finalized Product UI
+- Duplicate UI work and architectural churn are avoided
+
+This is a planning change only. It is not an architecture redesign.
+
+See `Docs/Architecture/Decisions/DR-014-product-ui-first.md`.
 
 ---
 
@@ -322,31 +346,15 @@ Refine the Today experience so presentation focus is owned by the Today Snapshot
 
 ---
 
-# In Progress
-
-## Sprint 7 — Notification System
+## Sprint 7 — Notification Foundation
 
 ### Goal
 
 Notifications become another consumer of today's schedule.
 
-### Scope
+### Completed
 
-- Notification permission
-
-- Notification Scheduler
-
-- Notification Trigger Policy (T1)
-
-- Notification Plan
-
-- Schedule synchronization
-
-### Progress
-
-✅ T1 — Notification Trigger Policy
-
-Completed
+#### T1 — Notification Trigger Policy
 
 - Notification permission
 
@@ -356,9 +364,7 @@ Completed
 
 - NotificationService integration
 
-✅ T2 — Notification Plan
-
-Completed
+#### T2 — Notification Plan
 
 - NotificationPlan / NotificationPlanItem
 
@@ -368,9 +374,7 @@ Completed
 
 - One-time scheduling through NotificationPlan
 
-✅ T3 — Notification Synchronization
-
-Completed
+#### T3 — Notification Synchronization
 
 - NotificationSynchronization minimal diff
 
@@ -378,31 +382,53 @@ Completed
 
 - Add / remove / update reconciliation
 
-🚧 Remaining Sprint work
+### Deferred (non-blocking)
 
-- App lifecycle / background invocation of synchronization (if approved later)
+- App lifecycle / background invocation of synchronization remains optional future work if approved later
+
+Notification Foundation is considered stable. Deferred lifecycle invocation does not block Product UI work.
 
 **Status**
 
-🚧 In Progress
+✅ Completed
 
 ---
 
 # Planned
 
-## Sprint 8 — Widget Experience
+## Sprint 8 — Today Product Experience
 
 ### Goal
 
-Bring today's rhythm to the Home Screen.
+Elevate the in-app Today experience toward MVP quality.
 
-### Scope
+### Intent
 
-- Home Widget
+Strengthen the primary in-app surface that users live in every day, reusing the existing Snapshot and presentation architecture.
 
-- Timeline
+### Scope Direction
 
-- Shared Snapshot
+- Today screen Product UI quality
+- Primary rhythm clarity and calm presentation
+- In-app experience refinements that consume existing architecture
+
+Widget, Watch, and new platform surfaces remain out of scope.
+
+**Status**
+
+📅 Ready
+
+---
+
+## Sprint 9 — Routine Management
+
+### Goal
+
+Strengthen in-app rhythm creation and management so daily use feels complete.
+
+### Intent
+
+Improve the management flows that support Today, without redesigning persistence or Schedule Engine ownership.
 
 **Status**
 
@@ -410,23 +436,81 @@ Bring today's rhythm to the Home Screen.
 
 ---
 
-## Sprint 9 — Apple Watch
+## Sprint 10 — Settings & Preferences
+
+### Goal
+
+Provide the preferences users need to support a calm in-app experience.
+
+### Intent
+
+Add settings that serve Product UI quality. Avoid expanding into platform integrations prematurely.
+
+**Status**
+
+📅 Planned
+
+---
+
+## Sprint 11 — UX Polish
+
+### Goal
+
+Raise overall in-app UX quality to MVP before platform expansion.
+
+### Intent
+
+Polish interaction, clarity, and calm presentation across the Product UI surfaces already in scope.
+
+**Status**
+
+📅 Planned
+
+---
+
+## Sprint 12 — Widget Experience
+
+### Goal
+
+Bring today's rhythm to the Home Screen.
+
+### Intent
+
+Widget implementation is intentionally postponed until Product UI reaches MVP quality.
+
+When resumed, Widget should consume the existing Snapshot and mapping architecture rather than redefine business logic.
+
+### Scope Direction
+
+- Home Widget
+- Timeline
+- Shared Snapshot
+
+**Status**
+
+📅 Planned (postponed until after Product UI MVP)
+
+---
+
+## Sprint 13 — Apple Watch Integration
 
 ### Goal
 
 Bring today's rhythm to Apple Watch.
 
-### Scope
+### Intent
+
+Apple Watch remains a future surface. It should reuse the finalized Product UI interpretation and existing architecture.
+
+### Scope Direction
 
 - Watch App
-
 - Watch Complication
-
 - Shared Schedule
 
 **Status**
 
-📅 Planned
+📅 Planned (postponed until after Product UI MVP)
 
 ---
 

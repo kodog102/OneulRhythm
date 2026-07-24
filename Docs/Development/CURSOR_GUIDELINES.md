@@ -33,6 +33,24 @@ Do not rely on assumptions or incomplete context.
 
 ---
 
+# Current Project Priority
+
+The Notification Foundation is complete and stable.
+
+Until Product UI reaches MVP quality, all implementation work should prioritize the in-app experience over Widgets, Apple Watch, or additional platform integrations.
+
+When implementing approved Product UI work:
+
+- Reuse the existing Snapshot, Schedule Engine, Mapping, Notification, and Live Activity architecture.
+- Avoid introducing new business logic unless the approved Product UI scope requires it.
+- Do not expand into Widget, Watch, or other platform surfaces unless the current Sprint explicitly includes them.
+
+Future platform integrations should consume the existing architecture instead of redefining it.
+
+See `Docs/ROADMAP.md` and `Docs/Architecture/Decisions/DR-014-product-ui-first.md`.
+
+---
+
 # Required Context
 
 Before implementation begins, review the required project documentation.
