@@ -26,6 +26,8 @@ struct Routine: Identifiable {
     let endTime: Date?
     let category: RoutineCategory
     let status: RoutineStatus
+    /// Minutes before `startTime` to remind, or `nil` when no reminder is set.
+    let reminderMinutes: Int?
     /// Originating recurring definition id when this rhythm was materialized
     /// from a recurring template. `nil` for one-time routines.
     let recurringRhythmID: UUID?
@@ -40,6 +42,7 @@ struct Routine: Identifiable {
         endTime: Date?,
         category: RoutineCategory,
         status: RoutineStatus,
+        reminderMinutes: Int? = nil,
         recurringRhythmID: UUID? = nil,
         occurrenceDate: Date? = nil
     ) {
@@ -49,6 +52,7 @@ struct Routine: Identifiable {
         self.endTime = endTime
         self.category = category
         self.status = status
+        self.reminderMinutes = reminderMinutes
         self.recurringRhythmID = recurringRhythmID
         self.occurrenceDate = occurrenceDate
     }
@@ -79,6 +83,7 @@ struct Routine: Identifiable {
             endTime: endTime,
             category: category,
             status: status,
+            reminderMinutes: reminderMinutes,
             recurringRhythmID: recurringRhythmID,
             occurrenceDate: occurrenceDate
         )

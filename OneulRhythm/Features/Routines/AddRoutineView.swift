@@ -447,10 +447,15 @@ struct AddRoutineView: View {
                 // Recurring reminders are persisted only; scheduling remains out of scope.
                 if input.recurrence == nil {
                     await scheduleReminderIfNeeded(
-                        routineID: input.id,
-                        title: input.title,
-                        startTime: input.startTime,
-                        reminderMinutes: input.reminderMinutes
+                        for: Routine(
+                            id: input.id,
+                            title: input.title,
+                            startTime: input.startTime,
+                            endTime: input.endTime,
+                            category: input.category,
+                            status: .upcoming,
+                            reminderMinutes: input.reminderMinutes
+                        )
                     )
                 }
                 dismiss()
@@ -461,33 +466,29 @@ struct AddRoutineView: View {
     }
 
     @MainActor
-    private func scheduleReminderIfNeeded(
-        routineID: UUID,
-        title: String,
-        startTime: Date,
-        reminderMinutes: Int?
-    ) async {
-        guard let triggerDate = NotificationTriggerPolicy.triggerDate(
-            startTime: startTime,
-            reminderMinutes: reminderMinutes,
+    private func scheduleReminderIfNeeded(for routine: Routine) async {
+        let plan = NotificationMapper.makePlan(
+            routines: [routine],
             now: nowProvider(),
             calendar: calendar
-        ) else {
-            return
-        }
+        )
+
+        guard !plan.items.isEmpty else { return }
 
         let status = await notificationScheduler.authorizationStatus()
         guard status == .authorized else { return }
 
-        do {
-            try await notificationScheduler.schedule(
-                identifier: routineID.uuidString,
-                title: "리듬 시작",
-                body: "\"\(title)\" 리듬을 시작할 시간이에요.",
-                at: triggerDate
-            )
-        } catch {
-            // Save already succeeded; notification failure must not block the flow.
+        for item in plan.items {
+            do {
+                try await notificationScheduler.schedule(
+                    identifier: item.identifier,
+                    title: item.title,
+                    body: item.body,
+                    at: item.triggerDate
+                )
+            } catch {
+                // Save already succeeded; notification failure must not block the flow.
+            }
         }
     }
 

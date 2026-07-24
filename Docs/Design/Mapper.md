@@ -268,13 +268,39 @@ Examples include:
 
 - Today Snapshot Mapper
 - Live Activity Mapper
+- Notification Mapper
 - Widget Mapper
 - Watch Mapper
-- Notification Mapper
 
 Adding a new presentation surface should require only a new mapper.
 
 Existing mappers should remain unchanged.
+
+---
+
+
+
+# Notification Mapping
+
+`NotificationMapper` transforms domain `Routine` values into a `NotificationPlan`.
+
+Input:
+
+```
+[Routine]
+```
+
+Output:
+
+```
+NotificationPlan
+```
+
+Trigger dates are computed only through `NotificationTriggerPolicy`.
+
+The mapper does not schedule notifications or touch Apple frameworks.
+
+See `Docs/Design/Notification.md` for the notification subsystem specification.
 
 ---
 
@@ -327,6 +353,7 @@ Maintaining this separation keeps every presentation surface consistent while al
 - DR-006 — Live Activity Architecture
 - DR-007 — Schedule Resolution
 - DR-009 — Single Primary Rhythm
+- DR-012 — Notification Plan Architecture
 
 ---
 
@@ -338,4 +365,6 @@ Maintaining this separation keeps every presentation surface consistent while al
 - Docs/Architecture/ARCHITECTURE.md
 - Docs/Design/Scheduling.md
 - Docs/Design/Presentation.md
+- Docs/Design/Notification.md
+- Docs/Design/LiveActivity.md
 

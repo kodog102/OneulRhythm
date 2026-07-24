@@ -8,6 +8,31 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 7 — Notification System (T2)
+
+Date
+
+2026-07-24
+
+## Added
+
+### Notification Plan
+
+- Introduced `NotificationPlan` and `NotificationPlanItem` as pure desired-state models.
+- Introduced `NotificationMapper` to transform domain rhythms into a deterministic notification plan.
+- Promoted `reminderMinutes` onto domain `Routine` and mapped it through `RoutineEntity`.
+- One-time create flow now schedules through `Routine → NotificationMapper → NotificationPlan → NotificationScheduling`.
+
+## Notes
+
+Permission UX and `NotificationService` isolation are unchanged.
+
+Recurring reminder scheduling remains persist-only and out of scope for T2.
+
+Schedule synchronization remains a later Sprint 7 slice.
+
+---
+
 # Sprint 7 — Notification System (T1)
 
 Date

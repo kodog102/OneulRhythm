@@ -94,6 +94,7 @@ Schedule Engine
 
 - Today Snapshot Mapper
 - Live Activity Mapper
+- Notification Mapper
 - Future Surface Mappers
 
 **Not Responsible For**
@@ -132,9 +133,62 @@ Mapping
 
 - Today Snapshot Mapper
 - Live Activity Mapper
+- Notification Mapper
 - Widget Mapper
 - Watch Mapper
-- Notification Mapper
+
+---
+
+## Notification Plan
+
+### Korean
+
+알림 표면이 소비하는 Desired State 모델.
+
+스케줄링이나 Apple 프레임워크 타입을 포함하지 않으며, 원하는 알림 상태만 표현한다.
+
+### English
+
+Desired notification state produced by `NotificationMapper`.
+
+It is a pure value model containing ordered `NotificationPlanItem` values. It does not schedule notifications or contain Apple framework types.
+
+**Layer**
+
+Mapping
+
+**Produced By**
+
+Notification Mapper
+
+**Consumed By**
+
+Notification Scheduling
+
+**Not Responsible For**
+
+- Persistence
+- Permission UX
+- Pending request reconciliation
+- UserNotifications delivery
+
+---
+
+## Notification Trigger Policy
+
+### Korean
+
+리마인더 트리거 시각을 계산하는 단일 정책.
+
+### English
+
+The single source of truth for reminder trigger-date calculation.
+
+Returns `nil` when no notification should be scheduled.
+
+**Layer**
+
+Business / Domain Policy
 
 ---
 

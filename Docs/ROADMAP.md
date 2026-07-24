@@ -356,9 +356,19 @@ Completed
 
 - NotificationService integration
 
-🚧 Next
+✅ T2 — Notification Plan
 
-- Notification Plan
+Completed
+
+- NotificationPlan / NotificationPlanItem
+
+- NotificationMapper
+
+- Routine.reminderMinutes domain mapping
+
+- One-time scheduling through NotificationPlan
+
+🚧 Next
 
 - Schedule synchronization
 

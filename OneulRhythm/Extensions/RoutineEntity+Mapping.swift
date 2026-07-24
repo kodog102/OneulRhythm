@@ -21,6 +21,7 @@ extension RoutineEntity {
             endTime: endTime,
             category: category,
             status: status,
+            reminderMinutes: reminderMinutes,
             recurringRhythmID: recurringRhythmID,
             occurrenceDate: occurrenceDate
         )
@@ -28,7 +29,6 @@ extension RoutineEntity {
 
     convenience init(
         routine: Routine,
-        reminderMinutes: Int? = nil,
         createdAt: Date = Date(),
         updatedAt: Date = Date()
     ) {
@@ -39,7 +39,7 @@ extension RoutineEntity {
             endTime: routine.endTime,
             category: routine.category,
             status: routine.status == .current ? .upcoming : routine.status,
-            reminderMinutes: reminderMinutes,
+            reminderMinutes: routine.reminderMinutes,
             recurringRhythmID: routine.recurringRhythmID,
             occurrenceDate: routine.occurrenceDate,
             createdAt: createdAt,

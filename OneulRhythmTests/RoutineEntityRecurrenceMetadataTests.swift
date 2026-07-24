@@ -105,12 +105,14 @@ final class RoutineEntityRecurrenceMetadataTests: XCTestCase {
         )
 
         let domain = original.toDomain()
-        let rematerialized = RoutineEntity(routine: domain, reminderMinutes: original.reminderMinutes)
+        let rematerialized = RoutineEntity(routine: domain)
 
         XCTAssertEqual(domain.recurringRhythmID, recurringID)
         XCTAssertEqual(domain.occurrenceDate, occurrenceDate)
+        XCTAssertEqual(domain.reminderMinutes, original.reminderMinutes)
         XCTAssertEqual(rematerialized.recurringRhythmID, recurringID)
         XCTAssertEqual(rematerialized.occurrenceDate, occurrenceDate)
+        XCTAssertEqual(rematerialized.reminderMinutes, original.reminderMinutes)
     }
 
     func testUpdatingStatusPreservesRecurrenceOriginMetadata() {
@@ -123,6 +125,7 @@ final class RoutineEntityRecurrenceMetadataTests: XCTestCase {
             endTime: nil,
             category: .rest,
             status: .upcoming,
+            reminderMinutes: 15,
             recurringRhythmID: recurringID,
             occurrenceDate: occurrenceDate
         )
@@ -131,6 +134,7 @@ final class RoutineEntityRecurrenceMetadataTests: XCTestCase {
 
         XCTAssertEqual(completed.recurringRhythmID, recurringID)
         XCTAssertEqual(completed.occurrenceDate, occurrenceDate)
+        XCTAssertEqual(completed.reminderMinutes, 15)
         XCTAssertEqual(completed.status, .completed)
     }
 

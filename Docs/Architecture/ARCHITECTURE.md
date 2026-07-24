@@ -111,9 +111,9 @@ It includes surface-specific mappers such as:
 
 - Today Snapshot Mapper
 - Live Activity Mapper
+- Notification Mapper
 - Future Widget Mapper
 - Future Watch Mapper
-- Future Notification Mapper
 
 The Mapping Layer is responsible for:
 
@@ -148,6 +148,12 @@ Resolved Schedule ─────────► Today Snapshot
                          └──────────┬───────────┘
                                     ▼
 Resolved Schedule ─────────► Activity Content
+
+                         ┌──────────────────────┐
+                         │ Notification Mapper  │
+                         └──────────┬───────────┘
+                                    ▼
+Domain Routine ────────────► Notification Plan
 ```
 
 The following chained mapping structure is forbidden:
@@ -447,6 +453,38 @@ The Coordinator does not resolve schedules.
 
 ---
 
+## Notification Architecture
+
+Notifications are an additional presentation surface for reminder delivery.
+
+```text
+Routine
+        │
+        ▼
+NotificationMapper
+        │
+        ▼
+NotificationPlan
+        │
+        ▼
+NotificationScheduling
+        │
+        ▼
+NotificationService
+```
+
+`NotificationPlan` is desired notification state only.
+
+`NotificationMapper` transforms domain rhythms into that plan using `NotificationTriggerPolicy` for trigger dates.
+
+`NotificationService` remains the Apple UserNotifications boundary.
+
+Notification failures must never fail persistence.
+
+Schedule synchronization against pending requests is a later Sprint slice and is not part of the current Notification Plan layer.
+
+---
+
 ## Dependency Rules
 
 Dependencies must point toward more fundamental layers.
@@ -501,6 +539,7 @@ Each model has one architectural role.
 | ResolvedSchedule | Business | Interpreted schedule state |
 | Today Snapshot | Mapping output | Today presentation state |
 | Activity Content | Mapping output | Live Activity presentation state |
+| Notification Plan | Mapping output | Desired notification state |
 
 Models should not cross boundaries merely for convenience.
 
@@ -542,8 +581,6 @@ New scheduling behavior
 
 Expected future extensions include:
 
-- Recurring rhythms
-- Notifications
 - Widgets
 - Apple Watch
 - Cloud synchronization

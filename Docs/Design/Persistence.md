@@ -164,6 +164,10 @@ SwiftData Entity
 
 The Repository owns these transformations.
 
+`RoutineEntity.reminderMinutes` maps onto domain `Routine.reminderMinutes`.
+
+Reminder configuration is persisted data. Notification planning and scheduling belong outside Persistence.
+
 ---
 
 # Persistence Principles

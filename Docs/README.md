@@ -90,9 +90,9 @@ Examples include:
 
 - Today Snapshot Mapper
 - Live Activity Mapper
+- Notification Mapper
 - Future Widget Mapper
 - Future Watch Mapper
-- Future Notification Mapper
 
 Because mapping is isolated from business logic, new presentation surfaces can be added without modifying the Schedule Engine.
 
@@ -228,6 +228,7 @@ Current specifications include:
 - Mapper
 - Presentation
 - Live Activity
+- Notification
 
 ```
 Design/
@@ -303,7 +304,6 @@ Current product work:
 
 Sprint 7
 
-- Notification Plan
 - Schedule Synchronization
 
 Planned capabilities include:

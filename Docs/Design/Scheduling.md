@@ -49,6 +49,7 @@ Scheduling is **not** responsible for:
 - Updating Live Activities.
 - Managing ActivityKit lifecycle.
 - Creating notifications.
+- Building notification plans.
 
 Those responsibilities belong to other architectural layers.
 
