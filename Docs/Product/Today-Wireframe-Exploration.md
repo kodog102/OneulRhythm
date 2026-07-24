@@ -1,3 +1,8 @@
+> **Archived**
+>
+> This document is retained for historical reference.
+> It is not an active product, architecture, or implementation contract.
+
 # Today Wireframe Exploration
 
 Sprint 8 — Product Design Exploration

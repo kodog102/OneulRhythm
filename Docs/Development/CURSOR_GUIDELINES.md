@@ -8,7 +8,7 @@ Cursor is responsible for executing approved work—not defining project directi
 
 Related documents:
 
-- `ENGINEERING_CHARTER.md`
+- `Docs/Engineering/ENGINEERING_CHARTER.md`
 - `DEVELOPMENT_WORKFLOW.md`
 - `PROMPT_LIBRARY.md`
 - `SPRINT_CHECKLIST.md`
@@ -57,7 +57,7 @@ Before implementation begins, review the required project documentation.
 
 Mandatory project documents:
 
-- `ENGINEERING_CHARTER.md`
+- `Docs/Engineering/ENGINEERING_CHARTER.md`
 - `DEVELOPMENT_WORKFLOW.md`
 - `CURSOR_GUIDELINES.md`
 

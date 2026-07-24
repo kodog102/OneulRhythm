@@ -1,340 +1,173 @@
-# OneulRhythm
-
-> Calm daily rhythm management for iOS.
-
-OneulRhythm is an offline-first iOS application that helps users focus on what matters **right now**.
-
-Instead of presenting long lists of tasks, the application continuously determines a single rhythm that deserves the user's attention and shares that interpretation consistently across every presentation surface.
-
-The project is built around deterministic scheduling, clear architectural boundaries, and a calm user experience.
-
----
-
-# Architecture at a Glance
-
-```
-SwiftData
-      │
-      ▼
-Repository
-      │
-      ▼
-Schedule Engine
-      │
-      ▼
-ResolvedSchedule
-      │
-      ▼
-Mapper
-      │
-      ▼
-Presentation
-```
-
-This pipeline represents the core architecture of OneulRhythm.
-
-Business state is resolved exactly once and transformed for each presentation surface without duplicating business logic.
-
----
-
-# Vision
-
-OneulRhythm is designed around four long-term goals.
-
-- Help users focus on one rhythm at a time.
-- Produce deterministic and predictable behavior.
-- Share one business interpretation across the entire application.
-- Grow without increasing architectural complexity.
-
-Every architectural decision supports these goals.
-
----
-
-# Core Concepts
-
-## Repository
-
-The Repository abstracts persistence and isolates SwiftData from the rest of the application.
-
-It is the only component responsible for reading and writing persisted rhythm data.
-
----
-
-## Schedule Engine
-
-The Schedule Engine is the heart of OneulRhythm.
-
-It interprets persisted rhythm data relative to the current time and applies business rules to determine the state of the user's day.
-
-The Schedule Engine never depends on UI frameworks or presentation concerns.
-
----
-
-## ResolvedSchedule
-
-`ResolvedSchedule` is the official business output of the Schedule Engine.
-
-It represents the fully interpreted state of the current day before any presentation-specific transformation occurs.
-
-Every presentation surface consumes the same resolved business state.
-
----
-
-## Mapper
-
-A Mapper transforms business state into presentation state.
-
-Each presentation surface owns an independent mapper.
-
-Examples include:
-
-- Today Snapshot Mapper
-- Live Activity Mapper
-- Notification Mapper
-- Future Widget Mapper
-- Future Watch Mapper
-
-Because mapping is isolated from business logic, new presentation surfaces can be added without modifying the Schedule Engine.
-
----
-
-# High-Level Architecture
-
-OneulRhythm follows a unidirectional architecture consisting of four primary layers.
-
-```
-                 Presentation
-                        ▲
-                        │
-               Presentation Models
-                        ▲
-                        │
-                   Mapping Layer
-                        ▲
-                        │
-                  Business Models
-                        ▲
-                        │
-                  Business Layer
-                        ▲
-                        │
-                    Repository
-                        ▲
-                        │
-                     SwiftData
-```
-
-Each layer owns exactly one responsibility.
-
-| Layer | Responsibility |
-|--------|----------------|
-| Data | Persist rhythm data |
-| Business | Resolve deterministic business state |
-| Mapping | Transform business models into presentation models |
-| Presentation | Render presentation models and receive user interaction |
-
----
-
-# Application Flow
-
-The application follows one-way data flow.
-
-```
-SwiftData
-    │
-    ▼
-Repository
-    │
-    ▼
-Schedule Engine
-    │
-    ▼
-ResolvedSchedule
-    │
-    ├──────────────────────────────┐
-    │                              │
-    ▼                              ▼
-Today Snapshot Mapper      Live Activity Mapper
-    │                              │
-    ▼                              ▼
-Today Snapshot            Activity Content
-    │                              │
-    ▼                              ▼
-Today View                Live Activity
-```
-
-The schedule is interpreted exactly once.
-
-Presentation layers never reconstruct business state independently.
-
----
-
-# Architectural Principles
-
-The architecture follows a small set of long-lived principles.
-
-- Single Source of Truth
-- Derived State Over Stored State
-- Deterministic Behavior
-- Separation of Responsibilities
-- Presentation Independence
-- Offline First
-- Simplicity Before Abstraction
-
-These principles guide every architectural decision and are formally documented in the Decision Records.
-
----
-
 # Documentation
 
-Project documentation is organized into complementary levels.
+## Purpose
 
-## Architecture
+This file is the documentation router for OneulRhythm.
 
-Explains the overall system structure.
+It helps contributors decide where to go, which documents are active, and which role-based path to follow.
 
-Topics include:
+## Audience
 
-- Layer responsibilities
-- Dependency direction
-- Data flow
-- Core architectural concepts
+All contributors, including developers, architecture reviewers, maintainers, and AI agents.
 
-```
-Architecture/
-```
+## Scope
 
----
+- Documentation categories and ownership
+- Active vs historical documents
+- Role-based entry points
+- Conflict resolution order
+- Links to domain hubs and global references
 
-## Decision Records
+## What this document does NOT contain
 
-Decision Records explain **why** the architecture looks the way it does.
+- Product philosophy or product behavior
+- Architecture explanations or diagrams
+- Design contracts
+- Development workflow details
 
-They capture long-term architectural intent instead of implementation details.
-
-```
-Architecture/Decisions/
-```
----
-
-## Design
-
-Design documents describe **how** each subsystem is implemented.
-
-Current specifications include:
-
-- Scheduling
-- Persistence
-- Mapper
-- Presentation
-- Live Activity
-- Notification
-
-```
-Design/
-```
-
-Recurrence is documented as an extension under `Extensions/`.
+Authoritative content lives in the linked documents below.
 
 ---
 
-## Development
+# How to Navigate
 
-Development documents define the official Sprint workflow.
-
-```
-Development/
-  DEVELOPMENT_WORKFLOW.md
-  PROMPT_LIBRARY.md
-  CURSOR_GUIDELINES.md
-  SPRINT_CHECKLIST.md
-```
-
-Product philosophy and architecture rules for AI agents remain in `AI/AGENTS.md`.
-
-The older `DEVELOPMENT-PLAYBOOK.md` is superseded by `Development/DEVELOPMENT_WORKFLOW.md`.
-
----
-
-# Recommended Reading Order
-
-New contributors should read the documentation in the following order.
-
-```
-README
+```text
+Docs/README.md          ← you are here (router)
     │
-    ▼
-Architecture
-    │
-    ▼
-Decision Records
-    │
-    ▼
-Design
-    │
-    ▼
-Development
+    ├─ Product/         ← product decisions & UX contracts
+    ├─ Architecture/    ← system structure, ADRs, architecture reviews
+    ├─ Design/          ← implementation contracts
+    ├─ Extensions/      ← optional capabilities
+    ├─ Development/     ← how work is executed
+    │     → Engineering charter
+    │     → AI/AGENTS.md
+    ├─ GLOSSARY.md      ← shared terminology
+    ├─ ROADMAP.md       ← forward plan
+    ├─ CHANGELOG.md     ← completed work
+    └─ SprintReviews/   ← historical sprint records
 ```
 
-This progresses from project overview to architectural intent, implementation details, and then the Sprint process.
+Prefer:
+
+Hub → leaf → authoritative document
+
+Avoid circular navigation between hubs.
 
 ---
 
-# Current Architecture
+# Documentation Categories
 
-The current architectural foundation includes:
-
-- Offline-first persistence
-- Repository abstraction
-- Deterministic Schedule Engine
-- ResolvedSchedule business model
-- Dedicated Mapping Layer
-- Single Primary Rhythm
-- Today Snapshot
-- Live Activity integration
-- Immediate Day Complete lifecycle
-- Notification Foundation (Trigger Policy, Plan, Synchronization)
+| Category | Hub | Answers |
+|----------|-----|---------|
+| Product | `Product/README.md` | What should the product feel and behave like? |
+| Architecture | `Architecture/README.md` | What is the system structure? Why was it chosen? |
+| Design | `Design/README.md` | How is each subsystem implemented? |
+| Extensions | `Extensions/README.md` | How do optional capabilities integrate? |
+| Development | `Development/README.md` | How do we plan, implement, and validate work? |
+| Terminology | `GLOSSARY.md` | What do official terms mean? |
+| Progress | `ROADMAP.md`, `CHANGELOG.md` | What is planned? What shipped? |
+| History | `SprintReviews/README.md`, `Architecture/Reviews/` | What was decided in past sprints? |
 
 ---
 
-# Future Direction
+# Active vs Historical
 
-The architecture is intentionally designed for extension without changing its foundation.
+## Active (default reading)
 
-## Current Priority — Product UI First
+- Product philosophy, principles, experience, and UI specifications
+- Architecture structure and Decision Records
+- Design and Extensions implementation contracts
+- Development process documents, Engineering Charter, and `AI/AGENTS.md`
+- Glossary, Roadmap, Changelog
 
-Notification Foundation is complete and stable.
+## Historical (not part of default onboarding)
 
-Current development prioritizes the in-app Product UI until it reaches MVP quality:
+- `Product/Today-Wireframe-Exploration.md` (archived exploration)
+- `Architecture/Reviews/` (archived pre-sprint architecture contracts)
+- `SprintReviews/` (archived post-sprint reviews)
 
-- Sprint 8 — Today Product Experience
-- Sprint 9 — Routine Management
-- Sprint 10 — Settings & Preferences
-- Sprint 11 — UX Polish
-
-Widget Experience and Apple Watch Integration are intentionally postponed. They remain planned surfaces and should later consume the existing architecture rather than redefine it.
-
-See `ROADMAP.md` and `Architecture/Decisions/DR-014-product-ui-first.md`.
-
-## Later Platform Capabilities
-
-- Widgets
-- Apple Watch
-- Siri & Shortcuts
-- Cloud synchronization
-
-Future features should integrate through the existing architecture rather than bypassing it.
+Historical documents remain in the repository for context. They are not sources of truth for current implementation.
 
 ---
 
-# Philosophy
+# Role-Based Entry Points
 
-OneulRhythm intentionally favors:
+## Public visitor
 
-- Deterministic behavior over hidden magic.
-- Clear responsibilities over convenience.
-- Stable architecture over premature abstraction.
-- Reusable business logic over duplicated presentation logic.
-- Long-term maintainability over short-term optimization.
+Start at the repository root README for product overview.
 
-A predictable architecture creates a predictable user experience.
+This router is for contributors.
+
+## New developer
+
+1. This router
+2. `Product/README.md`
+3. `GLOSSARY.md`
+4. `Architecture/README.md` → `Architecture/ARCHITECTURE.md`
+5. `Design/README.md`
+6. `Development/README.md` → `Development/DEVELOPMENT_WORKFLOW.md`
+7. `AI/AGENTS.md`
+
+## AI implementation agent
+
+1. `AI/AGENTS.md`
+2. `Development/DEVELOPMENT_WORKFLOW.md`
+3. `Development/CURSOR_GUIDELINES.md`
+4. `Engineering/ENGINEERING_CHARTER.md`
+5. Sprint-specific Product and/or Design documents
+6. `ROADMAP.md` (priority only)
+
+## Architecture reviewer
+
+1. `Architecture/README.md` → `Architecture/ARCHITECTURE.md`
+2. `Architecture/Decisions/README.md` → relevant Decision Records
+3. Related Design documents
+4. Product documents when the sprint is UX-facing
+
+## Future maintainer
+
+1. This router
+2. `GLOSSARY.md`
+3. `Product/README.md`
+4. `Architecture/README.md`
+5. `Design/README.md`
+6. `Development/README.md`
+7. `ROADMAP.md` and `CHANGELOG.md`
+8. Historical indexes only when reconstructing history
+
+---
+
+# Authority When Documents Conflict
+
+```text
+GLOSSARY.md                 ← terminology
+    ↓
+Product/                    ← UX / product behavior
+    ↓
+Architecture/               ← system structure
+    ↓
+Architecture/Decisions/     ← why / ownership
+    ↓
+Design/                     ← implementation contracts
+    ↓
+Extensions/
+    ↓
+Development/ and AI/AGENTS.md
+```
+
+Process conflicts are resolved by `Development/DEVELOPMENT_WORKFLOW.md`.
+
+---
+
+# Documentation Principles
+
+1. One document, one responsibility.
+2. Hubs navigate; leaves decide.
+3. Link instead of duplicate.
+4. Prefer the authoritative source.
+5. Archive rather than delete history.
+6. Active vs historical must be visible at the hub.
+7. Product decisions before UI implementation contracts; contracts before code.
+8. Architecture owns structure; Design owns how; Decisions own why.
+9. Process docs never redefine product or architecture.
+10. Avoid circular navigation.

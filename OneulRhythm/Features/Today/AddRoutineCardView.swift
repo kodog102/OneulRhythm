@@ -38,7 +38,7 @@ struct AddRoutineCardView: View {
 }
 
 #Preview {
-    AddRoutineCardView(title: "리듬 추가하기", action: {})
+    AddRoutineCardView(title: "리듬 만들기", action: {})
         .padding(ORSpacing.screenHorizontal)
         .background(ORColors.background)
 }

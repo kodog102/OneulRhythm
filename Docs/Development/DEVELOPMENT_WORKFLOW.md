@@ -10,7 +10,7 @@ Before implementation begins, all AI agents must follow the project governance d
 
 Related documents:
 
-- `ENGINEERING_CHARTER.md` — engineering principles
+- `Docs/Engineering/ENGINEERING_CHARTER.md` — engineering principles
 - `CURSOR_GUIDELINES.md` — execution rules for Cursor
 - `PROMPT_LIBRARY.md` — reusable prompts
 - `SPRINT_CHECKLIST.md` — Sprint completion checklist
@@ -127,7 +127,7 @@ Before architecture or implementation begins, review the required project docume
 
 Typical required context includes:
 
-- ENGINEERING_CHARTER
+- Docs/Engineering/ENGINEERING_CHARTER.md
 - DEVELOPMENT_WORKFLOW
 - CURSOR_GUIDELINES
 

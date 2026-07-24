@@ -1,29 +1,24 @@
 # Architecture Decision Records
 
-This directory contains the Architecture Decision Records (ADRs) for OneulRhythm.
+## Purpose
 
-Each Decision Record captures a significant architectural decision, the context in which it was made, the chosen solution, and its long-term consequences.
+This directory preserves architectural intent.
 
-The purpose of these records is to preserve architectural intent, making it easier to understand why the system is designed the way it is as the project evolves.
+Each Decision Record captures a significant architectural decision, its context, the chosen solution, and long-term consequences.
 
----
+## Audience
 
-## Decision Status
+Architecture reviewers, maintainers, and contributors changing ownership boundaries.
 
-The following status values are used throughout this directory.
+## Scope
 
-| Status | Description |
-|---------|-------------|
-| Proposed | Under discussion and not yet accepted. |
-| Accepted | Official architectural decision. |
-| Superseded | Replaced by a newer decision. |
-| Deprecated | Retained for historical reference but no longer recommended. |
+- Architectural boundaries and domain ownership
+- Persistence, scheduling, presentation, and lifecycle strategy
+- Long-term architectural direction
 
----
+## Primary navigation
 
-## Reading Order
-
-The Decision Records are intended to be read in numerical order because later decisions build upon earlier architectural foundations.
+Decision Records are intended to be read in numerical order when learning the foundations.
 
 | ID | Title | Status |
 |----|-------|--------|
@@ -42,60 +37,36 @@ The Decision Records are intended to be read in numerical order because later de
 | DR-013 | Notification Synchronization | Accepted |
 | DR-014 | Product UI First Strategy | Accepted |
 
----
+## Decision status
 
-## Scope
+| Status | Description |
+|--------|-------------|
+| Proposed | Under discussion and not yet accepted |
+| Accepted | Official architectural decision |
+| Superseded | Replaced by a newer decision |
+| Deprecated | Retained historically but no longer recommended |
 
-Decision Records describe **architectural decisions**, not implementation details.
+## What this hub does NOT contain
 
-Appropriate topics include:
+- Algorithms and UI layouts
+- Feature UX specifications
+- Sprint process details
+- Full system structure narrative
 
-- Architectural boundaries
-- Domain responsibilities
-- Data ownership
-- Persistence strategy
-- Scheduling architecture
-- Presentation responsibilities
-- Lifecycle management
-- Long-term product architecture
-
-The following should generally be documented elsewhere:
-
-- Algorithms
-- UI layouts
-- API usage
-- Code structure
-- Implementation details
-- Feature specifications
-
-These belong in design documents or the source code itself.
-
----
-
-## Relationship to Other Documentation
-
-| Document | Purpose |
-|----------|---------|
-| Architecture | Overall system structure and component relationships |
-| Design | Feature design and implementation details |
-| Roadmap | Planned work and future milestones |
-| CHANGELOG | Completed work and release history |
-| Decision Records | Architectural decisions and their rationale |
-
----
+System structure: `Docs/Architecture/ARCHITECTURE.md`  
+Implementation contracts: `Docs/Design/`  
+Product behavior: `Docs/Product/`
 
 ## Maintaining Decision Records
 
-Create a new Decision Record whenever a significant architectural decision is made.
+Create a new Decision Record when a significant architectural decision is made.
 
-Decision Records should describe *why* a decision exists rather than *how* it is implemented.
+Prefer describing why a decision exists and what ownership it establishes.
 
 Avoid rewriting historical decisions.
 
-If an architectural decision changes:
+If a decision changes:
 
 1. Create a new Decision Record.
 2. Mark the previous record as **Superseded**.
-3. Add cross-references between the related records.
-
-This preserves the architectural history of the project while keeping the current direction clear.
+3. Cross-reference the related records.

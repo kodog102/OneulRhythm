@@ -148,34 +148,6 @@ Presentation Models should require no further business interpretation.
 
 ---
 
-# Presentation Flow
-
-```
-Repository
-      │
-      ▼
-Schedule Engine
-      │
-      ▼
-ResolvedSchedule
-      │
-      ▼
-Mapper
-      │
-      ▼
-Presentation Model
-      │
-      ▼
-ViewModel
-      │
-      ▼
-SwiftUI View
-```
-
-Each step has a single responsibility.
-
----
-
 # State Management
 
 Presentation state is derived.

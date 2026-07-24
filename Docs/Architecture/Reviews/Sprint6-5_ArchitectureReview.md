@@ -1,3 +1,8 @@
+> **Archived**
+>
+> This document is retained for historical reference.
+> It is not an active product, architecture, or implementation contract.
+
 # Sprint 6-5 Architecture Review
 
 ## Goal

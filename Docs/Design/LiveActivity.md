@@ -48,34 +48,6 @@ Those responsibilities belong to lower architectural layers.
 
 ---
 
-# Architecture
-
-```
-Repository
-      │
-      ▼
-Schedule Engine
-      │
-      ▼
-ResolvedSchedule
-      │
-      ▼
-Live Activity Mapper
-      │
-      ▼
-Activity Content
-      │
-      ▼
-Coordinator
-      │
-      ▼
-ActivityKit
-```
-
-Live Activity is the final consumer of Activity-specific presentation models.
-
----
-
 # Components
 
 ## Activity Mapper

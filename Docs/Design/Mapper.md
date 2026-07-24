@@ -55,29 +55,6 @@ The Mapping Layer is **not** responsible for:
 
 ---
 
-
-
-# Architecture
-
-```
-Business Layer
-       │
-       ▼
-ResolvedSchedule
-       │
-       ▼
- Mapper Layer
-       │
-       ▼
-Presentation Models
-```
-
-The Mapping Layer exists entirely between Business and Presentation.
-
----
-
-
-
 # Mapping Flow
 
 ```
@@ -234,31 +211,6 @@ Primary Rhythm
 The selection belongs to the Snapshot because it is presentation-specific rather than a Schedule Engine concern.
 
 ---
-
-
-
-# ViewModel Collaboration
-
-The intended workflow is:
-
-```
-Load Data
-      │
-      ▼
-Resolve Business State
-      │
-      ▼
-Map Presentation State
-      │
-      ▼
-Publish
-```
-
-The ViewModel coordinates the workflow but does not perform mapping itself.
-
----
-
-
 
 # Surface Independence
 

@@ -151,6 +151,8 @@ No process step should be skipped without explicit developer approval.
 
 # Product Philosophy
 
+Canonical product philosophy: `Docs/Product/PRODUCT-PHILOSOPHY.md`.
+
 Every implementation should preserve these principles.
 
 ## Calm
@@ -322,20 +324,24 @@ Approved decisions must exist in documentation before implementation begins.
 
 ## Documentation Hierarchy
 
-Consult documentation in the following order.
+AI implementation agents should read in this order:
 
-1. Docs/README.md
-2. Docs/GLOSSARY.md
-3. Docs/Architecture/
-4. Docs/Architecture/Decisions/
-5. Docs/Design/
-6. Docs/Extensions/
-7. Docs/Development/
-8. Docs/AI/AGENTS.md
+1. `Docs/AI/AGENTS.md`
+2. `Docs/Development/DEVELOPMENT_WORKFLOW.md`
+3. `Docs/Development/CURSOR_GUIDELINES.md`
+4. `Docs/Engineering/ENGINEERING_CHARTER.md`
+5. Sprint-specific Product and/or Design documents
+6. `Docs/ROADMAP.md` (priority only)
+
+Use `Docs/GLOSSARY.md` as the shared terminology reference when terms are unclear.
 
 When conflicts exist:
 
 Glossary
+
+↓
+
+Product
 
 ↓
 
@@ -361,9 +367,13 @@ Process conflicts are resolved by:
 
 `Docs/Development/DEVELOPMENT_WORKFLOW.md`
 
+Avoid circular navigation between documentation hubs.
+
 ---
 
 ## Documentation Responsibilities
+
+Product documents define product decisions and UX contracts.
 
 Architecture documents define system structure.
 

@@ -35,7 +35,7 @@ OneulRhythm은 사용자가 하나의 리듬에만 집중하도록 돕기 위해
 
 OneulRhythm은 단순한 루틴 관리 앱이 아닙니다.
 
-13년 동안 운영 서비스를 개발하며 얻은 경험을 바탕으로,
+13년 동안 개발하며 얻은 경험을 바탕으로,
 
 SwiftUI, SwiftData, ActivityKit을 활용해 지속 가능한 iOS 아키텍처와 사용자 경험을 함께 고민하는 프로젝트입니다.
 
@@ -170,10 +170,13 @@ Planning
 
 프로젝트의 설계와 의사결정 과정은 `Docs/`에서 관리합니다.
 
-- `Docs/Architecture/` — system structure
-- `Docs/Architecture/Decisions/` — architectural decisions
-- `Docs/Design/` — subsystem implementation specs
+Start here: `Docs/README.md`
+
+- `Docs/Product/` — product decisions and UX contracts
+- `Docs/Architecture/` — system structure and decisions
+- `Docs/Design/` — subsystem implementation contracts
 - `Docs/Development/` — official Sprint workflow
+- `Docs/GLOSSARY.md` — shared terminology
 - `Docs/ROADMAP.md` / `Docs/CHANGELOG.md` — product progress
 
 ---

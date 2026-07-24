@@ -25,6 +25,8 @@ These principles are formally defined in the Architecture Decision Records.
 
 ---
 
+
+
 ## High-Level Architecture
 
 OneulRhythm follows a unidirectional architecture composed of four primary layers:
@@ -68,7 +70,11 @@ Each layer has one primary purpose:
 
 ---
 
+
+
 ## Layer Responsibilities
+
+
 
 ### Presentation Layer
 
@@ -102,6 +108,8 @@ The Presentation Layer is not responsible for:
 Views should consume presentation-ready state rather than derive it themselves.
 
 ---
+
+
 
 ### Mapping Layer
 
@@ -172,6 +180,8 @@ A presentation surface must not depend on another presentation surface's model.
 
 ---
 
+
+
 ### Business Layer
 
 The Business Layer determines the meaning of the user's day.
@@ -211,6 +221,8 @@ It represents the interpreted state of the schedule before any presentation-spec
 
 ---
 
+
+
 ### Data Layer
 
 The Data Layer owns persistence.
@@ -240,6 +252,8 @@ The Data Layer is not responsible for:
 Persistence data must not be presented directly to the user.
 
 ---
+
+
 
 ## Core Data Flow
 
@@ -274,6 +288,8 @@ Persisted data flows upward through business interpretation and surface-specific
 Presentation layers never reconstruct the schedule independently.
 
 ---
+
+
 
 ## Interaction Flow
 
@@ -317,6 +333,8 @@ The application does not manually patch derived presentation state when it can b
 
 ---
 
+
+
 ## ViewModel Role
 
 ViewModels coordinate presentation workflows.
@@ -328,15 +346,13 @@ A ViewModel may:
 - Invoke the appropriate mapper
 - Publish presentation models
 - Forward persistence mutations
-- Trigger reconciliation after state changes
 
 A ViewModel must not:
 
 - Reimplement schedule resolution
 - Contain persistence implementation
 - Duplicate mapper rules
-- Construct ActivityKit content directly
-- Become the owner of domain behavior
+- Own domain behavior
 
 The intended orchestration is:
 
@@ -357,30 +373,7 @@ ViewModels coordinate these steps but do not absorb the responsibilities of the 
 
 ---
 
-## Shared Business State
 
-All presentation surfaces originate from the same resolved business state.
-
-```text
-                     ResolvedSchedule
-                            │
-          ┌─────────────────┼─────────────────┐
-          │                 │                 │
-          ▼                 ▼                 ▼
-     Today Mapper     Activity Mapper    Future Mapper
-          │                 │                 │
-          ▼                 ▼                 ▼
-    Today Snapshot    Activity Content   Surface Model
-```
-
-This ensures that:
-
-- The application and Live Activity share one interpretation of the day.
-- Presentation surfaces may differ without duplicating business rules.
-- A new presentation surface can be added without changing schedule resolution.
-- Existing presentation models remain independent from one another.
-
----
 
 ## Primary Rhythm Ownership
 
@@ -418,6 +411,8 @@ This preserves the separation between business interpretation and presentation i
 
 ---
 
+
+
 ## Live Activity Architecture
 
 Live Activity is an additional presentation surface, not an independent scheduling system.
@@ -452,6 +447,8 @@ The Mapper does not perform lifecycle operations.
 The Coordinator does not resolve schedules.
 
 ---
+
+
 
 ## Notification Architecture
 
@@ -491,6 +488,8 @@ Notification failures must never fail persistence.
 App lifecycle and background invocation of synchronization are out of scope for the current slice.
 
 ---
+
+
 
 ## Dependency Rules
 
@@ -535,18 +534,22 @@ The Mapping Layer may produce models intended for a specific presentation framew
 
 ---
 
+
+
 ## Model Boundaries
 
 Each model has one architectural role.
 
-| Model | Layer | Purpose |
-|---|---|---|
-| Persistence Entity | Data | SwiftData storage representation |
-| Domain Rhythm | Business boundary | Framework-independent rhythm data |
-| ResolvedSchedule | Business | Interpreted schedule state |
-| Today Snapshot | Mapping output | Today presentation state |
-| Activity Content | Mapping output | Live Activity presentation state |
-| Notification Plan | Mapping output | Desired notification state |
+
+| Model              | Layer             | Purpose                           |
+| ------------------ | ----------------- | --------------------------------- |
+| Persistence Entity | Data              | SwiftData storage representation  |
+| Domain Rhythm      | Business boundary | Framework-independent rhythm data |
+| ResolvedSchedule   | Business          | Interpreted schedule state        |
+| Today Snapshot     | Mapping output    | Today presentation state          |
+| Activity Content   | Mapping output    | Live Activity presentation state  |
+| Notification Plan  | Mapping output    | Desired notification state        |
+
 
 Models should not cross boundaries merely for convenience.
 
@@ -558,6 +561,8 @@ In particular:
 - ActivityKit models must not enter the Business Layer.
 
 ---
+
+
 
 ## Extension Strategy
 
@@ -597,6 +602,8 @@ These capabilities should integrate with the existing flow rather than bypass it
 
 ---
 
+
+
 ## Architectural Invariants
 
 The following rules must remain true as the project evolves:
@@ -614,15 +621,19 @@ The following rules must remain true as the project evolves:
 
 ---
 
+
+
 ## Relationship to Other Documentation
 
-| Document | Purpose |
-|---|---|
-| Architecture | Overall structure, boundaries, and dependency direction |
-| Design | Detailed implementation behavior and algorithms |
-| Decision Records | Architectural decisions and their rationale |
-| Roadmap | Planned work and future milestones |
-| CHANGELOG | Completed work and project history |
+
+| Document         | Purpose                                                 |
+| ---------------- | ------------------------------------------------------- |
+| Architecture     | Overall structure, boundaries, and dependency direction |
+| Design           | Detailed implementation behavior and algorithms         |
+| Decision Records | Architectural decisions and their rationale             |
+| Roadmap          | Planned work and future milestones                      |
+| CHANGELOG        | Completed work and project history                      |
+
 
 Architecture explains **what the system looks like**.
 

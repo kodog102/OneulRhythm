@@ -58,29 +58,6 @@ Notification pending-request reconciliation is owned by `NotificationScheduling`
 
 ---
 
-# Architecture
-
-```
-Repository
-      │
-      ▼
-Schedule Engine
-      │
-      ▼
-ResolvedSchedule
-      │
-      ▼
-Mapping Layer
-```
-
-Scheduling begins after persistence has provided domain data.
-
-Scheduling ends once `ResolvedSchedule` has been produced.
-
-Everything after that belongs to presentation.
-
----
-
 # Business Flow
 
 ```
@@ -198,27 +175,9 @@ Mapping never changes business interpretation.
 
 # Relationship with ViewModel
 
-The ViewModel coordinates scheduling.
+The ViewModel coordinates scheduling by invoking the Schedule Engine and publishing mapped presentation state.
 
-```
-Repository
-      │
-      ▼
-Schedule Engine
-      │
-      ▼
-ResolvedSchedule
-      │
-      ▼
-Mapper
-      │
-      ▼
-Publish
-```
-
-The ViewModel does not resolve schedules.
-
-The ViewModel does not duplicate business rules.
+The ViewModel does not resolve schedules or duplicate business rules.
 
 ---
 

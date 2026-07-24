@@ -1,196 +1,65 @@
 # Design
 
-The Design documentation defines how the architecture is implemented.
+## Purpose
 
-While the Architecture documents describe the structure of the system and the Decision Records explain why architectural decisions were made, the Design documents specify how each subsystem behaves and how those architectural decisions are realized.
+Design documentation defines how the architecture is implemented.
 
-Design documents are implementation specifications rather than implementation code.
+Design documents are implementation contracts, not product decisions and not Architecture Decision Records.
 
----
+## Audience
 
-# Purpose
+Implementers, design/architecture agents, and maintainers changing subsystem behavior.
 
-The Design documentation exists to:
+## Scope
 
-- Define implementation responsibilities.
-- Describe subsystem behavior.
-- Specify interactions between components.
-- Preserve implementation consistency.
-- Support future maintenance and extension.
+- Subsystem responsibilities and non-responsibilities
+- Data flow, state transitions, and collaboration rules
+- Extension strategy at the subsystem boundary
 
-Design documents intentionally avoid repeating architectural decisions that are already documented elsewhere.
+## Primary navigation
 
----
-
-# Relationship to Other Documentation
-
-The project documentation is organized into four complementary levels.
-
-```
-README
-    │
-    ▼
-Architecture
-    │
-    ▼
-Decision Records
-    │
-    ▼
-Design
-```
-
-Each document answers a different question.
-
-| Document | Purpose |
-|----------|---------|
-| README | What is this project? |
-| Architecture | What is the system structure? |
-| Decision Records | Why was this architecture chosen? |
-| Design | How is each subsystem implemented? |
-
----
-
-# Design Principles
-
-Every design document should follow these principles.
-
-## Deterministic
-
-Behavior should be predictable.
-
-The same input should always produce the same output.
-
----
-
-## Single Responsibility
-
-Each subsystem owns one responsibility.
-
-Responsibilities should not overlap.
-
----
-
-## Layer Respect
-
-Design must preserve the architectural boundaries defined in Architecture.md.
-
-Implementation convenience must never violate dependency direction.
-
----
-
-## Framework Independence
-
-Business behavior should remain independent from SwiftUI, ActivityKit, SwiftData, or any presentation framework whenever possible.
-
----
-
-## Extensibility
-
-Future capabilities should integrate through existing architectural boundaries rather than introducing parallel implementations.
-
----
-
-# Design Scope
-
-A design document may describe:
-
-- Responsibilities
-- Non-responsibilities
-- Data flow
-- State transitions
-- Algorithms
-- Interaction sequences
-- Component collaboration
-- Extension strategy
-
-A design document should not contain implementation code.
-
-Pseudo-code may be used when it improves understanding.
-
----
-
-# Standard Document Structure
-
-Every Design document follows the same structure.
-
-```text
-Purpose
-
-Responsibilities
-
-Non-Responsibilities
-
-Architecture
-
-Data Flow
-
-State
-
-Algorithms
-
-Sequence
-
-Design Notes
-
-Related Decisions
-```
-
-Individual sections may be omitted if they are not relevant to the subsystem.
-
----
-
-# Current Design Documents
-
-| Document | Purpose |
-|----------|---------|
-| Mapper.md | Business → Presentation transformation |
-| Scheduling.md | Schedule resolution and business flow |
-| Persistence.md | Persistence implementation |
-| Presentation.md | Presentation architecture |
-| LiveActivity.md | ActivityKit implementation |
-| Notification.md | Notification Plan and scheduling boundary |
+| Document | Purpose | Status |
+|----------|---------|--------|
+| `Scheduling.md` | Schedule resolution and business flow | Active |
+| `Persistence.md` | Persistence implementation | Active |
+| `Mapper.md` | Business → presentation transformation | Active |
+| `Presentation.md` | Presentation architecture | Active |
+| `LiveActivity.md` | ActivityKit implementation | Active |
+| `Notification.md` | Notification Plan and scheduling boundary | Active |
 
 Recurring rhythm design lives in `Docs/Extensions/Recurrence.md`.
 
----
+## What this hub does NOT contain
 
-# Dependency Direction
+- Product philosophy or UX layout contracts
+- Architecture Decision rationale catalogs
+- Sprint workflow or QA process
+- Glossary term definitions
 
-Design documents follow the architectural dependency direction.
+## Design document structure
 
+```text
+Purpose
+Responsibilities
+Non-Responsibilities
+Data Flow
+Design Principles
+Extension Strategy
+Design Notes
+Related Decisions
 ```
-Presentation
-      ▲
-      │
-Mapping
-      ▲
-      │
-Business
-      ▲
-      │
-Data
-```
 
-Implementation details must never introduce dependencies that violate this direction.
+Individual sections may be omitted when irrelevant.
 
----
+## Design rules
 
-# Design Language
+- Behavior should be deterministic.
+- Each subsystem owns one responsibility.
+- Preserve architectural dependency direction.
+- Prefer framework-independent business behavior.
+- Integrate future capabilities through existing boundaries.
 
-Throughout the Design documentation:
+Terminology is defined in `Docs/GLOSSARY.md`.
 
-- English terminology is canonical.
-- Terms are defined in `Docs/GLOSSARY.md`.
-- Architectural terminology should not be redefined.
-- Code examples are illustrative rather than authoritative.
-
-When referring to architectural concepts, use the official names defined in the Glossary.
-
----
-
-# Related Documents
-
-- Docs/README.md
-- Docs/GLOSSARY.md
-- Docs/Architecture/ARCHITECTURE.md
-- Docs/Architecture/Decisions/
+System structure is defined in `Docs/Architecture/ARCHITECTURE.md`.  
+Related “why” decisions live under `Docs/Architecture/Decisions/`.

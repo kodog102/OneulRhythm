@@ -56,27 +56,6 @@ It never interprets data.
 
 ---
 
-# Architecture
-
-```
-SwiftData
-      │
-      ▼
-Repository Implementation
-      │
-      ▼
-Repository Interface
-      │
-      ▼
-Business Layer
-```
-
-The Business Layer depends only on the Repository abstraction.
-
-Persistence frameworks remain hidden behind the Repository boundary.
-
----
-
 # Data Flow
 
 ```
@@ -205,24 +184,6 @@ Business meaning is produced later by the Schedule Engine.
 Entity conversion must be deterministic.
 
 The same persisted entity should always produce the same domain model.
-
----
-
-# Collaboration
-
-```
-Business
-      │
-      ▼
-Repository
-      │
-      ▼
-SwiftData
-```
-
-The Repository collaborates with the Business Layer by supplying domain models.
-
-It never performs business interpretation.
 
 ---
 

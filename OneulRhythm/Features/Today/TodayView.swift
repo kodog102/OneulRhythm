@@ -9,7 +9,7 @@ struct TodayView: View {
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var launchState: AppLaunchState
     @StateObject private var viewModel: TodayViewModel
-    @State private var isAddRoutinePresented = false
+    @State private var isCreateRhythmPresented = false
 
     private let onSaveRoutine: (RoutineCreationInput) throws -> Void
     private let onAppBecomeActive: () -> Void
@@ -37,21 +37,32 @@ struct TodayView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: ORSpacing.sectionGap) {
-                    header
-                    screenContent
+                VStack(alignment: .leading, spacing: 0) {
+                    greetingSection
 
-                    AddRoutineCardView(
-                        title: "리듬 추가하기",
-                        action: { isAddRoutinePresented = true }
-                    )
+                    dateSection
+                        .padding(.top, ORSpacing.xs)
+
+                    screenContent
+                        .padding(.top, ORSpacing.xxxl)
+
+                    if viewModel.showsProgress,
+                       viewModel.screenPresentation != .empty {
+                        TodayProgressView(
+                            completedCount: viewModel.completedRoutineCount,
+                            totalCount: viewModel.totalRoutineCount,
+                            progress: viewModel.progress
+                        )
+                        .padding(.top, ORSpacing.xxxl)
+                    }
                 }
                 .padding(.horizontal, ORSpacing.screenHorizontal)
                 .padding(.bottom, ORSpacing.scrollBottom)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .safeAreaPadding(.top, ORSpacing.screenTop)
             .background(ORColors.background.ignoresSafeArea())
-            .navigationDestination(isPresented: $isAddRoutinePresented) {
+            .navigationDestination(isPresented: $isCreateRhythmPresented) {
                 AddRoutineView(
                     onSave: { input in
                         try onSaveRoutine(input)
@@ -89,19 +100,24 @@ struct TodayView: View {
         }
     }
 
-    private var header: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.xs) {
-            Text(viewModel.formattedTodayDate)
-                .orTypography(.caption)
-                .foregroundStyle(ORColors.textSecondary)
-                .accessibilityAddTraits(.isHeader)
+    // MARK: - Always Visible
 
-            Text("오늘 당신의 리듬은\n어떤가요")
-                .orTypography(.largeTitle)
-                .foregroundStyle(ORColors.textPrimary)
-        }
-        .padding(.bottom, ORSpacing.xs)
+    /// Level 2 — warm emotional entry. Never interactive.
+    private var greetingSection: some View {
+        Text(viewModel.greetingText)
+            .orTypography(.title)
+            .foregroundStyle(ORColors.textPrimary)
+            .accessibilityAddTraits(.isHeader)
     }
+
+    /// Level 3 — temporal orientation. Secondary emphasis.
+    private var dateSection: some View {
+        Text(viewModel.formattedTodayDate)
+            .orTypography(.body)
+            .foregroundStyle(ORColors.textSecondary)
+    }
+
+    // MARK: - Screen Content
 
     @ViewBuilder
     private var screenContent: some View {
@@ -109,10 +125,15 @@ struct TodayView: View {
             loadingState
         } else if let loadErrorMessage = viewModel.loadErrorMessage {
             errorState(message: loadErrorMessage)
-        } else if viewModel.routines.isEmpty {
-            emptyState
         } else {
-            routineContent
+            switch viewModel.screenPresentation {
+            case .empty:
+                emptyState
+            case .dayComplete:
+                dayCompleteMessage
+            case .upcoming, .current, .pastIncomplete:
+                primaryRhythmArea
+            }
         }
     }
 
@@ -125,23 +146,8 @@ struct TodayView: View {
                 .orTypography(.body)
                 .foregroundStyle(ORColors.textSecondary)
         }
-        .frame(maxWidth: .infinity, alignment: .center)
-        .padding(.vertical, ORSpacing.lg)
-    }
-
-    private var emptyState: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.xs) {
-            Text("아직 등록된 리듬이 없어요")
-                .orTypography(.title)
-                .foregroundStyle(ORColors.textPrimary)
-
-            Text("오늘의 첫 리듬을 만들어보세요.")
-                .orTypography(.body)
-                .foregroundStyle(ORColors.textSecondary)
-        }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(ORSpacing.cardPadding)
-        .orCard()
+        .padding(.vertical, ORSpacing.lg)
     }
 
     private func errorState(message: String) -> some View {
@@ -150,110 +156,157 @@ struct TodayView: View {
             .foregroundStyle(ORColors.textSecondary)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(ORSpacing.cardPadding)
-            .orCard()
     }
 
-    @ViewBuilder
-    private var routineContent: some View {
-        primaryRoutineCard
+    /// Empty: Guidance + Create Rhythm CTA only.
+    /// CTA is Level 7 — subordinate to Empty Guidance; visible only when zero routines.
+    private var emptyState: some View {
+        VStack(alignment: .leading, spacing: ORSpacing.xl) {
+            emptyGuidance
+            createRhythmCTA
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
 
-        TodayProgressView(
-            title: "오늘의 흐름",
-            completedCount: viewModel.completedRoutineCount,
-            totalCount: viewModel.totalRoutineCount,
-            message: viewModel.progressMessage,
-            progress: viewModel.progress
+    /// Approved Empty copy. Friendly, calm, never urgent.
+    private var emptyGuidance: some View {
+        Text("오늘의 첫 리듬을 만들어보세요.")
+            .orTypography(.title)
+            .foregroundStyle(ORColors.textPrimary)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// Approved Create Rhythm CTA. Empty-only onboarding affordance.
+    private var createRhythmCTA: some View {
+        AddRoutineCardView(
+            title: "리듬 만들기",
+            action: { isCreateRhythmPresented = true }
         )
     }
 
-    /// Renders the snapshot's single primary rhythm.
-    /// Selection lives in `TodayRhythmSnapshot`; the view only presents it.
-    /// When primary is not next, the next rhythm may appear as quiet preview only.
-    @ViewBuilder
-    private var primaryRoutineCard: some View {
-        if let primaryRhythm = viewModel.primaryRhythm, let primaryRole = viewModel.primaryRole {
-            VStack(alignment: .leading, spacing: ORSpacing.xs) {
-                RoutineCardView(
-                    routine: primaryRhythm,
-                    scheduleRole: primaryRole.scheduleRole,
-                    isCompleting: viewModel.isCompleting(primaryRhythm),
-                    onComplete: { viewModel.completeRoutine(primaryRhythm) }
-                )
+    /// Approved Day Complete copy. Quiet closure — never celebratory.
+    private var dayCompleteMessage: some View {
+        Text("오늘의 리듬을 모두 이어냈어요.")
+            .orTypography(.title)
+            .foregroundStyle(ORColors.textPrimary)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, ORSpacing.xl)
+    }
 
-                if primaryRole == .pastIncomplete {
-                    Text("지금 이어가도 괜찮아요")
-                        .orTypography(.caption)
-                        .foregroundStyle(ORColors.textSecondary)
-                        .padding(.horizontal, ORSpacing.xs)
+    // MARK: - Primary Rhythm Area
+
+    /// Emotional center of Today.
+    /// Order: Primary Rhythm → Rhythm Meaning (hidden) → Time → Completion → Next.
+    @ViewBuilder
+    private var primaryRhythmArea: some View {
+        if let primaryRhythm = viewModel.primaryRhythm {
+            VStack(alignment: .leading, spacing: 0) {
+                // Level 1 — Primary Rhythm
+                Text(primaryRhythm.title)
+                    .orTypography(.largeTitle)
+                    .foregroundStyle(ORColors.textPrimary)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityAddTraits(.isHeader)
+
+                // Rhythm Meaning intentionally omitted in Sprint 8 —
+                // no approved data source; never show placeholder.
+
+                // Level 4 — Time
+                Text(primaryRhythm.formattedTime)
+                    .orTypography(.caption)
+                    .foregroundStyle(ORColors.textTertiary)
+                    .padding(.top, ORSpacing.lg)
+
+                if viewModel.showsCompletionButton {
+                    completionButton(for: primaryRhythm)
+                        .padding(.top, ORSpacing.xl)
                 }
 
                 if let secondaryNextRoutine = viewModel.secondaryNextRoutine {
-                    nextRhythmPreview(for: secondaryNextRoutine)
+                    nextRhythmSection(for: secondaryNextRoutine)
+                        .padding(.top, ORSpacing.xxxl)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .animation(.easeInOut(duration: 0.25), value: primaryRhythm.id)
         }
     }
 
-    /// A lightweight, non-interactive preview of the next rhythm shown
-    /// beneath the primary card. Deliberately card-less and button-less so
-    /// it never competes with the one primary routine. A subtle vertical
-    /// accent visually connects it to the primary rhythm above.
-    private func nextRhythmPreview(for routine: Routine) -> some View {
-        HStack(alignment: .top, spacing: ORSpacing.xs) {
-            Capsule()
-                .fill(ORColors.divider)
-                .frame(width: 2)
-                .frame(maxHeight: .infinity)
+    /// Gentle acknowledgment. Visible only when completion is possible.
+    private func completionButton(for routine: Routine) -> some View {
+        let isCompleting = viewModel.isCompleting(routine)
 
-            VStack(alignment: .leading, spacing: ORSpacing.xxs) {
-                Text("다음 리듬")
-                    .orTypography(.caption, weight: .medium)
-                    .foregroundStyle(ORColors.textTertiary)
-
-                Text(routine.title)
-                    .orTypography(.body)
-                    .foregroundStyle(ORColors.textSecondary)
-
-                Text(routine.formattedTime)
-                    .orTypography(.caption)
-                    .foregroundStyle(ORColors.textTertiary)
+        return Button(action: { viewModel.completeRoutine(routine) }) {
+            Group {
+                if isCompleting {
+                    ProgressView()
+                        .tint(.white)
+                        .accessibilityLabel("완료 저장 중")
+                } else {
+                    Text("완료했어요")
+                        .orTypography(.body, weight: .semibold)
+                        .foregroundStyle(.white)
+                }
             }
+            .frame(maxWidth: .infinity)
+            .frame(height: ORSpacing.primaryButtonHeight)
+            .background(ORColors.primary)
+            .clipShape(RoundedRectangle(cornerRadius: ORRadius.button, style: .continuous))
         }
-        .padding(.horizontal, ORSpacing.xs)
-        .padding(.top, ORSpacing.xxs)
+        .buttonStyle(.plain)
+        .disabled(isCompleting)
+        .opacity(isCompleting ? 0.45 : 1)
+        .accessibilityHint("이 리듬을 완료로 표시합니다")
+    }
+
+    /// Level 5 — quiet orientation for what follows. Never a second focus.
+    private func nextRhythmSection(for routine: Routine) -> some View {
+        VStack(alignment: .leading, spacing: ORSpacing.xxs) {
+            Text("다음 리듬")
+                .orTypography(.caption)
+                .foregroundStyle(ORColors.textTertiary)
+
+            Text(routine.title)
+                .orTypography(.caption)
+                .foregroundStyle(ORColors.textSecondary)
+
+            Text(routine.formattedTime)
+                .orTypography(.caption)
+                .foregroundStyle(ORColors.textTertiary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
     }
 }
 
-private extension TodayPrimaryRole {
-    /// Maps snapshot presentation role onto `RoutineCardView` styling.
-    /// `.pastIncomplete` reuses the existing overdue card treatment.
-    var scheduleRole: RoutineScheduleRole {
-        switch self {
-        case .current:
-            return .current
-        case .pastIncomplete:
-            return .overdue
-        case .next:
-            return .next
-        }
-    }
-}
-
-#Preview("Empty Day") {
+#Preview("Empty") {
     TodayView(
         repository: PreviewRoutineRepository(),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
-        nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
+        nowProvider: { TodayPreviewData.morningNow }
     )
     .environmentObject(AppLaunchState.previewCompleted())
 }
 
-#Preview("None Completed") {
+#Preview("Upcoming") {
     TodayView(
         repository: PreviewRoutineRepository(
-            entities: TodayPreviewData.currentOverdueNextEntities()
+            entities: TodayPreviewData.upcomingEntities()
+        ),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
+        nowProvider: { TodayPreviewData.earlyMorningNow }
+    )
+    .environmentObject(AppLaunchState.previewCompleted())
+}
+
+#Preview("Current") {
+    TodayView(
+        repository: PreviewRoutineRepository(
+            entities: TodayPreviewData.currentWithNextEntities()
         ),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
@@ -261,10 +314,10 @@ private extension TodayPrimaryRole {
     .environmentObject(AppLaunchState.previewCompleted())
 }
 
-#Preview("Partially Completed") {
+#Preview("Past Incomplete") {
     TodayView(
         repository: PreviewRoutineRepository(
-            entities: TodayPreviewData.partiallyCompletedEntities()
+            entities: TodayPreviewData.pastIncompleteOnlyEntities()
         ),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
@@ -272,7 +325,7 @@ private extension TodayPrimaryRole {
     .environmentObject(AppLaunchState.previewCompleted())
 }
 
-#Preview("All Completed") {
+#Preview("Day Complete") {
     TodayView(
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.completedEntities()
@@ -294,17 +347,6 @@ private extension TodayPrimaryRole {
     .environmentObject(AppLaunchState.previewCompleted())
 }
 
-#Preview("Past Incomplete Only") {
-    TodayView(
-        repository: PreviewRoutineRepository(
-            entities: TodayPreviewData.pastIncompleteOnlyEntities()
-        ),
-        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
-        nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
-    )
-    .environmentObject(AppLaunchState.previewCompleted())
-}
-
 #Preview("Multiple Past Incomplete") {
     TodayView(
         repository: PreviewRoutineRepository(
@@ -316,20 +358,6 @@ private extension TodayPrimaryRole {
     .environmentObject(AppLaunchState.previewCompleted())
 }
 
-#Preview("Current + Past Incomplete") {
-    TodayView(
-        repository: PreviewRoutineRepository(
-            entities: TodayPreviewData.currentAndPastIncompleteEntities()
-        ),
-        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
-        nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
-    )
-    .environmentObject(AppLaunchState.previewCompleted())
-}
-
-/// Interactive: tap "완료했어요" on the past incomplete card to verify it
-/// promotes to the next routine (past incomplete → next), with no backlog
-/// card left behind.
 #Preview("Completion Promotion") {
     TodayView(
         repository: PreviewRoutineRepository(
@@ -337,6 +365,26 @@ private extension TodayPrimaryRole {
         ),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
+    )
+    .environmentObject(AppLaunchState.previewCompleted())
+}
+
+#Preview("Afternoon Greeting") {
+    TodayView(
+        repository: PreviewRoutineRepository(),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
+        nowProvider: { TodayPreviewData.afternoonNow }
+    )
+    .environmentObject(AppLaunchState.previewCompleted())
+}
+
+#Preview("Evening Greeting") {
+    TodayView(
+        repository: PreviewRoutineRepository(
+            entities: TodayPreviewData.completedEntities()
+        ),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
+        nowProvider: { TodayPreviewData.eveningNow }
     )
     .environmentObject(AppLaunchState.previewCompleted())
 }
@@ -391,8 +439,48 @@ private struct PreviewLiveActivityCoordinator: LiveActivityCoordinating {
 }
 
 private enum TodayPreviewData {
+    static var morningNow: Date {
+        MockRoutineData.date(hour: 9, minute: 0)
+    }
+
+    static var earlyMorningNow: Date {
+        MockRoutineData.date(hour: 6, minute: 0)
+    }
+
+    static var afternoonNow: Date {
+        MockRoutineData.date(hour: 14, minute: 0)
+    }
+
+    static var eveningNow: Date {
+        MockRoutineData.date(hour: 20, minute: 0)
+    }
+
     static var nowDuringCurrentRoutine: Date {
         MockRoutineData.date(hour: 7, minute: 35)
+    }
+
+    @MainActor
+    static func upcomingEntities() -> [RoutineEntity] {
+        [
+            RoutineEntity(
+                routine: MockRoutineData.currentRoutine.updatingStatus(.upcoming)
+            ),
+            RoutineEntity(
+                routine: MockRoutineData.nextRoutine
+            )
+        ]
+    }
+
+    @MainActor
+    static func currentWithNextEntities() -> [RoutineEntity] {
+        [
+            RoutineEntity(
+                routine: MockRoutineData.currentRoutine.updatingStatus(.upcoming)
+            ),
+            RoutineEntity(
+                routine: MockRoutineData.nextRoutine
+            )
+        ]
     }
 
     @MainActor
@@ -416,30 +504,7 @@ private enum TodayPreviewData {
         ]
     }
 
-    @MainActor
-    static func partiallyCompletedEntities() -> [RoutineEntity] {
-        [
-            RoutineEntity(
-                routine: Routine(
-                    title: "아침 스트레칭",
-                    startTime: MockRoutineData.date(hour: 6, minute: 30),
-                    endTime: MockRoutineData.date(hour: 6, minute: 45),
-                    category: .morning,
-                    status: .completed
-                )
-            ),
-            RoutineEntity(
-                routine: MockRoutineData.currentRoutine.updatingStatus(.upcoming)
-            ),
-            RoutineEntity(
-                routine: MockRoutineData.nextRoutine
-            )
-        ]
-    }
-
-    /// No current routine — only a past incomplete routine and a future
-    /// next routine. The next routine should appear as quiet secondary
-    /// information beneath the past incomplete card.
+    /// No current routine — only a past incomplete routine and a future next.
     @MainActor
     static func pastIncompleteOnlyEntities() -> [RoutineEntity] {
         [
@@ -458,8 +523,7 @@ private enum TodayPreviewData {
         ]
     }
 
-    /// Two past incomplete routines. Only the earliest should appear as the
-    /// primary card — there is no backlog list of the remaining one.
+    /// Two past incomplete routines. Only the earliest should appear as primary.
     @MainActor
     static func multiplePastIncompleteEntities() -> [RoutineEntity] {
         [
@@ -483,27 +547,6 @@ private enum TodayPreviewData {
             ),
             RoutineEntity(
                 routine: MockRoutineData.nextRoutine
-            )
-        ]
-    }
-
-    /// A current routine together with an earlier past incomplete routine
-    /// and no future routine. Current must win priority — the past
-    /// incomplete routine stays a fact in the snapshot but is not rendered.
-    @MainActor
-    static func currentAndPastIncompleteEntities() -> [RoutineEntity] {
-        [
-            RoutineEntity(
-                routine: Routine(
-                    title: "아침 스트레칭",
-                    startTime: MockRoutineData.date(hour: 6, minute: 30),
-                    endTime: MockRoutineData.date(hour: 6, minute: 45),
-                    category: .morning,
-                    status: .upcoming
-                )
-            ),
-            RoutineEntity(
-                routine: MockRoutineData.currentRoutine.updatingStatus(.upcoming)
             )
         ]
     }

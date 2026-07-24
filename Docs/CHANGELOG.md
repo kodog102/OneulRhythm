@@ -8,34 +8,54 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
-# Planning — Product UI First Strategy
+# Sprint 8 — Today Product Experience
 
-Date
+**Date:** 2026-07-24
 
-2026-07-24
+## Added
 
-## Changed
+### Today Experience
 
-### Roadmap Direction
+- Redesigned Today as a calm, single-focus experience.
+- Introduced the Single Primary Rhythm presentation.
+- Improved information hierarchy and spacing so Primary Rhythm remains the emotional center.
 
-- Adopted Product UI First as the current development priority after Notification Foundation stability.
-- Reordered upcoming Sprints so Today Product Experience, Routine Management, Settings & Preferences, and UX Polish precede Widget Experience and Apple Watch Integration.
-- Documented that Widget and Apple Watch remain planned surfaces but are intentionally postponed until in-app MVP quality is reached.
-- Recorded the strategic decision in `DR-014-product-ui-first.md`.
+### Empty State
+
+- Redesigned Empty as an open invitation to begin.
+- Added Empty Guidance with approved Product copy.
+- Added Create Rhythm CTA visible only when Today has zero routines.
+- Reused the existing routine creation flow for first-time onboarding.
+- Eliminated the Empty-state onboarding dead-end discovered during Manual QA.
+
+### Day Complete
+
+- Added a dedicated Day Complete presentation.
+- Introduced the approved completion message.
+- Preserved quiet completion without celebration or additional actions.
+
+### Product Documentation
+
+- Completed the implementation-ready Product documentation for Today:
+  - `Today-Experience.md`
+  - `Today-Wireframe-Exploration.md`
+  - `Today-UI-Specification.md`
 
 ## Notes
 
-This is a planning and documentation update only.
+Manual Visual QA validated Empty, Upcoming, Current, Past Incomplete, and Day Complete.
 
-No application architecture, Notification pipeline, Snapshot, or production code was changed.
+Product documentation was refined from QA findings before the Empty Create Rhythm CTA was finalized.
+
+Final implementation matches the approved Product Contract.
+
+See `Docs/SprintReviews/Sprint-8.md` for the Sprint Review.
 
 ---
 
 # Sprint 7 — Notification System (T3)
 
-Date
-
-2026-07-24
+**Date:** 2026-07-24
 
 ## Added
 
@@ -62,9 +82,7 @@ Recurring reminder scheduling remains persist-only.
 
 # Sprint 7 — Notification System (T2)
 
-Date
-
-2026-07-24
+**Date:** 2026-07-24
 
 ## Added
 
@@ -87,9 +105,7 @@ Schedule synchronization remains a later Sprint 7 slice.
 
 # Sprint 7 — Notification System (T1)
 
-Date
-
-2026-07-23
+**Date:** 2026-07-23
 
 ## Added
 
@@ -111,9 +127,7 @@ Developer verification completed successfully.
 
 # Sprint 6-5 — Primary Rhythm Ownership
 
-Date
-
-2026-07-23
+**Date:** 2026-07-23
 
 ## Changed
 
@@ -135,9 +149,7 @@ See `Docs/Architecture/Reviews/Sprint6-5_ArchitectureReview.md` and `Docs/Sprint
 
 # Sprint 6-4 — Recurring Rhythm
 
-Date
-
-2026-07-22
+**Date:** 2026-07-22
 
 ## Added
 
@@ -166,9 +178,7 @@ See `Docs/SprintReviews/Sprint-6-4.md` for the Sprint Review.
 
 # Development Workflow Documentation
 
-Date
-
-2026-07-22
+**Date:** 2026-07-22
 
 ## Added
 
@@ -197,9 +207,7 @@ Product philosophy and architecture rules remain in `Docs/AI/AGENTS.md`.
 
 # Sprint 6-3 — Documentation Architecture
 
-Date
-
-2026-07-20
+**Date:** 2026-07-20
 
 ## Added
 

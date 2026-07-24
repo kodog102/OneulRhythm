@@ -5,46 +5,33 @@
 
 import SwiftUI
 
+/// Level 6 supporting progress — quiet orientation only.
+/// Must never compete with Primary Rhythm.
 struct TodayProgressView: View {
-    let title: String
     let completedCount: Int
     let totalCount: Int
-    let message: String
     let progress: Double
 
     private var countText: String {
-        "\(completedCount) / \(totalCount) 리듬 완료"
+        "\(completedCount) / \(totalCount)"
     }
 
     private var accessibilitySummary: String {
-        "\(totalCount)개의 리듬 중 \(completedCount)개 완료. \(message)"
+        "\(totalCount)개의 리듬 중 \(completedCount)개 완료"
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.md) {
-            Text(title)
-                .orTypography(.title)
-                .foregroundStyle(ORColors.textPrimary)
-
+        VStack(alignment: .leading, spacing: ORSpacing.xs) {
             FlowProgressBar(progress: progress)
                 .accessibilityHidden(true)
 
-            VStack(alignment: .leading, spacing: ORSpacing.xs) {
-                Text(countText)
-                    .orTypography(.caption)
-                    .foregroundStyle(ORColors.textSecondary)
-
-                Text(message)
-                    .orTypography(.body)
-                    .foregroundStyle(ORColors.textSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            Text(countText)
+                .orTypography(.caption)
+                .foregroundStyle(ORColors.textTertiary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(ORSpacing.cardPadding)
-        .orCard()
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(title)
+        .accessibilityLabel("오늘의 흐름")
         .accessibilityValue(accessibilitySummary)
     }
 }
@@ -60,16 +47,7 @@ private struct FlowProgressBar: View {
                     .frame(height: ORSpacing.progressBarHeight)
 
                 Capsule()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                ORColors.primary.opacity(0.7),
-                                ORColors.primary
-                            ],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
+                    .fill(ORColors.primary.opacity(0.55))
                     .frame(
                         width: geometry.size.width * min(max(progress, 0), 1),
                         height: ORSpacing.progressBarHeight
@@ -82,10 +60,8 @@ private struct FlowProgressBar: View {
 
 #Preview("None Completed") {
     TodayProgressView(
-        title: "오늘의 흐름",
         completedCount: 0,
         totalCount: 3,
-        message: "첫 리듬부터 천천히 시작해보세요.",
         progress: 0
     )
     .padding(ORSpacing.screenHorizontal)
@@ -94,10 +70,8 @@ private struct FlowProgressBar: View {
 
 #Preview("Partial") {
     TodayProgressView(
-        title: "오늘의 흐름",
         completedCount: 2,
         totalCount: 5,
-        message: "오늘의 흐름이 차분하게 이어지고 있어요.",
         progress: 0.4
     )
     .padding(ORSpacing.screenHorizontal)
@@ -106,10 +80,8 @@ private struct FlowProgressBar: View {
 
 #Preview("Complete") {
     TodayProgressView(
-        title: "오늘의 흐름",
         completedCount: 3,
         totalCount: 3,
-        message: "오늘의 리듬을 모두 이어냈어요.",
         progress: 1
     )
     .padding(ORSpacing.screenHorizontal)

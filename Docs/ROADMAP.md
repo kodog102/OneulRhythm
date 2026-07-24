@@ -16,7 +16,7 @@ Feature Development — Product UI First
 
 ## Current Sprint
 
-Sprint 8 — Today Product Experience
+Sprint 9 — Routine Management
 
 ## Status
 
@@ -24,19 +24,21 @@ Sprint 8 — Today Product Experience
 
 ## Current Goal
 
-Elevate the in-app Today experience toward MVP quality before expanding to additional platform surfaces.
+Strengthen in-app rhythm creation and management so daily use feels complete.
 
 ## Current Priority
 
 Product UI First.
 
-Notification Foundation is complete and stable.
+Sprint 8 completed the Today Product Experience.
+
+Notification Foundation remains complete and stable.
 
 Until the in-app experience reaches MVP quality, development prioritizes Product UI over Widgets, Apple Watch, and other platform integrations.
 
 ## Next Sprint
 
-Sprint 9 — Routine Management
+Sprint 10 — Settings & Preferences
 
 ---
 
@@ -394,31 +396,28 @@ Notification Foundation is considered stable. Deferred lifecycle invocation does
 
 ---
 
-# Planned
-
 ## Sprint 8 — Today Product Experience
 
 ### Goal
 
 Elevate the in-app Today experience toward MVP quality.
 
-### Intent
+### Completed
 
-Strengthen the primary in-app surface that users live in every day, reusing the existing Snapshot and presentation architecture.
-
-### Scope Direction
-
-- Today screen Product UI quality
-- Primary rhythm clarity and calm presentation
-- In-app experience refinements that consume existing architecture
-
-Widget, Watch, and new platform surfaces remain out of scope.
+- Calm single-focus Today experience
+- Single Primary Rhythm presentation
+- Empty State redesign
+- Empty-only Create Rhythm CTA
+- Day Complete experience
+- Documentation First workflow completed for Today
 
 **Status**
 
-📅 Ready
+✅ Completed
 
 ---
+
+# Planned
 
 ## Sprint 9 — Routine Management
 
@@ -432,7 +431,7 @@ Improve the management flows that support Today, without redesigning persistence
 
 **Status**
 
-📅 Planned
+📅 Ready
 
 ---
 

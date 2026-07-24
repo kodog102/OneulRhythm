@@ -1,86 +1,42 @@
 # Extensions
 
-The Extensions documentation describes capabilities that extend the core architecture without changing it.
+## Purpose
 
-Unlike the Design documentation, which specifies the implementation of the current system, Extensions define how future capabilities integrate into the existing architecture.
+Extensions documentation describes capabilities that extend the core architecture without replacing it.
 
-Extensions are optional additions.
+## Audience
 
-The core architecture remains stable regardless of whether an extension is implemented.
+Implementers and maintainers adding optional capabilities on the existing pipeline.
 
----
+## Scope
 
-# Purpose
+- Extension integration points
+- Current and planned optional capabilities
+- Rules for preserving architectural consistency
 
-Extensions exist to:
-
-- Describe future architectural capabilities.
-- Define integration points.
-- Preserve architectural consistency.
-- Avoid parallel implementations.
-- Support long-term evolution.
-
----
-
-# Principles
-
-Every extension should:
-
-- Reuse the existing architecture.
-- Respect dependency direction.
-- Integrate through existing boundaries.
-- Avoid duplicating business logic.
-- Produce deterministic behavior.
-
-Extensions should never require changes to the fundamental architecture.
-
----
-
-# Typical Extension Flow
-
-```
-Extension
-      │
-      ▼
-Repository
-      │
-      ▼
-Schedule Engine
-      │
-      ▼
-ResolvedSchedule
-      │
-      ▼
-Mapper
-      │
-      ▼
-Presentation
-```
-
-Extensions contribute to the existing pipeline.
-
-They do not replace it.
-
----
-
-# Current Extensions
+## Primary navigation
 
 | Document | Purpose | Status |
 |----------|---------|--------|
-| Recurrence.md | Generate daily rhythms from recurring definitions | Foundation in progress (Sprint 6-4) |
+| `Recurrence.md` | Generate daily rhythms from recurring definitions | Active |
 
----
+## What this hub does NOT contain
 
-# Future Extensions
+- Core subsystem Design contracts for Scheduling, Persistence, Mapper, Presentation, Live Activity, or Notification
+- Product UX specifications
+- Architecture Decision Record catalogs
 
-Potential future extensions include:
+Core implementation contracts live under `Docs/Design/`.  
+System structure lives under `Docs/Architecture/ARCHITECTURE.md`.
 
-- Calendar Integration
-- Cloud Synchronization
-- Apple Watch
-- Siri
-- Shortcuts
-- Family Sharing
-- AI Rhythm Suggestions
+## Extension rules
 
-Each extension should integrate through the existing architecture rather than introducing new business pipelines.
+Every extension should:
+
+- Reuse the existing architecture
+- Respect dependency direction
+- Integrate through existing boundaries
+- Avoid duplicating business logic
+- Produce deterministic behavior
+
+Extensions contribute to the existing pipeline. They do not replace it.

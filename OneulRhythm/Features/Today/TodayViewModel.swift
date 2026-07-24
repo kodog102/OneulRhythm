@@ -6,6 +6,15 @@
 import Combine
 import Foundation
 
+/// Today screen presentation states defined by Today-UI-Specification.
+enum TodayScreenPresentation: Equatable {
+    case empty
+    case upcoming
+    case current
+    case pastIncomplete
+    case dayComplete
+}
+
 @MainActor
 final class TodayViewModel: ObservableObject {
     @Published private(set) var snapshot: TodayRhythmSnapshot
@@ -110,20 +119,55 @@ final class TodayViewModel: ObservableObject {
         return nowProvider().formatted(format)
     }
 
-    var progressMessage: String {
-        guard snapshot.totalCount > 0 else {
-            return "오늘의 첫 리듬을 만들어보세요."
+    /// Approved Product greeting contract from Today-UI-Specification.
+    var greetingText: String {
+        let hour = calendar.component(.hour, from: nowProvider())
+        switch hour {
+        case 5..<12:
+            return "좋은 아침이에요."
+        case 12..<18:
+            return "좋은 오후예요."
+        default:
+            return "편안한 저녁이에요."
         }
+    }
 
-        if snapshot.completedCount == 0 {
-            return "첫 리듬부터 천천히 시작해보세요."
+    /// Presentation mapping for Today screen states.
+    /// Derived only from existing snapshot facts — no schedule logic.
+    var screenPresentation: TodayScreenPresentation {
+        if snapshot.totalCount == 0 {
+            return .empty
         }
 
         if snapshot.isComplete {
-            return "오늘의 리듬을 모두 이어냈어요."
+            return .dayComplete
         }
 
-        return "오늘의 흐름이 차분하게 이어지고 있어요."
+        switch snapshot.primaryRole {
+        case .current:
+            return .current
+        case .pastIncomplete:
+            return .pastIncomplete
+        case .next:
+            return .upcoming
+        case nil:
+            return .empty
+        }
+    }
+
+    /// Progress is available whenever today has at least one rhythm.
+    var showsProgress: Bool {
+        snapshot.totalCount > 0
+    }
+
+    /// Completion is possible only for Current and Past Incomplete.
+    var showsCompletionButton: Bool {
+        switch primaryRole {
+        case .current, .pastIncomplete:
+            return true
+        case .next, nil:
+            return false
+        }
     }
 
     func loadRoutines() {
