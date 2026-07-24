@@ -202,6 +202,7 @@ NotificationScheduling.synchronize
 
 - Trigger-date calculation
 - Schedule Engine business rules
+- Deriving business state
 - NotificationMapper responsibilities
 - Apple framework interaction
 

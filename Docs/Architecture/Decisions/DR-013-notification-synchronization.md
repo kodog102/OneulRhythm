@@ -14,8 +14,6 @@ Desired state alone does not keep UserNotifications pending requests aligned. Wi
 
 Synchronization must remain free of trigger-date policy and Schedule Engine concerns.
 
-
-
 ---
 
 ## Decision
@@ -25,6 +23,8 @@ NotificationScheduling owns reconciliation between desired `NotificationPlan` an
 ### Ownership
 
 `NotificationSynchronization` owns minimal deterministic diff calculation.
+
+`NotificationSynchronization` compares desired notification state with pending notification state. It does not interpret business rules or derive business state.
 
 It produces only:
 
@@ -112,6 +112,3 @@ Coordinator and lifecycle integration are out of scope for T3.
 - DR-012 — Notification Plan Architecture
 - DR-001 — Project Principles
 - DR-006 — Live Activity Architecture
-
-
-NotificationSynchronization compares desired notification state with pending notification state. It does not interpret business rules.

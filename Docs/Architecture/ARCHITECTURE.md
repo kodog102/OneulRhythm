@@ -480,9 +480,9 @@ NotificationService
 
 `NotificationMapper` transforms domain rhythms into that plan using `NotificationTriggerPolicy` for trigger dates.
 
-`NotificationSynchronization` computes the minimal remove/schedule diff against pending requests.
+`NotificationSynchronization` computes the minimal remove/schedule diff against pending requests. It does not interpret business rules or derive business state.
 
-`NotificationScheduling.synchronize(with:)` applies that diff.
+`NotificationScheduling.synchronize(with:)` applies that diff. The plan is treated as the complete desired state.
 
 `NotificationService` remains the Apple UserNotifications boundary.
 

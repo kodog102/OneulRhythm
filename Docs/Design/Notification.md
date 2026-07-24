@@ -73,7 +73,7 @@ NotificationService
 
 `NotificationPlan` is desired state only.
 
-`NotificationSynchronization` compares desired state with pending requests.
+`NotificationSynchronization` compares desired state with pending requests. It does not interpret business rules or derive business state.
 
 `NotificationService` is the Apple boundary.
 
@@ -212,10 +212,13 @@ Ordering:
 
 `NotificationScheduling.synchronize(with:)` retrieves pending requests, computes the diff, and applies it.
 
+`synchronize(with:)` treats the plan as the complete desired state. Passing a partial plan can cancel unrelated pending notifications that are absent from that plan.
+
 Synchronization must not:
 
 - calculate trigger dates
 - contain business rules
+- derive business state
 - duplicate NotificationMapper responsibilities
 
 ---
