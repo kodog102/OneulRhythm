@@ -39,6 +39,7 @@ The Decision Records are intended to be read in numerical order because later de
 | DR-010 | Immediate Day Complete | Accepted |
 | DR-011 | Recurring Rhythm Foundation | Accepted |
 | DR-012 | Notification Plan Architecture | Accepted |
+| DR-013 | Notification Synchronization | Accepted |
 
 ---
 

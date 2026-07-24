@@ -8,8 +8,8 @@ import Foundation
 /// Desired notification state for a set of rhythms.
 ///
 /// Pure value model. Contains no Apple framework types, scheduling logic,
-/// or side effects. Synchronization and pending-request reconciliation are
-/// out of scope.
+/// or side effects. Pending-request reconciliation belongs to
+/// `NotificationSynchronization` / `NotificationScheduling`.
 struct NotificationPlan: Equatable {
     let items: [NotificationPlanItem]
 

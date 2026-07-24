@@ -50,8 +50,11 @@ Scheduling is **not** responsible for:
 - Managing ActivityKit lifecycle.
 - Creating notifications.
 - Building notification plans.
+- Reconciling pending notification requests.
 
 Those responsibilities belong to other architectural layers.
+
+Notification pending-request reconciliation is owned by `NotificationScheduling` / `NotificationSynchronization`, not by the Schedule Engine.
 
 ---
 

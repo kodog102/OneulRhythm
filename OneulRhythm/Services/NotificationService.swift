@@ -31,6 +31,11 @@ protocol NotificationScheduling {
     func cancel(identifier: String)
     func cancelAll()
     func pendingRequests() async -> [PendingNotificationRequest]
+    /// Reconciles pending requests with the desired `NotificationPlan`.
+    ///
+    /// Applies the minimal remove/schedule set produced by
+    /// `NotificationSynchronization`. Does not calculate trigger dates.
+    func synchronize(with plan: NotificationPlan) async throws
 }
 
 final class NotificationService: NotificationScheduling {
@@ -113,6 +118,28 @@ final class NotificationService: NotificationScheduling {
                 body: request.content.body.isEmpty ? nil : request.content.body,
                 triggerDate: triggerDate
             )
+        }
+    }
+
+    func synchronize(with plan: NotificationPlan) async throws {
+        let pending = await pendingRequests()
+        let changes = NotificationSynchronization.changes(
+            desired: plan,
+            pending: pending
+        )
+
+        for change in changes {
+            switch change {
+            case .remove(let identifier):
+                cancel(identifier: identifier)
+            case .schedule(let item):
+                try await schedule(
+                    identifier: item.identifier,
+                    title: item.title,
+                    body: item.body,
+                    at: item.triggerDate
+                )
+            }
         }
     }
 }

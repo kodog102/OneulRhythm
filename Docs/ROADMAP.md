@@ -368,9 +368,19 @@ Completed
 
 - One-time scheduling through NotificationPlan
 
-🚧 Next
+✅ T3 — Notification Synchronization
 
-- Schedule synchronization
+Completed
+
+- NotificationSynchronization minimal diff
+
+- NotificationScheduling.synchronize
+
+- Add / remove / update reconciliation
+
+🚧 Remaining Sprint work
+
+- App lifecycle / background invocation of synchronization (if approved later)
 
 **Status**
 

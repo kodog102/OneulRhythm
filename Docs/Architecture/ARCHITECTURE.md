@@ -467,7 +467,10 @@ NotificationMapper
 NotificationPlan
         │
         ▼
-NotificationScheduling
+NotificationSynchronization
+        │
+        ▼
+NotificationScheduling.synchronize
         │
         ▼
 NotificationService
@@ -477,11 +480,15 @@ NotificationService
 
 `NotificationMapper` transforms domain rhythms into that plan using `NotificationTriggerPolicy` for trigger dates.
 
+`NotificationSynchronization` computes the minimal remove/schedule diff against pending requests.
+
+`NotificationScheduling.synchronize(with:)` applies that diff.
+
 `NotificationService` remains the Apple UserNotifications boundary.
 
 Notification failures must never fail persistence.
 
-Schedule synchronization against pending requests is a later Sprint slice and is not part of the current Notification Plan layer.
+App lifecycle and background invocation of synchronization are out of scope for the current slice.
 
 ---
 

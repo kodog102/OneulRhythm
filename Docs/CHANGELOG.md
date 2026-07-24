@@ -8,6 +8,35 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 7 — Notification System (T3)
+
+Date
+
+2026-07-24
+
+## Added
+
+### Notification Synchronization
+
+- Introduced `NotificationSynchronization` as the pure minimal-diff reconciler between `NotificationPlan` and pending requests.
+- Extended `NotificationScheduling` with `synchronize(with:)` to apply remove/schedule operations.
+- Update semantics are expressed as remove + schedule for the same identifier.
+- Unit tests cover empty pending, already synchronized, trigger update, removal, addition, and mixed synchronization.
+
+## Notes
+
+`NotificationPlan` remains desired state only.
+
+`NotificationMapper` and `NotificationTriggerPolicy` responsibilities are unchanged.
+
+`NotificationService` remains the Apple UserNotifications boundary.
+
+One-time create continues to schedule plan items after save. App lifecycle / background sync invocation remain out of scope for T3.
+
+Recurring reminder scheduling remains persist-only.
+
+---
+
 # Sprint 7 — Notification System (T2)
 
 Date

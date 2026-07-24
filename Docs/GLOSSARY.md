@@ -169,8 +169,41 @@ Notification Scheduling
 
 - Persistence
 - Permission UX
-- Pending request reconciliation
+- Diff calculation (owned by Notification Synchronization)
 - UserNotifications delivery
+
+---
+
+## Notification Synchronization
+
+### Korean
+
+원하는 `NotificationPlan`과 현재 pending notification을 최소 변경으로 맞추는 순수 조정 로직.
+
+### English
+
+Pure reconciliation that computes the minimal remove/schedule operations required to align pending notification requests with a desired `NotificationPlan`.
+
+An update is expressed as remove + schedule for the same identifier.
+
+**Layer**
+
+Mapping / Scheduling boundary
+
+**Produced By**
+
+NotificationSynchronization.changes
+
+**Applied By**
+
+NotificationScheduling.synchronize
+
+**Not Responsible For**
+
+- Trigger-date calculation
+- Schedule Engine business rules
+- NotificationMapper responsibilities
+- Apple framework interaction
 
 ---
 

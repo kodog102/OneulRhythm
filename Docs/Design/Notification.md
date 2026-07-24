@@ -1,8 +1,8 @@
 # Notification
 
-Notification defines how OneulRhythm expresses desired reminder state for rhythms.
+Notification defines how OneulRhythm expresses desired reminder state for rhythms and reconciles that state with pending UserNotifications requests.
 
-It is a Mapping Layer concern. Desired state is produced as a pure `NotificationPlan` and delivered through `NotificationScheduling`.
+Desired state is produced as a pure `NotificationPlan`. Delivery and pending-request reconciliation are owned by `NotificationScheduling`.
 
 Schedule interpretation remains owned by the Schedule Engine. Apple delivery remains owned by `NotificationService`.
 
@@ -14,6 +14,7 @@ The Notification subsystem exists to:
 
 - Transform rhythms with reminders into desired notification state.
 - Keep trigger calculation centralized in `NotificationTriggerPolicy`.
+- Reconcile desired state with pending notification requests.
 - Isolate Apple UserNotifications behind `NotificationScheduling`.
 - Preserve persistence success when notification delivery fails.
 
@@ -26,7 +27,8 @@ Notification is responsible for:
 - Building a `NotificationPlan` from domain rhythms.
 - Creating `NotificationPlanItem` values with identifier, title, body, and trigger date.
 - Using `NotificationTriggerPolicy` for trigger-date calculation.
-- Scheduling plan items through `NotificationScheduling` after successful persistence.
+- Computing a minimal sync diff between desired plan and pending requests.
+- Applying add / remove / update operations through `NotificationScheduling`.
 - Keeping permission UX in Presentation.
 
 ---
@@ -37,12 +39,12 @@ Notification is **not** responsible for:
 
 - Schedule Engine resolution.
 - Producing `ResolvedSchedule`.
-- Pending request reconciliation.
-- Cancel / reschedule synchronization.
 - Background refresh.
+- App lifecycle integration.
 - Recurring reminder scheduling.
 - Widget, Watch, or Live Activity behavior.
 - Changing notification copy independently of the mapper.
+- Introducing a Notification Coordinator.
 
 Recurring reminders remain persist-only. No OS notification is scheduled for recurring create flows in the current slice.
 
@@ -60,13 +62,18 @@ NotificationMapper
 NotificationPlan
       │
       ▼
-NotificationScheduling
+NotificationSynchronization  (minimal diff)
+      │
+      ▼
+NotificationScheduling.synchronize
       │
       ▼
 NotificationService
 ```
 
 `NotificationPlan` is desired state only.
+
+`NotificationSynchronization` compares desired state with pending requests.
 
 `NotificationService` is the Apple boundary.
 
@@ -97,9 +104,29 @@ NotificationPlan
 NotificationScheduling.schedule (per item)
 ```
 
-Presentation does not own notification identifier, title, body, or trigger calculation after save.
+One-time create schedules the newly produced plan items after successful persistence.
+
+Full pending-request reconciliation is available through `NotificationScheduling.synchronize(with:)` when the caller owns the complete desired plan.
 
 Permission prompting remains in Presentation and is unchanged.
+
+## Synchronization
+
+```text
+Desired NotificationPlan
+      │
+      ▼
+pendingRequests()
+      │
+      ▼
+NotificationSynchronization.changes
+      │
+      ▼
+remove / schedule operations
+      │
+      ▼
+NotificationService
+```
 
 ---
 
@@ -154,6 +181,45 @@ Behavior:
 
 ---
 
+# Notification Synchronization
+
+Conceptual API:
+
+```text
+NotificationSynchronization.changes(
+    desired: NotificationPlan,
+    pending: [PendingNotificationRequest]
+) -> [NotificationSyncChange]
+```
+
+Operations:
+
+- `remove(identifier:)` when pending is absent from the plan, or must be replaced
+- `schedule(NotificationPlanItem)` when desired is missing or was replaced
+
+Update semantics:
+
+```text
+remove + schedule
+```
+
+for the same identifier when title, body, or triggerDate differs.
+
+Ordering:
+
+1. All removes, sorted by identifier
+2. All schedules, sorted by triggerDate then identifier
+
+`NotificationScheduling.synchronize(with:)` retrieves pending requests, computes the diff, and applies it.
+
+Synchronization must not:
+
+- calculate trigger dates
+- contain business rules
+- duplicate NotificationMapper responsibilities
+
+---
+
 # Domain Mapping
 
 `Routine.reminderMinutes` is part of the domain model.
@@ -166,9 +232,9 @@ Behavior:
 
 # Failure Isolation
 
-Notification scheduling failures must never fail rhythm persistence.
+Notification scheduling and synchronization failures must never fail rhythm persistence.
 
-Save succeeds first. Scheduling is best-effort afterward.
+Save succeeds first. Notification work is best-effort afterward.
 
 Permission denied leaves the saved rhythm intact and schedules nothing.
 
@@ -176,11 +242,9 @@ Permission denied leaves the saved rhythm intact and schedules nothing.
 
 # Design Notes
 
-Notification Plan prepares the architecture for later schedule synchronization without implementing synchronization in this slice.
+`NotificationPlan` remains the source of truth for desired notification state.
 
-The Mapping Layer owns desired notification state.
-
-The Apple boundary owns delivery.
+Pending requests are current Apple state, not desired state.
 
 The Schedule Engine remains free of notification logic.
 
@@ -188,6 +252,7 @@ The Schedule Engine remains free of notification logic.
 
 # Related Decisions
 
+- DR-013 — Notification Synchronization
 - DR-012 — Notification Plan Architecture
 - DR-001 — Project Principles
 - DR-002 — SwiftData Persistence

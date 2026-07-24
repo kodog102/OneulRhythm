@@ -304,7 +304,7 @@ Current product work:
 
 Sprint 7
 
-- Schedule Synchronization
+- Notification Synchronization available; lifecycle invocation remains open if needed
 
 Planned capabilities include:
 
