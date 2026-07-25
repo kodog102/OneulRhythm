@@ -390,6 +390,16 @@ private final class SpyRecurringRhythmRepository: RecurringRhythmRepository {
         return active
     }
 
+    func update(
+        id: UUID,
+        title: String,
+        category: RoutineCategory,
+        startMinutes: Int,
+        durationMinutes: Int,
+        recurrence: RecurrenceRule,
+        reminderMinutes: Int?
+    ) throws {}
+
     func deactivate(id: UUID) throws {}
 }
 
@@ -419,8 +429,11 @@ private final class SpyRoutineRepository: RoutineRepository {
         }
     }
 
+    func update(_ input: RoutineCreationInput) throws {}
+    func clearRecurrenceMetadata(id: UUID) throws {}
     func updateStatus(id: UUID, status: RoutineStatus) throws {}
     func delete(_ routine: RoutineEntity) throws {}
+    func delete(id: UUID) throws {}
 
     func hasOccurrence(
         recurringRhythmID: UUID,

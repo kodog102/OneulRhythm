@@ -18,5 +18,14 @@ enum RecurringRhythmRepositoryError: Error {
 protocol RecurringRhythmRepository {
     func insert(_ definition: RecurringRhythmEntity) throws
     func fetchActive() throws -> [RecurringRhythmEntity]
+    func update(
+        id: UUID,
+        title: String,
+        category: RoutineCategory,
+        startMinutes: Int,
+        durationMinutes: Int,
+        recurrence: RecurrenceRule,
+        reminderMinutes: Int?
+    ) throws
     func deactivate(id: UUID) throws
 }

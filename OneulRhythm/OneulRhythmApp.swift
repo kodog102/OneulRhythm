@@ -61,7 +61,10 @@ struct OneulRhythmApp: App {
         WindowGroup {
             TodayView(
                 repository: makeRoutineRepository(),
+                recurringRhythmRepository: makeRecurringRhythmRepository(),
                 onSaveRoutine: saveRoutine,
+                onUpdateRoutine: updateRoutine,
+                onDeleteRoutine: deleteRoutine,
                 onAppBecomeActive: syncDailyRhythms
             )
             .environmentObject(launchState)
@@ -102,6 +105,157 @@ struct OneulRhythmApp: App {
         }
     }
 
+    private func updateRoutine(_ input: RoutineCreationInput) throws {
+        let repository = makeRoutineRepository()
+        let recurringRepository = makeRecurringRhythmRepository()
+        let entities = try repository.fetchRoutines()
+        let activeDefinitions = try recurringRepository.fetchActive()
+        let hasActiveDefinition = activeDefinitions.contains { $0.id == input.id }
+
+        if let recurrence = input.recurrence {
+            if hasActiveDefinition {
+                try updateRecurringRhythm(
+                    id: input.id,
+                    input: input,
+                    recurrence: recurrence
+                )
+                try refreshOccurrences(
+                    forDefinitionID: input.id,
+                    input: input,
+                    entities: entities,
+                    repository: repository
+                )
+                return
+            }
+
+            guard let entity = entities.first(where: { $0.id == input.id }) else {
+                throw RoutineRepositoryError.routineNotFound
+            }
+            let existing = entity.toDomain()
+
+            if let definitionID = existing.recurringRhythmID {
+                try updateRecurringRhythm(
+                    id: definitionID,
+                    input: input,
+                    recurrence: recurrence
+                )
+                try repository.update(input)
+                try refreshOccurrences(
+                    forDefinitionID: definitionID,
+                    input: input,
+                    entities: entities.filter { $0.id != input.id },
+                    repository: repository
+                )
+            } else {
+                try repository.delete(id: input.id)
+                try saveRecurringRhythm(input, recurrence: recurrence)
+                syncDailyRhythms()
+            }
+            return
+        }
+
+        if hasActiveDefinition {
+            let related = entities.filter { $0.recurringRhythmID == input.id }
+            for relatedEntity in related {
+                try repository.delete(relatedEntity)
+            }
+            try recurringRepository.deactivate(id: input.id)
+            try repository.insert(input)
+            return
+        }
+
+        guard let entity = entities.first(where: { $0.id == input.id }) else {
+            throw RoutineRepositoryError.routineNotFound
+        }
+        let existing = entity.toDomain()
+
+        if let definitionID = existing.recurringRhythmID {
+            try recurringRepository.deactivate(id: definitionID)
+            let related = entities.filter {
+                $0.recurringRhythmID == definitionID && $0.id != input.id
+            }
+            for relatedEntity in related {
+                try repository.delete(relatedEntity)
+            }
+            try repository.clearRecurrenceMetadata(id: input.id)
+            try repository.update(input)
+        } else {
+            try repository.update(input)
+        }
+    }
+
+    /// Deletes by Management identity: one-time routine id, or recurring definition id.
+    private func deleteRoutine(id: UUID) throws {
+        let repository = makeRoutineRepository()
+        let recurringRepository = makeRecurringRhythmRepository()
+        let entities = try repository.fetchRoutines()
+
+        if let entity = entities.first(where: { $0.id == id }) {
+            if let recurringRhythmID = entity.recurringRhythmID {
+                try RecurringDefinitionDeletion.apply(
+                    definitionID: recurringRhythmID,
+                    entities: entities,
+                    now: Date(),
+                    dayPolicy: dayPolicy,
+                    repository: repository,
+                    recurringRepository: recurringRepository
+                )
+            } else {
+                try repository.delete(entity)
+            }
+            return
+        }
+
+        try RecurringDefinitionDeletion.apply(
+            definitionID: id,
+            entities: entities,
+            now: Date(),
+            dayPolicy: dayPolicy,
+            repository: repository,
+            recurringRepository: recurringRepository
+        )
+    }
+
+    private func refreshOccurrences(
+        forDefinitionID definitionID: UUID,
+        input: RoutineCreationInput,
+        entities: [RoutineEntity],
+        repository: RoutineRepository
+    ) throws {
+        let related = entities.filter { $0.recurringRhythmID == definitionID }
+        for entity in related {
+            guard let occurrenceDate = entity.occurrenceDate else { continue }
+            let startTime = date(on: occurrenceDate, copyingTimeFrom: input.startTime)
+            let endTime = input.endTime.map {
+                date(on: occurrenceDate, copyingTimeFrom: $0)
+            }
+            try repository.update(
+                RoutineCreationInput(
+                    id: entity.id,
+                    title: input.title,
+                    startTime: startTime,
+                    endTime: endTime,
+                    category: input.category,
+                    reminderMinutes: input.reminderMinutes
+                )
+            )
+        }
+    }
+
+    private func date(on day: Date, copyingTimeFrom source: Date) -> Date {
+        let calendar = dayPolicy.calendar
+        let dayStart = dayPolicy.day(for: day)
+        let hour = calendar.component(.hour, from: source)
+        let minute = calendar.component(.minute, from: source)
+        let second = calendar.component(.second, from: source)
+        return calendar.date(
+            bySettingHour: hour,
+            minute: minute,
+            second: second,
+            of: dayStart
+        ) ?? dayStart
+    }
+
     private func saveRecurringRhythm(
         _ input: RoutineCreationInput,
         recurrence: RecurrenceRule
@@ -124,6 +278,27 @@ struct OneulRhythmApp: App {
         )
 
         try makeRecurringRhythmRepository().insert(definition)
+    }
+
+    private func updateRecurringRhythm(
+        id: UUID,
+        input: RoutineCreationInput,
+        recurrence: RecurrenceRule
+    ) throws {
+        let calendar = dayPolicy.calendar
+        let startMinutes =
+            calendar.component(.hour, from: input.startTime) * 60
+            + calendar.component(.minute, from: input.startTime)
+
+        try makeRecurringRhythmRepository().update(
+            id: id,
+            title: input.title,
+            category: input.category,
+            startMinutes: startMinutes,
+            durationMinutes: durationMinutes(for: input),
+            recurrence: recurrence,
+            reminderMinutes: input.reminderMinutes
+        )
     }
 
     private func durationMinutes(for input: RoutineCreationInput) -> Int {

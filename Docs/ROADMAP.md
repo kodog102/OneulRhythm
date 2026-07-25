@@ -12,33 +12,43 @@ The application should minimize management and maximize presence throughout the 
 
 ## Current Phase
 
-Feature Development — Product UI First
+Product UI First — UI/UX Refinement
 
 ## Current Sprint
 
-Sprint 9 — Routine Management
+Sprint 11 — UX Polish
 
 ## Status
 
-📅 Ready
+📅 Ready — Sprint 9 complete (9-1, 9-2); next focus is in-app UI/UX refinement
 
 ## Current Goal
 
-Strengthen in-app rhythm creation and management so daily use feels complete.
+Raise overall in-app UX quality to MVP before new feature work and platform expansion.
 
 ## Current Priority
 
-Product UI First.
+UI/UX refinement over new feature development.
 
-Sprint 8 completed the Today Product Experience.
+Immediate polish focus:
+
+- Today experience polish
+- Management UX polish
+- Design System refinement
+- Micro interactions
+- Visual hierarchy
+- Animation
+- Accessibility improvements
+
+Sprint 9 completed Routine Management (MVP + definition-based model alignment).
 
 Notification Foundation remains complete and stable.
 
-Until the in-app experience reaches MVP quality, development prioritizes Product UI over Widgets, Apple Watch, and other platform integrations.
+Until the in-app experience reaches MVP quality, development prioritizes Product UI polish over Settings expansion, Widgets, Apple Watch, and other platform integrations.
 
 ## Next Sprint
 
-Sprint 10 — Settings & Preferences
+Sprint 10 — Settings & Preferences (after UI/UX refinement)
 
 ---
 
@@ -417,8 +427,6 @@ Elevate the in-app Today experience toward MVP quality.
 
 ---
 
-# Planned
-
 ## Sprint 9 — Routine Management
 
 ### Goal
@@ -429,11 +437,18 @@ Strengthen in-app rhythm creation and management so daily use feels complete.
 
 Improve the management flows that support Today, without redesigning persistence or Schedule Engine ownership.
 
+### Completed
+
+- Sprint 9-1 — Routine Management MVP: Management screen, Create/Edit/Delete, Today secondary navigation
+- Sprint 9-2 — Management Model Alignment: definition-based Management list, today/future one-time visibility, recurring deletion policy with historical preservation, Today / Live Activity regression verification
+
 **Status**
 
-📅 Ready
+✅ Completed
 
 ---
+
+# Planned
 
 ## Sprint 10 — Settings & Preferences
 
@@ -445,6 +460,8 @@ Provide the preferences users need to support a calm in-app experience.
 
 Add settings that serve Product UI quality. Avoid expanding into platform integrations prematurely.
 
+Settings remains planned after in-app UI/UX refinement advances MVP quality.
+
 **Status**
 
 📅 Planned
@@ -455,15 +472,25 @@ Add settings that serve Product UI quality. Avoid expanding into platform integr
 
 ### Goal
 
-Raise overall in-app UX quality to MVP before platform expansion.
+Raise overall in-app UX quality to MVP before new feature work and platform expansion.
 
 ### Intent
 
 Polish interaction, clarity, and calm presentation across the Product UI surfaces already in scope.
 
+Focus areas:
+
+- Today experience polish
+- Management UX polish
+- Design System refinement
+- Micro interactions
+- Visual hierarchy
+- Animation
+- Accessibility improvements
+
 **Status**
 
-📅 Planned
+📅 Ready — Next
 
 ---
 

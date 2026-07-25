@@ -6,6 +6,11 @@
 import SwiftUI
 import UIKit
 
+enum RoutineFormMode: Equatable {
+    case create
+    case edit(routineID: UUID, originalStartTime: Date)
+}
+
 struct AddRoutineView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
@@ -24,6 +29,7 @@ struct AddRoutineView: View {
     @State private var isShowingNotificationSettingsPrompt = false
     @State private var isResolvingReminderPermission = false
 
+    private let mode: RoutineFormMode
     private let onSave: (RoutineCreationInput) throws -> Void
     private let notificationScheduler: NotificationScheduling
     private let nowProvider: () -> Date
@@ -45,6 +51,7 @@ struct AddRoutineView: View {
     private let reminderOptions = [5, 10, 15, 30]
 
     init(
+        mode: RoutineFormMode = .create,
         title: String = "",
         startTime: Date = Date(),
         hasEndTime: Bool = false,
@@ -58,6 +65,7 @@ struct AddRoutineView: View {
         nowProvider: @escaping () -> Date = Date.init,
         calendar: Calendar = .current
     ) {
+        self.mode = mode
         _title = State(initialValue: title)
         _startTime = State(initialValue: startTime)
         _hasEndTime = State(initialValue: hasEndTime)
@@ -87,7 +95,7 @@ struct AddRoutineView: View {
             .padding(.bottom, ORSpacing.scrollBottom)
         }
         .background(ORColors.background.ignoresSafeArea())
-        .navigationTitle("리듬 추가")
+        .navigationTitle(navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .tint(ORColors.primary)
         .environment(\.locale, Locale(identifier: "ko_KR"))
@@ -126,7 +134,7 @@ struct AddRoutineView: View {
             .accessibilityHint("같은 시간으로 내일의 리듬을 만듭니다")
 
             Button("오늘로 등록") {
-                saveRoutine(for: .today)
+                saveRoutine(for: .sameDay)
             }
             .accessibilityLabel("오늘로 등록")
             .accessibilityHint("오늘 지나간 리듬으로 등록합니다")
@@ -273,7 +281,7 @@ struct AddRoutineView: View {
                         .tint(.white)
                         .accessibilityLabel("저장 중")
                 } else {
-                    Text("리듬 저장하기")
+                    Text(saveButtonTitle)
                         .orTypography(.body, weight: .semibold)
                         .foregroundStyle(.white)
                 }
@@ -346,6 +354,24 @@ struct AddRoutineView: View {
         .buttonStyle(.plain)
     }
 
+    private var navigationTitle: String {
+        switch mode {
+        case .create:
+            return "리듬 추가"
+        case .edit:
+            return "리듬 편집"
+        }
+    }
+
+    private var saveButtonTitle: String {
+        switch mode {
+        case .create:
+            return "리듬 저장하기"
+        case .edit:
+            return "변경 저장하기"
+        }
+    }
+
     private var isTitleEmpty: Bool {
         title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
@@ -361,12 +387,13 @@ struct AddRoutineView: View {
         guard !trimmedTitle.isEmpty else { return }
 
         // Recurring rhythms skip the Today/Tomorrow dialog; they start from today.
-        if selectedRecurrence == nil, isSelectedStartTimeInPastToday() {
+        // Edit keeps the original calendar day unless the user chooses tomorrow.
+        if selectedRecurrence == nil, isSelectedStartTimeInPastOnTargetDay() {
             isShowingPastTimeConfirmation = true
             return
         }
 
-        saveRoutine(for: .today)
+        saveRoutine(for: .sameDay)
     }
 
     @MainActor
@@ -411,12 +438,13 @@ struct AddRoutineView: View {
         guard !trimmedTitle.isEmpty else { return }
 
         let now = nowProvider()
+        let baselineDay = targetBaselineDay(now: now)
         let targetDay: Date
         switch dayChoice {
-        case .today:
-            targetDay = now
+        case .sameDay:
+            targetDay = baselineDay
         case .tomorrow:
-            guard let tomorrow = calendar.date(byAdding: .day, value: 1, to: now) else {
+            guard let tomorrow = calendar.date(byAdding: .day, value: 1, to: baselineDay) else {
                 isShowingSaveError = true
                 return
             }
@@ -428,7 +456,16 @@ struct AddRoutineView: View {
             ? date(on: targetDay, copyingTimeFrom: endTime)
             : nil
 
+        let inputID: UUID
+        switch mode {
+        case .create:
+            inputID = UUID()
+        case .edit(let routineID, _):
+            inputID = routineID
+        }
+
         let input = RoutineCreationInput(
+            id: inputID,
             title: trimmedTitle,
             startTime: resolvedStart,
             endTime: resolvedEnd,
@@ -465,6 +502,15 @@ struct AddRoutineView: View {
         }
     }
 
+    private func targetBaselineDay(now: Date) -> Date {
+        switch mode {
+        case .create:
+            return now
+        case .edit(_, let originalStartTime):
+            return originalStartTime
+        }
+    }
+
     @MainActor
     private func scheduleReminderIfNeeded(for routine: Routine) async {
         let plan = NotificationMapper.makePlan(
@@ -492,10 +538,11 @@ struct AddRoutineView: View {
         }
     }
 
-    private func isSelectedStartTimeInPastToday() -> Bool {
+    private func isSelectedStartTimeInPastOnTargetDay() -> Bool {
         let now = nowProvider()
-        let todayStart = date(on: now, copyingTimeFrom: startTime)
-        return todayStart < now
+        let baselineDay = targetBaselineDay(now: now)
+        let resolvedStart = date(on: baselineDay, copyingTimeFrom: startTime)
+        return resolvedStart < now
     }
 
     private func date(on day: Date, copyingTimeFrom source: Date) -> Date {
@@ -514,7 +561,7 @@ struct AddRoutineView: View {
 }
 
 private enum PastTimeDayChoice {
-    case today
+    case sameDay
     case tomorrow
 }
 

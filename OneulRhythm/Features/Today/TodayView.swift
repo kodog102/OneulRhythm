@@ -10,14 +10,22 @@ struct TodayView: View {
     @EnvironmentObject private var launchState: AppLaunchState
     @StateObject private var viewModel: TodayViewModel
     @State private var isCreateRhythmPresented = false
+    @State private var isManageRhythmsPresented = false
 
+    private let repository: RoutineRepository
+    private let recurringRhythmRepository: RecurringRhythmRepository
     private let onSaveRoutine: (RoutineCreationInput) throws -> Void
+    private let onUpdateRoutine: (RoutineCreationInput) throws -> Void
+    private let onDeleteRoutine: (UUID) throws -> Void
     private let onAppBecomeActive: () -> Void
     private let nowProvider: () -> Date
 
     init(
         repository: RoutineRepository,
+        recurringRhythmRepository: RecurringRhythmRepository,
         onSaveRoutine: @escaping (RoutineCreationInput) throws -> Void = { _ in },
+        onUpdateRoutine: @escaping (RoutineCreationInput) throws -> Void = { _ in },
+        onDeleteRoutine: @escaping (UUID) throws -> Void = { _ in },
         onAppBecomeActive: @escaping () -> Void = {},
         liveActivityCoordinator: LiveActivityCoordinating? = nil,
         nowProvider: @escaping () -> Date = Date.init
@@ -29,7 +37,11 @@ struct TodayView: View {
                 nowProvider: nowProvider
             )
         )
+        self.repository = repository
+        self.recurringRhythmRepository = recurringRhythmRepository
         self.onSaveRoutine = onSaveRoutine
+        self.onUpdateRoutine = onUpdateRoutine
+        self.onDeleteRoutine = onDeleteRoutine
         self.onAppBecomeActive = onAppBecomeActive
         self.nowProvider = nowProvider
     }
@@ -62,10 +74,37 @@ struct TodayView: View {
             }
             .safeAreaPadding(.top, ORSpacing.screenTop)
             .background(ORColors.background.ignoresSafeArea())
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isManageRhythmsPresented = true
+                    } label: {
+                        Text("관리")
+                            .orTypography(.caption, weight: .medium)
+                            .foregroundStyle(ORColors.textSecondary)
+                    }
+                    .accessibilityLabel("리듬 관리")
+                    .accessibilityHint("리듬을 추가하거나 편집합니다")
+                }
+            }
             .navigationDestination(isPresented: $isCreateRhythmPresented) {
                 AddRoutineView(
+                    mode: .create,
                     onSave: { input in
                         try onSaveRoutine(input)
+                        viewModel.loadRoutines()
+                    },
+                    nowProvider: nowProvider
+                )
+            }
+            .navigationDestination(isPresented: $isManageRhythmsPresented) {
+                RoutineManagementView(
+                    repository: repository,
+                    recurringRhythmRepository: recurringRhythmRepository,
+                    onSaveRoutine: onSaveRoutine,
+                    onUpdateRoutine: onUpdateRoutine,
+                    onDeleteRoutine: onDeleteRoutine,
+                    onRoutinesChanged: {
                         viewModel.loadRoutines()
                     },
                     nowProvider: nowProvider
@@ -286,6 +325,7 @@ struct TodayView: View {
 #Preview("Empty") {
     TodayView(
         repository: PreviewRoutineRepository(),
+        recurringRhythmRepository: PreviewRecurringRhythmRepository(),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.morningNow }
     )
@@ -297,6 +337,7 @@ struct TodayView: View {
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.upcomingEntities()
         ),
+        recurringRhythmRepository: PreviewRecurringRhythmRepository(),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.earlyMorningNow }
     )
@@ -308,6 +349,7 @@ struct TodayView: View {
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.currentWithNextEntities()
         ),
+        recurringRhythmRepository: PreviewRecurringRhythmRepository(),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
@@ -319,6 +361,7 @@ struct TodayView: View {
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.pastIncompleteOnlyEntities()
         ),
+        recurringRhythmRepository: PreviewRecurringRhythmRepository(),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
@@ -330,6 +373,7 @@ struct TodayView: View {
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.completedEntities()
         ),
+        recurringRhythmRepository: PreviewRecurringRhythmRepository(),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
@@ -341,6 +385,7 @@ struct TodayView: View {
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.currentOverdueNextEntities()
         ),
+        recurringRhythmRepository: PreviewRecurringRhythmRepository(),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
@@ -352,6 +397,7 @@ struct TodayView: View {
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.multiplePastIncompleteEntities()
         ),
+        recurringRhythmRepository: PreviewRecurringRhythmRepository(),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
@@ -363,6 +409,7 @@ struct TodayView: View {
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.pastIncompleteOnlyEntities()
         ),
+        recurringRhythmRepository: PreviewRecurringRhythmRepository(),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
@@ -372,6 +419,7 @@ struct TodayView: View {
 #Preview("Afternoon Greeting") {
     TodayView(
         repository: PreviewRoutineRepository(),
+        recurringRhythmRepository: PreviewRecurringRhythmRepository(),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.afternoonNow }
     )
@@ -383,6 +431,7 @@ struct TodayView: View {
         repository: PreviewRoutineRepository(
             entities: TodayPreviewData.completedEntities()
         ),
+        recurringRhythmRepository: PreviewRecurringRhythmRepository(),
         liveActivityCoordinator: PreviewLiveActivityCoordinator(),
         nowProvider: { TodayPreviewData.eveningNow }
     )
@@ -407,6 +456,10 @@ private final class PreviewRoutineRepository: RoutineRepository {
         entities.append(routine)
     }
 
+    func update(_ input: RoutineCreationInput) throws {}
+
+    func clearRecurrenceMetadata(id: UUID) throws {}
+
     func updateStatus(id: UUID, status: RoutineStatus) throws {
         guard let index = entities.firstIndex(where: { $0.id == id }) else {
             throw RoutineRepositoryError.routineNotFound
@@ -420,6 +473,10 @@ private final class PreviewRoutineRepository: RoutineRepository {
         entities.removeAll { $0.id == routine.id }
     }
 
+    func delete(id: UUID) throws {
+        entities.removeAll { $0.id == id }
+    }
+
     func hasOccurrence(
         recurringRhythmID: UUID,
         occurrenceDate: Date
@@ -429,6 +486,22 @@ private final class PreviewRoutineRepository: RoutineRepository {
                 && $0.occurrenceDate == occurrenceDate
         }
     }
+}
+
+@MainActor
+private final class PreviewRecurringRhythmRepository: RecurringRhythmRepository {
+    func insert(_ definition: RecurringRhythmEntity) throws {}
+    func fetchActive() throws -> [RecurringRhythmEntity] { [] }
+    func update(
+        id: UUID,
+        title: String,
+        category: RoutineCategory,
+        startMinutes: Int,
+        durationMinutes: Int,
+        recurrence: RecurrenceRule,
+        reminderMinutes: Int?
+    ) throws {}
+    func deactivate(id: UUID) throws {}
 }
 
 /// Keeps previews deterministic and side-effect free.

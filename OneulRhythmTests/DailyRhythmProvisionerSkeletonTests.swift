@@ -54,6 +54,15 @@ final class DailyRhythmProvisionerSkeletonTests: XCTestCase {
 private final class SkeletonRecurringRhythmRepository: RecurringRhythmRepository {
     func insert(_ definition: RecurringRhythmEntity) throws {}
     func fetchActive() throws -> [RecurringRhythmEntity] { [] }
+    func update(
+        id: UUID,
+        title: String,
+        category: RoutineCategory,
+        startMinutes: Int,
+        durationMinutes: Int,
+        recurrence: RecurrenceRule,
+        reminderMinutes: Int?
+    ) throws {}
     func deactivate(id: UUID) throws {}
 }
 
@@ -62,7 +71,10 @@ private final class SkeletonRoutineRepository: RoutineRepository {
     func fetchRoutines() throws -> [RoutineEntity] { [] }
     func insert(_ input: RoutineCreationInput) throws {}
     func insert(_ routine: RoutineEntity) throws {}
+    func update(_ input: RoutineCreationInput) throws {}
+    func clearRecurrenceMetadata(id: UUID) throws {}
     func updateStatus(id: UUID, status: RoutineStatus) throws {}
     func delete(_ routine: RoutineEntity) throws {}
+    func delete(id: UUID) throws {}
     func hasOccurrence(recurringRhythmID: UUID, occurrenceDate: Date) throws -> Bool { false }
 }

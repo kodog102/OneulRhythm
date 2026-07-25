@@ -8,6 +8,71 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 9-2 — Management Model Alignment
+
+**Date:** 2026-07-25
+
+## Changed
+
+### Definition-Based Management
+
+- Routine Management now lists configured rhythms, not historical occurrence rows.
+- Recurring rhythms appear once per active recurring definition (`RecurringRhythm.id`).
+- One-time rhythms appear only when their calendar day is today or later (`Routine.id`).
+- Historical recurring occurrences remain persisted but are excluded from Management.
+- Past one-time routines remain persisted but are excluded from Management.
+- Deactivated recurring definitions are excluded from Management (`fetchActive()`).
+
+### Recurring Deletion Policy
+
+- Recurring Management delete deactivates the definition.
+- Past occurrences are preserved (completed and incomplete).
+- Today completed occurrences are preserved.
+- Today incomplete and future occurrences are removed.
+- One-time delete still removes only that routine row.
+- Inactive definitions no longer generate new occurrences through daily provisioning.
+
+## Notes
+
+Today, Schedule Engine, Snapshot, and Live Activity architecture remain unchanged.
+
+Regression and final state verification confirmed that deleted today-incomplete rhythms leave Today / Live Activity correctly, and that preserved historical occurrences do not re-enter the current day experience.
+
+### Verification
+
+- Architecture Review: PASS
+- Implementation Review: PASS
+- QA Review: PASS
+- Regression Review: PASS
+- Manual UI QA: PASS
+- Final State Verification: PASS WITH NOTES (resolved by this Documentation Pass)
+- Full Test Suite: 143 tests, 0 failures
+- Build: SUCCEEDED
+
+---
+
+# Sprint 9-1 — Routine Management MVP
+
+**Date:** 2026-07-25
+
+## Added
+
+### Routine Management
+
+- Added a dedicated Routine Management screen as the home of Routine CRUD.
+- Added secondary Today navigation (`관리`) that opens Management without changing Today's single-focus layout.
+- Restored ongoing Create from Management while preserving Empty-only Today onboarding.
+- Implemented Edit by reusing `AddRoutineView` in create/edit mode (no `EditRoutineView`).
+- Implemented Delete with swipe confirmation, repository deletion, and Today/Management refresh.
+
+## Notes
+
+Schedule Engine, Snapshot ownership, and Live Activity architecture remain unchanged.
+
+Repository gained field `update` / `delete(id:)` helpers and recurring definition `update` to support Management persistence without redesigning the Repository boundary.
+
+---
+
 # Sprint 8 — Today Product Experience
 
 **Date:** 2026-07-24

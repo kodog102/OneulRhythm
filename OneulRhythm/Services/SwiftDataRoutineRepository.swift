@@ -47,6 +47,41 @@ final class SwiftDataRoutineRepository: RoutineRepository {
         try modelContext.save()
     }
 
+    func update(_ input: RoutineCreationInput) throws {
+        let targetID = input.id
+        let descriptor = FetchDescriptor<RoutineEntity>(
+            predicate: #Predicate { $0.id == targetID }
+        )
+
+        guard let routine = try modelContext.fetch(descriptor).first else {
+            throw RoutineRepositoryError.routineNotFound
+        }
+
+        routine.title = input.title
+        routine.startTime = input.startTime
+        routine.endTime = input.endTime
+        routine.categoryRawValue = input.category.rawValue
+        routine.reminderMinutes = input.reminderMinutes
+        routine.updatedAt = Date()
+        try modelContext.save()
+    }
+
+    func clearRecurrenceMetadata(id: UUID) throws {
+        let targetID = id
+        let descriptor = FetchDescriptor<RoutineEntity>(
+            predicate: #Predicate { $0.id == targetID }
+        )
+
+        guard let routine = try modelContext.fetch(descriptor).first else {
+            throw RoutineRepositoryError.routineNotFound
+        }
+
+        routine.recurringRhythmID = nil
+        routine.occurrenceDate = nil
+        routine.updatedAt = Date()
+        try modelContext.save()
+    }
+
     func updateStatus(id: UUID, status: RoutineStatus) throws {
         let descriptor = FetchDescriptor<RoutineEntity>(
             predicate: #Predicate { $0.id == id }
@@ -64,6 +99,19 @@ final class SwiftDataRoutineRepository: RoutineRepository {
     func delete(_ routine: RoutineEntity) throws {
         modelContext.delete(routine)
         try modelContext.save()
+    }
+
+    func delete(id: UUID) throws {
+        let targetID = id
+        let descriptor = FetchDescriptor<RoutineEntity>(
+            predicate: #Predicate { $0.id == targetID }
+        )
+
+        guard let routine = try modelContext.fetch(descriptor).first else {
+            throw RoutineRepositoryError.routineNotFound
+        }
+
+        try delete(routine)
     }
 
     func hasOccurrence(
