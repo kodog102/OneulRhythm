@@ -172,12 +172,13 @@ Planning
 
 Start here: `Docs/README.md`
 
-- `Docs/Product/` — product decisions and UX contracts
-- `Docs/Architecture/` — system structure and decisions
+- `Docs/Product/` — Product Principles and UX contracts
+- `Docs/Architecture/` — Architecture and Architecture Decisions
 - `Docs/Design/` — subsystem implementation contracts
 - `Docs/Development/` — official Sprint workflow
+- `Docs/AI_Collaboration_Playbook_v2.2.md` — AI Collaboration Playbook
 - `Docs/GLOSSARY.md` — shared terminology
-- `Docs/ROADMAP.md` / `Docs/CHANGELOG.md` — product progress
+- `Docs/ROADMAP.md` / `Docs/CHANGELOG.md` — Roadmap and product progress
 
 ---
 

@@ -13,6 +13,7 @@ Related documents:
 - `PROMPT_LIBRARY.md`
 - `SPRINT_CHECKLIST.md`
 - `Docs/AI/AGENTS.md`
+- `Docs/AI_Collaboration_Playbook_v2.2.md`
 
 ---
 
@@ -57,6 +58,11 @@ Before implementation begins, review the required project documentation.
 
 Mandatory project documents:
 
+- `Docs/Product/PRODUCT-PRINCIPLES.md`
+- `Docs/Architecture/ARCHITECTURE.md`
+- `Docs/AI_Collaboration_Playbook_v2.2.md`
+- Relevant Architecture Decision(s) under `Docs/Architecture/Decisions/`
+- `Docs/ROADMAP.md` (when applicable)
 - `Docs/Engineering/ENGINEERING_CHARTER.md`
 - `DEVELOPMENT_WORKFLOW.md`
 - `CURSOR_GUIDELINES.md`
@@ -65,9 +71,7 @@ Then review Sprint-specific documentation as needed.
 
 Examples include:
 
-- Architecture Decisions
 - Design documents
-- Roadmap
 - Changelog
 - Feature documentation
 - Existing implementation

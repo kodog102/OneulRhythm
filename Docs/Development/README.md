@@ -31,15 +31,20 @@ Related authoritative documents outside this folder:
 
 - `Docs/Engineering/ENGINEERING_CHARTER.md` — engineering principles
 - `Docs/AI/AGENTS.md` — product and architecture rules for AI agents
+- `Docs/AI_Collaboration_Playbook_v2.2.md` — AI collaboration standard
 
 ### AI implementation reading order
 
 1. `Docs/AI/AGENTS.md`
-2. `DEVELOPMENT_WORKFLOW.md`
-3. `CURSOR_GUIDELINES.md`
-4. `Docs/Engineering/ENGINEERING_CHARTER.md`
-5. Sprint-specific Product and/or Design documents
-6. `Docs/ROADMAP.md` (priority only)
+2. `Docs/AI_Collaboration_Playbook_v2.2.md`
+3. `Docs/Product/PRODUCT-PRINCIPLES.md`
+4. `Docs/Architecture/ARCHITECTURE.md`
+5. Relevant Architecture Decision(s) under `Docs/Architecture/Decisions/`
+6. `DEVELOPMENT_WORKFLOW.md`
+7. `CURSOR_GUIDELINES.md`
+8. `Docs/Engineering/ENGINEERING_CHARTER.md`
+9. Sprint-specific Product and/or Design documents
+10. `Docs/ROADMAP.md` (when applicable)
 
 ## What this hub does NOT contain
 

@@ -41,11 +41,14 @@ Order documents by priority.
 
 Typical order:
 
+- Product Principles
+- Architecture
+- AI Collaboration Playbook
+- Relevant Architecture Decision(s)
+- Roadmap (when applicable)
 - Product Experience
 - Product Design
 - UI Specification
-- Decision Records
-- Architecture
 - Development Rules
 
 Never implement before reviewing these documents.

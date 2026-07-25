@@ -22,6 +22,7 @@ struct OneulRhythmApp: App {
     private let dailyRhythmSyncCoordinator: DailyRhythmSyncCoordinator
     private let initialDailyRhythmSyncGate = InitialDailyRhythmSyncGate()
     @StateObject private var launchState = AppLaunchState()
+    @StateObject private var firstRhythmJourneyProgress = FirstRhythmJourneyProgress()
 
     init() {
         let schema = Schema([
@@ -68,6 +69,7 @@ struct OneulRhythmApp: App {
                 onAppBecomeActive: syncDailyRhythms
             )
             .environmentObject(launchState)
+            .environmentObject(firstRhythmJourneyProgress)
             .task {
                 performInitialDailyRhythmSyncIfNeeded()
             }
@@ -81,7 +83,25 @@ struct OneulRhythmApp: App {
             launchState.completeInitialRhythmSync()
         }
 
+        bootstrapFirstRhythmJourneyIfNeeded()
         syncDailyRhythms()
+    }
+
+    /// DR-015 upgrade compatibility: complete journey for existing creators
+    /// who already have persisted rhythms but no journey preference yet.
+    /// Read failure preserves current state and never blocks launch.
+    private func bootstrapFirstRhythmJourneyIfNeeded() {
+        do {
+            try FirstRhythmJourneyCompatibilityBootstrap.applyIfNeeded(
+                progress: firstRhythmJourneyProgress,
+                routineRepository: makeRoutineRepository(),
+                recurringRhythmRepository: makeRecurringRhythmRepository()
+            )
+        } catch {
+            Self.logger.error(
+                "Failed to bootstrap first rhythm journey: \(String(describing: error), privacy: .public)"
+            )
+        }
     }
 
     /// Synchronizes recurring definitions into today's routines.
@@ -103,6 +123,8 @@ struct OneulRhythmApp: App {
         } else {
             try makeRoutineRepository().insert(input)
         }
+        // DR-015: First Journey completes only after successful creation.
+        firstRhythmJourneyProgress.markFirstRhythmCreated()
     }
 
     private func updateRoutine(_ input: RoutineCreationInput) throws {

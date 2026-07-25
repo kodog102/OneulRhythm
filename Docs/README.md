@@ -41,6 +41,7 @@ Docs/README.md          ← you are here (router)
     ├─ Development/     ← how work is executed
     │     → Engineering charter
     │     → AI/AGENTS.md
+    ├─ AI_Collaboration_Playbook_v2.2.md ← AI collaboration standard
     ├─ GLOSSARY.md      ← shared terminology
     ├─ ROADMAP.md       ← forward plan
     ├─ CHANGELOG.md     ← completed work
@@ -64,6 +65,7 @@ Avoid circular navigation between hubs.
 | Design | `Design/README.md` | How is each subsystem implemented? |
 | Extensions | `Extensions/README.md` | How do optional capabilities integrate? |
 | Development | `Development/README.md` | How do we plan, implement, and validate work? |
+| AI Collaboration | `AI_Collaboration_Playbook_v2.2.md` | How do ChatGPT, Cursor, QA, and the Developer collaborate? |
 | Terminology | `GLOSSARY.md` | What do official terms mean? |
 | Progress | `ROADMAP.md`, `CHANGELOG.md` | What is planned? What shipped? |
 | History | `SprintReviews/README.md`, `Architecture/Reviews/` | What was decided in past sprints? |
@@ -78,6 +80,7 @@ Avoid circular navigation between hubs.
 - Architecture structure and Decision Records
 - Design and Extensions implementation contracts
 - Development process documents, Engineering Charter, and `AI/AGENTS.md`
+- `AI_Collaboration_Playbook_v2.2.md`
 - Glossary, Roadmap, Changelog
 
 ## Historical (not part of default onboarding)
@@ -120,15 +123,20 @@ This router is for contributors.
 5. `Design/README.md`
 6. `Development/README.md` → `Development/DEVELOPMENT_WORKFLOW.md`
 7. `AI/AGENTS.md`
+8. `AI_Collaboration_Playbook_v2.2.md`
 
 ## AI implementation agent
 
 1. `AI/AGENTS.md`
-2. `Development/DEVELOPMENT_WORKFLOW.md`
-3. `Development/CURSOR_GUIDELINES.md`
-4. `Engineering/ENGINEERING_CHARTER.md`
-5. Sprint-specific Product and/or Design documents
-6. `ROADMAP.md` (priority only)
+2. `AI_Collaboration_Playbook_v2.2.md`
+3. Product Principles — `Product/PRODUCT-PRINCIPLES.md`
+4. Architecture — `Architecture/ARCHITECTURE.md`
+5. Relevant Architecture Decision(s) — `Architecture/Decisions/`
+6. `Development/DEVELOPMENT_WORKFLOW.md`
+7. `Development/CURSOR_GUIDELINES.md`
+8. `Engineering/ENGINEERING_CHARTER.md`
+9. Sprint-specific Product and/or Design documents
+10. `ROADMAP.md` (when applicable)
 
 ## Architecture reviewer
 

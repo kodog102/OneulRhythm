@@ -8,6 +8,7 @@ import SwiftUI
 struct TodayView: View {
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var launchState: AppLaunchState
+    @EnvironmentObject private var firstRhythmJourneyProgress: FirstRhythmJourneyProgress
     @StateObject private var viewModel: TodayViewModel
     @State private var isCreateRhythmPresented = false
     @State private var isManageRhythmsPresented = false
@@ -197,31 +198,18 @@ struct TodayView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    /// Empty: Guidance + Create Rhythm CTA only.
-    /// CTA is Level 7 — subordinate to Empty Guidance; visible only when zero routines.
+    /// Empty phases from DR-015 — First Journey vs Normal Experience.
     private var emptyState: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.xl) {
-            emptyGuidance
-            createRhythmCTA
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    /// Approved Empty copy. Friendly, calm, never urgent.
-    private var emptyGuidance: some View {
-        Text("오늘의 첫 리듬을 만들어보세요.")
-            .orTypography(.title)
-            .foregroundStyle(ORColors.textPrimary)
-            .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    /// Approved Create Rhythm CTA. Empty-only onboarding affordance.
-    private var createRhythmCTA: some View {
-        AddRoutineCardView(
-            title: "리듬 만들기",
-            action: { isCreateRhythmPresented = true }
+        TodayEmptyStateView(
+            phase: emptyPhase,
+            onCreateRhythm: { isCreateRhythmPresented = true }
         )
+    }
+
+    private var emptyPhase: TodayEmptyPhase {
+        firstRhythmJourneyProgress.hasCompletedFirstRhythmJourney
+            ? .normalExperience
+            : .firstJourney
     }
 
     /// Approved Day Complete copy. Quiet closure — never celebratory.
@@ -322,7 +310,7 @@ struct TodayView: View {
     }
 }
 
-#Preview("Empty") {
+#Preview("First Journey Empty") {
     TodayView(
         repository: PreviewRoutineRepository(),
         recurringRhythmRepository: PreviewRecurringRhythmRepository(),
@@ -330,6 +318,18 @@ struct TodayView: View {
         nowProvider: { TodayPreviewData.morningNow }
     )
     .environmentObject(AppLaunchState.previewCompleted())
+    .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: false))
+}
+
+#Preview("Normal Experience Empty") {
+    TodayView(
+        repository: PreviewRoutineRepository(),
+        recurringRhythmRepository: PreviewRecurringRhythmRepository(),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
+        nowProvider: { TodayPreviewData.morningNow }
+    )
+    .environmentObject(AppLaunchState.previewCompleted())
+    .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: true))
 }
 
 #Preview("Upcoming") {
@@ -342,6 +342,7 @@ struct TodayView: View {
         nowProvider: { TodayPreviewData.earlyMorningNow }
     )
     .environmentObject(AppLaunchState.previewCompleted())
+    .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: true))
 }
 
 #Preview("Current") {
@@ -354,6 +355,7 @@ struct TodayView: View {
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
     .environmentObject(AppLaunchState.previewCompleted())
+    .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: true))
 }
 
 #Preview("Past Incomplete") {
@@ -366,6 +368,7 @@ struct TodayView: View {
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
     .environmentObject(AppLaunchState.previewCompleted())
+    .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: true))
 }
 
 #Preview("Day Complete") {
@@ -378,6 +381,7 @@ struct TodayView: View {
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
     .environmentObject(AppLaunchState.previewCompleted())
+    .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: true))
 }
 
 #Preview("Current + Past Incomplete + Next") {
@@ -390,6 +394,7 @@ struct TodayView: View {
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
     .environmentObject(AppLaunchState.previewCompleted())
+    .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: true))
 }
 
 #Preview("Multiple Past Incomplete") {
@@ -402,6 +407,7 @@ struct TodayView: View {
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
     .environmentObject(AppLaunchState.previewCompleted())
+    .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: true))
 }
 
 #Preview("Completion Promotion") {
@@ -414,6 +420,7 @@ struct TodayView: View {
         nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
     )
     .environmentObject(AppLaunchState.previewCompleted())
+    .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: true))
 }
 
 #Preview("Afternoon Greeting") {
@@ -424,6 +431,7 @@ struct TodayView: View {
         nowProvider: { TodayPreviewData.afternoonNow }
     )
     .environmentObject(AppLaunchState.previewCompleted())
+    .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: false))
 }
 
 #Preview("Evening Greeting") {
@@ -436,6 +444,7 @@ struct TodayView: View {
         nowProvider: { TodayPreviewData.eveningNow }
     )
     .environmentObject(AppLaunchState.previewCompleted())
+    .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: true))
 }
 
 @MainActor

@@ -4,7 +4,11 @@ This document defines the collaboration model, product philosophy, and architect
 
 Sprint workflows, implementation prompts, Cursor guidelines, QA processes, and close-out checklists are defined under `Docs/Development/`.
 
-This document complements, but does not replace, the official Development Workflow.
+Stable collaboration rules for ChatGPT, Cursor, QA, and the Developer are defined in:
+
+`Docs/AI_Collaboration_Playbook_v2.2.md`
+
+This document complements, but does not replace, the official Development Workflow or the AI Collaboration Playbook.
 
 ---
 
@@ -166,6 +170,7 @@ Planning
 
 Related process documents:
 
+- Docs/AI_Collaboration_Playbook_v2.2.md
 - Docs/Development/PROMPT_LIBRARY.md
 - Docs/Development/CURSOR_GUIDELINES.md
 - Docs/Development/SPRINT_CHECKLIST.md
@@ -348,16 +353,31 @@ Approved decisions must exist in documentation before implementation begins.
 
 ---
 
+## Required References Before Implementation
+
+Before implementation begins, AI agents should review:
+
+1. Product Principles — `Docs/Product/PRODUCT-PRINCIPLES.md`
+2. Architecture — `Docs/Architecture/ARCHITECTURE.md`
+3. AI Collaboration Playbook — `Docs/AI_Collaboration_Playbook_v2.2.md`
+4. Relevant Architecture Decision(s) — `Docs/Architecture/Decisions/`
+5. Roadmap — `Docs/ROADMAP.md` (when applicable)
+
+Then continue with Sprint-specific Product and/or Design documents as needed.
+
+---
+
 ## Documentation Hierarchy
 
-AI implementation agents should read in this order:
+AI implementation agents should read process and governance documents in this order:
 
 1. `Docs/AI/AGENTS.md`
-2. `Docs/Development/DEVELOPMENT_WORKFLOW.md`
-3. `Docs/Development/CURSOR_GUIDELINES.md`
-4. `Docs/Engineering/ENGINEERING_CHARTER.md`
-5. Sprint-specific Product and/or Design documents
-6. `Docs/ROADMAP.md` (priority only)
+2. `Docs/AI_Collaboration_Playbook_v2.2.md`
+3. `Docs/Development/DEVELOPMENT_WORKFLOW.md`
+4. `Docs/Development/CURSOR_GUIDELINES.md`
+5. `Docs/Engineering/ENGINEERING_CHARTER.md`
+6. Sprint-specific Product and/or Design documents
+7. `Docs/ROADMAP.md` (priority only)
 
 Use `Docs/GLOSSARY.md` as the shared terminology reference when terms are unclear.
 
@@ -410,6 +430,8 @@ Design documents define implementation contracts.
 Extensions describe optional capabilities.
 
 Development documents define engineering processes.
+
+The AI Collaboration Playbook defines stable collaboration rules across ChatGPT, Cursor, QA, and the Developer.
 
 Hub READMEs index Active and Historical documents for their folder.
 

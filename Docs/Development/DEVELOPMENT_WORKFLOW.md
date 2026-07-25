@@ -16,6 +16,7 @@ Related documents:
 - `SPRINT_CHECKLIST.md` — Sprint completion checklist
 - `QA_PIPELINE.md` — QA process
 - `Docs/AI/AGENTS.md` — product and architecture rules
+- `Docs/AI_Collaboration_Playbook_v2.2.md` — AI collaboration standard
 
 ---
 
@@ -127,6 +128,11 @@ Before architecture or implementation begins, review the required project docume
 
 Typical required context includes:
 
+- Docs/Product/PRODUCT-PRINCIPLES.md
+- Docs/Architecture/ARCHITECTURE.md
+- Docs/AI_Collaboration_Playbook_v2.2.md
+- Relevant Architecture Decision(s) under Docs/Architecture/Decisions/
+- Docs/ROADMAP.md (when applicable)
 - Docs/Engineering/ENGINEERING_CHARTER.md
 - DEVELOPMENT_WORKFLOW
 - CURSOR_GUIDELINES
