@@ -46,10 +46,11 @@ Related authoritative documents outside this folder:
 9. Sprint-specific Product and/or Design documents
 10. `Docs/ROADMAP.md` (when applicable)
 
-For Brand Foundation and Brand Assets & Experience work, also read:
+For Brand Foundation and Brand Assets work, also read:
 
 - `Docs/BRAND.md`
 - `Docs/ADR/` (Brand Architecture Decision Records)
+- `Assets/brand/ASSET-MANIFEST.md` and `Assets/brand/Guide/` when touching brand files
 
 ## What this hub does NOT contain
 

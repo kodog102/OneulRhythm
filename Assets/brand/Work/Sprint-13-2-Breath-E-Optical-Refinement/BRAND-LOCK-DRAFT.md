@@ -114,6 +114,6 @@ Avoid busy photography, neon, or high-chroma fields that compete with the stroke
 
 ## Related
 
-- Sprint 13-1 board: `Assets/brand/Sprint-13-1-Breath-Flow-Refinement/`  
-- Sprint 13-2 board: `Assets/brand/Sprint-13-2-Breath-E-Optical-Refinement/board.html`  
+- Sprint 13-1 board: `Assets/brand/Work/Sprint-13-1-Breath-Flow-Refinement/`  
+- Sprint 13-2 board: `Assets/brand/Work/Sprint-13-2-Breath-E-Optical-Refinement/board.html`  
 - Rejection Record: `REJECTION-RECORD.md`

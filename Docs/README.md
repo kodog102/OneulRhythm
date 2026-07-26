@@ -63,7 +63,7 @@ Avoid circular navigation between hubs.
 | Category | Hub | Answers |
 |----------|-----|---------|
 | Product | `Product/README.md` | What should the product feel and behave like? |
-| Brand | `BRAND.md`, `ADR/` | How should the product feel as a brand? |
+| Brand | `BRAND.md`, `ADR/`, `../Assets/brand/` | How should the product feel, and where are production brand assets? |
 | Architecture | `Architecture/README.md` | What is the system structure? Why was it chosen? |
 | Design | `Design/README.md` | How is each subsystem implemented? |
 | Extensions | `Extensions/README.md` | How do optional capabilities integrate? |
@@ -81,6 +81,7 @@ Avoid circular navigation between hubs.
 
 - Product philosophy, principles, experience, and UI specifications
 - Brand Foundation (`BRAND.md`) and Brand Architecture Decision Records (`ADR/`)
+- Brand Assets (`../Assets/brand/` — `Release/` production, `Guide/` usage, `Work/` historical)
 - Architecture structure and Decision Records
 - Design and Extensions implementation contracts
 - Development process documents, Engineering Charter, and `AI/AGENTS.md`

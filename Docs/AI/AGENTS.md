@@ -363,10 +363,12 @@ Before implementation begins, AI agents should review:
 4. Relevant Architecture Decision(s) — `Docs/Architecture/Decisions/`
 5. Roadmap — `Docs/ROADMAP.md` (when applicable)
 
-For Sprint 12 — Brand Foundation and Sprint 13 — Brand Assets & Experience, also review:
+For Brand Foundation and Brand Assets work, also review:
 
 - `Docs/BRAND.md`
 - `Docs/ADR/`
+- `Assets/brand/ASSET-MANIFEST.md` (when working with brand files)
+- `Assets/brand/Guide/` (when applying or exporting brand assets)
 
 Then continue with Sprint-specific Product and/or Design documents as needed.
 

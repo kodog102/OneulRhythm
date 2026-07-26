@@ -33,39 +33,37 @@ Today's experience together with Live Activity already provides the primary quic
 
 ## Current Phase
 
-Brand Assets & Design System
+Platform Expansion (next)
 
 ## Current Sprint
 
-Sprint 14 — Brand Assets & Design System
+Sprint 15 — Widget Experience
 
 ## Status
 
-📍 Current — Sprint 13 Brand Assets & Experience complete; Brand Mark at Brand Lock review; Sprint 14 Brand Assets & Design System is current
+✅ Sprint 14 Brand Assets & Design System complete; Brand Lock v1.0 Approved; Sprint 15 Widget Experience is planned (postponed)
 
 ## Current Goal
 
-Produce production brand assets and the design system package from the Brand Lock review mark.
+Apply finalized Brand Foundation and Brand Assets on future surfaces without redefining architecture.
 
 ## Current Priority
 
-Brand Lock first. Asset production next.
+Brand Assets are production-ready. Prefer consistent application over new metaphors.
 
 Immediate focus:
 
-- App Icon Assets
-- SVG / PDF / PNG
-- Construction Grid
-- Safe Area
-- Export Guide
-- Motion Principle
-- Brand Package
+- Consume `Assets/brand/Release/` for product/marketing surfaces when wiring assets  
+- Keep Widget / Watch postponed until explicitly scheduled  
+- Do not reopen Brand Lock geometry  
 
-Sprint 12 Brand Foundation is complete. Sprint 13 Brand Assets & Experience is complete and reached Brand Lock review.
+Sprint 12 Brand Foundation is complete.  
+Sprint 13 Brand Assets & Experience is complete (Brand Lock v1.0 Approved).  
+Sprint 14 Brand Assets & Design System is complete.
 
 Widget Experience remains on the long-term roadmap and is intentionally postponed because Live Activity already satisfies the primary quick-access experience.
 
-Sprint 10 Settings & Preferences remains planned and does not redefine Sprint 14 scope.
+Sprint 10 Settings & Preferences remains planned and does not redefine Sprint 15 scope.
 
 Notification Foundation remains complete and stable.
 
@@ -510,7 +508,7 @@ Provide the preferences users need to support a calm in-app experience.
 
 Add settings that serve Product UI quality. Avoid expanding into platform integrations prematurely.
 
-Settings remains planned and does not redefine Sprint 14 Brand Assets & Design System scope.
+Settings remains planned and does not redefine Sprint 15 Widget Experience scope.
 
 **Status**
 
@@ -598,7 +596,7 @@ Typical deliverables include:
 - Breath Flow refinement
 - Optical refinement
 - Brand validation
-- Brand Lock v1.0 (review)
+- Brand Lock v1.0 Approved
 
 **Status**
 
@@ -610,7 +608,7 @@ Typical deliverables include:
 
 ### Goal
 
-Produce production brand assets and the design system package from Brand Lock review.
+Produce production brand assets and the design system package from approved Brand Lock v1.0.
 
 ### Scope Direction
 
@@ -624,9 +622,19 @@ Produce production brand assets and the design system package from Brand Lock re
 - Motion Principle
 - Brand Package
 
+### Completed
+
+- Brand asset architecture (`Work/` / `Release/` / `Guide/`)
+- Master Logo exports (SVG / PDF / PNG / mono)
+- App Icon 1024 + preview + export pipeline
+- Usage, Construction, Safe Area, and Export guides
+- Brand System Integration QA
+- Brand Package inventory (`Release/` + `Guide/` + manifest)
+- Motion Principle: product motion remains under `Docs/BRAND.md` (no separate asset geometry)
+
 **Status**
 
-📍 Current
+✅ Completed
 
 ---
 

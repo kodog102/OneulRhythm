@@ -8,6 +8,37 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 14 — Brand Assets & Design System
+
+**Date:** 2026-07-26
+
+## Completed
+
+### Brand Assets
+
+- Brand asset architecture (`Work/` / `Release/` / `Guide/`)
+- Master Logo production (SVG / PDF / PNG / mono variants)
+- App Icon production (`AppIcon-1024.png`, preview, export script)
+- Brand usage, construction, safe-area, and export guides
+- Brand System Integration QA
+- Brand Package inventory recorded in `Assets/brand/ASSET-MANIFEST.md`
+
+### Major Outcomes
+
+- Brand Lock v1.0 Approved production assets available under `Assets/brand/Release/`
+- Geometry fingerprint stabilized across Release SVG masters
+- Work retained as historical exploration only
+
+## Notes
+
+Sprint 14 Brand Assets & Design System is complete.
+
+Motion Principle for product UI remains under `Docs/BRAND.md`.
+
+Sprint 15 — Widget Experience remains planned (postponed).
+
+---
+
 # Sprint 13 — Brand Assets & Experience
 
 **Date:** 2026-07-26
@@ -20,20 +51,20 @@ For future plans, see `ROADMAP.md`.
 - Breath Flow refinement completed
 - Optical refinement completed
 - Brand validation completed
-- Brand Lock v1.0 reached review
+- Brand Lock v1.0 Approved (effective Sprint 13)
 
 ### Major Outcomes
 
 - Concept 02 — Breath Flow confirmed as the production mark family
-- Soft Taper path refined to production candidate (E10)
-- Brand Lock draft prepared for review
+- Soft Taper path locked as production master (E10)
+- Brand Lock approved for Sprint 14 asset production
 - Rejected finalists recorded for long-term consistency (A / C / J)
 
 ## Notes
 
-Sprint 13 Brand Assets & Experience is complete. The Brand Mark is at Brand Lock review.
+Sprint 13 Brand Assets & Experience is complete. Brand Lock v1.0 is Approved.
 
-Sprint 14 — Brand Assets & Design System is current.
+Sprint 14 — Brand Assets & Design System followed.
 
 ---
 

@@ -175,6 +175,7 @@ Start here: `Docs/README.md`
 - `Docs/Product/` — Product Principles and UX contracts
 - `Docs/BRAND.md` — Brand Foundation
 - `Docs/ADR/` — Brand Architecture Decision Records
+- `Assets/brand/` — Brand Assets (Release / Guide / Work)
 - `Docs/Architecture/` — Architecture and Architecture Decisions
 - `Docs/Design/` — subsystem implementation contracts
 - `Docs/Development/` — official Sprint workflow
@@ -196,17 +197,20 @@ Start here: `Docs/README.md`
 - Recurring Rhythm
 - Primary Rhythm Ownership
 - Notification Foundation
+- Brand Foundation (Sprint 12)
+- Brand Assets & Experience (Sprint 13) — Brand Lock v1.0 Approved
+- Brand Assets & Design System (Sprint 14)
 
-### 📅 Current Priority — Brand Foundation
+### 📅 Current Priority — Platform Expansion (planned)
 
-Core Experience is complete through Sprint 11. Development now establishes Brand Foundation before Brand Assets & Experience and Platform Expansion.
+Brand Foundation and Brand Assets are complete. Next platform surfaces remain intentionally postponed.
 
 ```text
 Core Experience → Brand Foundation → Brand Assets & Experience → Platform Expansion
 ```
 
-- Brand Foundation (Sprint 12)
-- Brand Assets & Experience (Sprint 13)
+- Widget Experience (Sprint 15) — postponed
+- Apple Watch (Sprint 16) — postponed
 
 ### 🔮 Later (intentionally postponed)
 

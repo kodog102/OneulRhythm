@@ -46,14 +46,18 @@ Near-term work follows:
 Core Experience → Brand Foundation → Brand Assets & Experience → Platform Expansion
 ```
 
-Until Brand Foundation and Brand Assets & Experience are complete, prioritize Brand Foundation and consistent brand application over Widgets, Apple Watch, or additional platform integrations.
+Brand Foundation (Sprint 12) and Brand Assets (Sprints 13–14) are complete. Brand Lock v1.0 is Approved. Production assets live under `Assets/brand/Release/`.
+
+Prefer consistent application of Release assets over new brand exploration. Do not reopen locked geometry.
 
 Widget remains on the long-term roadmap and is intentionally postponed because Today and Live Activity already satisfy the primary quick-access experience.
 
-When implementing approved Brand Foundation or Brand Assets & Experience work:
+When implementing work that touches brand visuals:
 
+- Use `Assets/brand/Release/` only for production artwork.
+- Follow `Assets/brand/Guide/` for usage, safe area, and export rules.
+- Treat `Assets/brand/Work/` as historical only.
 - Reuse the existing Snapshot, Schedule Engine, Mapping, Notification, and Live Activity architecture.
-- Prefer product quality and consistency over new functionality unless the approved Sprint scope requires it.
 - Do not expand into Widget, Watch, or other platform surfaces unless the current Sprint explicitly includes them.
 
 Future platform integrations should consume the existing architecture and finalized Brand Foundation / Brand Assets instead of redefining them.
