@@ -83,16 +83,17 @@ final class ManagementRhythmComposerTests: XCTestCase {
             makeRecurring(id: eveningID, title: "Weekday Reading", startMinutes: 21 * 60, recurrence: .weekdays)
         ]
 
-        let items = ManagementRhythmComposer.compose(
+        let catalog = ManagementRhythmComposer.compose(
             recurring: recurring,
             routines: [],
             now: today,
             dayPolicy: dayPolicy
         )
 
-        XCTAssertEqual(items.count, 2)
-        XCTAssertEqual(items.map(\.id), [morningID, eveningID])
-        XCTAssertTrue(items.allSatisfy(\.isRecurring))
+        XCTAssertEqual(catalog.recurring.count, 2)
+        XCTAssertTrue(catalog.oneTime.isEmpty)
+        XCTAssertEqual(catalog.recurring.map(\.id), [morningID, eveningID])
+        XCTAssertTrue(catalog.recurring.allSatisfy(\.isRecurring))
     }
 
     func testExcludesHistoricalRecurringOccurrences() {
@@ -118,16 +119,17 @@ final class ManagementRhythmComposerTests: XCTestCase {
             )
         ]
 
-        let items = ManagementRhythmComposer.compose(
+        let catalog = ManagementRhythmComposer.compose(
             recurring: recurring,
             routines: routines,
             now: today,
             dayPolicy: dayPolicy
         )
 
-        XCTAssertEqual(items.count, 1)
-        XCTAssertEqual(items.first?.id, definitionID)
-        XCTAssertEqual(items.first?.title, "Daily Exercise")
+        XCTAssertEqual(catalog.recurring.count, 1)
+        XCTAssertTrue(catalog.oneTime.isEmpty)
+        XCTAssertEqual(catalog.recurring.first?.id, definitionID)
+        XCTAssertEqual(catalog.recurring.first?.title, "Daily Exercise")
     }
 
     // MARK: - One-time visibility
@@ -140,16 +142,17 @@ final class ManagementRhythmComposerTests: XCTestCase {
             makeOneTime(id: tomorrowID, title: "Tomorrow Meeting", startTime: tomorrow)
         ]
 
-        let items = ManagementRhythmComposer.compose(
+        let catalog = ManagementRhythmComposer.compose(
             recurring: [],
             routines: routines,
             now: today,
             dayPolicy: dayPolicy
         )
 
-        // Sorted by wall-clock minutes: tomorrow 09:00 before today 10:00.
-        XCTAssertEqual(items.map(\.id), [tomorrowID, todayID])
-        XCTAssertTrue(items.allSatisfy { !$0.isRecurring })
+        // Sorted by date then time: today 10:00 before tomorrow 09:00.
+        XCTAssertTrue(catalog.recurring.isEmpty)
+        XCTAssertEqual(catalog.oneTime.map(\.id), [todayID, tomorrowID])
+        XCTAssertTrue(catalog.oneTime.allSatisfy { !$0.isRecurring })
     }
 
     func testHidesPastOneTimeRoutines() {
@@ -160,15 +163,15 @@ final class ManagementRhythmComposerTests: XCTestCase {
             makeOneTime(id: futureID, title: "Tomorrow Meeting", startTime: tomorrow)
         ]
 
-        let items = ManagementRhythmComposer.compose(
+        let catalog = ManagementRhythmComposer.compose(
             recurring: [],
             routines: routines,
             now: today,
             dayPolicy: dayPolicy
         )
 
-        XCTAssertEqual(items.count, 1)
-        XCTAssertEqual(items.first?.id, futureID)
+        XCTAssertEqual(catalog.oneTime.count, 1)
+        XCTAssertEqual(catalog.oneTime.first?.id, futureID)
     }
 
     func testDayBoundaryKeepsTodayOneTimeVisible() {
@@ -176,7 +179,7 @@ final class ManagementRhythmComposerTests: XCTestCase {
         let lateNow = makeDate(year: 2026, month: 7, day: 25, hour: 23, minute: 50)
         let routineID = UUID()
 
-        let items = ManagementRhythmComposer.compose(
+        let catalog = ManagementRhythmComposer.compose(
             recurring: [],
             routines: [
                 makeOneTime(id: routineID, title: "Late Night", startTime: earlyToday)
@@ -185,7 +188,7 @@ final class ManagementRhythmComposerTests: XCTestCase {
             dayPolicy: dayPolicy
         )
 
-        XCTAssertEqual(items.map(\.id), [routineID])
+        XCTAssertEqual(catalog.oneTime.map(\.id), [routineID])
     }
 
     // MARK: - Mixed composition
@@ -194,7 +197,7 @@ final class ManagementRhythmComposerTests: XCTestCase {
         let definitionID = UUID()
         let oneTimeID = UUID()
 
-        let items = ManagementRhythmComposer.compose(
+        let catalog = ManagementRhythmComposer.compose(
             recurring: [
                 makeRecurring(id: definitionID, title: "Weekend Walk", startMinutes: 8 * 60, recurrence: .weekends)
             ],
@@ -211,18 +214,75 @@ final class ManagementRhythmComposerTests: XCTestCase {
             dayPolicy: dayPolicy
         )
 
-        XCTAssertEqual(items.count, 2)
-        XCTAssertEqual(Set(items.map(\.id)), [definitionID, oneTimeID])
+        XCTAssertEqual(catalog.recurring.map(\.id), [definitionID])
+        XCTAssertEqual(catalog.oneTime.map(\.id), [oneTimeID])
     }
 
-    func testSortsByWallClockStartThenTitle() {
-        let items = ManagementRhythmComposer.compose(
+    func testSortsRecurringByConfiguredTimeThenTitle() {
+        let catalog = ManagementRhythmComposer.compose(
             recurring: [
                 makeRecurring(title: "B Recurring", startMinutes: 9 * 60),
-                makeRecurring(title: "A Recurring", startMinutes: 9 * 60)
+                makeRecurring(title: "A Recurring", startMinutes: 9 * 60),
+                makeRecurring(title: "Evening", startMinutes: 18 * 60)
+            ],
+            routines: [],
+            now: today,
+            dayPolicy: dayPolicy
+        )
+
+        XCTAssertEqual(catalog.recurring.map(\.title), [
+            "A Recurring",
+            "B Recurring",
+            "Evening"
+        ])
+    }
+
+    func testSortsOneTimeByDateThenTimeThenTitle() {
+        let laterTodayID = UUID()
+        let earlierTomorrowID = UUID()
+        let laterTomorrowID = UUID()
+
+        let catalog = ManagementRhythmComposer.compose(
+            recurring: [],
+            routines: [
+                makeOneTime(
+                    id: earlierTomorrowID,
+                    title: "Tomorrow Morning",
+                    startTime: tomorrow
+                ),
+                makeOneTime(
+                    id: laterTodayID,
+                    title: "Today Afternoon",
+                    startTime: makeDate(year: 2026, month: 7, day: 25, hour: 14, minute: 0)
+                ),
+                makeOneTime(
+                    id: laterTomorrowID,
+                    title: "Tomorrow Afternoon",
+                    startTime: makeDate(year: 2026, month: 7, day: 26, hour: 15, minute: 0)
+                )
+            ],
+            now: today,
+            dayPolicy: dayPolicy
+        )
+
+        XCTAssertEqual(catalog.oneTime.map(\.id), [
+            laterTodayID,
+            earlierTomorrowID,
+            laterTomorrowID
+        ])
+    }
+
+    func testKeepsSectionsSeparateWhenWallClockOverlaps() {
+        let definitionID = UUID()
+        let oneTimeID = UUID()
+
+        let catalog = ManagementRhythmComposer.compose(
+            recurring: [
+                makeRecurring(id: definitionID, title: "Morning Recurring", startMinutes: 9 * 60)
             ],
             routines: [
                 makeOneTime(
+                    id: oneTimeID,
                     title: "Afternoon Visit",
                     startTime: makeDate(year: 2026, month: 7, day: 25, hour: 14, minute: 0)
                 )
@@ -231,10 +291,47 @@ final class ManagementRhythmComposerTests: XCTestCase {
             dayPolicy: dayPolicy
         )
 
-        XCTAssertEqual(items.map(\.title), [
-            "A Recurring",
-            "B Recurring",
-            "Afternoon Visit"
-        ])
+        XCTAssertEqual(catalog.recurring.map(\.id), [definitionID])
+        XCTAssertEqual(catalog.oneTime.map(\.id), [oneTimeID])
+        XCTAssertFalse(catalog.isEmpty)
+    }
+
+    func testScheduleSummaryUsesEstablishedRecurrenceLanguage() {
+        let item = ManagementRhythmItem.recurring(
+            makeRecurring(title: "아침 독서", startMinutes: 7 * 60 + 30, recurrence: .daily)
+        )
+
+        let summary = item.formattedScheduleSummary(
+            referenceDay: today,
+            now: today,
+            dayPolicy: dayPolicy
+        )
+        let accessibilityFragments = item.accessibilityScheduleFragments(
+            referenceDay: today,
+            now: today,
+            dayPolicy: dayPolicy
+        )
+
+        XCTAssertTrue(summary.contains("매일"))
+        XCTAssertFalse(summary.contains("반복"))
+        XCTAssertFalse(summary.contains("daily"))
+        XCTAssertTrue(accessibilityFragments.contains("매일 반복"))
+    }
+
+    func testOneTimeScheduleSummaryUsesTodayLabel() {
+        let item = ManagementRhythmItem.oneTime(
+            makeOneTime(
+                title: "병원",
+                startTime: makeDate(year: 2026, month: 7, day: 25, hour: 14, minute: 0)
+            )
+        )
+
+        let summary = item.formattedScheduleSummary(
+            referenceDay: today,
+            now: today,
+            dayPolicy: dayPolicy
+        )
+
+        XCTAssertTrue(summary.hasPrefix("오늘 · "))
     }
 }

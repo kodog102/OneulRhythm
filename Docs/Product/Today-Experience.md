@@ -225,7 +225,7 @@ Information should appear in this order of importance:
 3. Primary Action
 4. Progress
 5. Next Rhythm
-6. Supporting InformationInformation
+6. Supporting Information
 
 ### Rhythm Meaning
 
@@ -303,6 +303,63 @@ Empty is an invitation to begin, not a problem to solve under pressure.
 The experience should remain calm and light.
 
 It should never make the absence of rhythm feel like failure.
+
+Empty has two emotional purposes across the user's journey:
+
+- **First Journey Empty** — introduce the product and invite the first rhythm
+- **Normal Experience Empty** — quiet guidance after the product has already been introduced
+
+First Journey Empty remains only until the first rhythm is successfully created.
+
+After that moment, Empty never returns to onboarding.
+
+Deleting every rhythm does not restore First Journey Empty.
+
+---
+
+# First Rhythm Journey Lifecycle
+
+Today's Empty experience follows the user's journey, not the current count of rhythms.
+
+```text
+First launch / fresh application state
+    │
+    ▼
+First Journey
+    │
+    ▼
+First successful rhythm creation
+    │
+    ▼
+Normal Experience
+    │
+    ▼
+Never return to onboarding
+```
+
+### First Journey
+
+The product introduces itself through First Journey Empty when Today has no rhythm.
+
+Relaunch before the first successful create keeps First Journey.
+
+Cancelling create keeps First Journey.
+
+### Normal Experience
+
+Immediately after the first successful rhythm creation, onboarding ends permanently.
+
+Later Empty days use Normal Experience Empty only.
+
+### What does not restore onboarding
+
+- Deleting every rhythm
+- Returning to an empty Today later
+- App relaunch after the first successful create
+
+Only a completely fresh application state — fresh install or cleared app data — returns to First Journey.
+
+This lifecycle is defined by DR-015 — First Rhythm Onboarding Lifecycle.
 
 ---
 
@@ -422,13 +479,17 @@ It should not create a second center of attention.
 
 ## Empty Guidance Area
 
-Responsibility: help the user begin when no rhythm exists.
+Responsibility: help the user begin when no rhythm exists for the day.
 
 This area exists only when the day is empty.
 
 Its tone should remain welcoming and light.
 
 It should never turn emptiness into urgency.
+
+In First Journey, guidance may introduce product philosophy.
+
+In Normal Experience, guidance stays minimal and does not re-explain the product.
 
 ---
 
@@ -453,6 +514,7 @@ The user should feel finished and free to return to life.
 - The user can understand the day quickly.
 - The product never invents urgency.
 - Today remains about presence, not management.
+- First Journey onboarding ends after the first successful rhythm creation and does not return when Empty reappears.
 
 ---
 
@@ -466,6 +528,59 @@ The user should feel finished and free to return to life.
 - Making the app feel like a place to stay and manage
 - Turning progress into a score, streak, or performance measure
 - Making the user wonder what deserves attention first
+- Reintroducing product onboarding after the first successful rhythm creation
+
+---
+
+# Relationship Between Today and Management
+
+Today and Management share the same personal rhythms.
+
+They have distinct responsibilities.
+
+```text
+Today
+    │
+    ▼
+focus on one rhythm
+
+Management
+    │
+    ▼
+overview of all personal rhythms
+```
+
+### Today
+
+Today presents the one rhythm that deserves attention now.
+
+It is presence, not configuration.
+
+Ongoing Create, Edit, and Delete while rhythms exist do not belong here.
+
+Empty may invite create only when the day has no rhythm.
+
+### Management
+
+Management presents the calm overview of configured rhythms.
+
+It is the home of ongoing Create, Edit, and Delete.
+
+It shows recurring definitions and today/future one-time plans.
+
+It does not replace Today's single-focus experience.
+
+### Shared meaning
+
+Management decides and maintains the rhythms.
+
+Today decides which one matters right now.
+
+Both surfaces must remain calm.
+
+Neither may turn the product into a task dashboard.
+
+Detailed Management UI behavior lives in `Docs/Product/Management-UI-Specification.md`.
 
 ---
 
@@ -501,7 +616,7 @@ This document does not define:
 - Engineering architecture
 - Schedule resolution rules
 - Persistence or data models
-- Routine creation and management flows
+- Routine Management UI details beyond the Today / Management relationship
 
 Those concerns belong to later Product, Design, or Architecture work.
 
@@ -530,6 +645,6 @@ The best Today experience is the one that quietly disappears after helping the u
 
 Every future decision about Today should answer:
 
-> Does this help the user reconnect with the one rhythm that matters most right now, understand it effortlessly, take one gentle action if needed, and confidently return to life? If the answer is no, the change probably does not belong in the Today experience.
+> Does this help the user reconnect with the one rhythm that matters most right now, understand it effortlessly, take one gentle action if needed, and confidently return to life?
 
 If the answer is no, the change probably does not belong in the Today experience.

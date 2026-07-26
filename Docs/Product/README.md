@@ -25,13 +25,15 @@ Developers, product-minded contributors, architecture reviewers on UX sprints, a
 | `PRODUCT-PRINCIPLES.md` | Non-negotiable product constraints | Active |
 | `Today-Experience.md` | Today North Star experience | Active |
 | `Today-UI-Specification.md` | Today implementation-ready UI contract | Active |
+| `Management-UI-Specification.md` | Management implementation-ready UI contract | Active |
 | `Today-Wireframe-Exploration.md` | Sprint 8 hierarchy exploration | Historical |
 
-For current Today work, read:
+For current Product UI work, read:
 
 1. `PRODUCT-PRINCIPLES.md`
 2. `Today-Experience.md`
 3. `Today-UI-Specification.md`
+4. `Management-UI-Specification.md`
 
 ## What this hub does NOT contain
 

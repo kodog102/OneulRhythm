@@ -37,6 +37,7 @@ struct TodayProgressView: View {
 }
 
 private struct FlowProgressBar: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let progress: Double
 
     var body: some View {
@@ -51,6 +52,10 @@ private struct FlowProgressBar: View {
                     .frame(
                         width: geometry.size.width * min(max(progress, 0), 1),
                         height: ORSpacing.progressBarHeight
+                    )
+                    .animation(
+                        reduceMotion ? nil : .easeInOut(duration: 0.3),
+                        value: progress
                     )
             }
         }

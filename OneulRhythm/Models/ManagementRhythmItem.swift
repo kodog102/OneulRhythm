@@ -166,9 +166,97 @@ enum ManagementRhythmItem: Identifiable {
         }
     }
 
+    /// Secondary schedule line for Management rows.
+    ///
+    /// Recurring: time and recurrence. One-time: today-or-date and time.
+    func formattedScheduleSummary(
+        referenceDay: Date,
+        now: Date,
+        dayPolicy: CalendarDayPolicy
+    ) -> String {
+        let calendar = dayPolicy.calendar
+        let timeText = formattedTime(referenceDay: referenceDay, calendar: calendar)
+
+        switch self {
+        case .recurring(let rhythm):
+            return "\(timeText) · \(rhythm.recurrence.managementDisplayTitle)"
+        case .oneTime(let routine):
+            let dateText = Self.formattedOneTimeDate(
+                startTime: routine.startTime,
+                now: now,
+                dayPolicy: dayPolicy
+            )
+            return "\(dateText) · \(timeText)"
+        }
+    }
+
+    /// VoiceOver-friendly schedule fragments after the title.
+    func accessibilityScheduleFragments(
+        referenceDay: Date,
+        now: Date,
+        dayPolicy: CalendarDayPolicy
+    ) -> [String] {
+        let calendar = dayPolicy.calendar
+        let timeText = formattedTime(referenceDay: referenceDay, calendar: calendar)
+
+        switch self {
+        case .recurring(let rhythm):
+            return [timeText, rhythm.recurrence.managementAccessibilityTitle]
+        case .oneTime(let routine):
+            return [
+                Self.formattedOneTimeDate(
+                    startTime: routine.startTime,
+                    now: now,
+                    dayPolicy: dayPolicy
+                ),
+                timeText
+            ]
+        }
+    }
+
+    private static func formattedOneTimeDate(
+        startTime: Date,
+        now: Date,
+        dayPolicy: CalendarDayPolicy
+    ) -> String {
+        let today = dayPolicy.day(for: now)
+        let routineDay = dayPolicy.day(for: startTime)
+        if routineDay == today {
+            return "오늘"
+        }
+
+        var format = Date.FormatStyle()
+            .month(.abbreviated)
+            .day()
+            .locale(Locale(identifier: "ko_KR"))
+        format.calendar = dayPolicy.calendar
+        return startTime.formatted(format)
+    }
+
     private static let displayTimeFormat = Date.FormatStyle(
         date: .omitted,
         time: .shortened
     )
     .locale(Locale(identifier: "ko_KR"))
+}
+
+extension RecurrenceRule {
+    /// Visible Management recurrence label (Add form option titles).
+    ///
+    /// Omits "반복" because the recurring section already communicates recurrence.
+    var managementDisplayTitle: String {
+        switch self {
+        case .daily:
+            return "매일"
+        case .weekdays:
+            return "평일"
+        case .weekends:
+            return "주말"
+        }
+    }
+
+    /// VoiceOver recurrence label that retains explicit "반복" context.
+    var managementAccessibilityTitle: String {
+        "\(managementDisplayTitle) 반복"
+    }
 }

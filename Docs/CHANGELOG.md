@@ -8,6 +8,83 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 11 — UX Polish
+
+**Date:** 2026-07-26
+
+## Added
+
+### Today Empty Journey
+
+- Today Empty now distinguishes First Journey Empty from Normal Experience Empty.
+- First Journey Empty introduces the product with Hero Message, Philosophy Card, Primary CTA, and brand footer.
+- Normal Experience Empty presents minimal guidance and a quieter Create Rhythm CTA, without repeated product introduction.
+- Journey completion is persisted after the first successful rhythm creation.
+- Onboarding does not return after deletion, relaunch, or later Empty days.
+
+### Compatibility Bootstrap
+
+- Existing creators are treated as Normal Experience through a one-time compatibility bootstrap on launch.
+- Empty phase selection follows whether the user has ever successfully created a rhythm, not current routine count.
+
+### Management redesign
+
+- Routine Management presents as `내 리듬` with sectioned overview:
+  - `반복되는 리듬`
+  - `예정된 리듬`
+- Rows follow Title → Time → Recurrence / Date hierarchy.
+- Recurring section shows active definitions only.
+- One-time section shows today/future rhythms only.
+- Historical recurring occurrences and past one-time rhythms remain excluded.
+- Empty uses the approved quiet guidance copy.
+- Tap opens edit, ＋ opens create, swipe/context menu opens delete confirmation.
+
+## Changed
+
+### Today Visual Polish
+
+- Strengthened Primary Rhythm hierarchy and atmospheric Greeting / Date header grouping.
+- Preserved single-focus Today presentation across Empty, Upcoming, Current, Past Incomplete, and Day Complete.
+
+### Motion Polish
+
+- Added restrained Today content transition on focus change.
+- Progress fill animates quietly when progress changes.
+- Management uses subtle content transition on catalog membership change.
+- Reduce Motion softens or disables these transitions.
+
+### Accessibility improvements
+
+- Today VoiceOver hierarchy, combined Philosophy Card, decorative brand footer, Progress summary, and interaction hints.
+- Management visible recurrence labels: `매일`, `평일`, `주말`.
+- Management VoiceOver recurrence labels: `매일 반복`, `평일 반복`, `주말 반복`.
+
+### Final copy polish
+
+- Confirmed Today Approved Copy for First Journey Empty, Normal Experience Empty, and Day Complete.
+- Confirmed Management Empty and delete confirmation copy.
+
+### Documentation synchronization
+
+- Updated `Today-Experience.md` and `Today-UI-Specification.md` to the final Sprint 11 Today experience.
+- Added `Management-UI-Specification.md` for the shipped Management screen.
+- Updated Product hub, Roadmap, and Changelog for Sprint 11 completion.
+
+## Notes
+
+Schedule Engine, Today Snapshot, and Live Activity architecture remain unchanged.
+
+Today focuses on one rhythm. Management provides the overview of all personal rhythms.
+
+### Verification
+
+- Architecture Decision: DR-015 Accepted
+- Architecture / Product / UX / Design / Accessibility / QA: Approved
+- Documentation Pass: Completed
+- Build: SUCCEEDED
+
+---
+
 # Sprint 9-2 — Management Model Alignment
 
 **Date:** 2026-07-25

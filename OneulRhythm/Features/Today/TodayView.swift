@@ -7,6 +7,7 @@ import SwiftUI
 
 struct TodayView: View {
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @EnvironmentObject private var launchState: AppLaunchState
     @EnvironmentObject private var firstRhythmJourneyProgress: FirstRhythmJourneyProgress
     @StateObject private var viewModel: TodayViewModel
@@ -51,13 +52,12 @@ struct TodayView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    greetingSection
-
-                    dateSection
-                        .padding(.top, ORSpacing.xs)
+                    headerGroup
 
                     screenContent
-                        .padding(.top, ORSpacing.xxxl)
+                        .padding(.top, ORSpacing.sectionGap)
+                        .id(contentTransitionID)
+                        .transition(contentTransition)
 
                     if viewModel.showsProgress,
                        viewModel.screenPresentation != .empty {
@@ -66,12 +66,13 @@ struct TodayView: View {
                             totalCount: viewModel.totalRoutineCount,
                             progress: viewModel.progress
                         )
-                        .padding(.top, ORSpacing.xxxl)
+                        .padding(.top, ORSpacing.lg)
                     }
                 }
                 .padding(.horizontal, ORSpacing.screenHorizontal)
                 .padding(.bottom, ORSpacing.scrollBottom)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .animation(contentAnimation, value: contentTransitionID)
             }
             .safeAreaPadding(.top, ORSpacing.screenTop)
             .background(ORColors.background.ignoresSafeArea())
@@ -142,19 +143,19 @@ struct TodayView: View {
 
     // MARK: - Always Visible
 
-    /// Level 2 — warm emotional entry. Never interactive.
-    private var greetingSection: some View {
-        Text(viewModel.greetingText)
-            .orTypography(.title)
-            .foregroundStyle(ORColors.textPrimary)
-            .accessibilityAddTraits(.isHeader)
-    }
+    /// Greeting + Date as one atmospheric header group. Never competes with Primary.
+    private var headerGroup: some View {
+        VStack(alignment: .leading, spacing: ORSpacing.xxs) {
+            Text(viewModel.greetingText)
+                .orTypography(.title, weight: .medium)
+                .foregroundStyle(ORColors.textPrimary)
+                .accessibilityAddTraits(.isHeader)
 
-    /// Level 3 — temporal orientation. Secondary emphasis.
-    private var dateSection: some View {
-        Text(viewModel.formattedTodayDate)
-            .orTypography(.body)
-            .foregroundStyle(ORColors.textSecondary)
+            Text(viewModel.formattedTodayDate)
+                .orTypography(.body)
+                .foregroundStyle(ORColors.textSecondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - Screen Content
@@ -175,6 +176,40 @@ struct TodayView: View {
                 primaryRhythmArea
             }
         }
+    }
+
+    /// Stable Today content identity — drives restrained enter transition only when focus changes.
+    private var contentTransitionID: String {
+        // Omit loading: loadRoutines toggles isLoading synchronously and must not re-animate.
+        if viewModel.loadErrorMessage != nil {
+            return "error"
+        }
+
+        switch viewModel.screenPresentation {
+        case .empty:
+            switch emptyPhase {
+            case .firstJourney:
+                return "empty-firstJourney"
+            case .normalExperience:
+                return "empty-normalExperience"
+            }
+        case .dayComplete:
+            return "dayComplete"
+        case .upcoming, .current, .pastIncomplete:
+            let rhythmID = viewModel.primaryRhythm?.id.uuidString ?? "none"
+            return "\(viewModel.screenPresentation)-\(rhythmID)"
+        }
+    }
+
+    private var contentTransition: AnyTransition {
+        if reduceMotion {
+            return .opacity
+        }
+        return .opacity.combined(with: .offset(y: 6))
+    }
+
+    private var contentAnimation: Animation {
+        .easeInOut(duration: 0.28)
     }
 
     private var loadingState: some View {
@@ -230,37 +265,46 @@ struct TodayView: View {
     private var primaryRhythmArea: some View {
         if let primaryRhythm = viewModel.primaryRhythm {
             VStack(alignment: .leading, spacing: 0) {
-                // Level 1 — Primary Rhythm
-                Text(primaryRhythm.title)
-                    .orTypography(.largeTitle)
-                    .foregroundStyle(ORColors.textPrimary)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityAddTraits(.isHeader)
-
-                // Rhythm Meaning intentionally omitted in Sprint 8 —
-                // no approved data source; never show placeholder.
-
-                // Level 4 — Time
-                Text(primaryRhythm.formattedTime)
-                    .orTypography(.caption)
-                    .foregroundStyle(ORColors.textTertiary)
-                    .padding(.top, ORSpacing.lg)
-
-                if viewModel.showsCompletionButton {
-                    completionButton(for: primaryRhythm)
-                        .padding(.top, ORSpacing.xl)
-                }
+                primaryRhythmCard(for: primaryRhythm)
 
                 if let secondaryNextRoutine = viewModel.secondaryNextRoutine {
                     nextRhythmSection(for: secondaryNextRoutine)
-                        .padding(.top, ORSpacing.xxxl)
+                        .padding(.top, ORSpacing.lg)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .animation(.easeInOut(duration: 0.25), value: primaryRhythm.id)
         }
+    }
+
+    /// Primary surface — emphasized by hierarchy and surrounding space, not enlargement.
+    private func primaryRhythmCard(for primaryRhythm: Routine) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // Level 1 — Primary Rhythm
+            Text(primaryRhythm.title)
+                .orTypography(.largeTitle)
+                .foregroundStyle(ORColors.textPrimary)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .accessibilityAddTraits(.isHeader)
+
+            // Rhythm Meaning intentionally omitted in Sprint 8 —
+            // no approved data source; never show placeholder.
+
+            // Level 4 — Time
+            Text(primaryRhythm.formattedTime)
+                .orTypography(.caption)
+                .foregroundStyle(ORColors.textTertiary)
+                .padding(.top, ORSpacing.sm)
+
+            if viewModel.showsCompletionButton {
+                completionButton(for: primaryRhythm)
+                    .padding(.top, ORSpacing.lg)
+            }
+        }
+        .padding(ORSpacing.cardPadding)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .orCard()
     }
 
     /// Gentle acknowledgment. Visible only when completion is possible.
@@ -445,6 +489,20 @@ struct TodayView: View {
     )
     .environmentObject(AppLaunchState.previewCompleted())
     .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: true))
+}
+
+#Preview("Current — Large Dynamic Type") {
+    TodayView(
+        repository: PreviewRoutineRepository(
+            entities: TodayPreviewData.currentWithNextEntities()
+        ),
+        recurringRhythmRepository: PreviewRecurringRhythmRepository(),
+        liveActivityCoordinator: PreviewLiveActivityCoordinator(),
+        nowProvider: { TodayPreviewData.nowDuringCurrentRoutine }
+    )
+    .environmentObject(AppLaunchState.previewCompleted())
+    .environmentObject(FirstRhythmJourneyProgress.preview(hasCompletedFirstRhythmJourney: true))
+    .environment(\.sizeCategory, .accessibilityLarge)
 }
 
 @MainActor

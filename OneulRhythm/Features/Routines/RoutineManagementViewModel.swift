@@ -8,7 +8,7 @@ import Foundation
 
 @MainActor
 final class RoutineManagementViewModel: ObservableObject {
-    @Published private(set) var items: [ManagementRhythmItem] = []
+    @Published private(set) var catalog = ManagementRhythmCatalog.empty
     @Published private(set) var isLoading = false
     @Published var loadErrorMessage: String?
     @Published var mutationErrorMessage: String?
@@ -33,6 +33,14 @@ final class RoutineManagementViewModel: ObservableObject {
         self.onDeleteRoutine = onDeleteRoutine
     }
 
+    var isEmpty: Bool {
+        catalog.isEmpty
+    }
+
+    func item(id: UUID) -> ManagementRhythmItem? {
+        catalog.item(id: id)
+    }
+
     func loadItems() {
         isLoading = true
         loadErrorMessage = nil
@@ -43,7 +51,7 @@ final class RoutineManagementViewModel: ObservableObject {
                 .fetchActive()
                 .map(RecurringManagementRhythm.init)
             let routines = try repository.fetchRoutines().map { $0.toDomain() }
-            items = ManagementRhythmComposer.compose(
+            catalog = ManagementRhythmComposer.compose(
                 recurring: recurring,
                 routines: routines,
                 now: nowProvider(),

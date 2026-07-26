@@ -12,43 +12,35 @@ The application should minimize management and maximize presence throughout the 
 
 ## Current Phase
 
-Product UI First — UI/UX Refinement
+Product UI First — Post UX Polish
 
 ## Current Sprint
 
-Sprint 11 — UX Polish
+Sprint 12 — Widget Experience
 
 ## Status
 
-📅 Ready — Sprint 9 complete (9-1, 9-2); next focus is in-app UI/UX refinement
+📅 Ready — Sprint 11 UX Polish complete; next milestone is Widget Experience
 
 ## Current Goal
 
-Raise overall in-app UX quality to MVP before new feature work and platform expansion.
+Bring today's rhythm to the Home Screen once in-app Product UI quality is ready to reuse.
 
 ## Current Priority
 
-UI/UX refinement over new feature development.
+Resume postponed platform surfaces that consume the finalized Product UI interpretation.
 
-Immediate polish focus:
+Immediate focus:
 
-- Today experience polish
-- Management UX polish
-- Design System refinement
-- Micro interactions
-- Visual hierarchy
-- Animation
-- Accessibility improvements
+- Home Widget
+- Timeline
+- Shared Snapshot
 
-Sprint 9 completed Routine Management (MVP + definition-based model alignment).
+Sprint 11 completed Today Empty Journey, visual/motion polish, Management redesign, accessibility and copy polish, and documentation synchronization.
+
+Sprint 10 Settings & Preferences remains planned and does not redefine Widget scope.
 
 Notification Foundation remains complete and stable.
-
-Until the in-app experience reaches MVP quality, development prioritizes Product UI polish over Settings expansion, Widgets, Apple Watch, and other platform integrations.
-
-## Next Sprint
-
-Sprint 10 — Settings & Preferences (after UI/UX refinement)
 
 ---
 
@@ -448,6 +440,33 @@ Improve the management flows that support Today, without redesigning persistence
 
 ---
 
+## Sprint 11 — UX Polish
+
+### Goal
+
+Raise overall in-app UX quality to MVP before new feature work and platform expansion.
+
+### Intent
+
+Polish interaction, clarity, and calm presentation across the Product UI surfaces already in scope.
+
+### Completed
+
+- Today Empty Journey (First Journey Empty / Normal Experience Empty)
+- Compatibility Bootstrap for existing creators (DR-015)
+- Today Visual Polish
+- Motion Polish
+- Management redesign (sectioned overview: 내 리듬)
+- Accessibility improvements
+- Final copy polish
+- Documentation synchronization for Today and Management
+
+**Status**
+
+✅ Completed
+
+---
+
 # Planned
 
 ## Sprint 10 — Settings & Preferences
@@ -460,37 +479,11 @@ Provide the preferences users need to support a calm in-app experience.
 
 Add settings that serve Product UI quality. Avoid expanding into platform integrations prematurely.
 
-Settings remains planned after in-app UI/UX refinement advances MVP quality.
+Settings remains planned after in-app UI/UX refinement.
 
 **Status**
 
 📅 Planned
-
----
-
-## Sprint 11 — UX Polish
-
-### Goal
-
-Raise overall in-app UX quality to MVP before new feature work and platform expansion.
-
-### Intent
-
-Polish interaction, clarity, and calm presentation across the Product UI surfaces already in scope.
-
-Focus areas:
-
-- Today experience polish
-- Management UX polish
-- Design System refinement
-- Micro interactions
-- Visual hierarchy
-- Animation
-- Accessibility improvements
-
-**Status**
-
-📅 Ready — Next
 
 ---
 
@@ -502,9 +495,9 @@ Bring today's rhythm to the Home Screen.
 
 ### Intent
 
-Widget implementation is intentionally postponed until Product UI reaches MVP quality.
+Widget implementation was intentionally postponed until Product UI reached MVP quality.
 
-When resumed, Widget should consume the existing Snapshot and mapping architecture rather than redefine business logic.
+Widget should consume the existing Snapshot and mapping architecture rather than redefine business logic.
 
 ### Scope Direction
 
@@ -514,7 +507,7 @@ When resumed, Widget should consume the existing Snapshot and mapping architectu
 
 **Status**
 
-📅 Planned (postponed until after Product UI MVP)
+📅 Ready — Next
 
 ---
 

@@ -30,7 +30,7 @@ struct TodayEmptyStateView: View {
     // MARK: - First Journey (DR-015 Phase 1)
 
     private var firstJourneyEmpty: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.xxl) {
+        VStack(alignment: .leading, spacing: ORSpacing.xl) {
             firstJourneyHero
 
             philosophyCard
@@ -55,8 +55,8 @@ struct TodayEmptyStateView: View {
     private var philosophyCard: some View {
         VStack(alignment: .leading, spacing: ORSpacing.sm) {
             Text("모든 것을 끝내는 앱이 아니에요.")
-                .orTypography(.body, weight: .medium)
-                .foregroundStyle(ORColors.textPrimary)
+                .orTypography(.body)
+                .foregroundStyle(ORColors.textSecondary)
 
             Text("지금 가장 중요한 하나의 리듬에 집중하도록 도와줘요.")
                 .orTypography(.body)
@@ -88,14 +88,14 @@ struct TodayEmptyStateView: View {
             .orTypography(.caption)
             .foregroundStyle(ORColors.textTertiary)
             .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.top, ORSpacing.sm)
+            .padding(.top, ORSpacing.xs)
             .accessibilityHidden(true)
     }
 
     // MARK: - Normal Experience (DR-015 Phase 2)
 
     private var normalExperienceEmpty: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.xl) {
+        VStack(alignment: .leading, spacing: ORSpacing.lg) {
             Text("오늘의 리듬을 만들어보세요.")
                 .orTypography(.title)
                 .foregroundStyle(ORColors.textPrimary)
@@ -127,4 +127,14 @@ struct TodayEmptyStateView: View {
     )
     .padding(.horizontal, ORSpacing.screenHorizontal)
     .background(ORColors.background)
+}
+
+#Preview("First Journey — Large Dynamic Type") {
+    TodayEmptyStateView(
+        phase: .firstJourney,
+        onCreateRhythm: {}
+    )
+    .padding(.horizontal, ORSpacing.screenHorizontal)
+    .background(ORColors.background)
+    .environment(\.sizeCategory, .accessibilityLarge)
 }

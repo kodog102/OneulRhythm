@@ -11,45 +11,62 @@ import Foundation
 /// today/future one-time routines. Historical recurring occurrences and past
 /// one-time routines are excluded.
 enum ManagementRhythmComposer {
-    /// Composes the Management list from persistence-facing domain inputs.
+    /// Composes the Management catalog from persistence-facing domain inputs.
     ///
     /// - Parameters:
     ///   - recurring: Active recurring definitions only.
     ///   - routines: All persisted routines; occurrence rows are ignored.
     ///   - now: Reference instant for one-time day visibility.
     ///   - dayPolicy: Shared local day-identity policy.
-    /// - Returns: Management items sorted by wall-clock start, then title.
+    /// - Returns: Sectioned Management items with section-local sorting.
     static func compose(
         recurring: [RecurringManagementRhythm],
         routines: [Routine],
         now: Date,
         dayPolicy: CalendarDayPolicy
-    ) -> [ManagementRhythmItem] {
+    ) -> ManagementRhythmCatalog {
         let today = dayPolicy.day(for: now)
-
-        let recurringItems = recurring.map { ManagementRhythmItem.recurring($0) }
-
-        let oneTimeItems = routines.compactMap { routine -> ManagementRhythmItem? in
-            guard routine.recurringRhythmID == nil else {
-                return nil
-            }
-
-            let routineDay = dayPolicy.day(for: routine.startTime)
-            guard routineDay >= today else {
-                return nil
-            }
-
-            return .oneTime(routine)
-        }
-
         let calendar = dayPolicy.calendar
-        return (recurringItems + oneTimeItems).sorted { lhs, rhs in
-            let lhsMinutes = lhs.sortMinutes(calendar: calendar)
-            let rhsMinutes = rhs.sortMinutes(calendar: calendar)
-            if lhsMinutes != rhsMinutes {
-                return lhsMinutes < rhsMinutes
+
+        let recurringItems = recurring
+            .map { ManagementRhythmItem.recurring($0) }
+            .sorted { lhs, rhs in
+                let lhsMinutes = lhs.sortMinutes(calendar: calendar)
+                let rhsMinutes = rhs.sortMinutes(calendar: calendar)
+                if lhsMinutes != rhsMinutes {
+                    return lhsMinutes < rhsMinutes
+                }
+                return lhs.title.localizedStandardCompare(rhs.title) == .orderedAscending
             }
-            return lhs.title.localizedStandardCompare(rhs.title) == .orderedAscending
-        }
+
+        let oneTimeItems = routines
+            .compactMap { routine -> ManagementRhythmItem? in
+                guard routine.recurringRhythmID == nil else {
+                    return nil
+                }
+
+                let routineDay = dayPolicy.day(for: routine.startTime)
+                guard routineDay >= today else {
+                    return nil
+                }
+
+                return .oneTime(routine)
+            }
+            .sorted { lhs, rhs in
+                guard case .oneTime(let left) = lhs,
+                      case .oneTime(let right) = rhs else {
+                    return false
+                }
+
+                if left.startTime != right.startTime {
+                    return left.startTime < right.startTime
+                }
+                return left.title.localizedStandardCompare(right.title) == .orderedAscending
+            }
+
+        return ManagementRhythmCatalog(
+            recurring: recurringItems,
+            oneTime: oneTimeItems
+        )
     }
 }

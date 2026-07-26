@@ -94,7 +94,7 @@ The screen must contain only information necessary for the current moment.
 
 If information does not help the user understand today's rhythm, it must not appear.
 
-The Create Rhythm CTA is the sole exception: it appears only in Empty to enable first-time onboarding when no rhythm exists.
+The Create Rhythm CTA is the sole exception: it appears only in Empty so the user can begin or continue when Today has no rhythm.
 
 ---
 
@@ -102,30 +102,11 @@ The Create Rhythm CTA is the sole exception: it appears only in Empty to enable 
 
 ## Empty
 
-Visible
+Empty appears when Today has zero routines for the day.
 
-- Greeting
-- Date
-- Empty Guidance
-- Create Rhythm CTA
+Empty has two phases. The phase is chosen by whether the user has ever successfully created a rhythm (First Journey vs Normal Experience). It is not chosen by current routine count, launch count, or installation date.
 
-Structure
-
-Greeting
-
-↓
-
-Date
-
-↓
-
-Empty Guidance
-
-↓
-
-Create Rhythm CTA
-
-Hidden
+Hidden in both Empty phases
 
 - Primary Rhythm
 - Primary Action
@@ -135,6 +116,137 @@ Hidden
 The Create Rhythm CTA is the only interactive control in Empty.
 
 No additional controls may appear in this state.
+
+See DR-015 — First Rhythm Onboarding Lifecycle.
+
+---
+
+### Phase 1 — First Journey Empty
+
+Purpose
+
+Introduce OneulRhythm and invite the user to create their first rhythm.
+
+When it appears
+
+- Today has zero routines for the day
+- The user has not yet successfully created a first rhythm
+
+UI hierarchy
+
+Greeting
+
+↓
+
+Date
+
+↓
+
+Hero Message
+
+↓
+
+Philosophy Card
+
+↓
+
+Primary CTA
+
+↓
+
+Brand footer
+
+Approved Copy
+
+Hero Message
+
+오늘을  
+하나의 리듬으로  
+시작해보세요.
+
+Philosophy Card
+
+모든 것을 끝내는 앱이 아니에요.
+
+지금 가장 중요한 하나의 리듬에 집중하도록 도와줘요.
+
+Primary CTA
+
+오늘의 첫 리듬 만들기
+
+Brand footer
+
+One rhythm at a time.
+
+Primary CTA
+
+- Opens the routine creation flow
+- Visually primary invitation
+- Must feel calm, not urgent
+
+Brand footer
+
+- Quiet brand introduction
+- Must never compete with the Hero Message or Primary CTA
+
+Notes
+
+- First Journey Empty is part of onboarding, not a broken-day message
+- Philosophy Card and brand footer appear only in this phase
+- Cancelling create keeps First Journey Empty
+
+---
+
+### Phase 2 — Normal Experience Empty
+
+Purpose
+
+Provide calm, minimal guidance when Today is empty after the user has already begun their rhythm life.
+
+When it appears
+
+- Today has zero routines for the day
+- The user has already successfully created at least one rhythm
+
+UI hierarchy
+
+Greeting
+
+↓
+
+Date
+
+↓
+
+Minimal Hero / Empty Guidance
+
+↓
+
+Primary CTA
+
+Approved Copy
+
+Minimal Hero / Empty Guidance
+
+오늘의 리듬을 만들어보세요.
+
+Primary CTA
+
+리듬 만들기
+
+Primary CTA
+
+- Opens the routine creation flow
+- Quieter than First Journey Empty
+- Must feel like a gentle invitation, not product introduction
+
+Notes
+
+- No Philosophy Card
+- No brand footer
+- No repeated product introduction
+- Deleting every rhythm does not restore First Journey Empty
+- Only a fresh install or cleared app data returns to First Journey
 
 ---
 
@@ -221,9 +333,9 @@ The screen must communicate quiet closure.
 
 # CTA Visibility Contract
 
-The Create Rhythm CTA is an onboarding affordance.
+The Create Rhythm CTA is an Empty-only affordance.
 
-It is not part of the normal Today experience.
+It is not part of non-Empty Today states.
 
 ## Show Create Rhythm CTA
 
@@ -232,6 +344,8 @@ Show the Create Rhythm CTA only when:
 - Today has zero routines.
 
 This corresponds exclusively to the Empty state.
+
+Empty phase (First Journey vs Normal Experience) determines CTA presentation and copy. Phase selection follows journey completion, not current routine count.
 
 ## Hide Create Rhythm CTA
 
@@ -250,15 +364,17 @@ The CTA must not reappear for the remainder of that day.
 
 # UX Rationale — Create Rhythm CTA
 
-## Onboarding Affordance
+## Empty Affordance
 
-The Create Rhythm CTA exists solely to help first-time users create their first rhythm.
+The Create Rhythm CTA exists so Empty never becomes a dead-end.
 
-Without it, Empty becomes a dead-end: users cannot begin using the app.
+In First Journey Empty, it invites the first rhythm.
 
-## Not Normal Today Experience
+In Normal Experience Empty, it quietly allows creating a rhythm for an empty day after onboarding has ended.
 
-The CTA is intentionally excluded from the normal Today experience.
+## Not Non-Empty Today Experience
+
+The CTA is intentionally excluded from Upcoming, Current, Past Incomplete, and Day Complete.
 
 It is not routine management.
 
@@ -270,13 +386,14 @@ It does not persist once the day has content.
 
 This affordance remains consistent with:
 
-- **One Rhythm at a Time** — The CTA appears only when no rhythm exists. It disappears as soon as Today has a rhythm to present.
+- **One Rhythm at a Time** — The CTA appears only when no rhythm exists for the day. It disappears as soon as Today has a rhythm to present.
 - **Show Only What Matters Now** — When routines exist, Today shows only what matters for the current moment. The CTA does not belong in those states.
-- **Calm Over Pressure** — The CTA supports a gentle invitation to begin. It must not feel urgent, persistent, or like ongoing management.
+- **Calm Over Pressure** — The CTA supports a gentle invitation. It must not feel urgent, persistent, or like ongoing management.
+- **First Rhythm Onboarding Lifecycle (DR-015)** — Onboarding presentation ends after the first successful rhythm creation and does not return when later Empty days occur.
 
 Permanent routine management must not return to Today.
 
-Routine creation beyond first onboarding belongs in Routine Management (Sprint 9).
+Ongoing Create, Edit, and Delete while rhythms exist belong in Routine Management (Sprint 9).
 
 ---
 
@@ -431,13 +548,14 @@ Requirements
 
 Purpose
 
-Help the user begin the day.
+Help the user begin when Today is empty.
 
 Requirements
 
 - Friendly.
 - Calm.
 - Never urgent.
+- Phase-specific: First Journey uses Hero Message + Philosophy Card; Normal Experience uses Minimal Hero only.
 
 Approved copy is defined in Approved Copy.
 
@@ -447,7 +565,7 @@ Approved copy is defined in Approved Copy.
 
 Purpose
 
-Provide the only entry point for first-time users to create their first rhythm.
+Provide the Empty-only entry point to create a rhythm when Today has none.
 
 Requirements
 
@@ -457,8 +575,9 @@ Requirements
 - Must not compete with Primary Rhythm visual emphasis.
 - Must feel like a gentle invitation, not a persistent call-to-action.
 - Must disappear completely once at least one routine exists for the day.
+- Copy and visual weight follow Empty phase (First Journey vs Normal Experience).
 
-This component is an onboarding affordance, not routine management.
+This component is an Empty affordance, not routine management.
 
 Approved copy is defined in Approved Copy.
 
@@ -484,13 +603,33 @@ Approved copy is defined in Approved Copy.
 
 The following strings are approved Product copy for the Today screen.
 
-No alternate Empty Guidance, Create Rhythm CTA, or Day Complete strings may be introduced without a new Product Decision.
+No alternate Empty, Create Rhythm CTA, or Day Complete strings may be introduced without a new Product Decision.
 
-#### Empty Guidance
+#### First Journey Empty — Hero Message
 
-오늘의 첫 리듬을 만들어보세요.
+오늘을  
+하나의 리듬으로  
+시작해보세요.
 
-#### Create Rhythm CTA
+#### First Journey Empty — Philosophy Card
+
+모든 것을 끝내는 앱이 아니에요.
+
+지금 가장 중요한 하나의 리듬에 집중하도록 도와줘요.
+
+#### First Journey Empty — Primary CTA
+
+오늘의 첫 리듬 만들기
+
+#### First Journey Empty — Brand footer
+
+One rhythm at a time.
+
+#### Normal Experience Empty — Minimal Hero / Empty Guidance
+
+오늘의 리듬을 만들어보세요.
+
+#### Normal Experience Empty — Primary CTA
 
 리듬 만들기
 
@@ -521,6 +660,14 @@ Hidden
 
 The Today screen must not require additional navigation to understand the current rhythm.
 
+Secondary toolbar navigation (`관리`) opens Routine Management.
+
+It must remain quiet and must never compete with Primary Rhythm.
+
+Ongoing Create, Edit, and Delete while rhythms exist belong in Routine Management.
+
+See `Docs/Product/Management-UI-Specification.md`.
+
 ---
 
 ## Create Rhythm CTA
@@ -540,7 +687,8 @@ Action
 
 - Opens the routine creation flow.
 - Does not navigate away from Today permanently.
-- After a routine is created, Today returns to the appropriate non-Empty state and the CTA must not reappear.
+- After a routine is created, Today returns to the appropriate non-Empty state and the CTA must not reappear while routines remain for the day.
+- Successful first rhythm creation ends First Journey permanently. Later Empty days use Normal Experience Empty.
 
 ---
 
@@ -582,7 +730,9 @@ If the screen enters Day Complete
 
 If Today has zero routines
 
-- Show Empty Guidance and Create Rhythm CTA.
+- Show the Empty phase that matches journey completion:
+  - First Journey Empty when the user has never successfully created a rhythm
+  - Normal Experience Empty when the user has already successfully created a rhythm
 - Hide Primary Rhythm, Next Rhythm, Progress, and Completion Button.
 
 ---
@@ -634,9 +784,27 @@ Level 7
 
 Create Rhythm CTA (Empty only)
 
-The Create Rhythm CTA must remain visually subordinate to Empty Guidance.
+### Primary Rhythm hierarchy
 
-It must never dominate the screen.
+Primary Rhythm is the emotional center.
+
+It receives the strongest typography and surrounding whitespace.
+
+Time, Completion, Next Rhythm, and Progress remain subordinate.
+
+### Greeting hierarchy
+
+Greeting and Date form one atmospheric header group above the Primary Rhythm Area.
+
+Greeting welcomes the moment.
+
+Date orients the day.
+
+Neither may compete with Primary Rhythm for visual dominance.
+
+In First Journey Empty, Hero Message leads; Philosophy Card supports; Primary CTA invites without replacing the hero.
+
+In Normal Experience Empty, Minimal Hero leads; Primary CTA remains quieter and subordinate.
 
 Typography must reinforce information hierarchy without relying solely on color.
 
@@ -652,6 +820,35 @@ Animations must never compete for attention.
 
 Motion must feel soft, quiet, and brief.
 
+## Content Transition
+
+When Today focus changes — Empty phase, Day Complete, or Primary Rhythm identity — content enters with a restrained transition.
+
+Default motion
+
+- Soft opacity fade combined with a slight vertical settle
+
+Reduce Motion
+
+- Opacity only
+- No vertical offset
+
+Loading toggles must not re-trigger content enter motion.
+
+## Progress Animation
+
+When progress value changes, the progress fill may animate quietly.
+
+Default motion
+
+- Soft ease-in-out fill update
+
+Reduce Motion
+
+- No progress fill animation
+
+Progress motion must remain quieter than Primary Rhythm and must never feel like a score celebration.
+
 ---
 
 # Accessibility
@@ -662,6 +859,17 @@ Interactive elements must meet minimum touch target guidelines.
 
 Dynamic Type must preserve hierarchy while avoiding layout collapse.
 
+### Today accessibility contract
+
+- Greeting is announced as a header.
+- Primary Rhythm title is announced as a header.
+- First Journey Philosophy Card is announced as one combined element.
+- First Journey brand footer is decorative and hidden from VoiceOver.
+- Create Rhythm CTA includes a quiet navigation hint.
+- Completion Button includes a quiet completion hint while saving is in progress.
+- Progress is announced as "오늘의 흐름" with a spoken completion summary.
+- Reduce Motion softens content transition and disables progress fill animation.
+
 ---
 
 # Implementation Notes
@@ -669,13 +877,18 @@ Dynamic Type must preserve hierarchy while avoiding layout collapse.
 These notes clarify important implementation intent.
 
 - Primary Rhythm remains the emotional center of the screen.
+- Greeting remains an atmospheric entry and never outranks Primary Rhythm.
 - Progress is supporting information, never the focus.
 - Next Rhythm exists only for orientation.
 - Past Incomplete reuses the same visual structure as Current whenever possible.
 - Empty and Day Complete must follow the same visual language as the rest of Today.
-- Empty includes a Create Rhythm CTA as an onboarding affordance only. It must not persist once routines exist.
+- Empty has two phases per DR-015. Phase selection follows whether the user has ever successfully created a rhythm, not current routine count.
+- Empty includes a Create Rhythm CTA only while Today has zero routines. It must not persist once routines exist for the day.
+- First Journey Empty ends permanently after the first successful rhythm creation. Deleting every rhythm does not restore it.
+- Existing creators receive Normal Experience through a one-time compatibility bootstrap on launch.
+- Motion is restrained confirmation, never celebration.
 - Spacing is part of the experience and must not be optimized away.
-- Every component must justify its existence by helping the user understand today's rhythm, or by enabling first-time onboarding in Empty.
+- Every component must justify its existence by helping the user understand today's rhythm, or by enabling Empty create when the day has no rhythm.
 - Components without approved data must remain hidden.
 
 ---
@@ -692,10 +905,10 @@ This document does not define:
 - Layout constants
 - Animation timing values
 - Architecture
-- Persistence
+- Persistence technology
 - Notification scheduling
 - Routine creation flow details beyond the Empty-state entry point
 
 The Create Rhythm CTA entry point is in scope for Empty only.
 
-Routine creation form behavior, validation, and management flows belong to separate Product or Engineering documents.
+Routine creation form behavior, validation, and ongoing management flows belong to `Management-UI-Specification.md` and related Product or Engineering documents.
