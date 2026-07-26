@@ -8,6 +8,35 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 13 — Brand Assets & Experience
+
+**Date:** 2026-07-26
+
+## Completed
+
+### Brand Mark
+
+- Brand exploration completed
+- Breath Flow refinement completed
+- Optical refinement completed
+- Brand validation completed
+- Brand Lock v1.0 reached review
+
+### Major Outcomes
+
+- Concept 02 — Breath Flow confirmed as the production mark family
+- Soft Taper path refined to production candidate (E10)
+- Brand Lock draft prepared for review
+- Rejected finalists recorded for long-term consistency (A / C / J)
+
+## Notes
+
+Sprint 13 Brand Assets & Experience is complete. The Brand Mark is at Brand Lock review.
+
+Sprint 14 — Brand Assets & Design System is current.
+
+---
+
 # Sprint 12 — Brand Foundation
 
 **Date:** 2026-07-26
@@ -30,9 +59,7 @@ For future plans, see `ROADMAP.md`.
 
 ## Notes
 
-Sprint 12 Brand Foundation is complete. Sprint 13 — Brand Assets & Experience is current.
-
-Foundation first. Implementation later.
+Sprint 12 Brand Foundation is complete. Sprint 13 — Brand Assets & Experience followed.
 
 ---
 

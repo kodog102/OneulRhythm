@@ -33,42 +33,39 @@ Today's experience together with Live Activity already provides the primary quic
 
 ## Current Phase
 
-Brand Assets & Experience
+Brand Assets & Design System
 
 ## Current Sprint
 
-Sprint 13 — Brand Assets & Experience
+Sprint 14 — Brand Assets & Design System
 
 ## Status
 
-📍 Current — Sprint 12 Brand Foundation complete; Sprint 13 Brand Assets & Experience is current
+📍 Current — Sprint 13 Brand Assets & Experience complete; Brand Mark at Brand Lock review; Sprint 14 Brand Assets & Design System is current
 
 ## Current Goal
 
-Establish OneulRhythm's long-term brand foundation before producing visual assets or expanding to new surfaces.
+Produce production brand assets and the design system package from the Brand Lock review mark.
 
 ## Current Priority
 
-Foundation first. Implementation later.
+Brand Lock first. Asset production next.
 
 Immediate focus:
 
-- Brand Manifesto
-- Brand Philosophy
-- Design Language
-- Visual Principles
-- Motion Principles
-- Breath Flow as the Master Symbol
-- `Docs/BRAND.md`
-- ADR-010 / ADR-011 / ADR-012 (`Docs/ADR/`)
+- App Icon Assets
+- SVG / PDF / PNG
+- Construction Grid
+- Safe Area
+- Export Guide
+- Motion Principle
+- Brand Package
 
-Sprint 11 completed Today Empty Journey, visual/motion polish, Management redesign, accessibility and copy polish, and documentation synchronization.
-
-Sprint 12 Brand Foundation is complete. Sprint 13 — Brand Assets & Experience applies that foundation.
+Sprint 12 Brand Foundation is complete. Sprint 13 Brand Assets & Experience is complete and reached Brand Lock review.
 
 Widget Experience remains on the long-term roadmap and is intentionally postponed because Live Activity already satisfies the primary quick-access experience.
 
-Sprint 10 Settings & Preferences remains planned and does not redefine Sprint 12 or Sprint 13 scope.
+Sprint 10 Settings & Preferences remains planned and does not redefine Sprint 14 scope.
 
 Notification Foundation remains complete and stable.
 
@@ -513,7 +510,7 @@ Provide the preferences users need to support a calm in-app experience.
 
 Add settings that serve Product UI quality. Avoid expanding into platform integrations prematurely.
 
-Settings remains planned and does not redefine Sprint 12 Brand Foundation or Sprint 13 Brand Assets & Experience scope.
+Settings remains planned and does not redefine Sprint 14 Brand Assets & Design System scope.
 
 **Status**
 
@@ -595,13 +592,45 @@ Typical deliverables include:
 - Brand asset export
 - Applying the approved design language across the product
 
+### Completed
+
+- Brand exploration
+- Breath Flow refinement
+- Optical refinement
+- Brand validation
+- Brand Lock v1.0 (review)
+
+**Status**
+
+✅ Completed
+
+---
+
+## Sprint 14 — Brand Assets & Design System
+
+### Goal
+
+Produce production brand assets and the design system package from Brand Lock review.
+
+### Scope Direction
+
+- App Icon Assets
+- SVG
+- PDF
+- PNG
+- Construction Grid
+- Safe Area
+- Export Guide
+- Motion Principle
+- Brand Package
+
 **Status**
 
 📍 Current
 
 ---
 
-## Sprint 14 — Widget Experience
+## Sprint 15 — Widget Experience
 
 ### Goal
 
@@ -623,11 +652,11 @@ Widget should consume the existing Snapshot, mapping architecture, and finalized
 
 **Status**
 
-📅 Planned (postponed until after Brand Foundation and Brand Assets & Experience)
+📅 Planned (postponed until after Brand Assets & Design System)
 
 ---
 
-## Sprint 15 — Apple Watch Integration
+## Sprint 16 — Apple Watch Integration
 
 ### Goal
 
@@ -645,7 +674,7 @@ Apple Watch remains a future surface under Platform Expansion. It should reuse t
 
 **Status**
 
-📅 Planned (postponed until after Brand Foundation, Brand Assets & Experience, and Widget Experience)
+📅 Planned (postponed until after Brand Assets & Design System and Widget Experience)
 
 ---
 

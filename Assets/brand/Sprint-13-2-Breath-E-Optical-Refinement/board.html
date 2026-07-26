@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sprint 13-2 — Breath E Optical Refinement</title>
+  <style>
+    :root {
+      --cream:#f6f2eb; --paper:#fbf8f3; --ink:#24302a; --muted:#6a736c;
+      --line:#ddd6cb; --sage:#6f8a78; --sage-deep:#3d5648; --warn:#8a6a4a; --good:#3f6b52;
+      --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+      --sans:"Avenir Next","Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased}
+    .page{max-width:1180px;margin:0 auto;padding:48px 28px 96px}
+    .mast{display:grid;grid-template-columns:1.25fr .75fr;gap:36px;padding-bottom:36px;border-bottom:1px solid var(--line);margin-bottom:48px}
+    .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--sage);font-weight:600;margin:0 0 14px}
+    h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,4.2vw,46px);line-height:1.12;margin:0 0 14px;letter-spacing:-.02em}
+    .lede{font-size:15px;color:var(--muted);max-width:46ch;margin:0}
+    .meta{align-self:end;display:grid;gap:12px;padding:20px 22px;background:var(--paper);border:1px solid var(--line)}
+    .meta-row{display:flex;justify-content:space-between;gap:12px;font-size:13px;border-bottom:1px solid var(--line);padding-bottom:10px}
+    .meta-row:last-child{border:0;padding:0}
+    .meta-row span{color:var(--muted)}
+    .meta-row strong{font-weight:600}
+    section{margin-bottom:64px}
+    .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+    .sec-head h2{font-family:var(--serif);font-weight:500;font-size:26px;margin:0}
+    .sec-head p{margin:0;font-size:13px;color:var(--muted);max-width:46ch;text-align:right}
+    .findings{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .finding{background:var(--paper);border:1px solid var(--line);padding:16px}
+    .finding .n{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);font-weight:600;margin-bottom:6px}
+    .finding h3{font-family:var(--serif);font-size:16px;margin:0 0 8px;font-weight:500}
+    .finding p{margin:0;font-size:12.5px;color:var(--muted)}
+    .finding.wide{grid-column:span 2}
+    .matrix{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+    .card{background:var(--paper);border:1px solid var(--line);padding:14px}
+    .card.top{border-color:var(--sage)}
+    .card.pick{border-color:var(--sage-deep);background:#f3f7f4}
+    .card .label{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:10px}
+    .card .label strong{font-family:var(--serif);font-size:16px;font-weight:500}
+    .card .label em{font-style:normal;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);font-weight:600}
+    .tile{aspect-ratio:1;border-radius:22%;background:linear-gradient(165deg,#e9efe9,#d7e2d8);display:grid;place-items:center}
+    .tile svg{width:68%;height:68%}
+    .card .note{margin:10px 0 0;font-size:12px;color:var(--muted);min-height:3.4em}
+    .card .axis{margin-top:8px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--sage-deep);opacity:.85}
+    .scale-row,.funnel,.lock-grid,.reject-grid,.preview-grid{display:grid;gap:16px}
+    .scale-row{grid-template-columns:1.3fr .9fr}
+    .panel{background:var(--paper);border:1px solid var(--line);padding:22px}
+    .panel h3{font-family:var(--serif);font-size:18px;margin:0 0 6px;font-weight:500}
+    .panel .hint{font-size:12px;color:var(--muted);margin:0 0 16px}
+    .sizes{display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap}
+    .size{display:flex;flex-direction:column;align-items:center;gap:8px}
+    .size .t{border-radius:22%;background:linear-gradient(165deg,#e9efe9,#d7e2d8);display:grid;place-items:center}
+    .size .t svg{width:68%;height:68%}
+    .s1024 .t{width:160px;height:160px}.s180 .t{width:90px;height:90px}.s60 .t{width:60px;height:60px}.s29 .t{width:29px;height:29px;border-radius:7px}
+    .size figcaption{font-size:11px;color:var(--muted)}
+    .cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .cmp .item{text-align:center}
+    .cmp .item .t{width:100%;aspect-ratio:1;border-radius:22%;background:linear-gradient(165deg,#e9efe9,#d7e2d8);display:grid;place-items:center;margin-bottom:8px}
+    .cmp .item .t svg{width:68%;height:68%}
+    .cmp strong{display:block;font-family:var(--serif);font-weight:500}
+    .cmp span{font-size:12px;color:var(--muted)}
+    .preview-grid{grid-template-columns:1.1fr 1fr}
+    .homescreen{background:#0f1412;border-radius:28px;padding:22px 18px 26px;color:#e8ece9;min-height:400px;position:relative;overflow:hidden}
+    .homescreen::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 20% 10%,rgba(111,138,120,.22),transparent 45%);pointer-events:none}
+    .hs-top{position:relative;display:flex;justify-content:space-between;font-size:12px;opacity:.7;margin-bottom:18px;padding:0 8px}
+    .hs-grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 12px;padding:8px}
+    .app{display:flex;flex-direction:column;align-items:center;gap:6px}
+    .app .ico{width:56px;height:56px;border-radius:13px;display:grid;place-items:center}
+    .app.ours .ico{background:linear-gradient(165deg,#e9efe9,#d7e2d8)}
+    .app.ghost .ico{background:rgba(255,255,255,.08)}
+    .app .ico svg{width:68%;height:68%}
+    .app span{font-size:10px;opacity:.85;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .dn{border:1px solid var(--line);background:var(--paper);padding:16px;display:grid;grid-template-columns:88px 1fr;gap:14px;align-items:center}
+    .dn.night{background:#161d1a;border-color:#2a3530;color:#e6ebe7}
+    .dn .t{width:88px;height:88px;border-radius:22%;display:grid;place-items:center}
+    .dn.day .t{background:linear-gradient(165deg,#e9efe9,#d7e2d8)}
+    .dn.night .t{background:linear-gradient(165deg,#2a3530,#1a221e)}
+    .dn .t svg{width:68%;height:68%}
+    .dn h3{font-family:var(--serif);font-size:17px;margin:0 0 4px;font-weight:500}
+    .dn p{margin:0;font-size:13px;color:var(--muted)}
+    .dn.night p{color:#9aa79f}
+    .table-wrap{overflow-x:auto;border:1px solid var(--line);background:var(--paper)}
+    table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:820px}
+    th,td{padding:10px 11px;text-align:center;border-bottom:1px solid var(--line)}
+    th{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:#f3efe8;font-weight:600}
+    td:first-child,th:first-child{text-align:left;font-weight:600;white-space:nowrap}
+    tr.top3{background:#f4f8f5} tr.top2{background:#eaf2ec} tr.prod{background:#dce8e0}
+    .badge{display:inline-block;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;margin-left:6px;border:1px solid var(--sage);color:var(--sage-deep)}
+    .badge.one{background:var(--sage-deep);color:#eef3ef;border-color:var(--sage-deep)}
+    .funnel{grid-template-columns:1.15fr .85fr}
+    .step{background:var(--paper);border:1px solid var(--line);padding:18px 20px;margin-bottom:12px}
+    .step.final{background:var(--sage-deep);color:#eef3ef;border-color:var(--sage-deep)}
+    .step .stage{font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.7;margin-bottom:6px}
+    .step h3{font-family:var(--serif);font-size:20px;margin:0 0 8px;font-weight:500}
+    .step p{margin:0;font-size:13px}
+    .picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .pick-chip{font-size:12px;padding:5px 10px;border:1px solid var(--line);background:var(--cream)}
+    .step.final .pick-chip{border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.08)}
+    .winner{background:var(--paper);border:1px solid var(--line);padding:24px;display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:center}
+    .winner .big{width:176px;height:176px;border-radius:22%;background:linear-gradient(165deg,#e9efe9,#d7e2d8);display:grid;place-items:center;margin-bottom:16px}
+    .winner .big svg{width:68%;height:68%}
+    .winner h3{font-family:var(--serif);font-size:24px;margin:0 0 8px;font-weight:500}
+    .winner p{margin:0;font-size:13px;color:var(--muted);max-width:34ch}
+    .lock-grid{grid-template-columns:280px 1fr;gap:18px}
+    .lock-primary{background:var(--paper);border:1px solid var(--line);padding:28px;display:flex;flex-direction:column;align-items:center;text-align:center}
+    .lock-primary .big{width:200px;height:200px;border-radius:22%;background:linear-gradient(165deg,#e9efe9,#d7e2d8);display:grid;place-items:center;margin-bottom:16px}
+    .lock-primary .big svg{width:68%;height:68%}
+    .lock-primary h3{font-family:var(--serif);font-size:22px;margin:0 0 6px;font-weight:500}
+    .lock-primary p{margin:0;font-size:13px;color:var(--muted)}
+    .lock-specs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .spec{background:var(--paper);border:1px solid var(--line);padding:16px}
+    .spec h4{margin:0 0 8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--sage)}
+    .spec p,.spec li{margin:0;font-size:13px;color:var(--muted)}
+    .spec ul{margin:0;padding-left:18px}
+    .spec.do h4{color:var(--good)}
+    .spec.dont h4{color:var(--warn)}
+    .safe{position:relative;width:140px;height:140px;margin:8px auto 0}
+    .safe .outer{position:absolute;inset:0;border:1px dashed #b7c4ba;border-radius:22%}
+    .safe .inner{position:absolute;inset:14%;background:linear-gradient(165deg,#e9efe9,#d7e2d8);border-radius:18%;display:grid;place-items:center}
+    .safe .inner svg{width:68%;height:68%}
+    .reject-grid{grid-template-columns:repeat(3,1fr)}
+    .reject{background:var(--paper);border:1px solid var(--line);padding:18px}
+    .reject .mini{width:72px;height:72px;border-radius:18%;background:linear-gradient(165deg,#e9efe9,#d7e2d8);display:grid;place-items:center;margin-bottom:12px}
+    .reject .mini svg{width:68%;height:68%}
+    .reject h3{font-family:var(--serif);font-size:18px;margin:0 0 6px;font-weight:500}
+    .reject .why{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--warn);margin-bottom:8px}
+    .reject p{margin:0;font-size:13px;color:var(--muted)}
+    footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted)}
+    @media(max-width:960px){
+      .mast,.scale-row,.funnel,.lock-grid,.preview-grid,.reject-grid{grid-template-columns:1fr}
+      .findings,.matrix,.lock-specs{grid-template-columns:1fr 1fr}
+      .finding.wide{grid-column:span 1}
+      .sec-head{flex-direction:column}.sec-head p{text-align:left}
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <header class="mast">
+    <div>
+      <p class="eyebrow">Sprint 13-2 · Brand Assets & Experience</p>
+      <h1>Breath E<br />Optical Refinement</h1>
+      <p class="lede">Concept selected. Family closed. This board micro-refines Breath E only—optical center, tension, taper, rhythm, space, and small-size clarity.</p>
+    </div>
+    <aside class="meta">
+      <div class="meta-row"><span>Source</span><strong>Breath E — Soft Taper</strong></div>
+      <div class="meta-row"><span>Phase</span><strong>Optical micro-refinement</strong></div>
+      <div class="meta-row"><span>Variants</span><strong>10 · E1–E10</strong></div>
+      <div class="meta-row"><span>Production draft</span><strong>E10 — Synthesis</strong></div>
+    </aside>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <h2>01 · Optical Findings</h2>
+      <p>Study of Sprint 13-1 Breath E before micro moves.</p>
+    </div>
+    <div class="findings">
+      <article class="finding"><div class="n">01</div><h3>Optical Center</h3><p>Exhale trough pulls visual mass slightly low. The glyph wants a gentle lift so the breath sits nearer the optical middle of the squircle.</p></article>
+      <article class="finding"><div class="n">02</div><h3>Curve Tension</h3><p>The zero-crossing between inhale and exhale can feel slightly kinked. Longer handles quiet the S without flattening the rhythm.</p></article>
+      <article class="finding"><div class="n">03</div><h3>Stroke Transition</h3><p>Soft taper is correct in principle. Mid-to-end contrast can be softened so the stroke feels continuous rather than dramatic.</p></article>
+      <article class="finding"><div class="n">04</div><h3>End Weight</h3><p>Terminals approach too thin for reliable 29pt settings-row clarity. Minimum end width needs a production floor.</p></article>
+      <article class="finding"><div class="n">05</div><h3>Breath Rhythm</h3><p>Inhale peak arrives a little early relative to exhale length. More even timing reads as one calm cycle.</p></article>
+      <article class="finding"><div class="n">06</div><h3>Negative Space</h3><p>Left/right air is nearly even, but a slight inset improves containment inside the rounded square.</p></article>
+      <article class="finding wide"><div class="n">07</div><h3>Small-size Clarity</h3><p>At 29–60pt, taper detail collapses first. Production candidate must hold silhouette under reduction before chasing large-size elegance.</p></article>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>02 · Micro Refinements</h2>
+      <p>Ten Breath E descendants. No new concepts.</p>
+    </div>
+    <div class="matrix" id="matrix"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>03 · Production Evaluation</h2>
+      <p>Scored on the seven optical concerns · then narrowed.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Version</th><th>Center</th><th>Tension</th><th>Transition</th><th>Ends</th><th>Rhythm</th><th>Space</th><th>Small</th><th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="eval"></tbody>
+      </table>
+    </div>
+    <div class="funnel" style="margin-top:20px">
+      <div>
+        <div class="step">
+          <div class="stage">Stage 1</div>
+          <h3>TOP 3</h3>
+          <p>Kept the three that each solve a structural optical issue without leaving Breath E: smoother S, balanced timing, and reduction strength.</p>
+          <div class="picks"><span class="pick-chip">E4 Smoother</span><span class="pick-chip">E7 Balanced Rhythm</span><span class="pick-chip">E9 Small-Size Clear</span></div>
+        </div>
+        <div class="step">
+          <div class="stage">Stage 2</div>
+          <h3>TOP 2</h3>
+          <p>Between structural polish and reduction readiness, E9 carries better into app-icon reality. E10 then absorbs E4/E7 lessons into one mark.</p>
+          <div class="picks"><span class="pick-chip">E9 Small-Size Clear</span><span class="pick-chip">E10 Synthesis</span></div>
+        </div>
+        <div class="step final">
+          <div class="stage">Stage 3</div>
+          <h3>Production Candidate — E10</h3>
+          <p>Optical lift + smoother cycle + balanced inhale/exhale + production end weight. Still unmistakably Breath E Soft Taper.</p>
+          <div class="picks"><span class="pick-chip">E10 · Synthesis</span></div>
+        </div>
+      </div>
+      <div class="winner" id="winner"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>04 · Scale & Context</h2>
+      <p>E10 at production sizes · Day / Night · Home Screen</p>
+    </div>
+    <div class="scale-row">
+      <div class="panel">
+        <h3>E10 — Synthesis</h3>
+        <p class="hint">Production candidate draft · not final locked asset</p>
+        <div class="sizes" id="sizes"></div>
+      </div>
+      <div class="panel">
+        <h3>TOP 2 at 60pt</h3>
+        <p class="hint">Reduction side-by-side</p>
+        <div class="cmp" id="cmp"></div>
+      </div>
+    </div>
+    <div class="preview-grid" style="margin-top:16px">
+      <div class="homescreen" id="hs"></div>
+      <div id="dn" style="display:grid;gap:12px"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>05 · Brand Lock Draft</h2>
+      <p>First draft only. Does not lock the production asset.</p>
+    </div>
+    <div class="lock-grid">
+      <div class="lock-primary" id="lock-primary"></div>
+      <div class="lock-specs">
+        <div class="spec">
+          <h4>Construction Principle</h4>
+          <p>One open stroke. One full breath cycle (inhale → exhale). Soft taper with a production minimum end weight. Horizontal reading inside a rounded square.</p>
+        </div>
+        <div class="spec">
+          <h4>Brand DNA</h4>
+          <p>Presence · Rhythm · Flow · Continuity · Calm. Soft Geometry. “One rhythm at a time.” Philosophy before feature metaphor (ADR-010).</p>
+        </div>
+        <div class="spec">
+          <h4>Safe Area (concept)</h4>
+          <p>Keep clear margin ≈ 14% of icon edge. Do not crop terminals. Do not crowd with badges or type.</p>
+          <div class="safe" id="safe"></div>
+        </div>
+        <div class="spec">
+          <h4>Minimum Size</h4>
+          <p>Marketing / App Store: prefer ≥ 60pt display. System icon: 29pt must remain a readable single cycle. Below 29pt, do not use the mark alone.</p>
+        </div>
+        <div class="spec">
+          <h4>Background Usage</h4>
+          <p>Day: soft sage field, deep green mark. Night: deep field, lifted mark. Avoid busy photography, neon, or high-chroma fields that compete with the stroke.</p>
+        </div>
+        <div class="spec">
+          <h4>Color (draft)</h4>
+          <p>Mark ≈ #2F4A3C on light. Mark ≈ #D7E4DB on dark. Field day ≈ #E9EFE9 → #D7E2D8. Field night ≈ #2A3530 → #1A221E.</p>
+        </div>
+        <div class="spec do">
+          <h4>Do</h4>
+          <ul>
+            <li>Keep one open cycle</li>
+            <li>Preserve soft taper</li>
+            <li>Protect optical center</li>
+            <li>Test at 29 / 60 / 180</li>
+          </ul>
+        </div>
+        <div class="spec dont">
+          <h4>Don't</h4>
+          <ul>
+            <li>Close the path into a loop</li>
+            <li>Raise amplitude into chart/smile</li>
+            <li>Drop end weight below floor</li>
+            <li>Add dots, leaves, or accents</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>06 · Rejection Record</h2>
+      <p>Why Sprint 13-1 finalists did not become production.</p>
+    </div>
+    <div class="reject-grid" id="rejects"></div>
+  </section>
+
+  <footer>
+    <span>OneulRhythm · Sprint 13-2 · Breath E Optical Refinement</span>
+    <span>Draft Brand Lock · Production candidate E10</span>
+  </footer>
+</div>
+<script>
+const STROKE = "#2f4a3c";
+const STROKE_NIGHT = "#d7e4db";
+const variants = [{"id": "E1", "name": "Baseline", "note": "Sprint 13-1 Breath E soft taper. Reference for optical study.", "focus": "Reference", "path": "M18 52 C29 52 33 40 42 40 C51 40 51 64 60 64 C69 64 73 52 82 52", "end": 1.5, "mid": 7.3, "zone": 0.2, "rank": null, "scores": {"center": 3, "tension": 3, "transition": 3, "end": 3, "rhythm": 4, "space": 3, "small": 3}, "fill": "M 18.00 52.75 L 19.06 52.74 L 20.10 52.70 L 21.11 52.62 L 22.11 52.52 L 23.10 52.38 L 24.07 52.21 L 25.05 51.99 L 26.01 51.74 L 26.96 51.45 L 27.89 51.13 L 28.81 50.77 L 29.70 50.38 L 30.57 49.97 L 31.41 49.53 L 32.22 49.08 L 32.99 48.61 L 33.71 48.13 L 34.40 47.63 L 35.04 47.13 L 35.65 46.63 L 36.24 46.16 L 36.82 45.73 L 37.38 45.33 L 37.92 44.98 L 38.46 44.66 L 38.98 44.39 L 39.48 44.17 L 39.98 43.98 L 40.47 43.84 L 40.97 43.73 L 41.47 43.67 L 42.00 43.65 L 42.20 43.67 L 42.37 43.71 L 42.56 43.80 L 42.80 43.96 L 43.11 44.21 L 43.46 44.59 L 43.84 45.08 L 44.25 45.68 L 44.66 46.39 L 45.08 47.19 L 45.50 48.07 L 45.92 49.02 L 46.33 50.03 L 46.75 51.08 L 47.16 52.17 L 47.58 53.28 L 48.01 54.41 L 48.44 55.56 L 48.89 56.70 L 49.36 57.83 L 49.86 58.96 L 50.38 60.06 L 50.95 61.14 L 51.56 62.18 L 52.24 63.19 L 52.99 64.16 L 53.85 65.07 L 54.83 65.89 L 55.94 66.61 L 57.20 67.17 L 58.56 67.53 L 60.00 67.65 L 61.13 67.60 L 62.23 67.47 L 63.29 67.24 L 64.31 66.95 L 65.28 66.59 L 66.20 66.17 L 67.08 65.71 L 67.92 65.21 L 68.71 64.68 L 69.47 64.13 L 70.20 63.57 L 70.90 62.99 L 71.57 62.41 L 72.20 61.80 L 72.79 61.17 L 73.33 60.52 L 73.84 59.86 L 74.32 59.20 L 74.78 58.54 L 75.22 57.88 L 75.66 57.24 L 76.10 56.61 L 76.55 56.01 L 77.01 55.43 L 77.50 54.89 L 78.02 54.39 L 78.58 53.93 L 79.18 53.54 L 79.82 53.21 L 80.51 52.96 L 81.23 52.80 L 82.00 52.75 L 81.77 52.71 L 81.56 52.61 L 81.39 52.44 L 81.29 52.23 L 81.25 52.00 L 81.29 51.77 L 81.39 51.56 L 81.56 51.39 L 81.77 51.29 L 82.00 51.25 L 81.11 51.26 L 80.23 51.31 L 79.36 51.38 L 78.50 51.50 L 77.64 51.64 L 76.77 51.83 L 75.91 52.05 L 75.05 52.32 L 74.19 52.62 L 73.34 52.95 L 72.51 53.32 L 71.69 53.71 L 70.90 54.13 L 70.13 54.56 L 69.38 55.01 L 68.67 55.48 L 67.99 55.95 L 67.35 56.43 L 66.75 56.93 L 66.19 57.42 L 65.63 57.87 L 65.08 58.30 L 64.55 58.69 L 64.02 59.04 L 63.50 59.35 L 63.00 59.61 L 62.50 59.84 L 62.01 60.02 L 61.52 60.16 L 61.03 60.27 L 60.53 60.33 L 60.00 60.35 L 59.80 60.33 L 59.63 60.29 L 59.44 60.20 L 59.20 60.04 L 58.89 59.79 L 58.54 59.41 L 58.16 58.92 L 57.75 58.32 L 57.34 57.61 L 56.92 56.81 L 56.50 55.93 L 56.08 54.98 L 55.67 53.97 L 55.25 52.92 L 54.84 51.83 L 54.42 50.72 L 53.99 49.59 L 53.56 48.44 L 53.11 47.30 L 52.64 46.17 L 52.14 45.04 L 51.62 43.94 L 51.05 42.86 L 50.44 41.82 L 49.76 40.81 L 49.01 39.84 L 48.15 38.93 L 47.17 38.11 L 46.06 37.39 L 44.80 36.83 L 43.44 36.47 L 42.00 36.35 L 40.87 36.40 L 39.77 36.53 L 38.71 36.76 L 37.69 37.05 L 36.72 37.41 L 35.79 37.82 L 34.91 38.28 L 34.08 38.77 L 33.27 39.30 L 32.51 39.84 L 31.77 40.39 L 31.05 40.96 L 30.36 41.53 L 29.71 42.13 L 29.09 42.75 L 28.51 43.39 L 27.96 44.05 L 27.43 44.71 L 26.92 45.37 L 26.41 46.02 L 25.89 46.67 L 25.36 47.31 L 24.82 47.92 L 24.24 48.51 L 23.63 49.06 L 22.98 49.58 L 22.28 50.04 L 21.53 50.45 L 20.73 50.78 L 19.87 51.04 L 18.96 51.19 L 18.00 51.25 L 18.23 51.29 L 18.44 51.39 L 18.61 51.56 L 18.71 51.77 L 18.75 52.00 L 18.71 52.23 L 18.61 52.44 L 18.44 52.61 L 18.23 52.71 Z", "total": 22}, {"id": "E2", "name": "Optical Center \u2191", "note": "Whole glyph lifted ~1.5 units so mass sits nearer optical center.", "focus": "Optical Center", "path": "M18.00 50.50 C29.00 50.50 33.00 38.50 42.00 38.50 C51.00 38.50 51.00 62.50 60.00 62.50 C69.00 62.50 73.00 50.50 82.00 50.50", "end": 1.5, "mid": 7.3, "zone": 0.2, "rank": null, "scores": {"center": 5, "tension": 3, "transition": 3, "end": 3, "rhythm": 4, "space": 4, "small": 3}, "fill": "M 18.00 51.25 L 19.06 51.24 L 20.10 51.20 L 21.11 51.12 L 22.11 51.02 L 23.10 50.88 L 24.07 50.71 L 25.05 50.49 L 26.01 50.24 L 26.96 49.95 L 27.89 49.63 L 28.81 49.27 L 29.70 48.88 L 30.57 48.47 L 31.41 48.03 L 32.22 47.58 L 32.99 47.11 L 33.71 46.63 L 34.40 46.13 L 35.04 45.63 L 35.65 45.13 L 36.24 44.66 L 36.82 44.23 L 37.38 43.83 L 37.92 43.48 L 38.46 43.16 L 38.98 42.89 L 39.48 42.67 L 39.98 42.48 L 40.47 42.34 L 40.97 42.23 L 41.47 42.17 L 42.00 42.15 L 42.20 42.17 L 42.37 42.21 L 42.56 42.30 L 42.80 42.46 L 43.11 42.71 L 43.46 43.09 L 43.84 43.58 L 44.25 44.18 L 44.66 44.89 L 45.08 45.69 L 45.50 46.57 L 45.92 47.52 L 46.33 48.53 L 46.75 49.58 L 47.16 50.67 L 47.58 51.78 L 48.01 52.91 L 48.44 54.06 L 48.89 55.20 L 49.36 56.33 L 49.86 57.46 L 50.38 58.56 L 50.95 59.64 L 51.56 60.68 L 52.24 61.69 L 52.99 62.66 L 53.85 63.57 L 54.83 64.39 L 55.94 65.11 L 57.20 65.67 L 58.56 66.03 L 60.00 66.15 L 61.13 66.10 L 62.23 65.97 L 63.29 65.74 L 64.31 65.45 L 65.28 65.09 L 66.20 64.67 L 67.08 64.21 L 67.92 63.71 L 68.71 63.18 L 69.47 62.63 L 70.20 62.07 L 70.90 61.49 L 71.57 60.91 L 72.20 60.30 L 72.79 59.67 L 73.33 59.02 L 73.84 58.36 L 74.32 57.70 L 74.78 57.04 L 75.22 56.38 L 75.66 55.74 L 76.10 55.11 L 76.55 54.51 L 77.01 53.93 L 77.50 53.39 L 78.02 52.89 L 78.58 52.43 L 79.18 52.04 L 79.82 51.71 L 80.51 51.46 L 81.23 51.30 L 82.00 51.25 L 81.77 51.21 L 81.56 51.11 L 81.39 50.94 L 81.29 50.73 L 81.25 50.50 L 81.29 50.27 L 81.39 50.06 L 81.56 49.89 L 81.77 49.79 L 82.00 49.75 L 81.11 49.76 L 80.23 49.81 L 79.36 49.88 L 78.50 50.00 L 77.64 50.14 L 76.77 50.33 L 75.91 50.55 L 75.05 50.82 L 74.19 51.12 L 73.34 51.45 L 72.51 51.82 L 71.69 52.21 L 70.90 52.63 L 70.13 53.06 L 69.38 53.51 L 68.67 53.98 L 67.99 54.45 L 67.35 54.93 L 66.75 55.43 L 66.19 55.92 L 65.63 56.37 L 65.08 56.80 L 64.55 57.19 L 64.02 57.54 L 63.50 57.85 L 63.00 58.11 L 62.50 58.34 L 62.01 58.52 L 61.52 58.66 L 61.03 58.77 L 60.53 58.83 L 60.00 58.85 L 59.80 58.83 L 59.63 58.79 L 59.44 58.70 L 59.20 58.54 L 58.89 58.29 L 58.54 57.91 L 58.16 57.42 L 57.75 56.82 L 57.34 56.11 L 56.92 55.31 L 56.50 54.43 L 56.08 53.48 L 55.67 52.47 L 55.25 51.42 L 54.84 50.33 L 54.42 49.22 L 53.99 48.09 L 53.56 46.94 L 53.11 45.80 L 52.64 44.67 L 52.14 43.54 L 51.62 42.44 L 51.05 41.36 L 50.44 40.32 L 49.76 39.31 L 49.01 38.34 L 48.15 37.43 L 47.17 36.61 L 46.06 35.89 L 44.80 35.33 L 43.44 34.97 L 42.00 34.85 L 40.87 34.90 L 39.77 35.03 L 38.71 35.26 L 37.69 35.55 L 36.72 35.91 L 35.79 36.32 L 34.91 36.78 L 34.08 37.27 L 33.27 37.80 L 32.51 38.34 L 31.77 38.89 L 31.05 39.46 L 30.36 40.03 L 29.71 40.63 L 29.09 41.25 L 28.51 41.89 L 27.96 42.55 L 27.43 43.21 L 26.92 43.87 L 26.41 44.52 L 25.89 45.17 L 25.36 45.81 L 24.82 46.42 L 24.24 47.01 L 23.63 47.56 L 22.98 48.08 L 22.28 48.54 L 21.53 48.95 L 20.73 49.28 L 19.87 49.54 L 18.96 49.69 L 18.00 49.75 L 18.23 49.79 L 18.44 49.89 L 18.61 50.06 L 18.71 50.27 L 18.75 50.50 L 18.71 50.73 L 18.61 50.94 L 18.44 51.11 L 18.23 51.21 Z", "total": 25}, {"id": "E3", "name": "Lighter Taper", "note": "Gentler mid/end contrast. Softens drama; slightly less distinctive.", "focus": "Stroke Transition", "path": "M18 52 C29 52 33 40 42 40 C51 40 51 64 60 64 C69 64 73 52 82 52", "end": 2.4, "mid": 6.8, "zone": 0.28, "rank": null, "scores": {"center": 3, "tension": 4, "transition": 4, "end": 4, "rhythm": 4, "space": 3, "small": 4}, "fill": "M 18.00 53.20 L 19.09 53.17 L 20.15 53.09 L 21.18 52.95 L 22.18 52.77 L 23.15 52.54 L 24.10 52.26 L 25.02 51.94 L 25.92 51.59 L 26.81 51.20 L 27.67 50.79 L 28.51 50.35 L 29.34 49.90 L 30.14 49.43 L 30.93 48.95 L 31.70 48.46 L 32.45 47.98 L 33.18 47.51 L 33.90 47.04 L 34.59 46.59 L 35.27 46.16 L 35.92 45.75 L 36.56 45.37 L 37.17 45.02 L 37.76 44.70 L 38.32 44.42 L 38.87 44.16 L 39.39 43.93 L 39.90 43.74 L 40.41 43.60 L 40.93 43.49 L 41.45 43.42 L 42.00 43.40 L 42.24 43.42 L 42.45 43.47 L 42.68 43.58 L 42.95 43.76 L 43.28 44.03 L 43.65 44.43 L 44.05 44.93 L 44.46 45.55 L 44.88 46.27 L 45.31 47.08 L 45.73 47.97 L 46.15 48.92 L 46.57 49.93 L 46.98 50.99 L 47.40 52.08 L 47.82 53.19 L 48.24 54.33 L 48.68 55.47 L 49.13 56.60 L 49.59 57.74 L 50.08 58.85 L 50.61 59.95 L 51.17 61.02 L 51.77 62.05 L 52.44 63.05 L 53.18 64.00 L 54.02 64.88 L 54.98 65.69 L 56.06 66.39 L 57.28 66.94 L 58.61 67.28 L 60.00 67.40 L 61.11 67.35 L 62.19 67.22 L 63.23 67.00 L 64.23 66.71 L 65.19 66.36 L 66.09 65.94 L 66.95 65.47 L 67.75 64.94 L 68.50 64.38 L 69.21 63.78 L 69.87 63.16 L 70.51 62.53 L 71.11 61.88 L 71.68 61.23 L 72.23 60.57 L 72.77 59.92 L 73.29 59.27 L 73.81 58.64 L 74.32 58.02 L 74.83 57.42 L 75.34 56.84 L 75.86 56.29 L 76.38 55.77 L 76.92 55.29 L 77.48 54.84 L 78.05 54.44 L 78.64 54.08 L 79.26 53.78 L 79.90 53.53 L 80.57 53.35 L 81.27 53.24 L 82.00 53.20 L 81.63 53.14 L 81.29 52.97 L 81.03 52.71 L 80.86 52.37 L 80.80 52.00 L 80.86 51.63 L 81.03 51.29 L 81.29 51.03 L 81.63 50.86 L 82.00 50.80 L 81.07 50.83 L 80.17 50.92 L 79.28 51.06 L 78.42 51.25 L 77.58 51.49 L 76.75 51.78 L 75.94 52.10 L 75.14 52.46 L 74.36 52.86 L 73.59 53.28 L 72.83 53.72 L 72.09 54.17 L 71.35 54.65 L 70.63 55.12 L 69.93 55.60 L 69.23 56.08 L 68.55 56.55 L 67.88 57.01 L 67.22 57.46 L 66.58 57.88 L 65.96 58.28 L 65.35 58.65 L 64.76 59.00 L 64.19 59.31 L 63.64 59.59 L 63.11 59.84 L 62.60 60.07 L 62.09 60.26 L 61.58 60.41 L 61.07 60.51 L 60.55 60.58 L 60.00 60.60 L 59.76 60.58 L 59.55 60.53 L 59.32 60.42 L 59.05 60.24 L 58.72 59.97 L 58.35 59.57 L 57.95 59.07 L 57.54 58.45 L 57.12 57.73 L 56.69 56.92 L 56.27 56.03 L 55.85 55.08 L 55.43 54.07 L 55.02 53.01 L 54.60 51.92 L 54.18 50.81 L 53.76 49.67 L 53.32 48.53 L 52.87 47.40 L 52.41 46.26 L 51.92 45.15 L 51.39 44.05 L 50.83 42.98 L 50.23 41.95 L 49.56 40.95 L 48.82 40.00 L 47.98 39.12 L 47.02 38.31 L 45.94 37.61 L 44.72 37.06 L 43.39 36.72 L 42.00 36.60 L 40.89 36.65 L 39.81 36.78 L 38.77 37.00 L 37.77 37.29 L 36.81 37.64 L 35.91 38.05 L 35.05 38.53 L 34.24 39.05 L 33.48 39.60 L 32.77 40.19 L 32.09 40.81 L 31.44 41.43 L 30.81 42.07 L 30.21 42.72 L 29.63 43.37 L 29.05 44.02 L 28.48 44.66 L 27.92 45.29 L 27.35 45.91 L 26.77 46.51 L 26.19 47.09 L 25.59 47.64 L 24.97 48.17 L 24.33 48.66 L 23.66 49.11 L 22.96 49.53 L 22.23 49.89 L 21.46 50.20 L 20.66 50.45 L 19.81 50.64 L 18.93 50.76 L 18.00 50.80 L 18.37 50.86 L 18.71 51.03 L 18.97 51.29 L 19.14 51.63 L 19.20 52.00 L 19.14 52.37 L 18.97 52.71 L 18.71 52.97 L 18.37 53.14 Z", "total": 26}, {"id": "E4", "name": "Smoother Transition", "note": "Longer handles through the zero-crossing. Less kink, quieter S.", "focus": "Curve Tension", "path": "M18 52 C30 52 34 40.5 42 40.5 C50 40.5 50 63.5 60 63.5 C70 63.5 72 52 82 52", "end": 1.5, "mid": 7.3, "zone": 0.2, "rank": "top3", "scores": {"center": 3, "tension": 5, "transition": 5, "end": 3, "rhythm": 4, "space": 3, "small": 3}, "fill": "M 18.00 52.75 L 19.15 52.74 L 20.26 52.70 L 21.34 52.64 L 22.41 52.55 L 23.45 52.43 L 24.48 52.27 L 25.50 52.08 L 26.50 51.85 L 27.49 51.59 L 28.46 51.29 L 29.40 50.96 L 30.33 50.60 L 31.22 50.21 L 32.08 49.79 L 32.90 49.36 L 33.68 48.90 L 34.42 48.44 L 35.11 47.96 L 35.75 47.47 L 36.35 46.98 L 36.92 46.52 L 37.48 46.10 L 38.01 45.72 L 38.53 45.37 L 39.02 45.07 L 39.49 44.82 L 39.94 44.61 L 40.37 44.44 L 40.78 44.31 L 41.19 44.22 L 41.59 44.17 L 42.00 44.15 L 42.06 44.15 L 42.11 44.17 L 42.21 44.22 L 42.38 44.34 L 42.63 44.56 L 42.93 44.91 L 43.27 45.38 L 43.64 45.96 L 44.03 46.64 L 44.42 47.42 L 44.81 48.27 L 45.21 49.19 L 45.61 50.17 L 46.02 51.19 L 46.43 52.25 L 46.85 53.33 L 47.29 54.43 L 47.74 55.54 L 48.21 56.66 L 48.71 57.77 L 49.24 58.86 L 49.82 59.94 L 50.44 61.00 L 51.12 62.02 L 51.87 63.00 L 52.71 63.94 L 53.65 64.80 L 54.70 65.58 L 55.88 66.23 L 57.17 66.73 L 58.56 67.04 L 60.00 67.15 L 61.18 67.11 L 62.32 66.98 L 63.42 66.78 L 64.47 66.50 L 65.47 66.15 L 66.42 65.75 L 67.32 65.30 L 68.16 64.81 L 68.96 64.29 L 69.72 63.75 L 70.43 63.19 L 71.10 62.63 L 71.75 62.06 L 72.34 61.47 L 72.88 60.86 L 73.38 60.23 L 73.83 59.60 L 74.26 58.96 L 74.67 58.33 L 75.07 57.71 L 75.46 57.09 L 75.86 56.50 L 76.27 55.92 L 76.72 55.36 L 77.19 54.84 L 77.71 54.35 L 78.28 53.91 L 78.91 53.52 L 79.59 53.20 L 80.34 52.96 L 81.14 52.80 L 82.00 52.75 L 81.77 52.71 L 81.56 52.61 L 81.39 52.44 L 81.29 52.23 L 81.25 52.00 L 81.29 51.77 L 81.39 51.56 L 81.56 51.39 L 81.77 51.29 L 82.00 51.25 L 81.03 51.26 L 80.09 51.30 L 79.18 51.37 L 78.28 51.47 L 77.39 51.60 L 76.52 51.77 L 75.65 51.98 L 74.78 52.23 L 73.94 52.52 L 73.10 52.84 L 72.29 53.19 L 71.50 53.57 L 70.73 53.97 L 69.99 54.39 L 69.29 54.83 L 68.62 55.27 L 67.99 55.72 L 67.40 56.18 L 66.85 56.64 L 66.33 57.10 L 65.83 57.52 L 65.32 57.92 L 64.83 58.27 L 64.34 58.60 L 63.84 58.88 L 63.35 59.13 L 62.85 59.34 L 62.34 59.51 L 61.81 59.66 L 61.25 59.76 L 60.65 59.83 L 60.00 59.85 L 59.63 59.82 L 59.30 59.75 L 58.99 59.63 L 58.67 59.45 L 58.31 59.18 L 57.92 58.82 L 57.50 58.36 L 57.07 57.79 L 56.63 57.13 L 56.19 56.39 L 55.76 55.57 L 55.33 54.68 L 54.90 53.74 L 54.48 52.75 L 54.06 51.72 L 53.65 50.67 L 53.23 49.60 L 52.81 48.52 L 52.38 47.44 L 51.94 46.36 L 51.48 45.30 L 50.99 44.25 L 50.48 43.23 L 49.92 42.23 L 49.31 41.26 L 48.62 40.34 L 47.84 39.46 L 46.94 38.64 L 45.90 37.92 L 44.71 37.35 L 43.39 36.98 L 42.00 36.85 L 40.94 36.90 L 39.90 37.04 L 38.91 37.26 L 37.96 37.55 L 37.05 37.90 L 36.19 38.30 L 35.38 38.75 L 34.60 39.22 L 33.85 39.72 L 33.13 40.23 L 32.44 40.76 L 31.76 41.30 L 31.10 41.84 L 30.48 42.40 L 29.88 42.99 L 29.32 43.60 L 28.78 44.22 L 28.24 44.85 L 27.72 45.49 L 27.19 46.12 L 26.65 46.75 L 26.09 47.37 L 25.50 47.97 L 24.87 48.55 L 24.21 49.10 L 23.49 49.61 L 22.72 50.06 L 21.89 50.46 L 21.00 50.79 L 20.06 51.04 L 19.06 51.20 L 18.00 51.25 L 18.23 51.29 L 18.44 51.39 L 18.61 51.56 L 18.71 51.77 L 18.75 52.00 L 18.71 52.23 L 18.61 52.44 L 18.44 52.61 L 18.23 52.71 Z", "total": 26}, {"id": "E5", "name": "Reduced Tension", "note": "Lower amplitude. Calm, but weakens rhythm recognition.", "focus": "Amplitude", "path": "M18 52 C29 52 34 42 42 42 C51 42 51 62 60 62 C69 62 73 52 82 52", "end": 1.5, "mid": 7.3, "zone": 0.2, "rank": null, "scores": {"center": 4, "tension": 5, "transition": 4, "end": 3, "rhythm": 3, "space": 4, "small": 3}, "fill": "M 18.00 52.75 L 19.06 52.74 L 20.09 52.72 L 21.10 52.68 L 22.10 52.62 L 23.09 52.53 L 24.07 52.43 L 25.04 52.29 L 26.00 52.12 L 26.96 51.93 L 27.90 51.71 L 28.83 51.45 L 29.73 51.18 L 30.61 50.87 L 31.47 50.54 L 32.29 50.20 L 33.08 49.83 L 33.82 49.44 L 34.53 49.04 L 35.19 48.62 L 35.82 48.20 L 36.43 47.80 L 37.01 47.43 L 37.58 47.09 L 38.13 46.79 L 38.67 46.52 L 39.18 46.28 L 39.68 46.09 L 40.16 45.93 L 40.63 45.81 L 41.08 45.72 L 41.54 45.67 L 42.00 45.65 L 42.30 45.67 L 42.55 45.73 L 42.80 45.82 L 43.06 45.96 L 43.36 46.17 L 43.69 46.46 L 44.04 46.84 L 44.42 47.31 L 44.82 47.87 L 45.22 48.51 L 45.62 49.22 L 46.03 49.99 L 46.43 50.81 L 46.84 51.67 L 47.25 52.57 L 47.67 53.50 L 48.10 54.44 L 48.54 55.40 L 48.99 56.37 L 49.47 57.33 L 49.98 58.29 L 50.52 59.23 L 51.10 60.16 L 51.74 61.06 L 52.44 61.94 L 53.22 62.77 L 54.10 63.54 L 55.08 64.24 L 56.18 64.83 L 57.38 65.28 L 58.66 65.56 L 60.00 65.65 L 61.08 65.61 L 62.13 65.50 L 63.15 65.33 L 64.13 65.09 L 65.08 64.80 L 65.98 64.46 L 66.84 64.08 L 67.67 63.67 L 68.46 63.23 L 69.22 62.77 L 69.94 62.30 L 70.64 61.82 L 71.32 61.33 L 71.95 60.82 L 72.54 60.28 L 73.09 59.72 L 73.61 59.15 L 74.10 58.57 L 74.57 57.98 L 75.03 57.40 L 75.48 56.82 L 75.94 56.26 L 76.41 55.71 L 76.89 55.19 L 77.40 54.70 L 77.94 54.24 L 78.51 53.83 L 79.13 53.47 L 79.78 53.17 L 80.48 52.94 L 81.22 52.80 L 82.00 52.75 L 81.77 52.71 L 81.56 52.61 L 81.39 52.44 L 81.29 52.23 L 81.25 52.00 L 81.29 51.77 L 81.39 51.56 L 81.56 51.39 L 81.77 51.29 L 82.00 51.25 L 81.12 51.26 L 80.25 51.28 L 79.40 51.33 L 78.55 51.39 L 77.71 51.49 L 76.86 51.61 L 76.02 51.75 L 75.17 51.93 L 74.34 52.14 L 73.51 52.38 L 72.69 52.64 L 71.88 52.93 L 71.10 53.24 L 70.34 53.57 L 69.61 53.92 L 68.91 54.28 L 68.24 54.65 L 67.60 55.04 L 67.01 55.45 L 66.44 55.85 L 65.89 56.23 L 65.34 56.59 L 64.80 56.91 L 64.27 57.21 L 63.74 57.47 L 63.22 57.70 L 62.71 57.89 L 62.19 58.05 L 61.66 58.18 L 61.13 58.27 L 60.58 58.33 L 60.00 58.35 L 59.70 58.33 L 59.45 58.27 L 59.20 58.18 L 58.94 58.04 L 58.64 57.83 L 58.31 57.54 L 57.96 57.16 L 57.58 56.69 L 57.18 56.13 L 56.78 55.49 L 56.38 54.78 L 55.97 54.01 L 55.57 53.19 L 55.16 52.33 L 54.75 51.43 L 54.33 50.50 L 53.90 49.56 L 53.46 48.60 L 53.01 47.63 L 52.53 46.67 L 52.02 45.71 L 51.48 44.77 L 50.90 43.84 L 50.26 42.94 L 49.56 42.06 L 48.78 41.23 L 47.90 40.46 L 46.92 39.76 L 45.82 39.17 L 44.62 38.72 L 43.34 38.44 L 42.00 38.35 L 40.98 38.39 L 39.98 38.50 L 39.02 38.69 L 38.09 38.93 L 37.19 39.22 L 36.33 39.56 L 35.51 39.94 L 34.71 40.34 L 33.94 40.76 L 33.20 41.21 L 32.47 41.66 L 31.76 42.13 L 31.07 42.60 L 30.41 43.09 L 29.78 43.62 L 29.17 44.17 L 28.59 44.74 L 28.03 45.32 L 27.47 45.91 L 26.91 46.50 L 26.34 47.08 L 25.76 47.66 L 25.16 48.21 L 24.53 48.75 L 23.86 49.26 L 23.16 49.73 L 22.42 50.15 L 21.62 50.52 L 20.78 50.83 L 19.90 51.06 L 18.97 51.20 L 18.00 51.25 L 18.23 51.29 L 18.44 51.39 L 18.61 51.56 L 18.71 51.77 L 18.75 52.00 L 18.71 52.23 L 18.61 52.44 L 18.44 52.61 L 18.23 52.71 Z", "total": 26}, {"id": "E6", "name": "Stronger Ends", "note": "Higher minimum end weight for 29pt survival.", "focus": "End Weight", "path": "M18 52 C29 52 33 40 42 40 C51 40 51 64 60 64 C69 64 73 52 82 52", "end": 2.6, "mid": 7.4, "zone": 0.22, "rank": null, "scores": {"center": 3, "tension": 3, "transition": 3, "end": 5, "rhythm": 4, "space": 3, "small": 5}, "fill": "M 18.00 53.30 L 19.10 53.28 L 20.17 53.21 L 21.21 53.10 L 22.23 52.95 L 23.23 52.76 L 24.21 52.53 L 25.17 52.25 L 26.12 51.94 L 27.05 51.60 L 27.95 51.22 L 28.84 50.82 L 29.71 50.39 L 30.55 49.95 L 31.37 49.49 L 32.16 49.02 L 32.93 48.54 L 33.66 48.06 L 34.36 47.59 L 35.03 47.12 L 35.67 46.66 L 36.27 46.20 L 36.85 45.77 L 37.41 45.37 L 37.95 45.02 L 38.48 44.71 L 39.00 44.44 L 39.50 44.21 L 40.00 44.03 L 40.49 43.89 L 40.98 43.78 L 41.48 43.72 L 42.00 43.70 L 42.19 43.72 L 42.35 43.76 L 42.54 43.84 L 42.77 44.00 L 43.07 44.25 L 43.42 44.62 L 43.80 45.11 L 44.21 45.71 L 44.62 46.42 L 45.04 47.22 L 45.46 48.09 L 45.87 49.04 L 46.29 50.05 L 46.70 51.10 L 47.12 52.18 L 47.54 53.30 L 47.96 54.43 L 48.40 55.57 L 48.85 56.72 L 49.32 57.85 L 49.81 58.98 L 50.34 60.08 L 50.90 61.16 L 51.52 62.21 L 52.20 63.22 L 52.96 64.19 L 53.82 65.10 L 54.80 65.93 L 55.92 66.65 L 57.18 67.22 L 58.56 67.58 L 60.00 67.70 L 61.14 67.65 L 62.24 67.51 L 63.31 67.29 L 64.33 67.00 L 65.30 66.63 L 66.23 66.22 L 67.11 65.75 L 67.94 65.25 L 68.74 64.72 L 69.50 64.17 L 70.23 63.61 L 70.92 63.01 L 71.56 62.40 L 72.16 61.76 L 72.73 61.11 L 73.27 60.46 L 73.78 59.80 L 74.28 59.16 L 74.76 58.52 L 75.23 57.89 L 75.70 57.29 L 76.17 56.70 L 76.65 56.15 L 77.14 55.63 L 77.65 55.14 L 78.18 54.70 L 78.73 54.30 L 79.32 53.96 L 79.94 53.69 L 80.59 53.48 L 81.28 53.35 L 82.00 53.30 L 81.60 53.24 L 81.24 53.05 L 80.95 52.76 L 80.76 52.40 L 80.70 52.00 L 80.76 51.60 L 80.95 51.24 L 81.24 50.95 L 81.60 50.76 L 82.00 50.70 L 81.06 50.72 L 80.14 50.79 L 79.24 50.91 L 78.36 51.07 L 77.48 51.27 L 76.62 51.52 L 75.77 51.80 L 74.92 52.12 L 74.09 52.48 L 73.28 52.86 L 72.47 53.27 L 71.69 53.70 L 70.92 54.15 L 70.17 54.61 L 69.44 55.07 L 68.73 55.54 L 68.05 56.01 L 67.39 56.48 L 66.77 56.94 L 66.17 57.39 L 65.60 57.84 L 65.05 58.26 L 64.52 58.65 L 63.99 59.00 L 63.48 59.30 L 62.98 59.57 L 62.48 59.79 L 61.99 59.97 L 61.51 60.11 L 61.02 60.22 L 60.52 60.28 L 60.00 60.30 L 59.81 60.28 L 59.65 60.24 L 59.46 60.16 L 59.23 60.00 L 58.93 59.75 L 58.58 59.38 L 58.20 58.89 L 57.79 58.29 L 57.38 57.58 L 56.96 56.78 L 56.54 55.91 L 56.13 54.96 L 55.71 53.95 L 55.30 52.90 L 54.88 51.82 L 54.46 50.70 L 54.04 49.57 L 53.60 48.43 L 53.15 47.28 L 52.68 46.15 L 52.19 45.02 L 51.66 43.92 L 51.10 42.84 L 50.48 41.79 L 49.80 40.78 L 49.04 39.81 L 48.18 38.90 L 47.20 38.07 L 46.08 37.35 L 44.82 36.78 L 43.44 36.42 L 42.00 36.30 L 40.86 36.35 L 39.76 36.49 L 38.69 36.71 L 37.67 37.00 L 36.70 37.36 L 35.77 37.78 L 34.89 38.24 L 34.05 38.73 L 33.25 39.25 L 32.48 39.80 L 31.74 40.36 L 31.03 40.94 L 30.37 41.55 L 29.74 42.17 L 29.15 42.81 L 28.57 43.46 L 28.02 44.11 L 27.47 44.75 L 26.94 45.39 L 26.40 46.01 L 25.86 46.62 L 25.30 47.21 L 24.73 47.77 L 24.13 48.31 L 23.51 48.80 L 22.85 49.26 L 22.15 49.66 L 21.41 50.01 L 20.63 50.30 L 19.80 50.52 L 18.92 50.65 L 18.00 50.70 L 18.40 50.76 L 18.76 50.95 L 19.05 51.24 L 19.24 51.60 L 19.30 52.00 L 19.24 52.40 L 19.05 52.76 L 18.76 53.05 L 18.40 53.24 Z", "total": 26}, {"id": "E7", "name": "Balanced Rhythm", "note": "Equal inhale/exhale span and amplitude. More even breath timing.", "focus": "Breath Rhythm", "path": "M18 52 C28 52 32 40 40 40 C48 40 52 64 60 64 C68 64 74 52 82 52", "end": 1.5, "mid": 7.3, "zone": 0.2, "rank": "top3", "scores": {"center": 4, "tension": 4, "transition": 4, "end": 3, "rhythm": 5, "space": 4, "small": 3}, "fill": "M 18.00 52.75 L 18.98 52.74 L 19.93 52.69 L 20.87 52.62 L 21.80 52.51 L 22.72 52.37 L 23.64 52.19 L 24.56 51.97 L 25.47 51.71 L 26.37 51.41 L 27.25 51.08 L 28.12 50.72 L 28.97 50.32 L 29.80 49.90 L 30.59 49.46 L 31.35 49.00 L 32.08 48.52 L 32.77 48.04 L 33.41 47.54 L 34.01 47.04 L 34.57 46.54 L 35.11 46.07 L 35.64 45.64 L 36.15 45.25 L 36.64 44.89 L 37.12 44.59 L 37.57 44.33 L 38.01 44.11 L 38.42 43.94 L 38.82 43.81 L 39.21 43.72 L 39.60 43.67 L 40.00 43.65 L 40.07 43.66 L 40.18 43.69 L 40.37 43.78 L 40.66 43.97 L 41.03 44.27 L 41.45 44.70 L 41.92 45.24 L 42.42 45.89 L 42.93 46.63 L 43.45 47.47 L 43.99 48.37 L 44.53 49.34 L 45.07 50.36 L 45.62 51.42 L 46.18 52.52 L 46.74 53.63 L 47.30 54.76 L 47.88 55.90 L 48.46 57.03 L 49.06 58.15 L 49.67 59.25 L 50.31 60.33 L 50.97 61.38 L 51.67 62.39 L 52.40 63.35 L 53.19 64.27 L 54.05 65.12 L 55.01 65.91 L 56.07 66.60 L 57.27 67.15 L 58.59 67.52 L 60.00 67.65 L 61.08 67.60 L 62.13 67.46 L 63.14 67.23 L 64.11 66.93 L 65.04 66.57 L 65.93 66.16 L 66.79 65.71 L 67.61 65.23 L 68.41 64.71 L 69.17 64.18 L 69.92 63.62 L 70.64 63.06 L 71.35 62.49 L 72.02 61.89 L 72.64 61.26 L 73.24 60.61 L 73.79 59.94 L 74.33 59.27 L 74.84 58.60 L 75.34 57.93 L 75.82 57.28 L 76.30 56.64 L 76.79 56.02 L 77.28 55.44 L 77.79 54.89 L 78.32 54.38 L 78.86 53.93 L 79.44 53.53 L 80.04 53.21 L 80.67 52.96 L 81.33 52.80 L 82.00 52.75 L 81.77 52.71 L 81.56 52.61 L 81.39 52.44 L 81.29 52.23 L 81.25 52.00 L 81.29 51.77 L 81.39 51.56 L 81.56 51.39 L 81.77 51.29 L 82.00 51.25 L 81.18 51.26 L 80.37 51.31 L 79.56 51.39 L 78.73 51.50 L 77.90 51.65 L 77.05 51.83 L 76.20 52.05 L 75.34 52.31 L 74.48 52.60 L 73.62 52.93 L 72.77 53.28 L 71.93 53.66 L 71.11 54.06 L 70.30 54.49 L 69.52 54.93 L 68.76 55.39 L 68.04 55.87 L 67.36 56.35 L 66.71 56.85 L 66.09 57.35 L 65.49 57.82 L 64.90 58.26 L 64.32 58.66 L 63.76 59.02 L 63.22 59.34 L 62.70 59.62 L 62.20 59.85 L 61.72 60.04 L 61.26 60.18 L 60.83 60.27 L 60.41 60.33 L 60.00 60.35 L 59.93 60.34 L 59.82 60.31 L 59.63 60.22 L 59.34 60.03 L 58.97 59.73 L 58.55 59.30 L 58.08 58.76 L 57.58 58.11 L 57.07 57.37 L 56.55 56.53 L 56.01 55.63 L 55.47 54.66 L 54.93 53.64 L 54.38 52.58 L 53.82 51.48 L 53.26 50.37 L 52.70 49.24 L 52.12 48.10 L 51.54 46.97 L 50.94 45.85 L 50.33 44.75 L 49.69 43.67 L 49.03 42.62 L 48.33 41.61 L 47.60 40.65 L 46.81 39.73 L 45.95 38.88 L 44.99 38.09 L 43.93 37.40 L 42.73 36.85 L 41.41 36.48 L 40.00 36.35 L 38.92 36.40 L 37.88 36.55 L 36.87 36.78 L 35.91 37.09 L 35.00 37.46 L 34.14 37.89 L 33.32 38.35 L 32.54 38.86 L 31.80 39.38 L 31.09 39.93 L 30.41 40.49 L 29.75 41.05 L 29.11 41.63 L 28.51 42.22 L 27.95 42.84 L 27.42 43.48 L 26.92 44.12 L 26.44 44.78 L 25.98 45.43 L 25.52 46.08 L 25.06 46.73 L 24.59 47.35 L 24.11 47.96 L 23.60 48.54 L 23.05 49.09 L 22.47 49.60 L 21.85 50.06 L 21.18 50.46 L 20.45 50.79 L 19.68 51.04 L 18.86 51.19 L 18.00 51.25 L 18.23 51.29 L 18.44 51.39 L 18.61 51.56 L 18.71 51.77 L 18.75 52.00 L 18.71 52.23 L 18.61 52.44 L 18.44 52.61 L 18.23 52.71 Z", "total": 27}, {"id": "E8", "name": "Even Margins", "note": "Inset ends for more balanced negative space in the squircle.", "focus": "Negative Space", "path": "M20 52 C30 52 34 40 42 40 C50 40 52 64 60 64 C68 64 72 52 80 52", "end": 1.5, "mid": 7.3, "zone": 0.2, "rank": null, "scores": {"center": 4, "tension": 3, "transition": 3, "end": 3, "rhythm": 4, "space": 5, "small": 3}, "fill": "M 20.00 52.75 L 20.98 52.74 L 21.93 52.69 L 22.87 52.62 L 23.80 52.51 L 24.72 52.37 L 25.64 52.19 L 26.56 51.97 L 27.47 51.71 L 28.37 51.41 L 29.25 51.08 L 30.12 50.72 L 30.97 50.32 L 31.80 49.90 L 32.59 49.46 L 33.35 49.00 L 34.08 48.52 L 34.77 48.04 L 35.41 47.54 L 36.01 47.04 L 36.57 46.54 L 37.11 46.07 L 37.64 45.64 L 38.15 45.25 L 38.64 44.89 L 39.12 44.59 L 39.57 44.33 L 40.01 44.11 L 40.42 43.94 L 40.82 43.81 L 41.21 43.72 L 41.60 43.67 L 42.00 43.65 L 42.05 43.65 L 42.12 43.68 L 42.26 43.74 L 42.49 43.90 L 42.79 44.17 L 43.16 44.57 L 43.56 45.09 L 43.99 45.72 L 44.43 46.45 L 44.88 47.26 L 45.33 48.16 L 45.79 49.12 L 46.24 50.14 L 46.70 51.20 L 47.16 52.29 L 47.63 53.40 L 48.10 54.53 L 48.58 55.67 L 49.08 56.81 L 49.58 57.93 L 50.11 59.04 L 50.66 60.13 L 51.24 61.19 L 51.86 62.22 L 52.53 63.20 L 53.26 64.14 L 54.08 65.02 L 55.00 65.84 L 56.06 66.56 L 57.25 67.14 L 58.58 67.52 L 60.00 67.65 L 61.08 67.60 L 62.13 67.45 L 63.13 67.22 L 64.09 66.91 L 65.00 66.53 L 65.86 66.11 L 66.68 65.63 L 67.45 65.13 L 68.19 64.59 L 68.89 64.04 L 69.56 63.47 L 70.20 62.89 L 70.82 62.31 L 71.40 61.70 L 71.94 61.07 L 72.43 60.43 L 72.89 59.77 L 73.31 59.12 L 73.72 58.46 L 74.11 57.81 L 74.50 57.17 L 74.88 56.55 L 75.27 55.96 L 75.67 55.39 L 76.10 54.85 L 76.54 54.36 L 77.03 53.91 L 77.54 53.52 L 78.10 53.20 L 78.70 52.96 L 79.33 52.80 L 80.00 52.75 L 79.77 52.71 L 79.56 52.61 L 79.39 52.44 L 79.29 52.23 L 79.25 52.00 L 79.29 51.77 L 79.39 51.56 L 79.56 51.39 L 79.77 51.29 L 80.00 51.25 L 79.19 51.27 L 78.39 51.31 L 77.60 51.39 L 76.80 51.51 L 76.00 51.66 L 75.19 51.86 L 74.39 52.09 L 73.58 52.36 L 72.77 52.67 L 71.97 53.01 L 71.19 53.39 L 70.42 53.78 L 69.67 54.21 L 68.94 54.65 L 68.24 55.10 L 67.57 55.57 L 66.94 56.05 L 66.34 56.53 L 65.79 57.03 L 65.27 57.51 L 64.76 57.97 L 64.26 58.40 L 63.77 58.78 L 63.30 59.12 L 62.84 59.42 L 62.40 59.68 L 61.97 59.89 L 61.57 60.06 L 61.17 60.19 L 60.79 60.28 L 60.40 60.33 L 60.00 60.35 L 59.95 60.35 L 59.88 60.32 L 59.74 60.26 L 59.51 60.10 L 59.21 59.83 L 58.84 59.43 L 58.44 58.91 L 58.01 58.28 L 57.57 57.55 L 57.12 56.74 L 56.67 55.84 L 56.21 54.88 L 55.76 53.86 L 55.30 52.80 L 54.84 51.71 L 54.37 50.60 L 53.90 49.47 L 53.42 48.33 L 52.92 47.19 L 52.42 46.07 L 51.89 44.96 L 51.34 43.87 L 50.76 42.81 L 50.14 41.78 L 49.47 40.80 L 48.74 39.86 L 47.92 38.98 L 47.00 38.16 L 45.94 37.44 L 44.75 36.86 L 43.42 36.48 L 42.00 36.35 L 40.92 36.40 L 39.88 36.55 L 38.87 36.78 L 37.91 37.09 L 37.00 37.46 L 36.14 37.89 L 35.32 38.35 L 34.54 38.86 L 33.80 39.38 L 33.09 39.93 L 32.41 40.49 L 31.75 41.05 L 31.11 41.63 L 30.51 42.22 L 29.95 42.84 L 29.42 43.48 L 28.92 44.12 L 28.44 44.78 L 27.98 45.43 L 27.52 46.08 L 27.06 46.73 L 26.59 47.35 L 26.11 47.96 L 25.60 48.54 L 25.05 49.09 L 24.47 49.60 L 23.85 50.06 L 23.18 50.46 L 22.45 50.79 L 21.68 51.04 L 20.86 51.19 L 20.00 51.25 L 20.23 51.29 L 20.44 51.39 L 20.61 51.56 L 20.71 51.77 L 20.75 52.00 L 20.71 52.23 L 20.61 52.44 L 20.44 52.61 L 20.23 52.71 Z", "total": 25}, {"id": "E9", "name": "Small-Size Clear", "note": "Slightly bolder mid + stronger ends. Optimized for reduction.", "focus": "Small-size clarity", "path": "M18.00 51.20 C29.00 51.20 33.00 39.20 42.00 39.20 C51.00 39.20 51.00 63.20 60.00 63.20 C69.00 63.20 73.00 51.20 82.00 51.20", "end": 2.5, "mid": 7.8, "zone": 0.24, "rank": "top2", "scores": {"center": 4, "tension": 3, "transition": 4, "end": 5, "rhythm": 4, "space": 4, "small": 5}, "fill": "M 18.00 52.45 L 19.10 52.43 L 20.16 52.36 L 21.20 52.25 L 22.21 52.09 L 23.20 51.90 L 24.18 51.66 L 25.14 51.38 L 26.08 51.07 L 27.00 50.72 L 27.90 50.35 L 28.79 49.95 L 29.66 49.52 L 30.50 49.08 L 31.33 48.63 L 32.13 48.17 L 32.90 47.71 L 33.65 47.25 L 34.37 46.80 L 35.07 46.36 L 35.73 45.93 L 36.36 45.51 L 36.95 45.12 L 37.52 44.74 L 38.06 44.39 L 38.58 44.08 L 39.09 43.82 L 39.58 43.60 L 40.06 43.42 L 40.54 43.28 L 41.01 43.18 L 41.50 43.12 L 42.00 43.10 L 42.16 43.11 L 42.29 43.15 L 42.44 43.22 L 42.65 43.36 L 42.93 43.60 L 43.27 43.95 L 43.64 44.43 L 44.04 45.02 L 44.44 45.71 L 44.86 46.50 L 45.27 47.38 L 45.69 48.32 L 46.10 49.32 L 46.51 50.37 L 46.93 51.46 L 47.35 52.57 L 47.77 53.70 L 48.21 54.85 L 48.66 55.99 L 49.13 57.13 L 49.63 58.26 L 50.16 59.37 L 50.73 60.46 L 51.35 61.52 L 52.04 62.54 L 52.80 63.52 L 53.68 64.45 L 54.68 65.29 L 55.82 66.03 L 57.11 66.61 L 58.52 66.97 L 60.00 67.10 L 61.15 67.05 L 62.27 66.91 L 63.35 66.69 L 64.39 66.39 L 65.38 66.02 L 66.31 65.60 L 67.21 65.13 L 68.05 64.62 L 68.86 64.09 L 69.61 63.52 L 70.32 62.92 L 70.98 62.29 L 71.60 61.64 L 72.18 60.97 L 72.72 60.30 L 73.24 59.63 L 73.74 58.96 L 74.23 58.30 L 74.70 57.66 L 75.17 57.03 L 75.64 56.42 L 76.11 55.83 L 76.60 55.28 L 77.09 54.75 L 77.61 54.27 L 78.14 53.83 L 78.71 53.44 L 79.30 53.10 L 79.93 52.83 L 80.58 52.62 L 81.28 52.49 L 82.00 52.45 L 81.61 52.39 L 81.27 52.21 L 80.99 51.93 L 80.81 51.59 L 80.75 51.20 L 80.81 50.81 L 80.99 50.47 L 81.27 50.19 L 81.61 50.01 L 82.00 49.95 L 81.07 49.97 L 80.15 50.05 L 79.26 50.16 L 78.38 50.33 L 77.51 50.54 L 76.65 50.78 L 75.81 51.07 L 74.97 51.40 L 74.14 51.75 L 73.33 52.13 L 72.53 52.54 L 71.74 52.97 L 70.97 53.41 L 70.21 53.86 L 69.47 54.31 L 68.76 54.77 L 68.06 55.22 L 67.38 55.67 L 66.73 56.10 L 66.11 56.52 L 65.51 56.93 L 64.94 57.31 L 64.40 57.68 L 63.89 58.03 L 63.38 58.33 L 62.89 58.59 L 62.41 58.81 L 61.93 58.98 L 61.46 59.12 L 60.99 59.22 L 60.50 59.28 L 60.00 59.30 L 59.84 59.29 L 59.71 59.25 L 59.56 59.18 L 59.35 59.04 L 59.07 58.80 L 58.73 58.45 L 58.36 57.97 L 57.96 57.38 L 57.56 56.69 L 57.14 55.90 L 56.73 55.02 L 56.31 54.08 L 55.90 53.08 L 55.49 52.03 L 55.07 50.94 L 54.65 49.83 L 54.23 48.70 L 53.79 47.55 L 53.34 46.41 L 52.87 45.27 L 52.37 44.14 L 51.84 43.03 L 51.27 41.94 L 50.65 40.88 L 49.96 39.86 L 49.20 38.88 L 48.32 37.95 L 47.32 37.11 L 46.18 36.37 L 44.89 35.79 L 43.48 35.43 L 42.00 35.30 L 40.85 35.35 L 39.73 35.49 L 38.65 35.71 L 37.61 36.01 L 36.62 36.38 L 35.69 36.80 L 34.79 37.26 L 33.94 37.76 L 33.13 38.29 L 32.37 38.85 L 31.65 39.44 L 30.97 40.07 L 30.34 40.71 L 29.73 41.36 L 29.15 42.02 L 28.60 42.69 L 28.05 43.35 L 27.52 44.01 L 26.99 44.65 L 26.45 45.28 L 25.91 45.90 L 25.35 46.49 L 24.77 47.05 L 24.17 47.58 L 23.54 48.08 L 22.88 48.53 L 22.17 48.93 L 21.43 49.28 L 20.64 49.56 L 19.80 49.77 L 18.92 49.90 L 18.00 49.95 L 18.39 50.01 L 18.73 50.19 L 19.01 50.47 L 19.19 50.81 L 19.25 51.20 L 19.19 51.59 L 19.01 51.93 L 18.73 52.21 L 18.39 52.39 Z", "total": 29}, {"id": "E10", "name": "Synthesis", "note": "Optical center + smoother S + balanced rhythm + production end weight.", "focus": "Combined", "path": "M19 50.5 C29.5 50.5 33.5 39.2 41.5 39.2 C49.5 39.2 51.5 62.8 59.5 62.8 C67.5 62.8 72.5 50.5 81 50.5", "end": 2.2, "mid": 7.4, "zone": 0.23, "rank": "production", "scores": {"center": 5, "tension": 5, "transition": 5, "end": 5, "rhythm": 5, "space": 4, "small": 5}, "fill": "M 19.00 51.60 L 20.04 51.58 L 21.05 51.52 L 22.04 51.43 L 23.00 51.29 L 23.95 51.12 L 24.88 50.91 L 25.80 50.67 L 26.71 50.39 L 27.60 50.08 L 28.47 49.74 L 29.32 49.37 L 30.16 48.98 L 30.97 48.58 L 31.77 48.16 L 32.53 47.73 L 33.28 47.30 L 33.99 46.86 L 34.67 46.43 L 35.32 46.01 L 35.94 45.59 L 36.52 45.18 L 37.06 44.79 L 37.58 44.42 L 38.07 44.09 L 38.55 43.80 L 39.01 43.55 L 39.45 43.35 L 39.87 43.18 L 40.28 43.06 L 40.68 42.97 L 41.09 42.92 L 41.50 42.90 L 41.55 42.90 L 41.62 42.92 L 41.76 42.99 L 41.98 43.14 L 42.28 43.40 L 42.64 43.79 L 43.04 44.29 L 43.46 44.90 L 43.90 45.62 L 44.35 46.42 L 44.80 47.30 L 45.25 48.24 L 45.71 49.23 L 46.17 50.27 L 46.63 51.35 L 47.09 52.44 L 47.57 53.56 L 48.05 54.68 L 48.54 55.79 L 49.05 56.90 L 49.58 58.00 L 50.13 59.07 L 50.71 60.12 L 51.33 61.13 L 52.01 62.10 L 52.75 63.03 L 53.57 63.91 L 54.50 64.71 L 55.56 65.42 L 56.76 65.99 L 58.09 66.37 L 59.50 66.50 L 60.59 66.45 L 61.65 66.30 L 62.67 66.06 L 63.64 65.75 L 64.57 65.37 L 65.45 64.94 L 66.29 64.46 L 67.09 63.95 L 67.86 63.42 L 68.60 62.86 L 69.30 62.28 L 69.96 61.66 L 70.58 61.01 L 71.16 60.36 L 71.72 59.68 L 72.25 59.01 L 72.76 58.33 L 73.26 57.66 L 73.75 57.00 L 74.23 56.35 L 74.72 55.72 L 75.20 55.12 L 75.69 54.54 L 76.20 54.00 L 76.72 53.50 L 77.25 53.04 L 77.81 52.63 L 78.40 52.28 L 79.01 51.99 L 79.65 51.78 L 80.31 51.65 L 81.00 51.60 L 80.66 51.55 L 80.35 51.39 L 80.11 51.15 L 79.95 50.84 L 79.90 50.50 L 79.95 50.16 L 80.11 49.85 L 80.35 49.61 L 80.66 49.45 L 81.00 49.40 L 80.11 49.42 L 79.24 49.50 L 78.38 49.61 L 77.53 49.78 L 76.68 49.98 L 75.84 50.23 L 75.00 50.52 L 74.16 50.84 L 73.34 51.20 L 72.52 51.59 L 71.71 52.00 L 70.91 52.43 L 70.12 52.88 L 69.36 53.35 L 68.60 53.82 L 67.87 54.29 L 67.17 54.77 L 66.48 55.24 L 65.83 55.70 L 65.20 56.16 L 64.60 56.60 L 64.04 57.03 L 63.50 57.44 L 62.98 57.80 L 62.48 58.12 L 62.00 58.39 L 61.54 58.62 L 61.10 58.80 L 60.68 58.93 L 60.28 59.03 L 59.89 59.08 L 59.50 59.10 L 59.45 59.10 L 59.38 59.08 L 59.24 59.01 L 59.02 58.86 L 58.72 58.60 L 58.36 58.21 L 57.96 57.71 L 57.54 57.10 L 57.10 56.38 L 56.65 55.58 L 56.20 54.70 L 55.75 53.76 L 55.29 52.77 L 54.83 51.73 L 54.37 50.65 L 53.91 49.56 L 53.43 48.44 L 52.95 47.32 L 52.46 46.21 L 51.95 45.10 L 51.42 44.00 L 50.87 42.93 L 50.29 41.88 L 49.67 40.87 L 48.99 39.90 L 48.25 38.97 L 47.43 38.09 L 46.50 37.29 L 45.44 36.58 L 44.24 36.01 L 42.91 35.63 L 41.50 35.50 L 40.44 35.55 L 39.40 35.68 L 38.41 35.90 L 37.46 36.19 L 36.55 36.54 L 35.69 36.94 L 34.88 37.37 L 34.10 37.84 L 33.36 38.34 L 32.64 38.85 L 31.97 39.39 L 31.33 39.96 L 30.73 40.55 L 30.17 41.16 L 29.62 41.78 L 29.10 42.40 L 28.59 43.03 L 28.09 43.65 L 27.59 44.26 L 27.09 44.87 L 26.58 45.45 L 26.05 46.02 L 25.51 46.57 L 24.93 47.08 L 24.33 47.56 L 23.70 48.00 L 23.02 48.40 L 22.30 48.74 L 21.54 49.01 L 20.74 49.22 L 19.89 49.35 L 19.00 49.40 L 19.34 49.45 L 19.65 49.61 L 19.89 49.85 L 20.05 50.16 L 20.10 50.50 L 20.05 50.84 L 19.89 51.15 L 19.65 51.39 L 19.34 51.55 Z", "total": 34}];
+
+const rejects = [
+  {
+    id: "A", name: "Breath A — Baseline",
+    path: "M18 52 C29 52 33 39 42 39 C51 39 51 65 60 65 C69 65 73 52 82 52",
+    why: "Rejected for production",
+    text: "Strong family reference, but rounded uniform ends lack the inhale/settle grace of Soft Taper. Kept as historical baseline, not the brand mark."
+  },
+  {
+    id: "C", name: "Breath C — Soft Organic",
+    path: "M17 53 C26 54 30 37 41 38 C52 39 53 67 63 66 C74 65 77 51 83 51",
+    why: "Rejected for production",
+    text: "Warm and human, yet irregular handles reduce long-term constructability and small-size predictability. Emotionally close; geometrically less durable."
+  },
+  {
+    id: "J", name: "Breath J — Optical Taper",
+    path: "M18 52 C29 52 33 40 42 40 C51 40 51 64 60 64 C69 64 73 52 82 52",
+    why: "Rejected for production",
+    text: "Excellent presence, but mid-weight drama feels styled and less timeless. Soft Taper (E → E10) keeps calm without the optical flash."
+  }
+];
+
+function markFill(fill, night=false){
+  const c = night ? STROKE_NIGHT : STROKE;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="${fill}" fill="${c}"/></svg>`;
+}
+function markStroke(path, width=7.2, night=false, linecap="round"){
+  const c = night ? STROKE_NIGHT : STROKE;
+  return `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="${path}" fill="none" stroke="${c}" stroke-width="${width}" stroke-linecap="${linecap}" stroke-linejoin="round"/></svg>`;
+}
+
+const matrix = document.getElementById("matrix");
+matrix.innerHTML = variants.map(v=>{
+  const cls = v.rank==="production" ? "card pick" : (v.rank==="top2"||v.rank==="top3") ? "card top" : "card";
+  const badge = v.rank==="production" ? "Production" : v.rank==="top2" ? "Top 2" : v.rank==="top3" ? "Top 3" : v.focus;
+  return `<article class="${cls}"><div class="label"><strong>${v.id}</strong><em>${badge}</em></div><div class="tile">${markFill(v.fill)}</div><p class="note">${v.note}</p><div class="axis">${v.focus} · ${v.name}</div></article>`;
+}).join("");
+
+const sorted=[...variants].sort((a,b)=>b.total-a.total || a.id.localeCompare(b.id));
+document.getElementById("eval").innerHTML = sorted.map(v=>{
+  const row = v.rank==="production"?"prod":v.rank==="top2"?"top2":v.rank==="top3"?"top3":"";
+  const badge = v.rank==="production"?'<span class="badge one">Prod</span>':v.rank==="top2"?'<span class="badge">Top 2</span>':v.rank==="top3"?'<span class="badge">Top 3</span>':"";
+  const s=v.scores;
+  return `<tr class="${row}"><td>${v.id} · ${v.name}${badge}</td><td>${s.center}</td><td>${s.tension}</td><td>${s.transition}</td><td>${s.end}</td><td>${s.rhythm}</td><td>${s.space}</td><td>${s.small}</td><td><strong>${v.total}</strong></td></tr>`;
+}).join("");
+
+const E10 = variants.find(v=>v.id==="E10");
+const E9 = variants.find(v=>v.id==="E9");
+document.getElementById("winner").innerHTML = `<div class="big">${markFill(E10.fill)}</div><h3>E10 — Synthesis</h3><p>Production candidate draft for Brand Lock. Still Soft Taper. Still Breath E.</p>`;
+
+document.getElementById("sizes").innerHTML = [["s1024","1024"],["s180","180"],["s60","60"],["s29","29"]].map(([cls,label])=>`<figure class="size ${cls}"><div class="t">${markFill(E10.fill)}</div><figcaption>${label}pt</figcaption></figure>`).join("");
+document.getElementById("cmp").innerHTML = [E9,E10].map(v=>`<div class="item"><div class="t">${markFill(v.fill)}</div><strong>${v.id}</strong><span>${v.name}</span></div>`).join("");
+
+document.getElementById("hs").innerHTML = `<div class="hs-top"><span>9:41</span><span>●●●  LTE  ■</span></div><div class="hs-grid"><div class="app ours"><div class="ico">${markFill(E10.fill)}</div><span>OneulRhythm</span></div>${Array.from({length:7},()=>`<div class="app ghost"><div class="ico"></div><span>&nbsp;</span></div>`).join("")}</div>`;
+document.getElementById("dn").innerHTML = `<div class="dn day"><div class="t">${markFill(E10.fill)}</div><div><h3>Day</h3><p>Soft sage field · deep mark · quiet light-mode contrast.</p></div></div><div class="dn night"><div class="t">${markFill(E10.fill,true)}</div><div><h3>Night</h3><p>Deep field · lifted mark · same E10 geometry.</p></div></div>`;
+
+document.getElementById("lock-primary").innerHTML = `<div class="big">${markFill(E10.fill)}</div><h3>Primary Mark</h3><p>Breath E10 · Soft Taper Synthesis<br/>Draft · not final lock</p>`;
+document.getElementById("safe").innerHTML = `<div class="outer"></div><div class="inner">${markFill(E10.fill)}</div>`;
+
+document.getElementById("rejects").innerHTML = rejects.map(r=>`<article class="reject"><div class="mini">${markStroke(r.path,7.0)}</div><div class="why">${r.why}</div><h3>${r.name}</h3><p>${r.text}</p></article>`).join("");
+</script>
+</body>
+</html>
