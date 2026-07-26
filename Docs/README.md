@@ -35,6 +35,8 @@ Authoritative content lives in the linked documents below.
 Docs/README.md          ← you are here (router)
     │
     ├─ Product/         ← product decisions & UX contracts
+    ├─ BRAND.md         ← Brand Foundation
+    ├─ ADR/             ← Brand Architecture Decision Records
     ├─ Architecture/    ← system structure, ADRs, architecture reviews
     ├─ Design/          ← implementation contracts
     ├─ Extensions/      ← optional capabilities
@@ -61,6 +63,7 @@ Avoid circular navigation between hubs.
 | Category | Hub | Answers |
 |----------|-----|---------|
 | Product | `Product/README.md` | What should the product feel and behave like? |
+| Brand | `BRAND.md`, `ADR/` | How should the product feel as a brand? |
 | Architecture | `Architecture/README.md` | What is the system structure? Why was it chosen? |
 | Design | `Design/README.md` | How is each subsystem implemented? |
 | Extensions | `Extensions/README.md` | How do optional capabilities integrate? |
@@ -77,6 +80,7 @@ Avoid circular navigation between hubs.
 ## Active (default reading)
 
 - Product philosophy, principles, experience, and UI specifications
+- Brand Foundation (`BRAND.md`) and Brand Architecture Decision Records (`ADR/`)
 - Architecture structure and Decision Records
 - Design and Extensions implementation contracts
 - Development process documents, Engineering Charter, and `AI/AGENTS.md`
@@ -161,13 +165,17 @@ This router is for contributors.
 # Authority When Documents Conflict
 
 ```text
-GLOSSARY.md                 ← terminology
+README / Docs/README.md     ← navigation entry
     ↓
-Product/                    ← UX / product behavior
+Product/PRODUCT-PRINCIPLES.md ← product constraints
+    ↓
+BRAND.md                    ← Brand Foundation
+    ↓
+ADR/                        ← Brand Architecture Decision Records
     ↓
 Architecture/               ← system structure
     ↓
-Architecture/Decisions/     ← why / ownership
+Architecture/Decisions/     ← system why / ownership
     ↓
 Design/                     ← implementation contracts
     ↓
@@ -175,6 +183,8 @@ Extensions/
     ↓
 Development/ and AI/AGENTS.md
 ```
+
+`GLOSSARY.md` remains the terminology authority for shared terms.
 
 Process conflicts are resolved by `Development/DEVELOPMENT_WORKFLOW.md`.
 

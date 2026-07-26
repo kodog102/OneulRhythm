@@ -38,15 +38,25 @@ Do not rely on assumptions or incomplete context.
 
 The Notification Foundation is complete and stable.
 
-Until Product UI reaches MVP quality, all implementation work should prioritize the in-app experience over Widgets, Apple Watch, or additional platform integrations.
+Core Experience (Today, Live Activity, Management, UX Polish) is complete through Sprint 11.
 
-When implementing approved Product UI work:
+Near-term work follows:
+
+```text
+Core Experience → Brand Foundation → Brand Assets & Experience → Platform Expansion
+```
+
+Until Brand Foundation and Brand Assets & Experience are complete, prioritize Brand Foundation and consistent brand application over Widgets, Apple Watch, or additional platform integrations.
+
+Widget remains on the long-term roadmap and is intentionally postponed because Today and Live Activity already satisfy the primary quick-access experience.
+
+When implementing approved Brand Foundation or Brand Assets & Experience work:
 
 - Reuse the existing Snapshot, Schedule Engine, Mapping, Notification, and Live Activity architecture.
-- Avoid introducing new business logic unless the approved Product UI scope requires it.
+- Prefer product quality and consistency over new functionality unless the approved Sprint scope requires it.
 - Do not expand into Widget, Watch, or other platform surfaces unless the current Sprint explicitly includes them.
 
-Future platform integrations should consume the existing architecture instead of redefining it.
+Future platform integrations should consume the existing architecture and finalized Brand Foundation / Brand Assets instead of redefining them.
 
 See `Docs/ROADMAP.md` and `Docs/Architecture/Decisions/DR-014-product-ui-first.md`.
 

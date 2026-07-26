@@ -138,6 +138,10 @@ Today comes first.
 
 Reflection comes later.
 
+Product development follows the same calm order:
+
+Core Experience, then Brand Foundation, then Brand Assets & Experience, then Platform Expansion.
+
 As time passes,
 
 OneulRhythm may help people understand the rhythm of their own lives.
@@ -153,3 +157,14 @@ Understanding should grow naturally over time.
 # North Star
 
 OneulRhythm quietly helps people reconnect with the rhythm they already chose for today.
+
+---
+
+# Related Documents
+
+- `Docs/Product/PRODUCT-PRINCIPLES.md`
+- `Docs/BRAND.md`
+- `Docs/ROADMAP.md`
+- `Docs/ADR/ADR-010-Primary-Brand-Symbol-Breath-Flow.md`
+- `Docs/ADR/ADR-011-No-Checklist-Metaphor.md`
+- `Docs/ADR/ADR-012-Calm-Before-Productivity.md`

@@ -3,7 +3,9 @@
 ## OneulRhythm Collaboration Standard
 
 > Stable collaboration rules for ChatGPT (Architect), Cursor
-> (Implementation), QA, and the Developer.
+> (Implementation), QA, and the Product Owner (Developer).
+>
+> Sprint 12 established the Sprint governance model used from Sprint 13 onward.
 
 ------------------------------------------------------------------------
 
@@ -16,6 +18,8 @@ Goals
 -   Keep Sprint execution predictable.
 -   Separate Architecture, Implementation, QA, and Design review.
 -   Build a reusable AI-assisted development workflow.
+-   Keep Sprint goals and Sprint completion under Product Owner control
+    while the Architect owns day-to-day Sprint execution.
 
 ------------------------------------------------------------------------
 
@@ -31,22 +35,47 @@ Goals
 
 # 3. Roles
 
+## Product Owner
+
+Responsibilities
+
+-   Approves Sprint goals.
+-   Approves Sprint completion.
+-   Makes product direction decisions.
+-   Resolves business trade-offs.
+-   Reviews Sprint deliverables as a whole rather than individual
+    implementation steps.
+
+The Product Owner is the final decision maker for Sprint objectives and
+Sprint close.
+
+------------------------------------------------------------------------
+
 ## Architect (ChatGPT)
 
-Responsible for
+Responsibilities
 
--   Product direction
--   Architecture
--   Product & UX review
 -   Sprint planning
--   Prompt creation
--   Final approval
+-   Architecture design
+-   ADR / DR decisions
+-   Cursor task planning
+-   Architecture review
+-   Documentation review
+-   Quality gate
+-   Sprint close preparation
 
 Additionally acts as
 
 -   Product Designer
 -   UX Reviewer
 -   Brand Guardian
+
+Authority
+
+-   May approve implementation work during an active Sprint without
+    Product Owner approval.
+-   Product Owner approval is required only for Sprint goals and Sprint
+    completion.
 
 Not responsible for
 
@@ -57,12 +86,18 @@ Not responsible for
 
 ## Cursor
 
-Responsible for
+Responsibilities
 
 -   Implementation
--   Small approved documentation updates
+-   Documentation
+-   Refactoring
 -   Build verification
--   Reporting
+-   Implementation reports
+
+Constraints
+
+-   Must not change architecture independently.
+-   Must not introduce new product decisions.
 
 Never redesign architecture.
 
@@ -78,12 +113,6 @@ Responsible for
 -   Release readiness
 
 Do not redesign.
-
-------------------------------------------------------------------------
-
-## Developer
-
-Final decision maker.
 
 ------------------------------------------------------------------------
 
@@ -125,9 +154,98 @@ Next Sprint
 
 After **Approved**, no new recommendation cycle begins.
 
+This is the task-level workflow inside an active Sprint.
+
 ------------------------------------------------------------------------
 
-# 5. Scope Lock
+# 5. Sprint Lifecycle
+
+Standard Sprint workflow:
+
+Sprint Planning
+
+↓
+
+Sprint Goal Approved
+
+↓
+
+Architect Planning
+
+↓
+
+Cursor Implementation
+
+↓
+
+Architect Review
+
+↓
+
+Repeat until Definition of Done
+
+↓
+
+Final Architecture Review
+
+↓
+
+Product Owner Sprint Approval
+
+↓
+
+Sprint Closed
+
+During the Sprint, Architect and Cursor iterate on planning,
+implementation, and review.
+
+The Product Owner reviews the Sprint as a completed unit rather than
+approving each implementation step.
+
+Exceptional product decisions may require Product Owner input before
+Sprint completion.
+
+------------------------------------------------------------------------
+
+# 6. Sprint Governance
+
+Key principles
+
+-   The Architect owns day-to-day Sprint execution.
+-   The Product Owner governs Sprint objectives and Sprint completion.
+-   Cursor executes approved work.
+-   Architecture decisions are centralized through the Architect.
+-   Sprint approval occurs once at Sprint completion unless exceptional
+    product decisions are required.
+
+This governance model separates Sprint direction from Sprint execution.
+
+Product Owner approval is a Sprint gate, not a step-by-step
+implementation gate.
+
+------------------------------------------------------------------------
+
+# 7. Sprint Close Checklist
+
+Before a Sprint is considered complete, the Architect verifies:
+
+-   Architecture
+-   Documentation
+-   ROADMAP
+-   CHANGELOG
+-   ADR / DR consistency
+-   Build status
+-   Technical debt
+-   Sprint Definition of Done
+
+Sprint completion is recommended only after these checks pass.
+
+After the Architect prepares Sprint close, the Product Owner gives final
+Sprint approval.
+
+------------------------------------------------------------------------
+
+# 8. Scope Lock
 
 When Architect says **Approved**, the design is frozen.
 
@@ -145,14 +263,14 @@ Not allowed
 
 ------------------------------------------------------------------------
 
-# 6. Future Improvement Rule
+# 9. Future Improvement Rule
 
 New ideas discovered during implementation are recorded as **Future
 Improvements** and never interrupt the current Sprint.
 
 ------------------------------------------------------------------------
 
-# 7. Architect Operating Rules
+# 10. Architect Operating Rules
 
 Always
 
@@ -169,7 +287,7 @@ Never
 
 ------------------------------------------------------------------------
 
-# 8. Standard Prompt Template
+# 11. Standard Prompt Template
 
 1.  Goal
 2.  Context
@@ -182,7 +300,7 @@ Never
 
 ------------------------------------------------------------------------
 
-# 9. Required References Matrix
+# 12. Required References Matrix
 
   Area            References
   --------------- ---------------------------------------------
@@ -194,7 +312,7 @@ Never
 
 ------------------------------------------------------------------------
 
-# 10. Prompt Checklist
+# 13. Prompt Checklist
 
 -   Goal
 -   Context
@@ -207,7 +325,7 @@ Never
 
 ------------------------------------------------------------------------
 
-# 11. Prompt Anti-patterns
+# 14. Prompt Anti-patterns
 
 Avoid
 
@@ -228,7 +346,7 @@ Prefer
 
 ------------------------------------------------------------------------
 
-# 12. Architect Review Checklist
+# 15. Architect Review Checklist
 
 -   Scope satisfied
 -   Architecture preserved
@@ -238,7 +356,7 @@ Prefer
 
 ------------------------------------------------------------------------
 
-# 13. QA Checklist
+# 16. QA Checklist
 
 Verify only
 
@@ -250,7 +368,7 @@ Verify only
 
 ------------------------------------------------------------------------
 
-# 14. Definition of Done
+# 17. Definition of Done
 
 Done means
 
@@ -262,7 +380,7 @@ Done means
 
 ------------------------------------------------------------------------
 
-# 15. Common Mistakes
+# 18. Common Mistakes
 
 -   Missing references
 -   Prompt structure changes
@@ -275,7 +393,7 @@ Done means
 
 ------------------------------------------------------------------------
 
-# 16. Communication Rules
+# 19. Communication Rules
 
 Always separate
 
@@ -286,7 +404,7 @@ Optional improvements never become implementation automatically.
 
 ------------------------------------------------------------------------
 
-# 17. OneulRhythm Principles
+# 20. OneulRhythm Principles
 
 The project values consistency over cleverness.
 
@@ -296,7 +414,7 @@ Every Sprint ends cleanly before the next begins.
 
 ------------------------------------------------------------------------
 
-# 18. Design Collaboration
+# 21. Design Collaboration
 
 ## Design Mission
 
@@ -361,7 +479,7 @@ Before approving a UI change:
 
 ------------------------------------------------------------------------
 
-# 19. Quality Vision
+# 22. Quality Vision
 
 **Store Quality over MVP**
 
@@ -373,7 +491,7 @@ enjoy keeping on their Home Screen and returning to every day.
 
 ------------------------------------------------------------------------
 
-# 20. Architecture Decision Quality
+# 23. Architecture Decision Quality
 
 ## Why This Exists
 
@@ -507,7 +625,7 @@ App Store-scale process.
 
 ------------------------------------------------------------------------
 
-# 21. Documentation Freshness Rule
+# 24. Documentation Freshness Rule
 
 ## Why This Exists
 

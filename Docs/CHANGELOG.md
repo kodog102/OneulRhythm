@@ -8,6 +8,86 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 12 — Brand Foundation
+
+**Date:** 2026-07-26
+
+## Completed
+
+### Brand Foundation
+
+- Brand Foundation established
+- Introduced `Docs/BRAND.md`
+- ADR-010 — Primary Brand Symbol: Breath Flow
+- ADR-011 — No Checklist Metaphor
+- ADR-012 — Calm Before Productivity
+
+### Documentation
+
+- Documentation Integration completed
+- Documentation Audit completed
+- Final Documentation Cleanup completed
+
+## Notes
+
+Sprint 12 Brand Foundation is complete. Sprint 13 — Brand Assets & Experience is current.
+
+Foundation first. Implementation later.
+
+---
+
+# Sprint 12 — Brand Foundation Documentation
+
+**Date:** 2026-07-26
+
+## Added
+
+### Brand Foundation documents
+
+- Created `Docs/BRAND.md` as the Brand Foundation specification.
+- Created `Docs/ADR/ADR-010-Primary-Brand-Symbol-Breath-Flow.md`.
+- Created `Docs/ADR/ADR-011-No-Checklist-Metaphor.md`.
+- Created `Docs/ADR/ADR-012-Calm-Before-Productivity.md`.
+
+## Changed
+
+### Documentation integration
+
+- Added Related Documents cross-references among `BRAND.md`, Product Principles, and ADR-010~012.
+- Aligned README documentation links and Sprint naming with Brand Foundation.
+- Normalized Brand Foundation document paths in ROADMAP deliverables.
+- Indexed Brand Foundation in `Docs/README.md`, `Docs/Product/README.md`, and `Docs/ADR/README.md`.
+
+## Notes
+
+Foundation documentation is recorded. Terminology consistency verification, Architect Review, and Product Owner approval remain for Sprint 12 Definition of Done.
+
+Foundation first. Implementation later.
+
+---
+
+# Sprint 12 Planning — Brand Foundation Alignment
+
+**Date:** 2026-07-26
+
+## Changed
+
+### Roadmap planning
+
+- Refined Sprint 12 scope from Product Polish & Brand Identity to Brand Foundation.
+- Repositioned Sprint 13 from Visual Identity & Asset System to Brand Assets & Experience.
+- Clarified Sprint relationship: Sprint 12 establishes foundation; Sprint 13 applies it.
+- Introduced `BRAND.md` as a core documentation deliverable for Sprint 12.
+- Added ADR-010, ADR-011, and ADR-012 as planned architectural records for Sprint 12.
+
+## Notes
+
+This is a planning synchronization only. No brand documents or ADR files were created in this step.
+
+Foundation first. Implementation later.
+
+---
+
 # Sprint 11 — UX Polish
 
 **Date:** 2026-07-26

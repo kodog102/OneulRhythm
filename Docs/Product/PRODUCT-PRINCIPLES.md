@@ -63,3 +63,12 @@ Advanced customization should be introduced only after validating real user dema
 Technology is not the product.
 
 A simple and calm experience is the product.
+
+---
+
+## Related Documents
+
+- `Docs/BRAND.md`
+- `Docs/ADR/ADR-010-Primary-Brand-Symbol-Breath-Flow.md`
+- `Docs/ADR/ADR-011-No-Checklist-Metaphor.md`
+- `Docs/ADR/ADR-012-Calm-Before-Productivity.md`

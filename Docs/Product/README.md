@@ -28,6 +28,11 @@ Developers, product-minded contributors, architecture reviewers on UX sprints, a
 | `Management-UI-Specification.md` | Management implementation-ready UI contract | Active |
 | `Today-Wireframe-Exploration.md` | Sprint 8 hierarchy exploration | Historical |
 
+Brand Foundation lives outside this hub:
+
+- `Docs/BRAND.md`
+- `Docs/ADR/` (ADR-010 ~ ADR-012)
+
 For current Product UI work, read:
 
 1. `PRODUCT-PRINCIPLES.md`

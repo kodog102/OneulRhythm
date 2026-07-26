@@ -363,6 +363,11 @@ Before implementation begins, AI agents should review:
 4. Relevant Architecture Decision(s) — `Docs/Architecture/Decisions/`
 5. Roadmap — `Docs/ROADMAP.md` (when applicable)
 
+For Sprint 12 — Brand Foundation and Sprint 13 — Brand Assets & Experience, also review:
+
+- `Docs/BRAND.md`
+- `Docs/ADR/`
+
 Then continue with Sprint-specific Product and/or Design documents as needed.
 
 ---
@@ -383,11 +388,19 @@ Use `Docs/GLOSSARY.md` as the shared terminology reference when terms are unclea
 
 When conflicts exist:
 
-Glossary
+README
 
 ↓
 
-Product
+PRODUCT-PRINCIPLES
+
+↓
+
+BRAND
+
+↓
+
+Brand ADR
 
 ↓
 
@@ -395,7 +408,7 @@ Architecture
 
 ↓
 
-Decision Records
+Architecture Decision Records
 
 ↓
 

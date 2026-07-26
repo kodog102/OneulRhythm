@@ -173,6 +173,8 @@ Planning
 Start here: `Docs/README.md`
 
 - `Docs/Product/` — Product Principles and UX contracts
+- `Docs/BRAND.md` — Brand Foundation
+- `Docs/ADR/` — Brand Architecture Decision Records
 - `Docs/Architecture/` — Architecture and Architecture Decisions
 - `Docs/Design/` — subsystem implementation contracts
 - `Docs/Development/` — official Sprint workflow
@@ -195,19 +197,22 @@ Start here: `Docs/README.md`
 - Primary Rhythm Ownership
 - Notification Foundation
 
-### 📅 Current Priority — Product UI First
+### 📅 Current Priority — Brand Foundation
 
-Notification Foundation is stable. Development now prioritizes the in-app experience before additional platform integrations.
+Core Experience is complete through Sprint 11. Development now establishes Brand Foundation before Brand Assets & Experience and Platform Expansion.
 
-- Today Product Experience
-- Routine Management
-- Settings & Preferences
-- UX Polish
+```text
+Core Experience → Brand Foundation → Brand Assets & Experience → Platform Expansion
+```
+
+- Brand Foundation (Sprint 12)
+- Brand Assets & Experience (Sprint 13)
 
 ### 🔮 Later (intentionally postponed)
 
-- Widget Experience
+- Widget Experience — postponed because Live Activity already satisfies primary quick access; remains on the long-term roadmap
 - Apple Watch
+- Settings & Preferences
 - Statistics & Insights
 - iCloud Sync
 - Siri & Shortcuts

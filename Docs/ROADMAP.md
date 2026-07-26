@@ -6,39 +6,69 @@ OneulRhythm helps users stay connected with today's rhythm.
 
 The application should minimize management and maximize presence throughout the day.
 
+## Roadmap Philosophy
+
+Development follows a deliberate sequence:
+
+```text
+Core Experience
+  ↓
+Brand Foundation
+  ↓
+Brand Assets & Experience
+  ↓
+Platform Expansion
+```
+
+1. **Core Experience** — Today, Live Activity, Management, and supporting foundations that keep users connected with today's rhythm.
+2. **Brand Foundation** — Establish the project's long-term brand language, principles, and architectural records before producing visual assets.
+3. **Brand Assets & Experience** — Apply the completed Brand Foundation across icon, launch, README, widget consistency, and product surfaces.
+4. **Platform Expansion** — Extend the same meaning to Widget, Apple Watch, and other surfaces once foundation and assets are ready to reuse.
+
+Today's experience together with Live Activity already provides the primary quick-access experience. Near-term work therefore favors Brand Foundation, then Brand Assets & Experience, over new platform surfaces.
+
 ---
 
 # Current Status
 
 ## Current Phase
 
-Product UI First — Post UX Polish
+Brand Assets & Experience
 
 ## Current Sprint
 
-Sprint 12 — Widget Experience
+Sprint 13 — Brand Assets & Experience
 
 ## Status
 
-📅 Ready — Sprint 11 UX Polish complete; next milestone is Widget Experience
+📍 Current — Sprint 12 Brand Foundation complete; Sprint 13 Brand Assets & Experience is current
 
 ## Current Goal
 
-Bring today's rhythm to the Home Screen once in-app Product UI quality is ready to reuse.
+Establish OneulRhythm's long-term brand foundation before producing visual assets or expanding to new surfaces.
 
 ## Current Priority
 
-Resume postponed platform surfaces that consume the finalized Product UI interpretation.
+Foundation first. Implementation later.
 
 Immediate focus:
 
-- Home Widget
-- Timeline
-- Shared Snapshot
+- Brand Manifesto
+- Brand Philosophy
+- Design Language
+- Visual Principles
+- Motion Principles
+- Breath Flow as the Master Symbol
+- `Docs/BRAND.md`
+- ADR-010 / ADR-011 / ADR-012 (`Docs/ADR/`)
 
 Sprint 11 completed Today Empty Journey, visual/motion polish, Management redesign, accessibility and copy polish, and documentation synchronization.
 
-Sprint 10 Settings & Preferences remains planned and does not redefine Widget scope.
+Sprint 12 Brand Foundation is complete. Sprint 13 — Brand Assets & Experience applies that foundation.
+
+Widget Experience remains on the long-term roadmap and is intentionally postponed because Live Activity already satisfies the primary quick-access experience.
+
+Sprint 10 Settings & Preferences remains planned and does not redefine Sprint 12 or Sprint 13 scope.
 
 Notification Foundation remains complete and stable.
 
@@ -46,7 +76,7 @@ Notification Foundation remains complete and stable.
 
 # Strategy
 
-## Product UI First
+## Product UI First, Then Brand Before Platforms
 
 After Sprint 7, the core architecture has reached a stable point:
 
@@ -57,14 +87,18 @@ After Sprint 7, the core architecture has reached a stable point:
 - Notification Synchronization
 - Live Activity foundation
 
-At this stage, Product UI provides more validation value than immediately expanding platform integrations.
+Sprints 8–11 validated the in-app Core Experience (Today, Management, UX Polish).
 
-Widget and Apple Watch remain intentional long-term surfaces. They are postponed—not cancelled—so that:
+The next validation value comes from Brand Foundation and Brand Assets & Experience—not from immediately expanding platform integrations.
 
-- In-app UX can be validated faster
+Widget and Apple Watch remain intentional long-term surfaces under Platform Expansion. They are postponed—not cancelled—so that:
+
+- Brand Foundation and Brand Assets can be completed first
 - Existing architecture stays stable
-- Widget and Watch can reuse a finalized Product UI
+- Widget and Watch can reuse a finalized brand language and visual system
 - Duplicate UI work and architectural churn are avoided
+
+Widget implementation is intentionally postponed because Today and Live Activity already provide the primary quick-access experience. Widget remains part of the long-term roadmap.
 
 This is a planning change only. It is not an architecture redesign.
 
@@ -479,7 +513,7 @@ Provide the preferences users need to support a calm in-app experience.
 
 Add settings that serve Product UI quality. Avoid expanding into platform integrations prematurely.
 
-Settings remains planned after in-app UI/UX refinement.
+Settings remains planned and does not redefine Sprint 12 Brand Foundation or Sprint 13 Brand Assets & Experience scope.
 
 **Status**
 
@@ -487,7 +521,87 @@ Settings remains planned after in-app UI/UX refinement.
 
 ---
 
-## Sprint 12 — Widget Experience
+## Sprint 12 — Brand Foundation
+
+### Goal
+
+Establish OneulRhythm's long-term brand foundation.
+
+### Intent
+
+Sprint 12 defines the brand language of the product. It does not produce final visual assets.
+
+Foundation first. Implementation later.
+
+The Sprint records approved brand meaning, design language, visual and motion principles, and architectural decisions so Sprint 13 can apply them consistently.
+
+### Scope Direction
+
+#### Brand Foundation Deliverables
+
+- Brand Manifesto
+- Brand Philosophy
+- Design Language
+- Visual Principles
+- Motion Principles
+- Breath Flow selected as the Master Symbol
+- `Docs/BRAND.md`
+- `Docs/ADR/ADR-010-Primary-Brand-Symbol-Breath-Flow.md`
+- `Docs/ADR/ADR-011-No-Checklist-Metaphor.md`
+- `Docs/ADR/ADR-012-Calm-Before-Productivity.md`
+
+### Definition of Done
+
+- ROADMAP updated
+- CHANGELOG updated
+- PRODUCT-PRINCIPLES reviewed
+- `Docs/BRAND.md` completed
+- ADR-010 completed
+- ADR-011 completed
+- ADR-012 completed
+- Terminology consistency verified
+- Architect Review completed
+- Product Owner approval completed
+
+**Status**
+
+✅ Completed
+
+---
+
+## Sprint 13 — Brand Assets & Experience
+
+### Goal
+
+Apply the completed Brand Foundation across product surfaces and brand assets.
+
+### Intent
+
+Sprint 13 is practical application of Sprint 12.
+
+Sprint 12 → Foundation  
+Sprint 13 → Application
+
+After Brand Foundation is approved, produce and apply brand assets so every surface feels like one product.
+
+### Scope Direction
+
+Typical deliverables include:
+
+- App Icon production
+- Launch Screen
+- README Hero
+- Widget visual consistency
+- Brand asset export
+- Applying the approved design language across the product
+
+**Status**
+
+📍 Current
+
+---
+
+## Sprint 14 — Widget Experience
 
 ### Goal
 
@@ -495,9 +609,11 @@ Bring today's rhythm to the Home Screen.
 
 ### Intent
 
-Widget implementation was intentionally postponed until Product UI reached MVP quality.
+Widget remains part of the long-term roadmap under Platform Expansion.
 
-Widget should consume the existing Snapshot and mapping architecture rather than redefine business logic.
+Widget implementation has been intentionally postponed because Today and Live Activity already satisfy the primary quick-access experience.
+
+Widget should consume the existing Snapshot, mapping architecture, and finalized Brand Foundation / Brand Assets rather than redefine business logic.
 
 ### Scope Direction
 
@@ -507,11 +623,11 @@ Widget should consume the existing Snapshot and mapping architecture rather than
 
 **Status**
 
-📅 Ready — Next
+📅 Planned (postponed until after Brand Foundation and Brand Assets & Experience)
 
 ---
 
-## Sprint 13 — Apple Watch Integration
+## Sprint 15 — Apple Watch Integration
 
 ### Goal
 
@@ -519,7 +635,7 @@ Bring today's rhythm to Apple Watch.
 
 ### Intent
 
-Apple Watch remains a future surface. It should reuse the finalized Product UI interpretation and existing architecture.
+Apple Watch remains a future surface under Platform Expansion. It should reuse the finalized Brand Foundation, Brand Assets, and existing architecture.
 
 ### Scope Direction
 
@@ -529,7 +645,7 @@ Apple Watch remains a future surface. It should reuse the finalized Product UI i
 
 **Status**
 
-📅 Planned (postponed until after Product UI MVP)
+📅 Planned (postponed until after Brand Foundation, Brand Assets & Experience, and Widget Experience)
 
 ---
 

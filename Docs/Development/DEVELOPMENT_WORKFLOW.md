@@ -379,7 +379,7 @@ unless multiple commits improve reviewability.
 Review:
 
 - Remaining technical debt
-- Remaining roadmap and current Product UI First priority
+- Remaining roadmap and current Brand Foundation / Brand Assets & Experience priority
 - Next Sprint goal from `Docs/ROADMAP.md`
 
 ---
