@@ -19,7 +19,7 @@ struct TodayRhythmLiveActivityWidget: Widget {
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    Text("🌿")
+                    BreathFlowMark(size: 18)
                 }
                 DynamicIslandExpandedRegion(.center) {
                     TodayRhythmIslandExpandedView(
@@ -28,7 +28,7 @@ struct TodayRhythmLiveActivityWidget: Widget {
                     )
                 }
             } compactLeading: {
-                Text("🌿")
+                BreathFlowMark(size: 14)
             } compactTrailing: {
                 if let title = TodayRhythmLiveActivityCopy.primaryTitle(state: context.state, now: Date()) {
                     Text(title)
@@ -37,9 +37,26 @@ struct TodayRhythmLiveActivityWidget: Widget {
                         .minimumScaleFactor(0.7)
                 }
             } minimal: {
-                Text("🌿")
+                BreathFlowMark(size: 12)
             }
         }
+    }
+}
+
+// MARK: - Brand Presence (quiet)
+
+/// Compact Breath Flow for Live Activity / Dynamic Island.
+/// Presence only — never a competing hero.
+private struct BreathFlowMark: View {
+    let size: CGFloat
+
+    var body: some View {
+        Image("BreathFlow")
+            .resizable()
+            .interpolation(.high)
+            .scaledToFit()
+            .frame(width: size, height: size)
+            .accessibilityHidden(true)
     }
 }
 
@@ -69,8 +86,7 @@ private struct TodayRhythmLockScreenView: View {
         )
 
         VStack(alignment: .leading, spacing: 8) {
-            Text("🌿")
-                .font(.title3)
+            BreathFlowMark(size: 28)
 
             if let title {
                 Text(title)
@@ -164,7 +180,8 @@ private enum TodayRhythmLiveActivityCopy {
         case .nextRhythm:
             return state.nextTitle
         case .dayComplete:
-            return "오늘의 리듬을 잘 마무리했어요"
+            // Shared closure voice with Today (DR-017).
+            return "오늘의 리듬을 모두 이어냈어요."
         case .none:
             return state.focusTitle ?? state.nextTitle
         }

@@ -5,15 +5,15 @@
 
 import SwiftUI
 
+/// Legacy preview/card helper. Not used by production Today.
+/// Snooze / checklist completion framing removed per DR-017.
 struct RoutineCardView: View {
     let routine: Routine
     var scheduleRole: RoutineScheduleRole? = nil
     var showsSectionLabel: Bool = true
-    var primaryButtonTitle: String = "완료했어요"
-    var secondaryActionTitle: String = "10분 뒤에 하기"
+    var primaryButtonTitle: String = "이어냈어요"
     var isCompleting: Bool = false
     var onComplete: (() -> Void)?
-    var onSnooze: (() -> Void)?
 
     private var resolvedRole: RoutineScheduleRole {
         if let scheduleRole {
@@ -52,20 +52,16 @@ struct RoutineCardView: View {
         }
     }
 
-    private var showsSecondaryAction: Bool {
-        resolvedRole == .current
-    }
-
     private var isPrimaryDisabled: Bool {
         onComplete == nil || isCompleting
     }
 
-    private var showsCompletionMessage: Bool {
+    private var showsAcknowledgmentMessage: Bool {
         resolvedRole == .completed || routine.isCompleted
     }
 
     private var contentSpacing: CGFloat {
-        showsActions || showsCompletionMessage ? ORSpacing.cardContentGap : ORSpacing.sm
+        showsActions || showsAcknowledgmentMessage ? ORSpacing.cardContentGap : ORSpacing.sm
     }
 
     var body: some View {
@@ -86,14 +82,10 @@ struct RoutineCardView: View {
 
                 if showsActions {
                     primaryButton
-
-                    if showsSecondaryAction {
-                        secondaryButton
-                    }
                 }
 
-                if showsCompletionMessage {
-                    Text("오늘의 리듬을 완료했어요")
+                if showsAcknowledgmentMessage {
+                    Text("오늘의 리듬을 이어냈어요")
                         .orTypography(.body, weight: .medium)
                         .foregroundStyle(ORColors.primary)
                 }
@@ -110,7 +102,7 @@ struct RoutineCardView: View {
                 if isCompleting {
                     ProgressView()
                         .tint(.white)
-                        .accessibilityLabel("완료 저장 중")
+                        .accessibilityLabel("이어내는 중")
                 } else {
                     Text(primaryButtonTitle)
                         .orTypography(.body, weight: .semibold)
@@ -125,19 +117,7 @@ struct RoutineCardView: View {
         .buttonStyle(.plain)
         .disabled(isPrimaryDisabled)
         .opacity(isPrimaryDisabled ? 0.45 : 1)
-    }
-
-    private var secondaryButton: some View {
-        Button(action: { onSnooze?() }) {
-            Text(secondaryActionTitle)
-                .orTypography(.body, weight: .medium)
-                .foregroundStyle(ORColors.primaryEmphasis)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, ORSpacing.xs)
-        }
-        .buttonStyle(.plain)
-        .disabled(onSnooze == nil)
-        .opacity(onSnooze == nil ? 0.45 : 1)
+        .accessibilityHint("이 리듬을 이어낸 것으로 표시합니다")
     }
 }
 
@@ -169,7 +149,7 @@ struct RoutineCardView: View {
     .background(ORColors.background)
 }
 
-#Preview("Completed Routine") {
+#Preview("Acknowledged Routine") {
     RoutineCardView(
         routine: MockRoutineData.currentRoutine.updatingStatus(.completed),
         scheduleRole: .completed

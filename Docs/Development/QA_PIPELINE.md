@@ -30,7 +30,7 @@ Re-run affected QA steps
 
 ↓
 
-Sprint Approval
+Product Owner Approval
 
 Every verification must distinguish between:
 
@@ -43,7 +43,8 @@ Never claim verification that was not actually performed.
 
 # QA Flow
 
-Every Sprint follows the same QA sequence.
+Every Sprint follows the same QA sequence inside the canonical lifecycle
+(`DEVELOPMENT_WORKFLOW.md` stages 4–8).
 
 Implementation Completed
 
@@ -69,7 +70,15 @@ Documentation Pass
 
 ↓
 
-Sprint Approval
+Document Integration Review (DIR)
+
+↓
+
+Planning Sync (PS)
+
+↓
+
+Product Owner Approval
 
 ---
 
@@ -144,31 +153,52 @@ Items not visually verified must be recorded as Not Verified.
 
 Purpose
 
-Ensure documentation reflects implemented behavior.
+Ensure owner documents reflect implemented behavior.
 
 Update only documentation affected by the Sprint.
 
 Examples:
 
-- Architecture
-- Decision Records
-- Design
-- Roadmap
-- Changelog
+- Product / Design / Architecture / Decision Records
+- Hub README membership
+- Link repairs
 
 Avoid unrelated documentation cleanup.
 
+Documentation Pass does not replace DIR or Planning Sync. ROADMAP / CHANGELOG alignment belongs primarily to Planning Sync.
+
 ---
 
-# 5. Sprint Approval
+# 4A. Document Integration Review (DIR)
+
+Purpose
+
+Verify documentation system consistency (cross references, authority, terminology, orphans, contradictions).
+
+Defined in `DEVELOPMENT_WORKFLOW.md` stage 6 — do not redefine here.
+
+---
+
+# 4B. Planning Sync (PS)
+
+Purpose
+
+Align ROADMAP, CHANGELOG, and README with reality; ensure unique sprint ownership and correct deferred work.
+
+Defined in `DEVELOPMENT_WORKFLOW.md` stage 7 — do not redefine here.
+
+---
+
+# 5. Product Owner Approval
 
 A Sprint is ready for completion only when:
 
-- Approved scope implemented
+- Approved scope implemented (when applicable)
 - Review completed
 - Integration QA passed
 - Manual Visual QA completed or recorded
-- Documentation updated (when required)
+- DIR completed
+- Planning Sync completed
 - Outstanding risks understood and accepted by the developer
 
 Only then should the developer commit and push.
@@ -201,7 +231,7 @@ Re-run affected QA steps
 
 ↓
 
-Sprint Approval
+Product Owner Approval
 
 Only the affected QA stages need to be repeated.
 

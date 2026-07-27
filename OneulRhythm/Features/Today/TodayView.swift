@@ -13,6 +13,7 @@ struct TodayView: View {
     @StateObject private var viewModel: TodayViewModel
     @State private var isCreateRhythmPresented = false
     @State private var isManageRhythmsPresented = false
+    @State private var isSettingsPresented = false
 
     private let repository: RoutineRepository
     private let recurringRhythmRepository: RecurringRhythmRepository
@@ -55,12 +56,11 @@ struct TodayView: View {
                     headerGroup
 
                     screenContent
-                        .padding(.top, ORSpacing.sectionGap)
+                        .padding(.top, contentTopSpacing)
                         .id(contentTransitionID)
                         .transition(contentTransition)
 
-                    if viewModel.showsProgress,
-                       viewModel.screenPresentation != .empty {
+                    if viewModel.showsProgress {
                         TodayProgressView(
                             completedCount: viewModel.completedRoutineCount,
                             totalCount: viewModel.totalRoutineCount,
@@ -77,16 +77,30 @@ struct TodayView: View {
             .safeAreaPadding(.top, ORSpacing.screenTop)
             .background(ORColors.background.ignoresSafeArea())
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        isManageRhythmsPresented = true
-                    } label: {
-                        Text("관리")
-                            .orTypography(.caption, weight: .medium)
-                            .foregroundStyle(ORColors.textSecondary)
+                // Settings + My Rhythms: hidden on Welcome (First Journey). Settings UI Spec / DR-015.
+                if firstRhythmJourneyProgress.hasCompletedFirstRhythmJourney {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            isSettingsPresented = true
+                        } label: {
+                            Image(systemName: "gearshape")
+                                .foregroundStyle(ORColors.textSecondary)
+                        }
+                        .accessibilityLabel("설정")
+                        .accessibilityHint("앱 설정을 엽니다")
                     }
-                    .accessibilityLabel("리듬 관리")
-                    .accessibilityHint("리듬을 추가하거나 편집합니다")
+
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            isManageRhythmsPresented = true
+                        } label: {
+                            Text("내 리듬")
+                                .orTypography(.caption, weight: .medium)
+                                .foregroundStyle(ORColors.textSecondary)
+                        }
+                        .accessibilityLabel("내 리듬")
+                        .accessibilityHint("리듬 목록을 엽니다")
+                    }
                 }
             }
             .navigationDestination(isPresented: $isCreateRhythmPresented) {
@@ -112,6 +126,9 @@ struct TodayView: View {
                     nowProvider: nowProvider
                 )
             }
+            .navigationDestination(isPresented: $isSettingsPresented) {
+                SettingsView()
+            }
         }
         .task(id: launchState.didCompleteInitialRhythmSync) {
             guard launchState.didCompleteInitialRhythmSync else { return }
@@ -125,7 +142,7 @@ struct TodayView: View {
             }
         }
         .alert(
-            "리듬을 완료하지 못했어요",
+            "리듬을 이어내지 못했어요",
             isPresented: Binding(
                 get: { viewModel.completionErrorMessage != nil },
                 set: { isPresented in
@@ -143,19 +160,28 @@ struct TodayView: View {
 
     // MARK: - Always Visible
 
-    /// Greeting + Date as one atmospheric header group. Never competes with Primary.
+    /// Greeting + Date as one atmospheric header group. Never competes with Hero.
     private var headerGroup: some View {
         VStack(alignment: .leading, spacing: ORSpacing.xxs) {
             Text(viewModel.greetingText)
                 .orTypography(.title, weight: .medium)
                 .foregroundStyle(ORColors.textPrimary)
-                .accessibilityAddTraits(.isHeader)
+                // Welcome: atmosphere only — Hero Meaning owns the primary header.
+                .accessibilityAddTraits(isWelcomeExperienceActive ? [] : .isHeader)
 
             Text(viewModel.formattedTodayDate)
                 .orTypography(.body)
                 .foregroundStyle(ORColors.textSecondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// First Journey Empty — Welcome Experience is active (DR-015 + Welcome UI Spec).
+    private var isWelcomeExperienceActive: Bool {
+        !viewModel.isLoading
+            && viewModel.loadErrorMessage == nil
+            && viewModel.screenPresentation == .empty
+            && emptyPhase == .firstJourney
     }
 
     // MARK: - Screen Content
@@ -233,7 +259,7 @@ struct TodayView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    /// Empty phases from DR-015 — First Journey vs Normal Experience.
+    /// Empty phases from DR-015 — Welcome (First Journey) vs Normal Experience.
     private var emptyState: some View {
         TodayEmptyStateView(
             phase: emptyPhase,
@@ -245,6 +271,11 @@ struct TodayView: View {
         firstRhythmJourneyProgress.hasCompletedFirstRhythmJourney
             ? .normalExperience
             : .firstJourney
+    }
+
+    /// Welcome gives Breath Flow generous air after the atmospheric layer.
+    private var contentTopSpacing: CGFloat {
+        isWelcomeExperienceActive ? ORSpacing.xxl : ORSpacing.sectionGap
     }
 
     /// Approved Day Complete copy. Quiet closure — never celebratory.
@@ -307,7 +338,7 @@ struct TodayView: View {
         .orCard()
     }
 
-    /// Gentle acknowledgment. Visible only when completion is possible.
+    /// Gentle acknowledgment. Visible only when acknowledgment is possible.
     private func completionButton(for routine: Routine) -> some View {
         let isCompleting = viewModel.isCompleting(routine)
 
@@ -316,9 +347,9 @@ struct TodayView: View {
                 if isCompleting {
                     ProgressView()
                         .tint(.white)
-                        .accessibilityLabel("완료 저장 중")
+                        .accessibilityLabel("이어내는 중")
                 } else {
-                    Text("완료했어요")
+                    Text("이어냈어요")
                         .orTypography(.body, weight: .semibold)
                         .foregroundStyle(.white)
                 }
@@ -331,7 +362,7 @@ struct TodayView: View {
         .buttonStyle(.plain)
         .disabled(isCompleting)
         .opacity(isCompleting ? 0.45 : 1)
-        .accessibilityHint("이 리듬을 완료로 표시합니다")
+        .accessibilityHint("이 리듬을 이어낸 것으로 표시합니다")
     }
 
     /// Level 5 — quiet orientation for what follows. Never a second focus.
@@ -354,7 +385,7 @@ struct TodayView: View {
     }
 }
 
-#Preview("First Journey Empty") {
+#Preview("Welcome Experience") {
     TodayView(
         repository: PreviewRoutineRepository(),
         recurringRhythmRepository: PreviewRecurringRhythmRepository(),

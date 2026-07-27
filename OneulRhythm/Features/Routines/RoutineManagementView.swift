@@ -124,7 +124,7 @@ struct RoutineManagementView: View {
             Text("삭제한 리듬은 되돌릴 수 없어요.")
         }
         .alert(
-            "리듬을 변경하지 못했어요",
+            "리듬을 삭제하지 못했어요",
             isPresented: mutationErrorBinding
         ) {
             Button("확인", role: .cancel) {}
@@ -233,7 +233,7 @@ struct RoutineManagementView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityAddTraits(.isHeader)
 
-            Text("+ 버튼으로 첫 리듬을 만들어보세요.")
+            Text("첫 리듬을 만들어보세요.")
                 .orTypography(.body)
                 .foregroundStyle(ORColors.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)

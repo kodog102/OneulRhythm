@@ -123,6 +123,10 @@ A feature is not complete until its relevant documentation has been updated.
 
 Engineering decisions should be recorded while they are still fresh.
 
+Documentation quality includes not only the correctness of individual documents, but also the consistency of the documentation system as a whole.
+
+System-level consistency is verified through Document Integration Review (DIR) and Planning Sync (PS) in `Docs/Development/DEVELOPMENT_WORKFLOW.md`.
+
 ---
 
 ## 8. One Responsibility Per Agent

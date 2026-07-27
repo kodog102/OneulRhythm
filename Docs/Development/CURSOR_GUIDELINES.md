@@ -192,7 +192,10 @@ A successful build does not replace testing.
 Update documentation only:
 
 - when requested,
-- or during an approved Documentation Pass.
+- or during an approved Documentation Pass,
+- or during Document Integration Review / Planning Sync at Sprint close.
+
+Canonical stages: `DEVELOPMENT_WORKFLOW.md` (Documentation Pass → DIR → Planning Sync).
 
 ## Documentation Governance
 
@@ -203,6 +206,7 @@ Update documentation only:
 - Stop when documentation ownership is unclear.
 - Repair affected links before reporting Documentation Pass completion.
 - Update hub README Active/Historical listings when membership changes.
+- Complete DIR and Planning Sync before claiming Sprint documentation is finished.
 
 Update existing documentation before introducing new documentation.
 

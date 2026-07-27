@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="OR-Launch-VC">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Launch Screen-->
+        <scene sceneID="OR-Launch-Scene">
+            <objects>
+                <viewController id="OR-Launch-VC" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="OR-Launch-Root">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BreathFlow" translatesAutoresizingMaskIntoConstraints="NO" id="OR-Launch-Mark">
+                                <rect key="frame" x="148.5" y="378" width="96" height="96"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="96" id="OR-Launch-W"/>
+                                    <constraint firstAttribute="height" constant="96" id="OR-Launch-H"/>
+                                </constraints>
+                                <accessibility key="accessibilityConfiguration">
+                                    <bool key="isElement" value="NO"/>
+                                </accessibility>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="OR-Launch-Safe"/>
+                        <color key="backgroundColor" name="LaunchBackground"/>
+                        <constraints>
+                            <constraint firstItem="OR-Launch-Mark" firstAttribute="centerX" secondItem="OR-Launch-Root" secondAttribute="centerX" id="OR-Launch-CX"/>
+                            <constraint firstItem="OR-Launch-Mark" firstAttribute="centerY" secondItem="OR-Launch-Root" secondAttribute="centerY" id="OR-Launch-CY"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OR-Launch-First" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="0.0" y="0.0"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="BreathFlow" width="100" height="100"/>
+        <namedColor name="LaunchBackground">
+            <color red="0.97" green="0.95" blue="0.91" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

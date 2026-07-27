@@ -4,7 +4,9 @@
 
 This document defines the official Sprint workflow for OneulRhythm.
 
-It is the authoritative source describing how every Sprint progresses from planning to completion.
+It is the **canonical** source for Sprint lifecycle stages, Document Integration Review (DIR), and Planning Sync (PS).
+
+Other process documents reference this workflow. They must not redefine a competing lifecycle.
 
 Before implementation begins, all AI agents must follow the project governance defined in the repository.
 
@@ -30,6 +32,15 @@ Every Sprint follows these principles.
 - Scope Before Code
 - Validation Before Approval
 - Documentation Before Completion
+- **Documentation System Consistency**
+
+### Documentation System Consistency
+
+Documentation quality includes not only the correctness of individual documents, but also the consistency of the documentation system as a whole.
+
+Individual owner documents may be accurate in isolation and still leave the project inconsistent through broken links, conflicting authority, stale planning, or orphaned navigation.
+
+Document Integration Review and Planning Sync exist to protect that system-level consistency.
 
 Repository documentation always takes precedence over conversational memory.
 
@@ -40,7 +51,7 @@ Task slicing is optional and should only be used when it improves safety, valida
 When a Sprint primarily delivers user-facing experience,
 Product Experience should be defined before UI implementation.
 
-Engineering-only Sprints do not require Product Experience planning.
+Engineering-only Sprints do not require Experience Review or UI Specification.
 
 ---
 
@@ -58,6 +69,7 @@ Responsible for:
 - Cursor prompt creation
 - Architecture validation
 - Sprint planning support
+- DIR / Planning Sync review support when requested
 
 ChatGPT provides architectural guidance but does not replace implementation review or QA performed by Cursor.
 
@@ -73,8 +85,9 @@ Responsible for:
 - Build execution
 - Code review
 - Integration QA
-- Documentation Pass
-- Documentation updates
+- Documentation Pass (owner-document updates)
+- Document Integration Review (DIR)
+- Planning Sync (PS)
 - Structured implementation reports
 
 Cursor must remain inside the approved Sprint scope.
@@ -92,7 +105,7 @@ Responsible for:
 - Final decisions
 - Visual verification
 - Device verification
-- Sprint approval
+- Product Owner Approval
 - Commit
 - Push
 
@@ -102,88 +115,94 @@ The developer owns the final product.
 
 # Sprint Lifecycle
 
-## 1. Sprint Planning
+The standard Sprint Lifecycle is:
 
-ChatGPT and the developer define:
+```text
+1. Experience Review
+2. Architecture Review (Decision Record)
+3. UI Specification
+4. Implementation
+5. Product QA
+6. Document Integration Review (DIR)
+7. Planning Sync (PS)
+8. Product Owner Approval
+```
 
-- Sprint goal
-- Success criteria
-- Scope
-- Out of scope
-- Acceptance criteria
+### Preconditions (every Sprint)
 
-Sprint goals and sequencing follow the current priorities in `Docs/ROADMAP.md`.
+Before stage 1:
+
+| Step | Purpose |
+|------|---------|
+| **Sprint Planning** | Goal, scope, out of scope, acceptance criteria (`Docs/ROADMAP.md` priorities) |
+| **Repository Context Review** | Required Product / Architecture / process docs and Sprint-specific context |
+
+Output: Approved Sprint Goal and implementation context.
+
+### Applicability
+
+| Stage | Product Experience / UI Sprints | Engineering-only Sprints |
+|-------|----------------------------------|---------------------------|
+| 1 Experience Review | Required | Skip (or replace with technical problem review) |
+| 2 Architecture Review | Required when ownership/structure changes | Required when architecture changes |
+| 3 UI Specification | Required for user-facing UI | Skip |
+| 4–8 | Required | Required |
 
 Do not reopen postponed platform work (for example Widget or Apple Watch) unless the Roadmap current priority has changed.
 
+---
+
+## 1. Experience Review
+
+Define why the experience exists before architecture or UI.
+
+Typical answers:
+
+- Product purpose
+- Emotional role
+- Guiding principles
+- What belongs / does not belong
+- Relationship to other surfaces
+
+No UI design. No implementation.
+
 Output:
 
-Approved Sprint Goal
+Approved Experience Review (session artifact or Product document, as appropriate).
 
 ---
 
-## 2. Repository Context Review
+## 2. Architecture Review (Decision Record)
 
-Before architecture or implementation begins, review the required project documents.
+Convert experience principles into ownership and architectural rules.
 
-Typical required context includes:
+Typical outputs:
 
-- Docs/Product/PRODUCT-PRINCIPLES.md
-- Docs/Architecture/ARCHITECTURE.md
-- Docs/AI_Collaboration_Playbook_v2.2.md
-- Relevant Architecture Decision(s) under Docs/Architecture/Decisions/
-- Docs/ROADMAP.md (when applicable)
-- Docs/Engineering/ENGINEERING_CHARTER.md
-- DEVELOPMENT_WORKFLOW
-- CURSOR_GUIDELINES
+- Architecture specification under `Docs/Product/` or `Docs/Architecture/`
+- Decision Record under `Docs/Architecture/Decisions/` when ownership or structure is lasting
 
-Then review Sprint-specific documentation and affected source code.
+No UI layout. No implementation.
 
 Output:
 
-Approved implementation context.
+Accepted Architecture Decision / Architecture Specification.
 
 ---
 
-## 3. Architecture and Task Design
+## 3. UI Specification
 
-ChatGPT analyzes:
+Translate approved architecture into an implementation-ready presentation contract.
 
-- Current architecture
-- Affected modules
-- Implementation strategy
+Typical outputs:
 
-If the task is sufficiently large or risky, it may be divided into implementation slices.
+- Navigation, hierarchy, copy locks, motion, accessibility contracts
+- UI Specification under `Docs/Product/`
 
-Task slicing is optional.
-
-Output:
-
-Approved implementation plan.
-
----
-
-## 3A. Product Experience Design (When Applicable)
-
-If a Sprint primarily delivers user-facing experience,
-define the intended product experience before implementation.
-
-Typical outputs may include:
-
-- Product Vision
-- UX Principles
-- Information Hierarchy
-- User Flow
-- Component Inventory
-- Out of Scope
-
-This step is required only for Product UI Sprints.
-
-Engineering-only Sprints may skip this step.
+No implementation code.
 
 Output:
 
-Approved Product Experience.
+Approved UI Specification.
 
 ---
 
@@ -191,81 +210,54 @@ Approved Product Experience.
 
 Cursor implements only the approved scope.
 
+### Implementation activities
+
+- Code and tests within approved architecture and UI contracts
+- Build successfully
+- Implementation Report
+- Code Review (PASS / PASS WITH CONDITIONS / FAIL)
+- Fixes for approved findings only — no scope expansion
+
+### Documentation Pass (within Implementation close)
+
+When behavior or contracts change, update **owner documents** before DIR:
+
+- Product behavior → `Docs/Product/`
+- Implementation contracts → `Docs/Design/` or `Docs/Extensions/`
+- Architecture ownership → `Docs/Architecture/` and Decision Records
+- Terminology → `Docs/GLOSSARY.md`
+- Owning hub README Active/Historical listings when membership changes
+- Repair affected links in the same pass
+
+Documentation Pass updates owner content. It does **not** replace DIR or Planning Sync.
+
 Rules:
 
 - Preserve architecture
 - Keep changes small
 - Follow project governance
-- Update tests when necessary
-- Build successfully
 - Never expand scope
 - Never commit or push
 
 Output:
 
-Implementation Report
+Implementation Report + owner-document updates (when required).
 
 ---
 
-## 5. Implementation Report
+## 5. Product QA
 
-Cursor reports:
+Verify the product against approved contracts.
 
-1. Modified Files
-2. Implementation Summary
-3. Architecture Notes
-4. Test Results
-5. Build Results
-6. Manual Verification Required
-7. Remaining Risks
-
----
-
-## 6. Code Review
-
-Cursor reviews:
-
-- Architecture preservation
-- Scope adherence
-- Regression risk
-- Release readiness
-
-Return:
-
-- PASS
-- PASS WITH CONDITIONS
-- FAIL / BLOCK
-
----
-
-## 7. Fixes
-
-Cursor addresses only approved review findings.
-
-Rules:
-
-- No new features
-- No architecture redesign
-- No speculative improvements
-- No scope expansion
-
----
-
-## 8. Integration QA
-
-Cursor verifies:
+### Cursor
 
 - Functional behavior
-- Lifecycle behavior
-- Persistence
-- State transitions
-- Actor isolation
-- Idempotency
-- Build
-- Tests
+- Lifecycle / persistence / state transitions (as applicable)
+- Build and tests
 - Regression
+- Integration QA result: PASS / PASS WITH CONDITIONS / FAIL
 
-Developer performs:
+### Developer
 
 - Visual QA
 - Device verification
@@ -276,93 +268,70 @@ Return:
 - PASS WITH CONDITIONS
 - FAIL
 
----
-
-## 9. Sprint Review
-
-ChatGPT verifies:
-
-- Architecture consistency
-- Scope completion
-- Outstanding technical decisions
-
-When Product Experience Design was part of the Sprint,
-also verify:
-
-- UX Principle consistency
-- Information hierarchy
-- Alignment with Product Vision
-
-Developer performs:
-
-- Final product approval
+Product QA must complete before Document Integration Review.
 
 ---
 
-## 10. Documentation Pass
+## 6. Document Integration Review (DIR)
 
-Cursor updates only documentation affected by the Sprint.
+DIR verifies that the **documentation system** remains internally consistent.
 
-Update owner documents according to what changed:
+A Sprint is not documentation-complete when individual leaves are correct but the system is not.
 
-- Product behavior → `Docs/Product/`
-- Implementation contracts → `Docs/Design/` or `Docs/Extensions/`
-- Architecture ownership → `Docs/Architecture/` and Decision Records
-- Terminology → `Docs/GLOSSARY.md`
-- Progress → `Docs/ROADMAP.md` and `Docs/CHANGELOG.md`
+### DIR verifies
 
-Also update when membership or navigation is affected:
+| Area | Questions |
+|------|-----------|
+| **Cross references** | Reachable? Broken links? Orphans? Forward/back refs where needed? |
+| **Authority** | One source of truth per topic? Unintentional ownership moves? Duplicated decisions? |
+| **Ownership** | Surface / domain boundaries still clear? |
+| **Terminology** | Consistent product language? Conflicts with Glossary or Principles? |
+| **Product consistency** | Aligns with PRODUCT-PRINCIPLES and BRAND? |
+| **Documentation navigation** | Hubs index Active leaves? Role entry points still valid? |
+| **Orphan documents** | New docs unreachable from hubs? |
+| **Contradictions** | Conflicting status, sprint identity, or ownership claims? |
 
-- Owning hub README Active/Historical listings
-- `Docs/README.md` only when categories, paths, or role entry points change
-- Root `README.md` only when necessary
+DIR does not redesign product. DIR does not implement code.
 
-Documentation Pass must keep Active vs Archived consistency.
+Output:
 
-Archived documents remain historical. They are never implementation authority.
+DIR report — findings, recommended fixes, verdict (ready / blocked).
 
-Repair affected links in the same pass.
-
-Avoid unrelated documentation cleanup.
-
----
-
-## 11. Documentation Verification
-
-Cursor verifies:
-
-- Owner documents match implemented behavior
-- Hub README Active/Historical listings remain accurate
-- Archived documents are not cited as required contracts
-- Broken references in edited documentation
-- Documentation consistency with the Sprint scope
-
-Developer approves documentation as part of Sprint completion.
-
-Documentation Verification must complete before Sprint completion.
+Apply approved documentation fixes before Planning Sync when DIR is blocked.
 
 ---
 
-## 12. Sprint Retrospective
+## 7. Planning Sync (PS)
 
-Capture:
+Planning Sync makes planning documents describe **reality**, not obsolete intentions.
 
-- What changed
-- Why it changed
-- Lessons learned
-- Technical debt
-- Readiness for the next Sprint
+### Planning Sync verifies and updates
 
-When process improvements are identified, update existing documentation whenever possible.
+| Document / concern | Requirement |
+|--------------------|-------------|
+| `Docs/ROADMAP.md` | Current sprint, status, deferred work, ownership |
+| `Docs/CHANGELOG.md` | Completed work only — no invented implementation |
+| Root `README.md` | Sprint summaries match ROADMAP |
+| Sprint ownership | Unique; no duplicate “planned” owners for the same work |
+| Deferred work | Widget / Watch / Future correctly postponed |
+| Future sprint alignment | Numbers and names match current plan |
 
-Avoid introducing new governance unless repeated evidence shows it is necessary.
+Planning documents must defer to Product / Architecture authorities (PRODUCT-PRINCIPLES, BRAND, Decision Records). They must not duplicate architectural decisions.
+
+Output:
+
+Planning Sync complete — ROADMAP / CHANGELOG / README aligned.
 
 ---
 
-## 13. Commit and Push
+## 8. Product Owner Approval
 
-Developer performs:
+The developer (Product Owner) gives final Sprint approval.
 
+Includes:
+
+- Final product acceptance
+- Documentation approval (including DIR + Planning Sync outcomes)
 - Commit
 - Push
 
@@ -372,15 +341,7 @@ One Sprint = One reviewable commit
 
 unless multiple commits improve reviewability.
 
----
-
-## 14. Next Sprint Kickoff
-
-Review:
-
-- Remaining technical debt
-- Remaining roadmap and current Brand Foundation / Brand Assets & Experience priority
-- Next Sprint goal from `Docs/ROADMAP.md`
+After approval, prepare Next Sprint Kickoff from `Docs/ROADMAP.md` (remaining debt, current priority, next goal).
 
 ---
 
@@ -388,54 +349,52 @@ Review:
 
 ```mermaid
 flowchart TD
-    A[1. Sprint Planning]
-    --> B[2. Repository Context Review]
-    --> C[3. Architecture and Task Design]
+    P[Sprint Planning + Repository Context]
+    --> A[1. Experience Review]
+    --> B[2. Architecture Review / DR]
+    --> C[3. UI Specification]
+    --> D[4. Implementation]
+    --> E[5. Product QA]
 
-    C --> D{Product UI Sprint?}
+    E -->|Findings| D
+    E -->|Approved| F[6. Document Integration Review]
+    F -->|Fixes required| F
+    F -->|Approved| G[7. Planning Sync]
+    G --> H[8. Product Owner Approval]
+    H --> I[Next Sprint Kickoff]
 
-    D -->|Yes| E[3A. Product Experience Design]
-    D -->|No| F[4. Implementation]
-
-    E --> F
-
-    F --> G[5. Implementation Report]
-    G --> H[6. Code Review]
-
-    H -->|Findings| I[7. Fixes]
-    I --> H
-
-    H -->|Approved| J[8. Integration QA]
-    J -->|Findings| I
-
-    J -->|Approved| K[9. Sprint Review]
-    K --> L[10. Documentation Pass]
-    L --> M[11. Documentation Verification]
-
-    M -->|Changes Required| L
-
-    M -->|Approved| N[12. Sprint Retrospective]
-    N --> O[13. Commit and Push]
-    O --> P[14. Next Sprint Kickoff]
+    A -.->|Engineering-only may skip| D
+    C -.->|Engineering-only may skip| D
 ```
 
 ```text
-Planning
-  → Repository Context Review
-  → Architecture and Task Design
-  → Product Experience Design (UI Sprints only)
-  → Implementation
-  → Implementation Report
-  → Code Review (Cursor)
-  → Fixes (if needed)
-  → Integration QA (Cursor)
-  → Sprint Review (ChatGPT + Developer)
-  → Documentation Pass (Cursor)
-  → Documentation Verification (Cursor)
-  → Sprint Retrospective
-  → Commit and Push (Developer)
+Sprint Planning + Repository Context
+  → 1. Experience Review
+  → 2. Architecture Review (Decision Record)
+  → 3. UI Specification
+  → 4. Implementation (+ Documentation Pass)
+  → 5. Product QA
+  → 6. Document Integration Review (DIR)
+  → 7. Planning Sync (PS)
+  → 8. Product Owner Approval
   → Next Sprint Kickoff
 ```
+
+---
+
+# Relationship to Earlier Stage Names
+
+| Former name | Current home |
+|-------------|--------------|
+| Product Experience Design (3A) | Stage 1 Experience Review (+ Stage 3 UI Spec) |
+| Architecture and Task Design | Stage 2 Architecture Review |
+| Code Review / Fixes / Implementation Report | Stage 4 Implementation |
+| Integration QA / Visual QA | Stage 5 Product QA |
+| Documentation Pass | Stage 4 close (owner updates) |
+| Documentation Verification | Expanded into Stage 6 DIR |
+| ROADMAP / CHANGELOG updates alone | Stage 7 Planning Sync (systematically) |
+| Sprint Review + Developer approval | Stage 8 Product Owner Approval |
+| Sprint Retrospective | Capture lessons during Stage 8 / kickoff; update process docs when warranted |
 
 ---
 
@@ -444,13 +403,13 @@ Planning
 - Repository documentation is the source of truth.
 - Required project documents must be reviewed before implementation.
 - Scope is approved before implementation.
-- Product Experience is defined before UI implementation when applicable.
+- Experience and architecture are defined before UI Specification when applicable.
+- UI Specification is approved before Implementation when applicable.
 - ChatGPT owns architecture and technical decisions.
-- Cursor owns implementation quality.
+- Cursor owns implementation quality, DIR, and Planning Sync execution.
 - Cursor stays inside the approved scope.
-- The developer owns the final product.
-- Product experience is approved by the developer.
-- Visual QA is performed by the developer.
-- Documentation must reflect implemented behavior.
+- The developer owns the final product and Product Owner Approval.
+- Documentation must reflect implemented behavior **and** remain system-consistent (DIR).
+- Planning documents must reflect current reality (Planning Sync).
 - Architecture changes require explicit approval.
 - Task slicing is optional and should only be used when it improves implementation quality.

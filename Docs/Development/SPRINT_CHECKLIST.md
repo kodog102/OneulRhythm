@@ -2,7 +2,9 @@
 
 Reusable Sprint close-out checklist for OneulRhythm.
 
-Update only documentation affected by the implemented behavior. Not every document must change every Sprint.
+Canonical lifecycle: `DEVELOPMENT_WORKFLOW.md`.
+
+Update only documentation affected by the Sprint. Not every document must change every Sprint.
 
 Related documents:
 
@@ -12,70 +14,79 @@ Related documents:
 
 ---
 
-## Planning
+## Preconditions
 
 - [ ] Sprint goal defined
 - [ ] Scope approved
-- [ ] Architecture reviewed
+- [ ] Repository context reviewed
 - [ ] Acceptance criteria defined
 
 ---
 
-## Implementation
+## 1–3. Experience → Architecture → UI Spec
+
+- [ ] Experience Review completed (or N/A for engineering-only)
+- [ ] Architecture Review / Decision Record completed when required
+- [ ] UI Specification approved when user-facing UI is in scope
+
+---
+
+## 4. Implementation
 
 - [ ] Approved scope implemented
 - [ ] Tests added or updated
 - [ ] Build succeeds
 - [ ] Relevant test suite passes
 - [ ] Implementation Report reviewed
+- [ ] Code Review completed
+- [ ] Documentation Pass completed when owner docs must change
 
 ---
 
-## QA
+## 5. Product QA
 
 - [ ] Integration QA completed
 - [ ] Regression risks reviewed
-- [ ] Manual verification completed or recorded
+- [ ] Manual / visual verification completed or recorded
 - [ ] Blocking issues resolved
 
 ---
 
-## Documentation
+## 6. Document Integration Review (DIR)
 
-- [ ] Documentation Pass completed
-- [ ] Documentation Verification completed
-- [ ] Product documentation updated (when behavior changed)
-- [ ] Brand Foundation documentation updated (when brand meaning or brand ADRs change)
-- [ ] Design documentation updated (only when implementation contract changed)
-- [ ] Architecture / Decisions updated (when ownership or structure changed)
-- [ ] Hub README updated (when membership changed)
-- [ ] Active / Historical state verified
-- [ ] ROADMAP updated (completed Sprint work)
-- [ ] CHANGELOG updated (completed Sprint work)
-- [ ] Glossary updated (when terminology changed)
-- [ ] Affected links repaired
+- [ ] Cross references verified (no broken links / orphans)
+- [ ] Authority / ownership clear (one source of truth per topic)
+- [ ] Terminology consistent
+- [ ] Product Principles / Brand consistency checked
+- [ ] Hub navigation indexes Active documents
+- [ ] Contradictions resolved
+- [ ] DIR verdict recorded (ready / blocked → fixes applied)
 
-Documentation notes:
+---
 
-- `Docs/Product/` — Update first when product behavior or UX contracts change.
-- `Docs/BRAND.md` — Update when Brand Foundation meaning, design language, or visual/motion principles change.
-- `Docs/ADR/` — Update when Brand Architecture Decision Records change or are added.
-- `Docs/Design/` — Update only when implementation contracts change.
-- `Docs/Architecture/` — Update only when system structure or layer responsibilities change.
-- `Docs/Architecture/Decisions/` — Update only when a lasting architectural decision changes or is added.
-- Hub READMEs — Update Active/Historical listings when documents are added, archived, moved, or removed.
-- `Docs/ROADMAP.md` — Update completed Sprint progress.
-- `Docs/CHANGELOG.md` — Record completed user-visible or architectural changes.
-- `Docs/README.md` — Update only when categories, paths, or role entry points change.
+## 7. Planning Sync (PS)
+
+- [ ] `Docs/ROADMAP.md` reflects current reality
+- [ ] `Docs/CHANGELOG.md` records completed work only
+- [ ] Root `README.md` matches roadmap summaries
+- [ ] Sprint ownership unique (no duplicate planned owners)
+- [ ] Deferred work correctly postponed
+- [ ] Future sprint alignment verified
+
+Planning notes:
+
+- Planning docs defer to Product / Architecture authorities — do not duplicate Decision Records.
+- Glossary updated when terminology changed (`Docs/GLOSSARY.md`).
+- `Docs/README.md` updated only when categories, paths, or role entry points change.
 - Archived documents are historical only and are never implementation authority.
 
 ---
 
-## Sprint Close
+## 8. Product Owner Approval
 
-- [ ] Sprint Retrospective completed
-- [ ] Technical debt recorded
+- [ ] Product Owner Approval given
+- [ ] Technical debt recorded (as needed)
 - [ ] Commit message prepared
 - [ ] Commit completed by the developer
 - [ ] Push completed by the developer
-- [ ] Next Sprint prepared
+- [ ] Next Sprint prepared from `Docs/ROADMAP.md`

@@ -15,6 +15,8 @@ struct AddRoutineView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
 
+    @FocusState private var isTitleFocused: Bool
+
     @State private var title: String
     @State private var startTime: Date
     @State private var hasEndTime: Bool
@@ -82,13 +84,14 @@ struct AddRoutineView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: ORSpacing.sectionGap) {
-                titleSection
-                timeSection
-                categorySection
-                recurrenceSection
-                reminderSection
+            VStack(alignment: .leading, spacing: 0) {
+                captureSection
+
+                configureSection
+                    .padding(.top, ORSpacing.xxl)
+
                 saveButton
+                    .padding(.top, ORSpacing.xl)
             }
             .padding(.horizontal, ORSpacing.screenHorizontal)
             .padding(.top, ORSpacing.lg)
@@ -150,46 +153,79 @@ struct AddRoutineView: View {
                 await resolveReminderPermission()
             }
         }
-    }
-
-    private var titleSection: some View {
-        formSection(title: "리듬 이름") {
-            TextField("예: 따뜻한 차 한잔 마시기", text: $title)
-                .orTypography(.body)
-                .foregroundStyle(ORColors.textPrimary)
-                .submitLabel(.done)
-                .padding(ORSpacing.cardPadding)
-                .orCard()
+        .onAppear {
+            guard case .create = mode else { return }
+            isTitleFocused = true
         }
     }
 
-    private var timeSection: some View {
-        formSection(title: "시간") {
-            VStack(spacing: ORSpacing.md) {
-                timePickerRow(title: "시작 시간", selection: $startTime)
+    // MARK: - Capture (DR-019 Primary)
+
+    /// Name + start time — strongest emphasis; first reading order.
+    private var captureSection: some View {
+        VStack(alignment: .leading, spacing: ORSpacing.md) {
+            Text("리듬 이름")
+                .orTypography(.caption, weight: .medium)
+                .foregroundStyle(ORColors.textSecondary)
+                .accessibilityAddTraits(.isHeader)
+
+            VStack(alignment: .leading, spacing: 0) {
+                TextField("예: 따뜻한 차 한잔 마시기", text: $title)
+                    .orTypography(.title, weight: .semibold)
+                    .foregroundStyle(ORColors.textPrimary)
+                    .submitLabel(.done)
+                    .focused($isTitleFocused)
+                    .accessibilityLabel("리듬 이름")
 
                 Divider()
                     .overlay(ORColors.divider)
+                    .padding(.vertical, ORSpacing.md)
 
-                Toggle("종료 시간 설정", isOn: $hasEndTime)
-                    .orTypography(.body)
-                    .foregroundStyle(ORColors.textPrimary)
-                    .tint(ORColors.primary)
-
-                if hasEndTime {
-                    Divider()
-                        .overlay(ORColors.divider)
-
-                    timePickerRow(title: "종료 시간", selection: $endTime)
-                }
+                timePickerRow(title: "시작 시간", selection: $startTime)
             }
             .padding(ORSpacing.cardPadding)
             .orCard()
         }
+        .accessibilityElement(children: .contain)
     }
 
-    private var categorySection: some View {
-        formSection(title: "카테고리") {
+    // MARK: - Configure (DR-019 Advanced)
+
+    /// End time, category, repeat, reminder — secondary hierarchy below Capture.
+    private var configureSection: some View {
+        VStack(alignment: .leading, spacing: ORSpacing.lg) {
+            endTimeConfigureBlock
+            categoryConfigureBlock
+            recurrenceConfigureBlock
+            reminderConfigureBlock
+        }
+        .accessibilityElement(children: .contain)
+    }
+
+    private var endTimeConfigureBlock: some View {
+        VStack(alignment: .leading, spacing: ORSpacing.md) {
+            Toggle("종료 시간", isOn: $hasEndTime)
+                .orTypography(.body)
+                .foregroundStyle(ORColors.textSecondary)
+                .tint(ORColors.primary)
+
+            if hasEndTime {
+                Divider()
+                    .overlay(ORColors.divider)
+
+                timePickerRow(title: "종료 시간", selection: $endTime)
+            }
+        }
+        .padding(ORSpacing.cardPadding)
+        .configureSurface()
+    }
+
+    private var categoryConfigureBlock: some View {
+        VStack(alignment: .leading, spacing: ORSpacing.md) {
+            Text("카테고리")
+                .orTypography(.caption, weight: .medium)
+                .foregroundStyle(ORColors.textTertiary)
+
             LazyVGrid(
                 columns: [
                     GridItem(.flexible(), spacing: ORSpacing.sm),
@@ -207,13 +243,17 @@ struct AddRoutineView: View {
                     }
                 }
             }
-            .padding(ORSpacing.cardPadding)
-            .orCard()
         }
+        .padding(ORSpacing.cardPadding)
+        .configureSurface()
     }
 
-    private var recurrenceSection: some View {
-        formSection(title: "반복") {
+    private var recurrenceConfigureBlock: some View {
+        VStack(alignment: .leading, spacing: ORSpacing.md) {
+            Text("반복")
+                .orTypography(.caption, weight: .medium)
+                .foregroundStyle(ORColors.textTertiary)
+
             LazyVGrid(
                 columns: [
                     GridItem(.flexible(), spacing: ORSpacing.sm),
@@ -230,47 +270,45 @@ struct AddRoutineView: View {
                     }
                 }
             }
-            .padding(ORSpacing.cardPadding)
-            .orCard()
         }
+        .padding(ORSpacing.cardPadding)
+        .configureSurface()
     }
 
-    private var reminderSection: some View {
-        formSection(title: "알림") {
-            VStack(alignment: .leading, spacing: ORSpacing.md) {
-                Toggle("시작 전에 알려주기", isOn: $reminderEnabled)
-                    .orTypography(.body)
-                    .foregroundStyle(ORColors.textPrimary)
-                    .tint(ORColors.primary)
-                    .disabled(isResolvingReminderPermission)
-                    .accessibilityLabel("시작 전에 알려주기")
-                    .accessibilityHint("리마인더는 선택 사항이며, 알림 권한이 필요할 수 있어요")
+    private var reminderConfigureBlock: some View {
+        VStack(alignment: .leading, spacing: ORSpacing.md) {
+            Toggle("시작 전에 알려주기", isOn: $reminderEnabled)
+                .orTypography(.body)
+                .foregroundStyle(ORColors.textSecondary)
+                .tint(ORColors.primary)
+                .disabled(isResolvingReminderPermission)
+                .accessibilityLabel("시작 전에 알려주기")
+                .accessibilityHint("리마인더는 선택 사항이며, 알림 권한이 필요할 수 있어요")
 
-                if reminderEnabled {
-                    Divider()
-                        .overlay(ORColors.divider)
+            if reminderEnabled {
+                Divider()
+                    .overlay(ORColors.divider)
 
-                    LazyVGrid(
-                        columns: [
-                            GridItem(.flexible(), spacing: ORSpacing.sm),
-                            GridItem(.flexible(), spacing: ORSpacing.sm)
-                        ],
-                        spacing: ORSpacing.sm
-                    ) {
-                        ForEach(reminderOptions, id: \.self) { minutes in
-                            selectionChip(
-                                title: "\(minutes)분 전",
-                                isSelected: reminderMinutes == minutes
-                            ) {
-                                reminderMinutes = minutes
-                            }
+                LazyVGrid(
+                    columns: [
+                        GridItem(.flexible(), spacing: ORSpacing.sm),
+                        GridItem(.flexible(), spacing: ORSpacing.sm)
+                    ],
+                    spacing: ORSpacing.sm
+                ) {
+                    ForEach(reminderOptions, id: \.self) { minutes in
+                        selectionChip(
+                            title: "\(minutes)분 전",
+                            isSelected: reminderMinutes == minutes
+                        ) {
+                            reminderMinutes = minutes
                         }
                     }
                 }
             }
-            .padding(ORSpacing.cardPadding)
-            .orCard()
         }
+        .padding(ORSpacing.cardPadding)
+        .configureSurface()
     }
 
     private var saveButton: some View {
@@ -284,10 +322,12 @@ struct AddRoutineView: View {
                     Text(saveButtonTitle)
                         .orTypography(.body, weight: .semibold)
                         .foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
                 }
             }
             .frame(maxWidth: .infinity)
-            .frame(height: ORSpacing.primaryButtonHeight)
+            .padding(.vertical, ORSpacing.md)
+            .frame(minHeight: ORSpacing.primaryButtonHeight)
             .background(ORColors.primary)
             .clipShape(
                 RoundedRectangle(
@@ -299,16 +339,7 @@ struct AddRoutineView: View {
         .buttonStyle(.plain)
         .disabled(isSaveDisabled)
         .opacity(isTitleEmpty ? 0.45 : 1)
-    }
-
-    private func formSection<Content: View>(
-        title: String,
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        VStack(alignment: .leading, spacing: ORSpacing.md) {
-            ORSectionLabel(text: title)
-            content()
-        }
+        .accessibilityHint(saveAccessibilityHint)
     }
 
     private func timePickerRow(
@@ -352,6 +383,8 @@ struct AddRoutineView: View {
                 )
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(title)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private var navigationTitle: String {
@@ -369,6 +402,15 @@ struct AddRoutineView: View {
             return "리듬 저장하기"
         case .edit:
             return "변경 저장하기"
+        }
+    }
+
+    private var saveAccessibilityHint: String {
+        switch mode {
+        case .create:
+            return "리듬을 저장하고 이전 화면으로 돌아갑니다"
+        case .edit:
+            return "변경을 저장하고 이전 화면으로 돌아갑니다"
         }
     }
 
@@ -560,6 +602,16 @@ struct AddRoutineView: View {
     }
 }
 
+// MARK: - Configure surface (quieter than Capture card)
+
+private extension View {
+    /// Secondary Configure band — same field tokens, reduced optical competition with Capture.
+    func configureSurface() -> some View {
+        background(ORColors.card.opacity(0.72))
+            .clipShape(RoundedRectangle(cornerRadius: ORRadius.lg, style: .continuous))
+    }
+}
+
 private enum PastTimeDayChoice {
     case sameDay
     case tomorrow
@@ -610,4 +662,28 @@ private struct RecurrenceOption: Identifiable {
             nowProvider: { MockRoutineData.date(hour: 10, minute: 0) }
         )
     }
+}
+
+#Preview("편집") {
+    NavigationStack {
+        AddRoutineView(
+            mode: .edit(
+                routineID: UUID(),
+                originalStartTime: MockRoutineData.date(hour: 7, minute: 30)
+            ),
+            title: "따뜻한 차 한잔 마시기",
+            startTime: MockRoutineData.date(hour: 7, minute: 30),
+            category: .morning,
+            nowProvider: { MockRoutineData.date(hour: 10, minute: 0) }
+        )
+    }
+}
+
+#Preview("큰 Dynamic Type") {
+    NavigationStack {
+        AddRoutineView(
+            nowProvider: { MockRoutineData.date(hour: 10, minute: 0) }
+        )
+    }
+    .environment(\.sizeCategory, .accessibilityLarge)
 }

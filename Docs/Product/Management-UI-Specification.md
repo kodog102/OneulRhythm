@@ -153,13 +153,15 @@ Schedule context must never dominate the title.
 
 Empty appears when Management has no recurring definitions and no today/future one-time rhythms.
 
-Approved Copy
+**Canonical empty copy:** see `My-Rhythms-UI-Specification.md`.
 
-아직 만든 리듬이 없어요.
+Superseded (non-canonical):
 
+```text
 + 버튼으로 첫 리듬을 만들어보세요.
+```
 
-Empty must feel calm and instructional.
+Empty must feel calm and owned.
 
 It must not reintroduce Today First Journey onboarding.
 
@@ -243,10 +245,14 @@ It must never celebrate creation, deletion, or completion.
 
 # Interaction Rules
 
-- Management is reached from Today secondary navigation (`관리`).
+- My Rhythms is reached from Today secondary navigation.
+- Entry label and accessibility follow `My-Rhythms-UI-Specification.md` (`내 리듬`).
+- Empty copy and delete-failure wording follow `My-Rhythms-UI-Specification.md`.
 - Create, Edit, and Delete remain available while rhythms exist.
-- Management must not become a second Today focus surface.
-- Management must not show completion controls or Primary Rhythm presentation.
+- My Rhythms must not become a second Today focus surface.
+- My Rhythms must not show completion controls or Primary Rhythm presentation.
+
+> Note: Legacy references to visible entry `관리` and empty copy naming the `+` button are superseded by `My-Rhythms-UI-Specification.md`.
 
 ---
 

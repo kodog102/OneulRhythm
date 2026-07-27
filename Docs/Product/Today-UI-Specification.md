@@ -123,6 +123,14 @@ See DR-015 — First Rhythm Onboarding Lifecycle.
 
 ### Phase 1 — First Journey Empty
 
+> **Superseded for UI presentation by Welcome.**
+>
+> Product design: `Docs/Product/Welcome-Experience.md`  
+> UI contract: `Docs/Product/Welcome-UI-Specification.md`
+>
+> DR-015 lifecycle (when Phase 1 applies) remains authoritative.  
+> Do not implement the legacy First Journey Empty layout below for new work.
+
 Purpose
 
 Introduce OneulRhythm and invite the user to create their first rhythm.
@@ -194,6 +202,7 @@ Notes
 - First Journey Empty is part of onboarding, not a broken-day message
 - Philosophy Card and brand footer appear only in this phase
 - Cancelling create keeps First Journey Empty
+- **New implementation must follow Welcome-UI-Specification instead of this legacy Phase 1 block**
 
 ---
 

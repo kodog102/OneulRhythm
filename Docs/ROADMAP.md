@@ -25,7 +25,7 @@ Platform Expansion
 3. **Brand Assets & Experience** — Apply the completed Brand Foundation across icon, launch, README, widget consistency, and product surfaces.
 4. **Platform Expansion** — Extend the same meaning to Widget, Apple Watch, and other surfaces once foundation and assets are ready to reuse.
 
-Today's experience together with Live Activity already provides the primary quick-access experience. Near-term work therefore favors Brand Foundation, then Brand Assets & Experience, over new platform surfaces.
+Today's experience together with Live Activity already provides the primary quick-access experience. After Brand Foundation and Brand Assets, Sprint 15 locked in-app Product Experience documentation. Platform Expansion (Widget, Watch) remains intentionally postponed.
 
 ---
 
@@ -33,37 +33,42 @@ Today's experience together with Live Activity already provides the primary quic
 
 ## Current Phase
 
-Platform Expansion (next)
+Product Experience (Sprint 15) → Platform Expansion (next)
 
 ## Current Sprint
 
-Sprint 15 — Widget Experience
+Sprint 15 — Product Experience (Settings Implementation 15-6D next)
 
 ## Status
 
-✅ Sprint 14 Brand Assets & Design System complete; Brand Lock v1.0 Approved; Sprint 15 Widget Experience is planned (postponed)
+✅ Sprint 14 Brand Assets & Design System complete; Brand Lock v1.0 Approved  
+✅ Sprint 15 documentation complete through Settings UI Specification (15-6C)  
+➡️ Next: Sprint 15-6D — Settings Implementation
 
 ## Current Goal
 
-Apply finalized Brand Foundation and Brand Assets on future surfaces without redefining architecture.
+Implement Settings against the approved Settings Architecture (DR-020) and Settings UI Specification — without redesigning product or architecture.
 
 ## Current Priority
 
-Brand Assets are production-ready. Prefer consistent application over new metaphors.
+Sprint 15 Product Experience documentation is approved. Prefer implementation fidelity over new metaphors.
 
 Immediate focus:
 
-- Consume `Assets/brand/Release/` for product/marketing surfaces when wiring assets  
-- Keep Widget / Watch postponed until explicitly scheduled  
+- Sprint 15-6D — Settings Implementation (authority: DR-020 / `Settings-Architecture.md` / `Settings-UI-Specification.md`)  
+- Keep Widget / Watch postponed until explicitly scheduled under Platform Expansion  
 - Do not reopen Brand Lock geometry  
+- Do not reopen Sprint 15 experience architecture (DR-017 ~ DR-020)
 
 Sprint 12 Brand Foundation is complete.  
 Sprint 13 Brand Assets & Experience is complete (Brand Lock v1.0 Approved).  
 Sprint 14 Brand Assets & Design System is complete.
 
-Widget Experience remains on the long-term roadmap and is intentionally postponed because Live Activity already satisfies the primary quick-access experience.
+Sprint 15 Product Experience documentation (Welcome, Launch, Brand Integration, My Rhythms, Create Rhythm, Settings) is complete through 15-6C.
 
-Sprint 10 Settings & Preferences remains planned and does not redefine Sprint 15 scope.
+Former Sprint 10 Settings planning is **superseded** by Sprint 15-6 (DR-020). Settings ownership is unique under Sprint 15.
+
+Widget Experience remains on the long-term roadmap (relocated to Sprint 16) and is intentionally postponed because Live Activity already satisfies the primary quick-access experience.
 
 Notification Foundation remains complete and stable.
 
@@ -84,9 +89,13 @@ After Sprint 7, the core architecture has reached a stable point:
 
 Sprints 8–11 validated the in-app Core Experience (Today, Management, UX Polish).
 
-The next validation value comes from Brand Foundation and Brand Assets & Experience—not from immediately expanding platform integrations.
+Sprints 12–14 established Brand Foundation and Brand Assets.
 
-Widget and Apple Watch remain intentional long-term surfaces under Platform Expansion. They are postponed—not cancelled—so that:
+Sprint 15 locked Product Experience documentation (Welcome through Settings).
+
+The next validation value comes from Settings Implementation (15-6D), then Platform Expansion—not from immediately expanding Widget or Watch.
+
+Widget and Apple Watch remain intentional long-term surfaces under Platform Expansion (Sprint 16 / Sprint 17). They are postponed—not cancelled—so that:
 
 - Brand Foundation and Brand Assets can be completed first
 - Existing architecture stays stable
@@ -496,23 +505,31 @@ Polish interaction, clarity, and calm presentation across the Product UI surface
 
 ---
 
-# Planned
+# Planned / In Progress
 
 ## Sprint 10 — Settings & Preferences
 
-### Goal
+### Goal (historical)
 
 Provide the preferences users need to support a calm in-app experience.
 
-### Intent
+### Resolution
 
-Add settings that serve Product UI quality. Avoid expanding into platform integrations prematurely.
+Sprint 10 Settings planning is **superseded** by Sprint 15-6.
 
-Settings remains planned and does not redefine Sprint 15 Widget Experience scope.
+Settings product ownership is defined by:
+
+- `Docs/Architecture/Decisions/DR-020-settings.md`
+- `Docs/Product/Settings-Architecture.md`
+- `Docs/Product/Settings-UI-Specification.md`
+
+Implementation remaining: **Sprint 15-6D — Settings Implementation**.
+
+Do not plan a parallel Settings sprint. Do not duplicate Settings architecture here.
 
 **Status**
 
-📅 Planned
+♻️ Superseded by Sprint 15-6 (DR-020)
 
 ---
 
@@ -638,7 +655,55 @@ Produce production brand assets and the design system package from approved Bran
 
 ---
 
-## Sprint 15 — Widget Experience
+## Sprint 15 — Product Experience
+
+### Goal
+
+Lock the in-app Product Experience after Brand Assets — Welcome through Settings — so implementation follows approved architecture and UI contracts.
+
+### Intent
+
+Sprint 15 is Product Experience documentation and contracts, not Platform Expansion.
+
+It establishes surface purpose, ownership boundaries, and UI specifications for:
+
+- Welcome Experience  
+- Launch Experience  
+- Brand Integration  
+- My Rhythms  
+- Create Rhythm  
+- Settings  
+
+Architecture authority remains in Decision Records and Product documents (DR-015 ~ DR-020). This roadmap entry does not redefine those decisions.
+
+### Completed (documentation)
+
+- Welcome Experience + UI Specification  
+- Launch Architecture + UI Specification (DR-016)  
+- Brand Integration Architecture (DR-017)  
+- My Rhythms Architecture + UI Specification (DR-018)  
+- Create Rhythm Architecture + UI Specification (DR-019)  
+- Settings Architecture + UI Specification (DR-020 / Sprint 15-6A ~ 15-6C)  
+- Planning sync (ROADMAP / CHANGELOG / README)
+
+### Next
+
+- **Sprint 15-6D — Settings Implementation** (code against approved Settings UI Specification)
+
+### Explicitly out of scope for Sprint 15
+
+- Widget Experience (relocated to Sprint 16)  
+- Apple Watch  
+- Redesign of approved DR-017 ~ DR-020 decisions  
+
+**Status**
+
+✅ Documentation complete through 15-6C  
+➡️ Settings Implementation (15-6D) next
+
+---
+
+## Sprint 16 — Widget Experience
 
 ### Goal
 
@@ -648,7 +713,9 @@ Bring today's rhythm to the Home Screen.
 
 Widget remains part of the long-term roadmap under Platform Expansion.
 
-Widget implementation has been intentionally postponed because Today and Live Activity already satisfy the primary quick-access experience.
+Formerly numbered as Sprint 15 Widget Experience; relocated so Sprint 15 can represent completed Product Experience work.
+
+Widget implementation remains intentionally postponed because Today and Live Activity already satisfy the primary quick-access experience.
 
 Widget should consume the existing Snapshot, mapping architecture, and finalized Brand Foundation / Brand Assets rather than redefine business logic.
 
@@ -660,11 +727,11 @@ Widget should consume the existing Snapshot, mapping architecture, and finalized
 
 **Status**
 
-📅 Planned (postponed until after Brand Assets & Design System)
+📅 Planned (postponed until after Sprint 15 Settings Implementation)
 
 ---
 
-## Sprint 16 — Apple Watch Integration
+## Sprint 17 — Apple Watch Integration
 
 ### Goal
 
@@ -673,6 +740,8 @@ Bring today's rhythm to Apple Watch.
 ### Intent
 
 Apple Watch remains a future surface under Platform Expansion. It should reuse the finalized Brand Foundation, Brand Assets, and existing architecture.
+
+Formerly Sprint 16; renumbered after Widget relocated to Sprint 16.
 
 ### Scope Direction
 

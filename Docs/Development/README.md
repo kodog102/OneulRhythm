@@ -21,7 +21,7 @@ Developers and AI implementation agents.
 
 | Document | Role |
 |----------|------|
-| `DEVELOPMENT_WORKFLOW.md` | Official Sprint stages and roles |
+| `DEVELOPMENT_WORKFLOW.md` | Canonical Sprint lifecycle, DIR, Planning Sync, and roles |
 | `CURSOR_GUIDELINES.md` | Project-wide Cursor execution rules |
 | `PROMPT_LIBRARY.md` | Reusable implementation prompts |
 | `QA_PIPELINE.md` | QA process |

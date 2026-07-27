@@ -160,50 +160,28 @@ This is the task-level workflow inside an active Sprint.
 
 # 5. Sprint Lifecycle
 
-Standard Sprint workflow:
+The canonical Sprint Lifecycle is defined only in:
 
-Sprint Planning
+`Docs/Development/DEVELOPMENT_WORKFLOW.md`
 
-↓
+Standard stages:
 
-Sprint Goal Approved
+1. Experience Review  
+2. Architecture Review (Decision Record)  
+3. UI Specification  
+4. Implementation  
+5. Product QA  
+6. Document Integration Review (DIR)  
+7. Planning Sync (PS)  
+8. Product Owner Approval  
 
-↓
+During the Sprint, Architect and Cursor iterate on planning, implementation, and review inside those stages.
 
-Architect Planning
+The Product Owner reviews the Sprint as a completed unit (stage 8) rather than approving each implementation step.
 
-↓
+Exceptional product decisions may require Product Owner input before Sprint completion.
 
-Cursor Implementation
-
-↓
-
-Architect Review
-
-↓
-
-Repeat until Definition of Done
-
-↓
-
-Final Architecture Review
-
-↓
-
-Product Owner Sprint Approval
-
-↓
-
-Sprint Closed
-
-During the Sprint, Architect and Cursor iterate on planning,
-implementation, and review.
-
-The Product Owner reviews the Sprint as a completed unit rather than
-approving each implementation step.
-
-Exceptional product decisions may require Product Owner input before
-Sprint completion.
+Do not maintain a second lifecycle definition in this Playbook.
 
 ------------------------------------------------------------------------
 
@@ -227,21 +205,21 @@ implementation gate.
 
 # 7. Sprint Close Checklist
 
-Before a Sprint is considered complete, the Architect verifies:
+Before a Sprint is considered complete, the Architect verifies that the
+canonical close stages in `Docs/Development/DEVELOPMENT_WORKFLOW.md`
+are satisfied, including:
 
--   Architecture
--   Documentation
--   ROADMAP
--   CHANGELOG
--   ADR / DR consistency
--   Build status
--   Technical debt
--   Sprint Definition of Done
+- Architecture / Decision Record consistency  
+- Document Integration Review (DIR)  
+- Planning Sync (ROADMAP / CHANGELOG / README)  
+- Build status (when code changed)  
+- Technical debt recorded  
+- Sprint Definition of Done  
 
 Sprint completion is recommended only after these checks pass.
 
 After the Architect prepares Sprint close, the Product Owner gives final
-Sprint approval.
+Sprint approval (stage 8).
 
 ------------------------------------------------------------------------
 

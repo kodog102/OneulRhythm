@@ -155,9 +155,15 @@ final class TodayViewModel: ObservableObject {
         }
     }
 
-    /// Progress is available whenever today has at least one rhythm.
+    /// Progress orients Active Today only — never Day Complete, Empty, or Welcome.
     var showsProgress: Bool {
-        snapshot.totalCount > 0
+        guard snapshot.totalCount > 0 else { return false }
+        switch screenPresentation {
+        case .dayComplete, .empty:
+            return false
+        case .upcoming, .current, .pastIncomplete:
+            return true
+        }
     }
 
     /// Completion is possible only for Current and Past Incomplete.

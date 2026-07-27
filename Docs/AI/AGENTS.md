@@ -152,21 +152,20 @@ Follow the official Sprint pipeline defined in:
 
 `Docs/Development/DEVELOPMENT_WORKFLOW.md`
 
+Canonical Sprint Lifecycle:
+
 ```text
-Planning
-  → Architecture and Task Design
-  → Implementation
-  → Implementation Report
-  → Code Review
-  → Fixes
-  → Integration QA
-  → Final Review
-  → Documentation Pass
-  → Documentation Verification
-  → Sprint Retrospective
-  → Commit and Push (Developer)
-  → Next Sprint Kickoff
+1. Experience Review
+2. Architecture Review (Decision Record)
+3. UI Specification
+4. Implementation
+5. Product QA
+6. Document Integration Review (DIR)
+7. Planning Sync (PS)
+8. Product Owner Approval
 ```
+
+Do not redefine this lifecycle in AGENTS, the Playbook, or other process docs. Reference `DEVELOPMENT_WORKFLOW.md`.
 
 Related process documents:
 
@@ -511,10 +510,13 @@ Update:
 
 ### Sprint Completion
 
+Complete Document Integration Review (DIR) and Planning Sync (PS) per `Docs/Development/DEVELOPMENT_WORKFLOW.md`.
+
 Update:
 
 - ROADMAP
 - CHANGELOG
+- Root README when sprint summaries are affected
 
 Documentation should remain synchronized with the current state of the project.
 
@@ -524,7 +526,7 @@ Architect (identify impact)
 
 ↓
 
-Cursor (update owner docs and hubs)
+Cursor (update owner docs, hubs, DIR, Planning Sync)
 
 ↓
 
@@ -532,7 +534,7 @@ QA (verify consistency)
 
 ↓
 
-Developer (approve)
+Developer (Product Owner Approval)
 
 ---
 
@@ -575,18 +577,19 @@ A Sprint is complete only when the relevant stages of the Development Workflow h
 
 Including:
 
-- Approved scope implemented
-- Build completed successfully
-- Relevant tests passed
+- Approved scope implemented (when the Sprint includes implementation)
+- Build completed successfully (when code changed)
+- Relevant tests passed (when code changed)
 - Architecture preserved
-- Code Review completed
-- Integration QA completed
-- Manual Visual QA completed or explicitly recorded by the developer
-- Documentation Pass completed when documentation changes
-- Documentation Verification completed
-- Developer documentation approval
+- Code Review completed (when code changed)
+- Product QA completed (Integration QA + Visual/Device as applicable)
+- Document Integration Review (DIR) completed
+- Planning Sync (PS) completed
+- Product Owner Approval
 
 Only then should the developer commit and push.
+
+See `Docs/Development/DEVELOPMENT_WORKFLOW.md` for stage definitions.
 
 ---
 

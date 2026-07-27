@@ -173,7 +173,7 @@ Visual polish must always be manually confirmed.
 
 ## 10. Documentation Pass
 
-Update documentation only when required.
+Update documentation only when required (Implementation close).
 
 Owner-document order:
 
@@ -181,7 +181,6 @@ Owner-document order:
 - Implementation contracts → Design or Extensions
 - Architecture ownership → Architecture and Decision Records
 - Terminology → Glossary
-- Progress → ROADMAP and CHANGELOG
 
 Also update when needed:
 
@@ -189,18 +188,38 @@ Also update when needed:
 - Affected links
 - `Docs/README.md` only when categories, paths, or role entry points change
 
-Documentation Verification must confirm:
+Documentation Pass updates owner content. It does not replace Document Integration Review or Planning Sync.
 
-- Active docs match implemented behavior
-- Archived docs are not used as implementation authority
-- Hub listings remain accurate
-- Edited documentation links resolve
+See `DEVELOPMENT_WORKFLOW.md` stages 6–7.
 
-Implementation must never invalidate approved documentation.
+---
 
-If documentation becomes incorrect or ownership is unclear,
+## 10A. Document Integration Review (DIR)
 
-stop and request documentation updates.
+Verify the documentation **system**:
+
+- Cross references / orphans / broken links  
+- Authority and ownership  
+- Terminology  
+- Product Principles / Brand consistency  
+- Hub navigation  
+- Contradictions  
+
+DIR must complete before Planning Sync.
+
+---
+
+## 10B. Planning Sync (PS)
+
+Align planning with reality:
+
+- `Docs/ROADMAP.md`  
+- `Docs/CHANGELOG.md`  
+- Root `README.md`  
+- Sprint ownership uniqueness  
+- Deferred / future sprint alignment  
+
+Planning documents must not invent unimplemented work or duplicate architecture decisions.
 
 ---
 
@@ -274,13 +293,19 @@ Clearly distinguish:
 
 List updated owner documents, hub README changes, and link repairs.
 
-Confirm Documentation Verification was completed when documentation changed.
+Confirm:
+
+- Documentation Pass completed when owner docs changed  
+- Document Integration Review (DIR) completed  
+- Planning Sync (PS) completed  
 
 If none:
 
 State:
 
 "No documentation changes required."
+
+(DIR and Planning Sync may still be required at Sprint close even when Implementation made no doc edits — see `DEVELOPMENT_WORKFLOW.md`.)
 
 ---
 

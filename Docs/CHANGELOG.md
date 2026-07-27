@@ -8,6 +8,43 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 15 — Product Experience
+
+**Date:** 2026-07-27
+
+## Completed
+
+### Documentation & product contracts
+
+- Welcome Experience + Welcome UI Specification  
+- Launch Architecture Specification + Launch UI Specification (DR-016)  
+- Brand Integration Architecture (DR-017)  
+- My Rhythms Architecture + My Rhythms UI Specification (DR-018)  
+- Create Rhythm Architecture + Create Rhythm UI Specification (DR-019)  
+- Settings Architecture + Settings UI Specification (DR-020 / Sprint 15-6A ~ 15-6C)  
+- Planning sync: `Docs/ROADMAP.md`, this changelog, root `README.md`
+
+### Major Outcomes
+
+- Sprint 15 defined as in-app Product Experience (not Widget)  
+- Surface ownership locked: Welcome / Launch / Today / My Rhythms / Create / Settings  
+- Settings established as quiet support utility (DR-020); Sprint 10 Settings planning superseded  
+- Widget Experience relocated to Sprint 16 (postponed); Apple Watch to Sprint 17  
+
+## Notes
+
+Sprint 15 **documentation** is complete through Settings UI Specification (15-6C).
+
+**Next:** Sprint 15-6D — Settings Implementation (code). No Settings implementation work is recorded as complete in this entry.
+
+Authority for Settings implementation:
+
+- `Docs/Architecture/Decisions/DR-020-settings.md`
+- `Docs/Product/Settings-Architecture.md`
+- `Docs/Product/Settings-UI-Specification.md`
+
+---
+
 # Sprint 14 — Brand Assets & Design System
 
 **Date:** 2026-07-26
@@ -35,7 +72,7 @@ Sprint 14 Brand Assets & Design System is complete.
 
 Motion Principle for product UI remains under `Docs/BRAND.md`.
 
-Sprint 15 — Widget Experience remains planned (postponed).
+Sprint 15 — Product Experience followed (documentation through Settings UI Specification).
 
 ---
 

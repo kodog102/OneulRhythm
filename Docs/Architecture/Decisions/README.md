@@ -37,6 +37,11 @@ Decision Records are intended to be read in numerical order when learning the fo
 | DR-013 | Notification Synchronization | Accepted |
 | DR-014 | Product UI First Strategy | Accepted |
 | DR-015 | First Rhythm Onboarding Lifecycle | Accepted |
+| DR-016 | Launch Experience Architecture | Accepted |
+| DR-017 | Brand Integration Architecture | Accepted |
+| DR-018 | My Rhythms Architecture | Accepted |
+| DR-019 | Create Rhythm Architecture | Accepted |
+| DR-020 | Settings Architecture | Accepted |
 
 ## Decision status
 

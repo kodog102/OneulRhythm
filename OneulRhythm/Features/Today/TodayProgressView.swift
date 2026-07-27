@@ -17,7 +17,7 @@ struct TodayProgressView: View {
     }
 
     private var accessibilitySummary: String {
-        "\(totalCount)개의 리듬 중 \(completedCount)개 완료"
+        "\(totalCount)개의 리듬 중 \(completedCount)개를 이어냈어요"
     }
 
     var body: some View {

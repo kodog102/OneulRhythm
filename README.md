@@ -200,23 +200,26 @@ Start here: `Docs/README.md`
 - Brand Foundation (Sprint 12)
 - Brand Assets & Experience (Sprint 13) — Brand Lock v1.0 Approved
 - Brand Assets & Design System (Sprint 14)
+- Product Experience documentation (Sprint 15) — Welcome through Settings UI Spec (15-6C)
 
-### 📅 Current Priority — Platform Expansion (planned)
+### 📅 Current Priority — Sprint 15-6D Settings Implementation
 
-Brand Foundation and Brand Assets are complete. Next platform surfaces remain intentionally postponed.
+Sprint 15 Product Experience documentation is complete through Settings UI Specification.
 
 ```text
-Core Experience → Brand Foundation → Brand Assets & Experience → Platform Expansion
+Core Experience → Brand Foundation → Brand Assets → Product Experience → Platform Expansion
 ```
 
-- Widget Experience (Sprint 15) — postponed
-- Apple Watch (Sprint 16) — postponed
+- **Next:** Settings Implementation (Sprint 15-6D) — against DR-020 / Settings Architecture / Settings UI Specification  
+- Widget Experience (Sprint 16) — postponed  
+- Apple Watch (Sprint 17) — postponed  
+
+Former Sprint 10 Settings planning is superseded by Sprint 15-6 (DR-020).
 
 ### 🔮 Later (intentionally postponed)
 
-- Widget Experience — postponed because Live Activity already satisfies primary quick access; remains on the long-term roadmap
-- Apple Watch
-- Settings & Preferences
+- Widget Experience — postponed because Live Activity already satisfies primary quick access; remains on the long-term roadmap (Sprint 16)
+- Apple Watch (Sprint 17)
 - Statistics & Insights
 - iCloud Sync
 - Siri & Shortcuts
