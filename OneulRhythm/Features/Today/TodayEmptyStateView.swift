@@ -41,7 +41,7 @@ struct TodayEmptyStateView: View {
                 .padding(.bottom, breathFlowBottomSpacing)
 
             heroMeaning
-                .padding(.bottom, ORSpacing.lg)
+                .padding(.bottom, ORSpacing.md)
 
             philosophy
                 .padding(.bottom, philosophyToCTASpacing)
@@ -61,6 +61,8 @@ struct TodayEmptyStateView: View {
             .interpolation(.high)
             .aspectRatio(contentMode: .fit)
             .frame(width: side, height: side)
+            // Leading clear space comes from screen margins; pad other sides so the mark breathes.
+            .padding(.top, clearSpace)
             .padding(.trailing, clearSpace)
             .padding(.bottom, clearSpace)
             .accessibilityHidden(true)
@@ -91,6 +93,7 @@ struct TodayEmptyStateView: View {
         .accessibilityElement(children: .combine)
     }
 
+    /// Supportive doorway — visible and tappable, never the Hero of Welcome.
     private var primaryCTA: some View {
         Button(action: onCreateRhythm) {
             Text("오늘의 첫 리듬 만들기")
@@ -98,10 +101,11 @@ struct TodayEmptyStateView: View {
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, ORSpacing.md)
+                .padding(.vertical, ORSpacing.sm)
                 .frame(minHeight: ORSpacing.primaryButtonHeight)
-                .background(ORColors.primary)
+                .background(ORColors.primary.opacity(0.88))
                 .clipShape(RoundedRectangle(cornerRadius: ORRadius.button, style: .continuous))
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityHint("리듬 만들기 화면으로 이동합니다")
@@ -128,22 +132,22 @@ struct TodayEmptyStateView: View {
     /// Gap after Breath Flow clear space — tight enough that mark + Hero Meaning read as one group.
     private var breathFlowBottomSpacing: CGFloat {
         if sizeCategory.isAccessibilityCategory || verticalSizeClass == .compact {
-            return ORSpacing.md
+            return ORSpacing.sm
         }
-        return ORSpacing.lg
+        return ORSpacing.md
     }
 
     private var philosophyToCTASpacing: CGFloat {
         if sizeCategory.isAccessibilityCategory || verticalSizeClass == .compact {
-            return ORSpacing.lg
+            return ORSpacing.xl
         }
-        return ORSpacing.xl
+        return ORSpacing.xxl
     }
 
     // MARK: - Normal Experience (DR-015 Phase 2)
 
     private var normalExperienceEmpty: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.lg) {
+        VStack(alignment: .leading, spacing: ORSpacing.md) {
             Text("오늘의 리듬을 만들어보세요.")
                 .orTypography(.title)
                 .foregroundStyle(ORColors.textPrimary)

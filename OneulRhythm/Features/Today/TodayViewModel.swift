@@ -19,6 +19,9 @@ enum TodayScreenPresentation: Equatable {
 final class TodayViewModel: ObservableObject {
     @Published private(set) var snapshot: TodayRhythmSnapshot
     @Published private(set) var isLoading = false
+    /// Becomes true after the first `loadRoutines()` finishes (success or failure).
+    /// Prevents treating the empty bootstrap snapshot as Empty / Welcome before launch resolve.
+    @Published private(set) var hasResolvedInitialSnapshot = false
     @Published private(set) var completingRoutineID: UUID?
     @Published private(set) var loadErrorMessage: String?
     @Published var completionErrorMessage: String?
@@ -179,7 +182,10 @@ final class TodayViewModel: ObservableObject {
     func loadRoutines() {
         isLoading = true
         loadErrorMessage = nil
-        defer { isLoading = false }
+        defer {
+            isLoading = false
+            hasResolvedInitialSnapshot = true
+        }
 
         do {
             try refreshRoutines()

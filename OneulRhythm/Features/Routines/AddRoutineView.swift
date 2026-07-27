@@ -69,7 +69,14 @@ struct AddRoutineView: View {
     ) {
         self.mode = mode
         _title = State(initialValue: title)
-        _startTime = State(initialValue: startTime)
+        let initialStartTime: Date
+        switch mode {
+        case .create:
+            initialStartTime = Self.snapToNextMinute(startTime, calendar: calendar)
+        case .edit:
+            initialStartTime = startTime
+        }
+        _startTime = State(initialValue: initialStartTime)
         _hasEndTime = State(initialValue: hasEndTime)
         _endTime = State(initialValue: endTime)
         _selectedCategory = State(initialValue: category)
@@ -553,6 +560,55 @@ struct AddRoutineView: View {
         }
     }
 
+    /// Floors to the minute boundary (seconds & sub-second become 0).
+    static func floorToMinute(_ date: Date, calendar: Calendar) -> Date {
+        let comps = calendar.dateComponents(
+            [.year, .month, .day, .hour, .minute],
+            from: date
+        )
+        return calendar.date(from: comps) ?? date
+    }
+
+    /// Ceils to the next minute boundary if the input is not already aligned.
+    /// This prevents “past-by-seconds” dialogs for an untouched hour+minute picker.
+    static func snapToNextMinute(_ date: Date, calendar: Calendar) -> Date {
+        let minuteStart = floorToMinute(date, calendar: calendar)
+        let parts = calendar.dateComponents([.second, .nanosecond], from: date)
+        let second = parts.second ?? 0
+        let nanosecond = parts.nanosecond ?? 0
+        guard second != 0 || nanosecond != 0 else { return minuteStart }
+
+        return calendar.date(byAdding: .minute, value: 1, to: minuteStart) ?? minuteStart
+    }
+
+    /// Create/Edit shared past-time comparison, done at minute precision.
+    /// - Important: only hour+minute selection matters (seconds are not user-visible).
+    static func isStartTimeInPastOnTargetDay(
+        startTime: Date,
+        now: Date,
+        mode: RoutineFormMode,
+        calendar: Calendar
+    ) -> Bool {
+        let baselineDay: Date
+        switch mode {
+        case .create:
+            baselineDay = now
+        case .edit(_, let originalStartTime):
+            baselineDay = originalStartTime
+        }
+
+        let resolvedStart = calendar.date(
+            bySettingHour: calendar.component(.hour, from: startTime),
+            minute: calendar.component(.minute, from: startTime),
+            second: calendar.component(.second, from: startTime),
+            of: baselineDay
+        ) ?? startTime
+
+        let resolvedStartMinute = floorToMinute(resolvedStart, calendar: calendar)
+        let nowMinute = floorToMinute(now, calendar: calendar)
+        return resolvedStartMinute < nowMinute
+    }
+
     @MainActor
     private func scheduleReminderIfNeeded(for routine: Routine) async {
         let plan = NotificationMapper.makePlan(
@@ -582,9 +638,12 @@ struct AddRoutineView: View {
 
     private func isSelectedStartTimeInPastOnTargetDay() -> Bool {
         let now = nowProvider()
-        let baselineDay = targetBaselineDay(now: now)
-        let resolvedStart = date(on: baselineDay, copyingTimeFrom: startTime)
-        return resolvedStart < now
+        return Self.isStartTimeInPastOnTargetDay(
+            startTime: startTime,
+            now: now,
+            mode: mode,
+            calendar: calendar
+        )
     }
 
     private func date(on day: Date, copyingTimeFrom source: Date) -> Date {

@@ -25,7 +25,7 @@ Platform Expansion
 3. **Brand Assets & Experience** — Apply the completed Brand Foundation across icon, launch, README, widget consistency, and product surfaces.
 4. **Platform Expansion** — Extend the same meaning to Widget, Apple Watch, and other surfaces once foundation and assets are ready to reuse.
 
-Today's experience together with Live Activity already provides the primary quick-access experience. After Brand Foundation and Brand Assets, Sprint 15 completed the in-app Product Experience (Welcome through Settings). Sprint 16 completed Visual Identity Integration (Warm Light Appearance, shared Design System, Live Activity presentation). Platform Expansion (Widget, Watch) remains intentionally postponed pending Product Owner review after real-world use.
+Today's experience together with Live Activity already provides the primary quick-access experience. After Brand Foundation and Brand Assets, Sprint 15 completed the in-app Product Experience (Welcome through Settings). Sprint 16 completed Visual Identity Integration (Warm Light Appearance, shared Design System, Live Activity presentation). Sprint 17 completed Product Experience Polish on Today / Create. Platform Expansion (Widget, Watch) remains intentionally postponed pending Product Owner review after real-world use.
 
 ---
 
@@ -33,35 +33,37 @@ Today's experience together with Live Activity already provides the primary quic
 
 ## Current Phase
 
-Visual Identity Integration (Sprint 16) complete → Next Sprint (pending Product Owner / Architect release review)
+Product Experience Polish (Sprint 17) ✅ Complete
 
 ## Current Sprint
 
-Next Sprint — scope not finalized (Product Experience Polish candidates deferred; Widget remains postponed)
+Sprint 17 ✅ Complete
 
 ## Status
 
 ✅ Sprint 14 Brand Assets & Design System complete; Brand Lock v1.0 Approved  
 ✅ Sprint 15 Product Experience complete (documentation + implementation through Settings)  
 ✅ Sprint 16 Visual Identity Integration complete (DR-021, Visual Language Spec, Warm Light shell, shared Design System, Live Activity presentation)  
-➡️ Next: Architect / Product Owner release review; Platform Expansion remains postponed until explicitly scheduled
+✅ Sprint 17 Product Experience Polish complete (PE-01 ~ PE-12)  
+➡️ Current Focus: Product Owner Review Complete  
+➡️ Next Sprint: TBD
 
 ## Current Goal
 
-Close Sprint 16 release candidate for architectural approval, then validate shipped Visual Identity + Product Experience in real use before committing the next Sprint scope.
+Product Owner Review Complete. Next Sprint TBD.
 
 Do not invent new product direction in planning documents. Leave room for Product Owner review.
 
 ## Current Priority
 
-Sprint 16 is complete pending Architect review. Prefer learning from the shipped experience over opening new metaphors or platform work.
+Sprint 17 is complete. Prefer learning from the shipped experience over opening new metaphors or platform work.
 
 Immediate focus:
 
 - Keep Widget / Watch postponed until explicitly scheduled under Platform Expansion  
 - Do not reopen Brand Lock geometry  
 - Do not reopen Sprint 15 experience architecture (DR-017 ~ DR-020) or Sprint 16 appearance policy (DR-021) without a new Decision Record  
-- Finalize Next Sprint only after Product Owner review
+- Finalize Next Sprint only after Product Owner review (TBD)
 
 Sprint 12 Brand Foundation is complete.  
 Sprint 13 Brand Assets & Experience is complete (Brand Lock v1.0 Approved).  
@@ -71,9 +73,11 @@ Sprint 15 Product Experience is complete — documentation (Welcome through Sett
 
 Sprint 16 Visual Identity Integration is complete — Warm Light Appearance (DR-021), Visual Language Specification, Design System tokens shared with Widget Extension, Live Activity presentation alignment, and DEBUG platform QA tooling for ActivityKit verification.
 
+Sprint 17 Product Experience Polish is complete — Today launch first-frame, Create past-time validation, density / Progress / Empty / Welcome / hierarchy / affordance / consistency polish, and final PE-12 validation with explicitly documented unverified areas.
+
 Former Sprint 10 Settings planning is **superseded** by Sprint 15-6 (DR-020). Settings ownership remains unique under Sprint 15 and is implemented.
 
-Widget Experience remains on the long-term roadmap (relocated to Sprint 17) and is intentionally postponed because Live Activity already satisfies the primary quick-access experience.
+Widget Experience remains on the long-term roadmap under Platform Expansion and is intentionally postponed because Live Activity already satisfies the primary quick-access experience.
 
 Notification Foundation remains complete and stable.
 
@@ -98,9 +102,9 @@ Sprints 12–14 established Brand Foundation and Brand Assets.
 
 Sprint 15 completed Product Experience documentation and implementation (Welcome through Settings).
 
-The next validation value comes from real-world use of the shipped Product Experience and Visual Identity, then an explicitly scheduled Next Sprint—not from immediately expanding Widget or Watch.
+The next validation value comes from real-world use of the shipped Product Experience, Visual Identity, and Product Experience Polish, then an explicitly scheduled Next Sprint (TBD)—not from immediately expanding Widget or Watch.
 
-Widget and Apple Watch remain intentional long-term surfaces under Platform Expansion (Sprint 17 / Sprint 18). They are postponed—not cancelled—so that:
+Widget and Apple Watch remain intentional long-term surfaces under Platform Expansion. They are postponed—not cancelled—so that:
 
 - Brand Foundation, Brand Assets, and Visual Identity stay stable before platform reuse
 - Existing architecture stays stable
@@ -704,7 +708,7 @@ Architecture authority remains in Decision Records and Product documents (DR-015
 
 ### Explicitly out of scope for Sprint 15
 
-- Widget Experience (later relocated to Sprint 17)  
+- Widget Experience (later postponed under Platform Expansion)  
 - Apple Watch  
 - Redesign of approved DR-017 ~ DR-020 decisions  
 
@@ -747,33 +751,41 @@ Close the Brand Assets → Product Experience gap with a single appearance polic
 
 ---
 
-## Sprint 17 — Widget Experience
+## Sprint 17 — Product Experience Polish
 
 ### Goal
 
-Bring today's rhythm to the Home Screen.
+Polish the shipped Today / Create product experience so Sprint 15–16 surfaces feel coherent in real use—without architecture or platform expansion.
 
 ### Intent
 
-Widget remains part of the long-term roadmap under Platform Expansion.
+Close presentation, affordance, and validation gaps on the existing in-app experience. No architecture changes, no business-logic changes, and no Widget / Watch work.
 
-Formerly numbered as Sprint 16 Widget Experience; relocated so Sprint 16 can represent completed Visual Identity Integration.
+### Completed
 
-Widget implementation remains intentionally postponed because Today and Live Activity already satisfy the primary quick-access experience.
+- PE-01 Launch first-frame polish  
+- PE-02 Past-time validation refinement  
+- PE-03 Density refinement  
+- PE-04 Remaining-count progress language  
+- PE-05 Empty CTA refinement  
+- PE-06 Primary / Next hierarchy refinement  
+- PE-07 Welcome hierarchy refinement  
+- PE-08 Product honesty review (no changes required)  
+- PE-09 State transition continuity  
+- PE-10 Interaction affordance improvements  
+- PE-11 Visual consistency refinement  
+- PE-12 Final product experience validation  
 
-Widget should consume the existing Snapshot, mapping architecture, finalized Brand Foundation / Brand Assets, and Warm Light / Visual Language contracts rather than redefine business logic.
+### Explicitly out of scope for Sprint 17
 
-Next Sprint scope is not automatically Widget. Schedule only after Product Owner review.
-
-### Scope Direction
-
-- Home Widget
-- Timeline
-- Shared Snapshot
+- Architecture / Decision Record changes  
+- Business-logic / Schedule Engine / Snapshot changes  
+- Home Screen Widget Experience  
+- Apple Watch  
 
 **Status**
 
-📅 Planned (postponed; not current active scope)
+✅ Completed (with explicitly documented unverified areas from PE-12)
 
 ---
 
@@ -787,7 +799,7 @@ Bring today's rhythm to Apple Watch.
 
 Apple Watch remains a future surface under Platform Expansion. It should reuse the finalized Brand Foundation, Brand Assets, Visual Identity, and existing architecture.
 
-Formerly Sprint 17; renumbered after Visual Identity occupied Sprint 16 and Widget relocated to Sprint 17.
+Widget Experience remains postponed under Platform Expansion (not automatic Next Sprint). Schedule Widget / Watch only after Product Owner review.
 
 ### Scope Direction
 

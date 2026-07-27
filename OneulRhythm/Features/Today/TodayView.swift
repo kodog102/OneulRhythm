@@ -59,18 +59,9 @@ struct TodayView: View {
                         .padding(.top, contentTopSpacing)
                         .id(contentTransitionID)
                         .transition(contentTransition)
-
-                    if viewModel.showsProgress {
-                        TodayProgressView(
-                            completedCount: viewModel.completedRoutineCount,
-                            totalCount: viewModel.totalRoutineCount,
-                            progress: viewModel.progress
-                        )
-                        .padding(.top, ORSpacing.lg)
-                    }
                 }
                 .padding(.horizontal, ORSpacing.screenHorizontal)
-                .padding(.bottom, ORSpacing.scrollBottom)
+                .padding(.bottom, ORSpacing.xl)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .animation(contentAnimation, value: contentTransitionID)
             }
@@ -85,7 +76,10 @@ struct TodayView: View {
                         } label: {
                             Image(systemName: "gearshape")
                                 .foregroundStyle(ORColors.textSecondary)
+                                .frame(width: 44, height: 44)
+                                .contentShape(Rectangle())
                         }
+                        .buttonStyle(.plain)
                         .accessibilityLabel("설정")
                         .accessibilityHint("앱 설정을 엽니다")
                     }
@@ -97,7 +91,10 @@ struct TodayView: View {
                             Text("내 리듬")
                                 .orTypography(.caption, weight: .medium)
                                 .foregroundStyle(ORColors.textSecondary)
+                                .frame(minWidth: 44, minHeight: 44)
+                                .contentShape(Rectangle())
                         }
+                        .buttonStyle(.plain)
                         .accessibilityLabel("내 리듬")
                         .accessibilityHint("리듬 목록을 엽니다")
                     }
@@ -164,21 +161,40 @@ struct TodayView: View {
     private var headerGroup: some View {
         VStack(alignment: .leading, spacing: ORSpacing.xxs) {
             Text(viewModel.greetingText)
-                .orTypography(.title, weight: .medium)
-                .foregroundStyle(ORColors.textPrimary)
+                .orTypography(
+                    isWelcomeExperienceActive ? .body : .title,
+                    weight: .medium
+                )
+                .foregroundStyle(
+                    isWelcomeExperienceActive
+                        ? ORColors.textSecondary
+                        : ORColors.textPrimary
+                )
                 // Welcome: atmosphere only — Hero Meaning owns the primary header.
                 .accessibilityAddTraits(isWelcomeExperienceActive ? [] : .isHeader)
 
             Text(viewModel.formattedTodayDate)
-                .orTypography(.body)
-                .foregroundStyle(ORColors.textSecondary)
+                .orTypography(isWelcomeExperienceActive ? .caption : .body)
+                .foregroundStyle(
+                    isWelcomeExperienceActive
+                        ? ORColors.textTertiary
+                        : ORColors.textSecondary
+                )
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
+    /// True until initial sync finishes and the first Today load has resolved.
+    /// Holds the cream shell so Empty / Welcome / Create never flash on launch.
+    private var isAwaitingInitialToday: Bool {
+        !launchState.didCompleteInitialRhythmSync
+            || !viewModel.hasResolvedInitialSnapshot
+    }
+
     /// First Journey Empty — Welcome Experience is active (DR-015 + Welcome UI Spec).
     private var isWelcomeExperienceActive: Bool {
-        !viewModel.isLoading
+        !isAwaitingInitialToday
+            && !viewModel.isLoading
             && viewModel.loadErrorMessage == nil
             && viewModel.screenPresentation == .empty
             && emptyPhase == .firstJourney
@@ -188,7 +204,9 @@ struct TodayView: View {
 
     @ViewBuilder
     private var screenContent: some View {
-        if viewModel.isLoading {
+        if isAwaitingInitialToday {
+            initialTodayHold
+        } else if viewModel.isLoading {
             loadingState
         } else if let loadErrorMessage = viewModel.loadErrorMessage {
             errorState(message: loadErrorMessage)
@@ -205,7 +223,13 @@ struct TodayView: View {
     }
 
     /// Stable Today content identity — drives restrained enter transition only when focus changes.
+    /// Primary states key on rhythm identity (not role), so Upcoming → Current for the same
+    /// rhythm stays continuous rather than remounting as a new page.
     private var contentTransitionID: String {
+        if isAwaitingInitialToday {
+            return "awaiting-initial"
+        }
+
         // Omit loading: loadRoutines toggles isLoading synchronously and must not re-animate.
         if viewModel.loadErrorMessage != nil {
             return "error"
@@ -223,7 +247,7 @@ struct TodayView: View {
             return "dayComplete"
         case .upcoming, .current, .pastIncomplete:
             let rhythmID = viewModel.primaryRhythm?.id.uuidString ?? "none"
-            return "\(viewModel.screenPresentation)-\(rhythmID)"
+            return "primary-\(rhythmID)"
         }
     }
 
@@ -236,6 +260,15 @@ struct TodayView: View {
 
     private var contentAnimation: Animation {
         .easeInOut(duration: 0.28)
+    }
+
+    /// Calm cream continuation while launch sync + first snapshot resolve.
+    /// No Empty, Welcome, Create CTA, spinner, or progress.
+    private var initialTodayHold: some View {
+        Color.clear
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 1)
+            .accessibilityHidden(true)
     }
 
     private var loadingState: some View {
@@ -274,8 +307,9 @@ struct TodayView: View {
     }
 
     /// Welcome gives Breath Flow generous air after the atmospheric layer.
+    /// Non-Welcome uses a tighter gap for glanceable density.
     private var contentTopSpacing: CGFloat {
-        isWelcomeExperienceActive ? ORSpacing.xxl : ORSpacing.sectionGap
+        isWelcomeExperienceActive ? ORSpacing.xxl : ORSpacing.lg
     }
 
     /// Approved Day Complete copy. Quiet closure — never celebratory.
@@ -285,13 +319,13 @@ struct TodayView: View {
             .foregroundStyle(ORColors.textPrimary)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.vertical, ORSpacing.xl)
+            .padding(.vertical, ORSpacing.lg)
     }
 
     // MARK: - Primary Rhythm Area
 
     /// Emotional center of Today.
-    /// Order: Primary Rhythm → Rhythm Meaning (hidden) → Time → Completion → Next.
+    /// Order: Primary → Next → Progress as one continuous supporting flow.
     @ViewBuilder
     private var primaryRhythmArea: some View {
         if let primaryRhythm = viewModel.primaryRhythm {
@@ -300,11 +334,27 @@ struct TodayView: View {
 
                 if let secondaryNextRoutine = viewModel.secondaryNextRoutine {
                     nextRhythmSection(for: secondaryNextRoutine)
-                        .padding(.top, ORSpacing.lg)
+                        .padding(.top, ORSpacing.sm)
+                        .padding(.leading, supportingContentLeadingInset)
+                }
+
+                if viewModel.showsProgress {
+                    TodayProgressView(
+                        completedCount: viewModel.completedRoutineCount,
+                        totalCount: viewModel.totalRoutineCount,
+                        progress: viewModel.progress
+                    )
+                    .padding(.top, ORSpacing.sm)
+                    .padding(.leading, supportingContentLeadingInset)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+    }
+
+    /// Soft inset so Next / Progress align with Primary card content, not the card chrome edge.
+    private var supportingContentLeadingInset: CGFloat {
+        ORSpacing.cardPadding
     }
 
     /// Primary surface — emphasized by hierarchy and surrounding space, not enlargement.
@@ -326,14 +376,15 @@ struct TodayView: View {
             Text(primaryRhythm.formattedTime)
                 .orTypography(.caption)
                 .foregroundStyle(ORColors.textTertiary)
-                .padding(.top, ORSpacing.sm)
+                .padding(.top, ORSpacing.xs)
 
             if viewModel.showsCompletionButton {
                 completionButton(for: primaryRhythm)
-                    .padding(.top, ORSpacing.lg)
+                    .padding(.top, ORSpacing.md)
             }
         }
-        .padding(ORSpacing.cardPadding)
+        .padding(.vertical, ORSpacing.lg)
+        .padding(.horizontal, ORSpacing.cardPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
         .orCard()
     }
@@ -358,6 +409,7 @@ struct TodayView: View {
             .frame(height: ORSpacing.primaryButtonHeight)
             .background(ORColors.primary)
             .clipShape(RoundedRectangle(cornerRadius: ORRadius.button, style: .continuous))
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .disabled(isCompleting)
@@ -384,6 +436,7 @@ struct TodayView: View {
         .accessibilityElement(children: .combine)
     }
 }
+
 
 #Preview("Welcome Experience") {
     TodayView(

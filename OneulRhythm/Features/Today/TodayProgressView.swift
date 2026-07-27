@@ -12,8 +12,15 @@ struct TodayProgressView: View {
     let totalCount: Int
     let progress: Double
 
-    private var countText: String {
-        "\(completedCount) / \(totalCount)"
+    private var summaryText: String {
+        if completedCount == 0 {
+            return "\(totalCount)개의 리듬이 남아 있어요"
+        }
+        let remaining = totalCount - completedCount
+        if remaining == 0 {
+            return "오늘의 리듬을 모두 이어냈어요"
+        }
+        return "\(remaining)개의 리듬이 남아 있어요"
     }
 
     private var accessibilitySummary: String {
@@ -25,7 +32,7 @@ struct TodayProgressView: View {
             FlowProgressBar(progress: progress)
                 .accessibilityHidden(true)
 
-            Text(countText)
+            Text(summaryText)
                 .orTypography(.caption)
                 .foregroundStyle(ORColors.textTertiary)
         }

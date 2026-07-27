@@ -8,6 +8,55 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 17 — Product Experience Polish
+
+**Date:** 2026-07-27
+
+## Completed
+
+### Today launch & empty states
+
+- PE-01 Launch first-frame polish — cream hold until first Today snapshot; no false Empty / Welcome / Create flash  
+- PE-05 Empty CTA refinement — quieter Normal Empty CTA (soft fill, solid border, shared button radius, full hit region)  
+- PE-07 Welcome hierarchy refinement — calmer Greeting / Date atmosphere, Breath Flow + Hero grouping, quieter Welcome CTA  
+
+### Create validation
+
+- PE-02 Past-time validation refinement — default start snaps to next minute; past check at minute precision; genuine past values still rejected  
+
+### Today active-day presentation
+
+- PE-03 Density refinement — tighter local Today spacing without changing shared Design System tokens  
+- PE-04 Remaining-count progress language — Progress copy uses remaining-count language instead of `n / m`  
+- PE-06 Primary / Next hierarchy refinement — Progress sits with Next under Primary as supporting flow  
+- PE-09 State transition continuity — same-rhythm role changes keep identity; new primary identity uses restrained enter  
+
+### Affordance, honesty & consistency
+
+- PE-08 Product honesty review — no copy or behavior changes required  
+- PE-10 Interaction affordance improvements — Settings / 내 리듬 / CTA hit targets and content shapes aligned to real actions  
+- PE-11 Visual consistency refinement — supporting inset and Empty CTA radius aligned to shared tokens  
+
+### Validation
+
+- PE-12 Final product experience validation — release-readiness check across Sprint 17 journeys  
+
+### Major Outcomes
+
+- Sprint 17 Today experience polish shipped as one coherent in-app Product Experience pass  
+- No architecture changes  
+- No business logic changes  
+- No Widget / Watch work  
+- Sprint completed with explicitly documented unverified areas (interactive create paths, VoiceOver runtime, physical device, live role remount observation)
+
+## Notes
+
+Sprint 17 is Product Experience Polish only — presentation, affordance, and validation on existing Today / Create surfaces.
+
+Widget and Apple Watch remain postponed under Platform Expansion.
+
+---
+
 # Sprint 16 — Visual Identity Integration
 
 **Date:** 2026-07-27
