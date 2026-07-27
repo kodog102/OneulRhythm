@@ -21,7 +21,7 @@ Developers and AI implementation agents.
 
 | Document | Role |
 |----------|------|
-| `DEVELOPMENT_WORKFLOW.md` | Canonical Sprint lifecycle, DIR, Planning Sync, and roles |
+| `DEVELOPMENT_WORKFLOW.md` | Canonical Sprint lifecycle, Visual-first specialization (Sprint 18+), DIR, Planning Sync, and roles |
 | `CURSOR_GUIDELINES.md` | Project-wide Cursor execution rules |
 | `PROMPT_LIBRARY.md` | Reusable implementation prompts |
 | `QA_PIPELINE.md` | QA process |
@@ -31,7 +31,8 @@ Related authoritative documents outside this folder:
 
 - `Docs/Engineering/ENGINEERING_CHARTER.md` — engineering principles
 - `Docs/AI/AGENTS.md` — product and architecture rules for AI agents
-- `Docs/AI_Collaboration_Playbook_v2.2.md` — AI collaboration standard
+- `Docs/AI_Collaboration_Playbook_v2.2.md` — AI collaboration standard (includes Visual-first collaboration)
+- `Docs/Visual/README.md` — North Stars, Design Extractions, Visual Review Guides
 
 ### AI implementation reading order
 
@@ -44,7 +45,8 @@ Related authoritative documents outside this folder:
 7. `CURSOR_GUIDELINES.md`
 8. `Docs/Engineering/ENGINEERING_CHARTER.md`
 9. Sprint-specific Product and/or Design documents
-10. `Docs/ROADMAP.md` (when applicable)
+10. `Docs/Visual/README.md` (when Visual-first artifacts exist)
+11. `Docs/ROADMAP.md` (when applicable)
 
 For Brand Foundation and Brand Assets work, also read:
 
@@ -57,4 +59,5 @@ For Brand Foundation and Brand Assets work, also read:
 - Product philosophy or UX specifications
 - Architecture structure or Decision Records
 - Design implementation contracts
+- Visual Sprint artifact storage (`Docs/Visual/`)
 - Feature roadmaps beyond priority checks in `ROADMAP.md`

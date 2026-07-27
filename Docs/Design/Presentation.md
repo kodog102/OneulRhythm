@@ -259,6 +259,30 @@ Business interpretation remains shared.
 
 ---
 
+# Today Screen Presentation (Sprint 18)
+
+Today is the primary in-app surface. After Sprint 18 it presents snapshot-derived states inside one North Star visual shell:
+
+| State | Presentation role |
+|-------|-------------------|
+| Active | Primary rhythm card, optional next / Progress Ratio, completion CTA when allowed |
+| First Journey | Welcome introduction (Breath Flow, hero meaning, philosophy, create CTA) — DR-015 |
+| Normal Empty | Quiet empty after first successful create — create affordance only |
+| Day Complete | Peaceful completion message — no create CTA, no progress competition |
+
+Shared Today presentation language (presentation only):
+
+- Morning Landscape background asset
+- Premium card chrome (primary / secondary)
+- Progress Ratio indicator — fixed checkpoints mapped from overall completion ratio; exact counts remain numeric
+- Remaining-time ring trim from remaining/total duration when available
+
+These are visual / UX presentation concerns. They do not change Schedule Engine, Snapshot ownership, repositories, SwiftData schema, or Live Activity lifecycle policy.
+
+Visual Source of Truth: `Docs/Visual/NorthStars/Today-NorthStar-v1.jpg` (see `Docs/Visual/README.md`).
+
+---
+
 # Collaboration
 
 The Presentation Layer collaborates with:
@@ -310,6 +334,7 @@ Maintaining a strict separation between Business, Mapping and Presentation ensur
 - DR-006 — Live Activity Architecture
 - DR-008 — Single Focus Experience
 - DR-009 — Single Primary Rhythm
+- DR-015 — First Rhythm Onboarding Lifecycle
 
 ---
 
@@ -320,3 +345,6 @@ Maintaining a strict separation between Business, Mapping and Presentation ensur
 - Docs/Design/Mapper.md
 - Docs/Design/Scheduling.md
 - Docs/Design/Persistence.md
+- Docs/Visual/README.md
+- Docs/Product/Today-UI-Specification.md
+- Docs/Product/Welcome-UI-Specification.md

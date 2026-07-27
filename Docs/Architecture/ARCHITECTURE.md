@@ -97,6 +97,15 @@ The Presentation Layer is responsible for:
 - Triggering application workflows
 - Forwarding user intent to the appropriate component
 
+Today presentation (Sprint 18) renders snapshot-derived screen states with a North Star–driven visual shell:
+
+- Morning Landscape background
+- Premium card chrome
+- Progress Ratio indicator (presentation only)
+- First Journey / Normal Empty / Active / Day Complete
+
+Visual authority for Today lives under `Docs/Visual/` (official North Star). Product meaning remains under `Docs/Product/`. Presentation still does not interpret schedules or invent business truth.
+
 The Presentation Layer is not responsible for:
 
 - Reading or writing persistence directly

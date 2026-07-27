@@ -8,6 +8,50 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 18 — Today North Star Experience
+
+**Date:** 2026-07-27
+
+## Completed
+
+### Workflow
+
+- Adopted Image-Driven Development as the official visual workflow for Product Experience / visual Sprints  
+- Established official North Star visual specifications under `Docs/Visual/`  
+- Indexed `Docs/Visual/NorthStars/Today-NorthStar-v1.jpg` as the Active Visual Source of Truth for Today  
+
+### Today Experience (North Star–driven)
+
+- Completed the Today Experience against the approved North Star  
+- Morning Landscape asset strategy — official morning theme background (`Morning Landscape`) as a lightweight full-bleed wrapper  
+- Premium card chrome — floating glass primary / secondary surfaces tuned for Warm Light  
+- Progress Ratio indicator — fixed five-checkpoint wave with position from `completed / total` (exact counts remain in the numeric label)  
+- Aligned Today states to one visual system:
+  - Active  
+  - First Journey / Welcome  
+  - Normal Empty  
+  - Day Complete  
+
+### Final QA & polish
+
+- Sprint 18 Final QA across Visual, Functional, Multi-device, Accessibility (recorded), Architecture, and Performance  
+- Sprint 18.8 Final Polish:
+  - First Journey primary CTA visible above the fold on SE-class / short-height devices  
+  - Remaining-time ring trim driven by `remainingDuration / totalDuration` (presentation only; graceful fallback when duration is unavailable)  
+
+### Major Outcomes
+
+- Today visual language is North Star–driven and production-ready  
+- Written UI contracts supplement the North Star; they do not replace it  
+- No SwiftData schema, repository, schedule engine, snapshot model, or Live Activity lifecycle changes  
+- First Journey lifecycle remains DR-015 (`FirstRhythmJourneyProgress`) — not inferred from routine count  
+
+## Notes
+
+Sprint 18 is presentation / Product Experience only. Widget and Apple Watch remain postponed under Platform Expansion.
+
+---
+
 # Sprint 17 — Product Experience Polish
 
 **Date:** 2026-07-27

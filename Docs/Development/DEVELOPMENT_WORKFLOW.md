@@ -19,6 +19,7 @@ Related documents:
 - `QA_PIPELINE.md` — QA process
 - `Docs/AI/AGENTS.md` — product and architecture rules
 - `Docs/AI_Collaboration_Playbook_v2.2.md` — AI collaboration standard
+- `Docs/Visual/README.md` — visual asset strategy and North Star index (Visual Source of Truth)
 
 ---
 
@@ -57,21 +58,23 @@ Engineering-only Sprints do not require Experience Review or UI Specification.
 
 # Roles
 
+Role detail and collaboration hats live in `Docs/AI/AGENTS.md` and `Docs/AI_Collaboration_Playbook_v2.2.md`. This section summarizes workflow ownership only.
+
 ## ChatGPT
 
 Responsible for:
 
-- Requirement analysis
-- Repository context analysis
-- Architecture design
+- Requirement analysis and repository context analysis
+- Product / UX / Visual direction facilitation (Product Architect, UX Architect, Visual Director hats)
+- Architecture design and technical decision support
 - Task scope definition
-- Technical decision support
+- North Star and Visual Analysis support (Image-Driven Development)
 - Cursor prompt creation
 - Architecture validation
 - Sprint planning support
 - DIR / Planning Sync review support when requested
 
-ChatGPT provides architectural guidance but does not replace implementation review or QA performed by Cursor.
+ChatGPT provides architectural and visual guidance but does not replace implementation review or QA performed by Cursor / QA Agent.
 
 ---
 
@@ -80,11 +83,11 @@ ChatGPT provides architectural guidance but does not replace implementation revi
 Responsible for:
 
 - Repository inspection
-- Code implementation
+- Code implementation from approved Cursor prompts
 - Test implementation
 - Build execution
 - Code review
-- Integration QA
+- Technical / Integration QA
 - Documentation Pass (owner-document updates)
 - Document Integration Review (DIR)
 - Planning Sync (PS)
@@ -96,20 +99,32 @@ Cursor never commits or pushes.
 
 ---
 
-## Developer
+## QA Agent
+
+Responsible for:
+
+- Visual QA against the official North Star image when Image-Driven Development applies
+  (layout, spacing, hierarchy, atmosphere, visual similarity)
+- Technical QA (build, tests, integration, regression)
+- Documentation consistency checks when a Documentation Pass occurred
+
+QA does not redefine Product, Design, Architecture, or Visual direction.
+
+---
+
+## Product Owner (Developer)
 
 Responsible for:
 
 - Product direction
-- Product experience approval
+- Product experience and North Star acceptance
 - Final decisions
-- Visual verification
-- Device verification
+- Visual / device verification as Owner Review
 - Product Owner Approval
 - Commit
 - Push
 
-The developer owns the final product.
+The Product Owner owns the final product.
 
 ---
 
@@ -149,6 +164,60 @@ Output: Approved Sprint Goal and implementation context.
 | 4–8 | Required | Required |
 
 Do not reopen postponed platform work (for example Widget or Apple Watch) unless the Roadmap current priority has changed.
+
+---
+
+# Image-Driven Development (Sprint 18+)
+
+From Sprint 18, Product Experience / visual Sprints execute stages 1–5 and 8 through Image-Driven Development.
+
+The approved North Star image is the Visual Source of Truth. Visual implementation follows that image. Written UI descriptions and Visual Analysis sheets supplement it; they do not replace it.
+
+This does not replace DIR or Planning Sync.
+
+```text
+Requirements
+  → North Star
+  → Visual Analysis
+  → Implementation
+  → Visual QA
+  → Approval
+```
+
+Canonical mapping inside the Sprint Lifecycle:
+
+```text
+North Star Image
+  → Visual Analysis (Design Extraction)
+  → Cursor Prompt
+  → Implementation (stage 4)
+  → Self Visual Review
+  → Visual QA
+  → Technical QA
+  → Document Integration Review (DIR)
+  → Planning Sync (PS)
+  → Owner Review
+```
+
+| Image-Driven stage | Canonical home | Purpose |
+|--------------------|----------------|---------|
+| **Requirements** | Sprint Planning + Stage 1 | Fix Product Vision and Sprint scope before treating any image as authority |
+| **North Star** | Stage 1 Experience Review | Accept the official North Star image as Visual Source of Truth |
+| **Visual Analysis** | Stage 3 UI Specification | Extract implementable visual rules from the North Star image |
+| **Cursor Prompt** | Stage 4 entry | Freeze approved image + analysis + scope into an implementation prompt |
+| **Implementation** | Stage 4 | Reproduce the visual language shown in the North Star; preserve architecture |
+| **Self Visual Review** | Stage 4 close | Cursor checks layout, spacing, hierarchy, atmosphere, and similarity before handoff |
+| **Visual QA** | Stage 5 Product QA | Verify the built UI against the official North Star image |
+| **Technical QA** | Stage 5 Product QA | Verify build, tests, integration, and regression |
+| **Approval** | Stage 8 Product Owner Approval | Final product and documentation acceptance |
+
+Architecture Review (stage 2) still applies when ownership or structure changes.
+
+Visual assets (North Star images, Design Extraction Sheets, Visual Review Guides) are indexed from `Docs/Visual/README.md`. The latest approved North Star for a surface is that surface's Visual Source of Truth.
+
+Collaboration handoffs: `Docs/AI_Collaboration_Playbook_v2.2.md` (Image-Driven Development).
+
+Engineering-only Sprints continue to skip Experience Review / UI Specification and do not require Image-Driven Development stages.
 
 ---
 
@@ -249,7 +318,14 @@ Implementation Report + owner-document updates (when required).
 
 Verify the product against approved contracts.
 
-### Cursor
+### Visual QA (Image-Driven Development / user-facing)
+
+- Compare Simulator or device UI against the official North Star image
+- Verify layout, spacing, hierarchy, atmosphere, and visual similarity
+- Use Visual Analysis / Design Extraction and Visual Review Guide criteria when present under `Docs/Visual/`
+- Source inspection alone cannot validate visual quality
+
+### Technical QA (Cursor / QA Agent)
 
 - Functional behavior
 - Lifecycle / persistence / state transitions (as applicable)
@@ -257,10 +333,9 @@ Verify the product against approved contracts.
 - Regression
 - Integration QA result: PASS / PASS WITH CONDITIONS / FAIL
 
-### Developer
+### Product Owner
 
-- Visual QA
-- Device verification
+- Owner Review inputs: Visual QA outcomes, Technical QA outcomes, device verification as needed
 
 Return:
 
@@ -269,6 +344,8 @@ Return:
 - FAIL
 
 Product QA must complete before Document Integration Review.
+
+When Image-Driven Development applies, prefer the order **Visual QA → Technical QA** so visual drift is caught before close-out.
 
 ---
 
@@ -405,10 +482,11 @@ Sprint Planning + Repository Context
 - Scope is approved before implementation.
 - Experience and architecture are defined before UI Specification when applicable.
 - UI Specification is approved before Implementation when applicable.
-- ChatGPT owns architecture and technical decisions.
+- ChatGPT owns architecture, UX facilitation, and Visual Director support.
 - Cursor owns implementation quality, DIR, and Planning Sync execution.
+- QA Agent owns Visual QA and Technical QA verification against approved contracts.
 - Cursor stays inside the approved scope.
-- The developer owns the final product and Product Owner Approval.
+- The Product Owner owns the final product and Product Owner Approval.
 - Documentation must reflect implemented behavior **and** remain system-consistent (DIR).
 - Planning documents must reflect current reality (Planning Sync).
 - Architecture changes require explicit approval.

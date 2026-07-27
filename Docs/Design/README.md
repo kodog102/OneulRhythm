@@ -35,6 +35,7 @@ Recurring rhythm design lives in `Docs/Extensions/Recurrence.md`.
 
 - Product philosophy or UX layout contracts
 - Architecture Decision rationale catalogs
+- Sprint visual artifact storage (`Docs/Visual/`)
 - Sprint workflow or QA process
 - Glossary term definitions
 

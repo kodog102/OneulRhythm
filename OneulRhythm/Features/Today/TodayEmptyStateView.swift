@@ -15,8 +15,12 @@ enum TodayEmptyPhase: Equatable {
 
 /// Empty content for Today. Does not own greeting/date chrome.
 /// First Journey presents the Welcome Experience (`Welcome-UI-Specification.md`).
+/// Sprint 18-6: presentation aligned to Morning Landscape / Today shell — lifecycle unchanged.
+/// Sprint 18.8: optional compact vertical rhythm for SE-class first-fold CTA visibility.
 struct TodayEmptyStateView: View {
     let phase: TodayEmptyPhase
+    /// When true, tighten Welcome vertical spacing only — content and hierarchy unchanged.
+    var usesCompactVerticalSpacing: Bool = false
     let onCreateRhythm: () -> Void
 
     @Environment(\.sizeCategory) private var sizeCategory
@@ -35,13 +39,14 @@ struct TodayEmptyStateView: View {
 
     /// Hierarchy: Breath Flow → Hero Meaning → Philosophy → Primary CTA.
     /// Greeting / Date remain in `TodayView` as atmosphere only.
+    /// Open composition — no competing elevated card around Hero / Philosophy.
     private var welcomeExperience: some View {
         VStack(alignment: .leading, spacing: 0) {
             breathFlowPresence
                 .padding(.bottom, breathFlowBottomSpacing)
 
             heroMeaning
-                .padding(.bottom, ORSpacing.md)
+                .padding(.bottom, heroToPhilosophySpacing)
 
             philosophy
                 .padding(.bottom, philosophyToCTASpacing)
@@ -54,7 +59,7 @@ struct TodayEmptyStateView: View {
     /// Brand Presence — Sprint 14 Breath Flow E10. Not interactive; decorative for VoiceOver.
     private var breathFlowPresence: some View {
         let side = breathFlowSideLength
-        let clearSpace = max(side * 0.125, ORSpacing.sm)
+        let clearSpace = breathFlowClearSpace(for: side)
 
         return Image("BreathFlow")
             .resizable()
@@ -70,8 +75,8 @@ struct TodayEmptyStateView: View {
 
     private var heroMeaning: some View {
         Text("오늘을\n하나의 리듬으로\n만나보세요.")
-            .orTypography(.largeTitle)
-            .foregroundStyle(ORColors.textPrimary)
+            .todayWelcomeHeroTypography()
+            .foregroundStyle(ORTodayTypography.displayInk)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityAddTraits(.isHeader)
@@ -79,42 +84,55 @@ struct TodayEmptyStateView: View {
 
     /// Open text — never an elevated card competing with Hero presence.
     private var philosophy: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.sm) {
+        VStack(alignment: .leading, spacing: philosophyInternalSpacing) {
             Text("모든 것을 끝내는 앱이 아니에요.")
-                .orTypography(.body)
-                .foregroundStyle(ORColors.textSecondary)
+                .todaySecondaryValueTypography()
+                .foregroundStyle(ORTodayTypography.supportingInk)
 
             Text("지금 가장 중요한 하나에\n함께 머무르도록 도와줘요.")
-                .orTypography(.body)
-                .foregroundStyle(ORColors.textSecondary)
+                .todaySecondaryValueTypography()
+                .foregroundStyle(ORTodayTypography.supportingInk)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)
     }
 
-    /// Supportive doorway — visible and tappable, never the Hero of Welcome.
+    /// Supportive doorway — Visible and tappable; never the Hero of Welcome.
+    /// Shares Active Today CTA chrome so Welcome belongs to the same shell.
     private var primaryCTA: some View {
         Button(action: onCreateRhythm) {
             Text("오늘의 첫 리듬 만들기")
-                .orTypography(.body, weight: .semibold)
+                .todayCTATypography()
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, ORSpacing.sm)
-                .frame(minHeight: ORSpacing.primaryButtonHeight)
-                .background(ORColors.primary.opacity(0.88))
+                .frame(minHeight: ORTodaySurface.ctaHeight)
+                .background(ORTodaySurface.ctaFill)
                 .clipShape(RoundedRectangle(cornerRadius: ORRadius.button, style: .continuous))
+                .compositingGroup()
+                .shadow(color: ORTodaySurface.ctaFill.opacity(0.32), radius: 16, x: 0, y: 8)
+                .shadow(color: ORTodaySurface.ctaFill.opacity(0.18), radius: 4, x: 0, y: 2)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityHint("리듬 만들기 화면으로 이동합니다")
     }
 
+    private var prefersCompactWelcomeSpacing: Bool {
+        usesCompactVerticalSpacing
+            || verticalSizeClass == .compact
+            || sizeCategory.isAccessibilityCategory
+    }
+
     /// Presence scale: larger than toolbar glyphs; smaller than a full-bleed poster.
     private var breathFlowSideLength: CGFloat {
         if sizeCategory.isAccessibilityCategory {
             return 88
+        }
+
+        if usesCompactVerticalSpacing {
+            return 80
         }
 
         if verticalSizeClass == .compact {
@@ -129,15 +147,36 @@ struct TodayEmptyStateView: View {
         }
     }
 
+    private func breathFlowClearSpace(for side: CGFloat) -> CGFloat {
+        if usesCompactVerticalSpacing {
+            return ORSpacing.xs
+        }
+        return max(side * 0.125, ORSpacing.sm)
+    }
+
     /// Gap after Breath Flow clear space — tight enough that mark + Hero Meaning read as one group.
     private var breathFlowBottomSpacing: CGFloat {
-        if sizeCategory.isAccessibilityCategory || verticalSizeClass == .compact {
-            return ORSpacing.sm
+        if usesCompactVerticalSpacing {
+            return 0
+        }
+        if prefersCompactWelcomeSpacing {
+            return ORSpacing.xs
         }
         return ORSpacing.md
     }
 
+    private var heroToPhilosophySpacing: CGFloat {
+        usesCompactVerticalSpacing ? ORSpacing.xs : (prefersCompactWelcomeSpacing ? ORSpacing.sm : ORSpacing.md)
+    }
+
+    private var philosophyInternalSpacing: CGFloat {
+        usesCompactVerticalSpacing ? ORSpacing.xxs : (prefersCompactWelcomeSpacing ? ORSpacing.xs : ORSpacing.sm)
+    }
+
     private var philosophyToCTASpacing: CGFloat {
+        if usesCompactVerticalSpacing {
+            return ORSpacing.md
+        }
         if sizeCategory.isAccessibilityCategory || verticalSizeClass == .compact {
             return ORSpacing.xl
         }
@@ -146,11 +185,12 @@ struct TodayEmptyStateView: View {
 
     // MARK: - Normal Experience (DR-015 Phase 2)
 
+    /// Quiet, familiar empty — not onboarding. Soft hierarchy + easy create route.
     private var normalExperienceEmpty: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.md) {
+        VStack(alignment: .leading, spacing: ORSpacing.lg) {
             Text("오늘의 리듬을 만들어보세요.")
-                .orTypography(.title)
-                .foregroundStyle(ORColors.textPrimary)
+                .todayPrimaryTitleTypography()
+                .foregroundStyle(ORTodayTypography.displayInk)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -169,7 +209,17 @@ struct TodayEmptyStateView: View {
         onCreateRhythm: {}
     )
     .padding(.horizontal, ORSpacing.screenHorizontal)
-    .background(ORColors.background)
+    .background { LandscapeBackground() }
+}
+
+#Preview("Welcome — Compact Height") {
+    TodayEmptyStateView(
+        phase: .firstJourney,
+        usesCompactVerticalSpacing: true,
+        onCreateRhythm: {}
+    )
+    .padding(.horizontal, ORSpacing.screenHorizontal)
+    .background { LandscapeBackground() }
 }
 
 #Preview("Normal Experience Empty") {
@@ -178,7 +228,7 @@ struct TodayEmptyStateView: View {
         onCreateRhythm: {}
     )
     .padding(.horizontal, ORSpacing.screenHorizontal)
-    .background(ORColors.background)
+    .background { LandscapeBackground() }
 }
 
 #Preview("Welcome — Large Dynamic Type") {
@@ -187,16 +237,6 @@ struct TodayEmptyStateView: View {
         onCreateRhythm: {}
     )
     .padding(.horizontal, ORSpacing.screenHorizontal)
-    .background(ORColors.background)
+    .background { LandscapeBackground() }
     .environment(\.sizeCategory, .accessibilityLarge)
-}
-
-#Preview("Welcome — Compact Height") {
-    TodayEmptyStateView(
-        phase: .firstJourney,
-        onCreateRhythm: {}
-    )
-    .padding(.horizontal, ORSpacing.screenHorizontal)
-    .background(ORColors.background)
-    .environment(\.verticalSizeClass, .compact)
 }

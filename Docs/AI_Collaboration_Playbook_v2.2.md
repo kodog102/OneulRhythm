@@ -2,10 +2,13 @@
 
 ## OneulRhythm Collaboration Standard
 
-> Stable collaboration rules for ChatGPT (Architect), Cursor
-> (Implementation), QA, and the Product Owner (Developer).
+> Stable collaboration rules for ChatGPT (Product Architect, UX Architect,
+> Visual Director), Cursor (Implementation), QA Agent, and the Product Owner.
 >
 > Sprint 12 established the Sprint governance model used from Sprint 13 onward.
+> Sprint 18 introduces Image-Driven Development as the official visual workflow
+> for Product Experience / visual Sprints. The approved North Star image is the
+> Visual Source of Truth.
 
 ------------------------------------------------------------------------
 
@@ -40,7 +43,8 @@ Goals
 Responsibilities
 
 -   Approves Sprint goals.
--   Approves Sprint completion.
+-   Approves North Star acceptance when Image-Driven Development applies.
+-   Approves Sprint completion (Owner Review).
 -   Makes product direction decisions.
 -   Resolves business trade-offs.
 -   Reviews Sprint deliverables as a whole rather than individual
@@ -51,9 +55,12 @@ Sprint close.
 
 ------------------------------------------------------------------------
 
-## Architect (ChatGPT)
+## ChatGPT
 
-Responsibilities
+ChatGPT does not write production code. It works through three hats
+(detail in `Docs/AI/AGENTS.md`):
+
+### Product Architect
 
 -   Sprint planning
 -   Architecture design
@@ -64,18 +71,25 @@ Responsibilities
 -   Quality gate
 -   Sprint close preparation
 
-Additionally acts as
+### UX Architect
 
--   Product Designer
--   UX Reviewer
--   Brand Guardian
+-   Interaction and information architecture
+-   UX review against Product Principles
+-   Surface belonging / non-belonging clarity
+
+### Visual Director (from Sprint 18)
+
+-   Visual composition and atmosphere intent
+-   North Star image and Visual Analysis (Design Extraction) support
+-   Visual Review Guide criteria
+-   Visual QA review against the official North Star image
 
 Authority
 
 -   May approve implementation work during an active Sprint without
     Product Owner approval.
--   Product Owner approval is required only for Sprint goals and Sprint
-    completion.
+-   Product Owner approval is required for Sprint goals, North Star
+    acceptance (Image-Driven Development), and Sprint completion.
 
 Not responsible for
 
@@ -88,29 +102,37 @@ Not responsible for
 
 Responsibilities
 
--   Implementation
+-   Implementation from approved Cursor prompts
 -   Documentation
 -   Refactoring
 -   Build verification
+-   Technical / Integration QA support
+-   Self Visual Review against the North Star image when Image-Driven
 -   Implementation reports
 
 Constraints
 
 -   Must not change architecture independently.
--   Must not introduce new product decisions.
+-   Must not introduce new product or visual decisions.
+-   When an official North Star image exists, use it as the Visual Source
+    of Truth. Do not redesign or reinterpret the UI.
 
 Never redesign architecture.
 
 ------------------------------------------------------------------------
 
-## QA
+## QA Agent
 
 Responsible for
 
--   Scope verification
+-   Visual QA (when Image-Driven Development applies)
+-   Technical QA / scope verification
 -   Architecture verification
 -   Documentation consistency
 -   Release readiness
+
+Visual QA verifies layout, spacing, hierarchy, atmosphere, and visual
+similarity against the official North Star image.
 
 Do not redesign.
 
@@ -175,6 +197,8 @@ Standard stages:
 7. Planning Sync (PS)  
 8. Product Owner Approval  
 
+From Sprint 18, Product Experience / visual Sprints specialize stages 1–5 and 8 through Image-Driven Development (see Chapter 5A below and `DEVELOPMENT_WORKFLOW.md`).
+
 During the Sprint, Architect and Cursor iterate on planning, implementation, and review inside those stages.
 
 The Product Owner reviews the Sprint as a completed unit (stage 8) rather than approving each implementation step.
@@ -182,6 +206,139 @@ The Product Owner reviews the Sprint as a completed unit (stage 8) rather than a
 Exceptional product decisions may require Product Owner input before Sprint completion.
 
 Do not maintain a second lifecycle definition in this Playbook.
+
+------------------------------------------------------------------------
+
+# 5A. Image-Driven Development
+
+Applies from Sprint 18 to Product Experience / visual Sprints.
+
+Stage authority: `Docs/Development/DEVELOPMENT_WORKFLOW.md`.  
+Role detail: `Docs/AI/AGENTS.md`.  
+Visual artifact index: `Docs/Visual/README.md`.
+
+This chapter describes collaboration through Image-Driven Development. It does not redefine the canonical Sprint Lifecycle.
+
+Implementation begins by understanding the approved North Star image rather than interpreting text alone. Written descriptions supplement the image; they do not replace it. The latest approved North Star is the Visual Source of Truth for its surface.
+
+## Official flow
+
+```text
+Product Vision
+  → North Star Image
+  → Visual Analysis
+  → Implementation
+  → Self Visual Review
+  → Architect Review
+  → Product Owner Approval
+```
+
+Canonical mapping inside the Sprint Lifecycle:
+
+```text
+North Star Image
+  → Visual Analysis (Design Extraction)
+  → Cursor Prompt
+  → Implementation
+  → Self Visual Review
+  → Visual QA
+  → Technical QA
+  → Architect Review
+  → Owner Review
+```
+
+DIR and Planning Sync still run before Owner Review completes the Sprint.
+
+## Stages (collaboration view)
+
+### Product Vision
+
+Product Owner and ChatGPT (Product Architect) agree on experiential intent and Sprint goal before any visual artifact is treated as authority.
+
+No implementation.
+
+### North Star Image
+
+Product Owner and ChatGPT (Product Architect + Visual Director) accept an official North Star image as the Visual Source of Truth for the Sprint surface.
+
+Output: a versioned North Star image indexed from `Docs/Visual/`.
+
+No implementation. No Visual Analysis sheet yet.
+
+### Visual Analysis
+
+Visual Analysis is an implementation preparation step.
+
+It extracts implementation details from the approved North Star image.
+
+It does not redesign, reinterpret, or evolve the product experience.
+
+Its purpose is implementation fidelity.
+
+ChatGPT (Visual Director + UX Architect) produces the analysis.
+
+Output: Design Extraction Sheet and, when useful, a Visual Review Guide under `Docs/Visual/`.
+
+Written analysis clarifies the image. It does not override it.
+
+No code.
+
+### Cursor Prompt
+
+ChatGPT freezes approved North Star image + Visual Analysis + scope into a Cursor prompt.
+
+After the prompt is approved, design is frozen for the Sprint (Chapter 8 Scope Lock).
+
+### Implementation
+
+Cursor reproduces the visual language shown in the North Star image while preserving project architecture.
+
+Cursor must not redesign or reinterpret the UI.
+
+### Self Visual Review
+
+Cursor compares the built UI to the North Star image before handing off (layout, spacing, hierarchy, atmosphere, visual similarity).
+
+Simulator or Canvas evidence is preferred. Source inspection alone is insufficient.
+
+### Visual QA
+
+QA Agent (with Visual Director review support) verifies layout, spacing, hierarchy, atmosphere, and visual similarity against the official North Star image and Visual Analysis artifacts.
+
+Simulator or device evidence is required. Source inspection alone is insufficient.
+
+### Technical QA
+
+QA Agent / Cursor verify build, tests, integration, and regression against approved functional contracts.
+
+### Architect Review
+
+ChatGPT reviews implementation against Product, Architecture, and Visual Source of Truth constraints.
+
+### Product Owner Approval
+
+Product Owner accepts or rejects the Sprint as a whole, including visual quality and documentation close-out (DIR + Planning Sync).
+
+## Role handoff
+
+| Stage | Primary | Support |
+|-------|---------|---------|
+| Product Vision | Product Owner | Product Architect |
+| North Star Image | Product Owner | Visual Director, Product Architect |
+| Visual Analysis | Visual Director | UX Architect |
+| Cursor Prompt | Product Architect / Visual Director | — |
+| Implementation | Cursor | — |
+| Self Visual Review | Cursor | — |
+| Visual QA | QA Agent | Visual Director |
+| Technical QA | QA Agent / Cursor | — |
+| Architect Review | ChatGPT | — |
+| Product Owner Approval | Product Owner | ChatGPT Sprint close prep |
+
+## What this does not change
+
+- Architecture Review remains required when ownership or structure changes.
+- Product Principles, Brand, and Decision Records remain authoritative over visual taste alone.
+- Engineering-only Sprints do not require Image-Driven Development stages.
 
 ------------------------------------------------------------------------
 

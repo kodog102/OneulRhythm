@@ -39,6 +39,7 @@ Docs/README.md          ← you are here (router)
     ├─ ADR/             ← Brand Architecture Decision Records
     ├─ Architecture/    ← system structure, ADRs, architecture reviews
     ├─ Design/          ← implementation contracts
+    ├─ Visual/          ← North Stars, Design Extractions, Visual Review Guides
     ├─ Extensions/      ← optional capabilities
     ├─ Development/     ← how work is executed
     │     → Engineering charter
@@ -66,6 +67,7 @@ Avoid circular navigation between hubs.
 | Brand | `BRAND.md`, `ADR/`, `../Assets/brand/` | How should the product feel, and where are production brand assets? |
 | Architecture | `Architecture/README.md` | What is the system structure? Why was it chosen? |
 | Design | `Design/README.md` | How is each subsystem implemented? |
+| Visual | `Visual/README.md` | Where are Sprint North Stars, Design Extractions, and Visual Review Guides? |
 | Extensions | `Extensions/README.md` | How do optional capabilities integrate? |
 | Development | `Development/README.md` | How do we plan, implement, and validate work? |
 | AI Collaboration | `AI_Collaboration_Playbook_v2.2.md` | How do ChatGPT, Cursor, QA, and the Developer collaborate? |
@@ -84,6 +86,7 @@ Avoid circular navigation between hubs.
 - Brand Assets (`../Assets/brand/` — `Release/` production, `Guide/` usage, `Work/` historical)
 - Architecture structure and Decision Records
 - Design and Extensions implementation contracts
+- Visual Sprint artifacts hub (`Visual/`) for North Stars, Design Extractions, and Visual Review Guides
 - Development process documents, Engineering Charter, and `AI/AGENTS.md`
 - `AI_Collaboration_Playbook_v2.2.md`
 - Glossary, Roadmap, Changelog
@@ -126,9 +129,10 @@ This router is for contributors.
 3. `GLOSSARY.md`
 4. `Architecture/README.md` → `Architecture/ARCHITECTURE.md`
 5. `Design/README.md`
-6. `Development/README.md` → `Development/DEVELOPMENT_WORKFLOW.md`
-7. `AI/AGENTS.md`
-8. `AI_Collaboration_Playbook_v2.2.md`
+6. `Visual/README.md` (when working Visual-first / Product Experience Sprints)
+7. `Development/README.md` → `Development/DEVELOPMENT_WORKFLOW.md`
+8. `AI/AGENTS.md`
+9. `AI_Collaboration_Playbook_v2.2.md`
 
 ## AI implementation agent
 
@@ -141,7 +145,8 @@ This router is for contributors.
 7. `Development/CURSOR_GUIDELINES.md`
 8. `Engineering/ENGINEERING_CHARTER.md`
 9. Sprint-specific Product and/or Design documents
-10. `ROADMAP.md` (when applicable)
+10. `Visual/README.md` (when Visual-first artifacts exist for the Sprint)
+11. `ROADMAP.md` (when applicable)
 
 ## Architecture reviewer
 
@@ -180,6 +185,8 @@ Architecture/Decisions/     ← system why / ownership
     ↓
 Design/                     ← implementation contracts
     ↓
+Visual/                     ← Sprint visual artifacts (not product contracts)
+    ↓
 Extensions/
     ↓
 Development/ and AI/AGENTS.md
@@ -188,6 +195,8 @@ Development/ and AI/AGENTS.md
 `GLOSSARY.md` remains the terminology authority for shared terms.
 
 Process conflicts are resolved by `Development/DEVELOPMENT_WORKFLOW.md`.
+
+`Visual/` never outranks Product Principles, Brand, Architecture Decisions, or Design contracts.
 
 ---
 

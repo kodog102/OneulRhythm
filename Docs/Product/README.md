@@ -61,6 +61,7 @@ For current Product UI work, read:
 13. `Settings-UI-Specification.md` — Settings UI contract
 14. `Today-UI-Specification.md`
 15. `Management-UI-Specification.md` — section membership (see My-Rhythms-UI-Spec for entry/empty/delete)
+16. `Docs/Visual/README.md` — Today North Star (Visual Source of Truth, Sprint 18+)
 
 ## What this hub does NOT contain
 

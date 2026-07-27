@@ -46,6 +46,8 @@ Never claim verification that was not actually performed.
 Every Sprint follows the same QA sequence inside the canonical lifecycle
 (`DEVELOPMENT_WORKFLOW.md` stages 4–8).
 
+From Sprint 18, Product Experience / visual Sprints prefer **Visual QA before Technical QA** (see Visual-first in `DEVELOPMENT_WORKFLOW.md`).
+
 Implementation Completed
 
 ↓
@@ -58,11 +60,11 @@ Code Review
 
 ↓
 
-Integration QA
+Visual QA (when Visual-first / user-facing)
 
 ↓
 
-Manual Visual QA
+Technical / Integration QA
 
 ↓
 
@@ -78,7 +80,7 @@ Planning Sync (PS)
 
 ↓
 
-Product Owner Approval
+Product Owner Approval (Owner Review)
 
 ---
 
@@ -104,7 +106,7 @@ Return:
 
 ---
 
-# 2. Integration QA
+# 2. Technical / Integration QA
 
 Purpose
 
@@ -128,24 +130,34 @@ Return:
 
 ---
 
-# 3. Manual Visual QA
+# 3. Visual QA
 
 Purpose
 
 Verify user experience that cannot be confirmed through source inspection.
 
-Performed by the developer.
+When Visual-first applies (Sprint 18+), compare against:
+
+- North Star
+- Design Extraction Sheet
+- Visual Review Guide (when present)
+
+Artifact index: `Docs/Visual/README.md`.
+
+Performed by QA Agent with Product Owner / Visual Director review support as needed.
 
 Typical checks include:
 
-- Layout
-- UI consistency
+- Layout and composition against the North Star
+- UI consistency with Design Extraction
 - Animation
 - Accessibility
 - Live Activity behavior
 - Widget behavior (when applicable)
 
 Items not visually verified must be recorded as Not Verified.
+
+When Visual-first applies, prefer Visual QA before Technical / Integration QA so visual drift is caught before Sprint close-out.
 
 ---
 
@@ -189,19 +201,19 @@ Defined in `DEVELOPMENT_WORKFLOW.md` stage 7 — do not redefine here.
 
 ---
 
-# 5. Product Owner Approval
+# 5. Product Owner Approval (Owner Review)
 
 A Sprint is ready for completion only when:
 
 - Approved scope implemented (when applicable)
 - Review completed
-- Integration QA passed
-- Manual Visual QA completed or recorded
+- Visual QA completed or recorded (when applicable)
+- Technical / Integration QA passed
 - DIR completed
 - Planning Sync completed
-- Outstanding risks understood and accepted by the developer
+- Outstanding risks understood and accepted by the Product Owner
 
-Only then should the developer commit and push.
+Only then should the Product Owner commit and push.
 
 ---
 

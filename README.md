@@ -66,8 +66,11 @@ OneulRhythm의 핵심은 기능 목록이 아니라,
 
 오늘의 중심 화면입니다.
 
-Primary Rhythm 하나만 강조하고,
-완료하거나 다음으로 넘어가는 데 필요한 최소한의 행동만 남깁니다.
+Morning Landscape 위에 Primary Rhythm 카드 하나만 강조하고,
+다음 리듬·오늘의 흐름(Progress Ratio)·완료 행동은 그 아래 조용히 둡니다.
+
+Active뿐 아니라 First Journey, Normal Empty, Day Complete도
+같은 Today 시각 언어 안에서 의도적으로 구분됩니다.
 
 ### My Rhythms
 
@@ -168,12 +171,36 @@ Experience Review
   → Product Owner Approval
 ```
 
+Sprint 18부터 Product Experience / visual Sprint는 Image-Driven Development를 따릅니다.
+
+```text
+Requirements
+  → North Star
+  → Visual Analysis
+  → Implementation
+  → Visual QA
+  → Approval
+```
+
 ChatGPT는 설계와 범위 정리에,
 Cursor는 구현·검증·문서 동기화에,
 개발자는 최종 승인·커밋·푸시에 집중합니다.
 
 공식 Sprint 워크플로우는 `Docs/Development/DEVELOPMENT_WORKFLOW.md`에 있습니다.
 AI 협업 규칙은 `Docs/AI_Collaboration_Playbook_v2.2.md`를 참고하세요.
+시각 산출물과 Visual Source of Truth는 `Docs/Visual/README.md`입니다.
+
+---
+
+## Sources of Truth
+
+| Domain | Authority |
+|--------|-----------|
+| Architecture | `Docs/Architecture/` |
+| Product | `Docs/Product/` |
+| Visual | `Docs/Visual/` |
+
+Visual specifications — including official North Star images — live under `Docs/Visual/`. The latest approved North Star is the Visual Source of Truth for its surface.
 
 ---
 
@@ -190,6 +217,7 @@ AI 협업 규칙은 `Docs/AI_Collaboration_Playbook_v2.2.md`를 참고하세요.
 | `Assets/brand/` | Brand Assets |
 | `Docs/Architecture/` | Architecture, Decision Records |
 | `Docs/Design/` | 서브시스템 구현 계약 |
+| `Docs/Visual/` | North Star images, Visual Analysis, Visual Review Guides |
 | `Docs/Development/` | Sprint workflow |
 | `Docs/GLOSSARY.md` | 공통 용어 |
 | `Docs/ROADMAP.md` / `Docs/CHANGELOG.md` | 계획과 완료 기록 |
@@ -212,20 +240,21 @@ Core Experience → Brand Foundation → Brand Assets → Product Experience →
 - Product Experience (Sprint 15) — Welcome through Settings ✅ Complete
 - Visual Identity Integration (Sprint 16) ✅ Complete
 - Product Experience Polish (Sprint 17) ✅ Complete
+- Today North Star Experience (Sprint 18) ✅ Complete
 
 ### Current Status
 
-- Sprint 17 ✅ Complete
+- Sprint 18 ✅ Complete
 
 ### Current Focus
 
-- Product Owner Review Complete
+- Sprint 19 — Rhythm Editor, My Rhythms, Live Activity Settings
 
 ### Next Sprint
 
-TBD
+Sprint 19
 
-Widget Experience와 Apple Watch는 장기 로드맵(Platform Expansion)에 남아 있으며, 명시적으로 스케줄되기 전까지 postponed입니다.
+Further visual / theme work follows Sprint 19. Widget Experience와 Apple Watch는 장기 로드맵(Platform Expansion)에 남아 있으며, 명시적으로 스케줄되기 전까지 postponed입니다.
 
 ### Later
 

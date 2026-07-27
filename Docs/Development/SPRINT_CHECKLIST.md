@@ -26,8 +26,10 @@ Related documents:
 ## 1–3. Experience → Architecture → UI Spec
 
 - [ ] Experience Review completed (or N/A for engineering-only)
+- [ ] North Star accepted when Visual-first applies (Sprint 18+)
 - [ ] Architecture Review / Decision Record completed when required
-- [ ] UI Specification approved when user-facing UI is in scope
+- [ ] UI Specification / Design Extraction approved when user-facing UI is in scope
+- [ ] Cursor Prompt frozen when Visual-first applies
 
 ---
 
@@ -45,9 +47,9 @@ Related documents:
 
 ## 5. Product QA
 
-- [ ] Integration QA completed
+- [ ] Visual QA completed against North Star / Design Extraction (or N/A)
+- [ ] Technical / Integration QA completed
 - [ ] Regression risks reviewed
-- [ ] Manual / visual verification completed or recorded
 - [ ] Blocking issues resolved
 
 ---
