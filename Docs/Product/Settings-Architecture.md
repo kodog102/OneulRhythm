@@ -229,7 +229,7 @@ OneulRhythm may **explain**, **deep-link**, or **reflect** OS state when needed 
 | Notification **permission** (authorize / deny) | System authority |
 | Notification **presentation** (banners, sounds, Lock Screen, etc. as exposed by iOS) | System authority |
 | System language / region | System authority |
-| System Appearance (Light / Dark / Automatic) | System authority |
+| System Appearance (Light / Dark / Automatic) | System authority — Settings must not expose an in-app Appearance picker. Product rendering follows Warm Light Appearance (DR-021); OS Dark Mode must not produce mixed product presentation. |
 | Focus Mode / system interruption filters | System authority |
 | Broader OS privacy toggles | System authority |
 
@@ -312,7 +312,7 @@ A new Settings section or item is admitted only when:
 | **Siri & Shortcuts** | Exposure / links OK; not an automation IDE inside Settings |
 | **iCloud Sync** | Admit under Data & Sync only when sync is a real product feature |
 | **Backup / Restore** | Same as sync — earned, not decorative |
-| **Appearance** | Only if product-level appearance control is required; must not become brand playground or second Welcome. Prefer OS Appearance when sufficient. |
+| **Appearance** | Do not admit an in-app Light / Dark / Automatic control. Warm Light is product policy at the application shell (DR-021). OS Appearance remains OS-owned; Settings must not become a brand playground or second Welcome. |
 
 ## Compatibility statement
 
@@ -405,6 +405,7 @@ Settings is OneulRhythm’s **quiet support utility**.
 | DR-019 | System prefs out of Capture; deep links OK for permission recovery |
 | DR-014 | Platform surfaces consume existing architecture; Settings must not redefine them |
 | DR-015 | No Welcome reprise via Settings |
+| DR-021 | Warm Light Appearance is product policy; no in-app Appearance section; shell ownership prevents mixed presentation |
 | Sprint 15-6A Review | Product purpose / principles / scope basis |
 
 ---
@@ -426,6 +427,7 @@ Settings is OneulRhythm’s **quiet support utility**.
 - `Docs/Architecture/Decisions/DR-018-my-rhythms.md`
 - `Docs/Architecture/Decisions/DR-019-create-rhythm.md`
 - `Docs/Architecture/Decisions/DR-020-settings.md`
+- `Docs/Architecture/Decisions/DR-021-visual-identity-warm-light-appearance.md`
 - `Docs/Product/Settings-UI-Specification.md`
 - `Docs/Product/Brand-Integration-Architecture.md`
 - `Docs/Product/My-Rhythms-Architecture.md`

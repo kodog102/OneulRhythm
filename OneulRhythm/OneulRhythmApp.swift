@@ -60,21 +60,41 @@ struct OneulRhythmApp: App {
 
     var body: some Scene {
         WindowGroup {
+            // Warm Light Appearance (DR-021) is owned by
+            // INFOPLIST_KEY_UIUserInterfaceStyle = Light on the app target.
+            // Feature views consume Design System tokens and must not set
+            // preferredColorScheme independently.
             TodayView(
                 repository: makeRoutineRepository(),
                 recurringRhythmRepository: makeRecurringRhythmRepository(),
                 onSaveRoutine: saveRoutine,
                 onUpdateRoutine: updateRoutine,
                 onDeleteRoutine: deleteRoutine,
-                onAppBecomeActive: syncDailyRhythms
+                onAppBecomeActive: syncDailyRhythms,
+                liveActivityCoordinator: debugLiveActivityCoordinator
             )
             .environmentObject(launchState)
             .environmentObject(firstRhythmJourneyProgress)
             .task {
                 performInitialDailyRhythmSyncIfNeeded()
+                #if DEBUG
+                LiveActivityPlatformQA.runIfRequested()
+                #endif
             }
         }
         .modelContainer(sharedModelContainer)
+    }
+
+    /// DEBUG platform QA only: suspend production reconcile so fixture Activities survive.
+    /// Production builds always use the real `LiveActivityCoordinator` (nil → default).
+    private var debugLiveActivityCoordinator: LiveActivityCoordinating? {
+        #if DEBUG
+        LiveActivityPlatformQA.isRequested
+            ? LiveActivityPlatformQA.suspendedCoordinator
+            : nil
+        #else
+        nil
+        #endif
     }
 
     private func performInitialDailyRhythmSyncIfNeeded() {

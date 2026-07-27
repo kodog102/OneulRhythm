@@ -288,6 +288,23 @@ Never mix responsibilities across architectural layers.
 
 ---
 
+# Appearance Rules
+
+Warm Light Appearance is product policy (DR-021).
+
+- The app shell owns appearance via `INFOPLIST_KEY_UIUserInterfaceStyle = Light`.
+- Feature views must not set `preferredColorScheme` independently.
+- Do not add an in-app Light / Dark / Automatic Appearance control in Settings.
+- Consume Design System tokens from `OneulRhythmShared/DesignSystem/`; do not invent local color schemes.
+- Live Activity presentation must reuse the same tokens / Visual Language Specification.
+
+Authority:
+
+- `Docs/Architecture/Decisions/DR-021-visual-identity-warm-light-appearance.md`
+- `Docs/Design/Visual-Language-Specification.md`
+
+---
+
 # Live Activity Rules
 
 Only one Live Activity may exist per day.
@@ -302,6 +319,8 @@ Live Activity represents:
 - Today's Flow
 
 Notifications remain secondary.
+
+DEBUG ActivityKit platform QA (`-ORLiveActivityPlatformQA*`) is Debug-only reusable tooling. Production builds must never depend on it.
 
 ---
 

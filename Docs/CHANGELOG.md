@@ -8,6 +8,46 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 16 — Visual Identity Integration
+
+**Date:** 2026-07-27
+
+## Completed
+
+### Decision & specification
+
+- DR-021 Visual Identity and Warm Light Appearance  
+- Visual Language Specification  
+
+### Appearance foundation
+
+- App locked to Warm Light via `INFOPLIST_KEY_UIUserInterfaceStyle = Light`  
+- Settings and related surfaces consume Design System tokens without independent color-scheme overrides  
+
+### Design System sharing
+
+- Shared tokens moved to `OneulRhythmShared/DesignSystem/` (`ORColors`, `ORTypography`, `ORSpacing`) for app + Widget Extension  
+
+### Live Activity presentation
+
+- Lock Screen and Dynamic Island presentation aligned to Design System / DR-021  
+- DEBUG platform QA entry points for ActivityKit session verification (Debug only)  
+
+### Major Outcomes
+
+- Warm Light is the sole in-app appearance contract  
+- Live Activity presentation verified on physical device and clean simulator procedure  
+- Home Screen Widget remains postponed under Platform Expansion  
+
+## Notes
+
+Authority for appearance and visual language:
+
+- `Docs/Architecture/Decisions/DR-021-visual-identity-warm-light-appearance.md`
+- `Docs/Design/Visual-Language-Specification.md`
+
+---
+
 # Sprint 15 — Product Experience
 
 **Date:** 2026-07-27

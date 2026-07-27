@@ -12,6 +12,7 @@ Implementers, design/architecture agents, and maintainers changing subsystem beh
 
 ## Scope
 
+- Product visual language and Design System application rules
 - Subsystem responsibilities and non-responsibilities
 - Data flow, state transitions, and collaboration rules
 - Extension strategy at the subsystem boundary
@@ -20,6 +21,7 @@ Implementers, design/architecture agents, and maintainers changing subsystem beh
 
 | Document | Purpose | Status |
 |----------|---------|--------|
+| `Visual-Language-Specification.md` | Product visual language / Design System application contract | Active |
 | `Scheduling.md` | Schedule resolution and business flow | Active |
 | `Persistence.md` | Persistence implementation | Active |
 | `Mapper.md` | Business → presentation transformation | Active |

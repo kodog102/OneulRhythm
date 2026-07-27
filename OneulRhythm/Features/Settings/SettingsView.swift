@@ -32,6 +32,7 @@ struct SettingsView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden)
+        .listRowSeparatorTint(ORColors.divider)
         .background(ORColors.background.ignoresSafeArea())
         .navigationTitle("설정")
         .navigationBarTitleDisplayMode(.inline)
@@ -49,11 +50,14 @@ struct SettingsView: View {
     // MARK: - 알림
 
     private var notificationsSection: some View {
-        Section("알림") {
+        Section {
             Toggle(isOn: $viewModel.remindersEnabled) {
                 Text("리마인더")
+                    .orTypography(.body)
+                    .foregroundStyle(ORColors.textPrimary)
             }
             .tint(ORColors.primary)
+            .listRowBackground(ORColors.card)
             .accessibilityLabel("리마인더")
 
             Button {
@@ -61,27 +65,29 @@ struct SettingsView: View {
             } label: {
                 HStack {
                     Text("시스템 알림 설정")
+                        .orTypography(.body)
                         .foregroundStyle(ORColors.textPrimary)
                     Spacer()
                     Text(viewModel.systemNotificationStatusText)
+                        .orTypography(.caption)
                         .foregroundStyle(ORColors.textSecondary)
-                    Image(systemName: "chevron.right")
-                        .font(.footnote.weight(.semibold))
-                        .foregroundStyle(ORColors.textTertiary)
-                        .accessibilityHidden(true)
+                    disclosureChevron
                 }
             }
             .buttonStyle(.plain)
+            .listRowBackground(ORColors.card)
             .accessibilityLabel("시스템 알림 설정")
             .accessibilityValue(viewModel.systemNotificationStatusText)
             .accessibilityHint("시스템 설정에서 알림을 변경합니다")
+        } header: {
+            settingsSectionHeader("알림")
         }
     }
 
     // MARK: - 지원
 
     private var supportSection: some View {
-        Section("지원") {
+        Section {
             disclosureRow(
                 title: "피드백",
                 hint: "메일을 엽니다"
@@ -95,19 +101,25 @@ struct SettingsView: View {
             ) {
                 viewModel.openContactMail()
             }
+        } header: {
+            settingsSectionHeader("지원")
         }
     }
 
     // MARK: - 정보
 
     private var aboutSection: some View {
-        Section("정보") {
+        Section {
             HStack {
                 Text("버전")
+                    .orTypography(.body)
+                    .foregroundStyle(ORColors.textPrimary)
                 Spacer()
                 Text(viewModel.appVersion)
+                    .orTypography(.caption)
                     .foregroundStyle(ORColors.textSecondary)
             }
+            .listRowBackground(ORColors.card)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("버전, \(viewModel.appVersion)")
 
@@ -118,7 +130,10 @@ struct SettingsView: View {
                 )
             } label: {
                 Text("개인정보 처리방침")
+                    .orTypography(.body)
+                    .foregroundStyle(ORColors.textPrimary)
             }
+            .listRowBackground(ORColors.card)
             .accessibilityHint("문서를 엽니다")
 
             NavigationLink {
@@ -128,7 +143,10 @@ struct SettingsView: View {
                 )
             } label: {
                 Text("이용약관")
+                    .orTypography(.body)
+                    .foregroundStyle(ORColors.textPrimary)
             }
+            .listRowBackground(ORColors.card)
             .accessibilityHint("문서를 엽니다")
 
             NavigationLink {
@@ -138,8 +156,13 @@ struct SettingsView: View {
                 )
             } label: {
                 Text("오픈 소스 라이선스")
+                    .orTypography(.body)
+                    .foregroundStyle(ORColors.textPrimary)
             }
+            .listRowBackground(ORColors.card)
             .accessibilityHint("문서를 엽니다")
+        } header: {
+            settingsSectionHeader("정보")
         }
     }
 
@@ -151,17 +174,29 @@ struct SettingsView: View {
         Button(action: action) {
             HStack {
                 Text(title)
+                    .orTypography(.body)
                     .foregroundStyle(ORColors.textPrimary)
                 Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(ORColors.textTertiary)
-                    .accessibilityHidden(true)
+                disclosureChevron
             }
         }
         .accessibilityLabel(title)
         .accessibilityHint(hint)
         .buttonStyle(.plain)
+        .listRowBackground(ORColors.card)
+    }
+
+    private func settingsSectionHeader(_ title: String) -> some View {
+        ORSectionLabel(text: title)
+            .textCase(nil)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var disclosureChevron: some View {
+        Image(systemName: "chevron.right")
+            .font(ORTypography.font(for: .caption, weight: .semibold))
+            .foregroundStyle(ORColors.textTertiary)
+            .accessibilityHidden(true)
     }
 }
 

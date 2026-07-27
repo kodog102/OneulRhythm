@@ -101,6 +101,7 @@ Violates Earn Sections and invites clutter before demand.
 - DR-017 — Brand Integration Architecture  
 - DR-018 — My Rhythms Architecture  
 - DR-019 — Create Rhythm Architecture  
+- DR-021 — Visual Identity and Warm Light Appearance Policy  
 
 ---
 
@@ -113,3 +114,4 @@ Violates Earn Sections and invites clutter before demand.
 - `Docs/Product/Create-Rhythm-Architecture.md`
 - `Docs/Product/PRODUCT-PRINCIPLES.md`
 - `Docs/BRAND.md`
+- `Docs/Architecture/Decisions/DR-021-visual-identity-warm-light-appearance.md`

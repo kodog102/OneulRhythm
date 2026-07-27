@@ -42,6 +42,7 @@ Decision Records are intended to be read in numerical order when learning the fo
 | DR-018 | My Rhythms Architecture | Accepted |
 | DR-019 | Create Rhythm Architecture | Accepted |
 | DR-020 | Settings Architecture | Accepted |
+| DR-021 | Visual Identity and Warm Light Appearance Policy | Accepted |
 
 ## Decision status
 

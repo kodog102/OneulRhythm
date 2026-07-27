@@ -50,6 +50,7 @@ extension TodayRhythmActivityAttributes {
 }
 
 extension TodayRhythmActivityAttributes.ContentState {
+    /// DEBUG / Canvas preview fixture only — not a production API.
     static var previewActive: TodayRhythmActivityAttributes.ContentState {
         let now = Date()
         return TodayRhythmActivityAttributes.ContentState(

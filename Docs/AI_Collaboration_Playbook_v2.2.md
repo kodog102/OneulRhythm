@@ -603,7 +603,42 @@ App Store-scale process.
 
 ------------------------------------------------------------------------
 
-# 24. Documentation Freshness Rule
+# 24. Simulator vs Physical Device
+
+## Rule
+
+Never perform architecture refactoring based solely on simulator
+behavior.
+
+Before changing architecture, at least one of the following must exist:
+
+- Physical-device verification confirming the issue
+- A reproducible issue across clean simulator environments
+- Clear runtime evidence directly linking the problem to the proposed
+  architectural cause
+
+Simulator-only behavior is insufficient evidence for architecture
+changes.
+
+When simulator and physical-device behavior conflict, treat the
+simulator result as a hypothesis until additional evidence is
+collected.
+
+Evidence always takes priority over intuition.
+
+## Relationship
+
+This is an engineering workflow rule, not a Decision Record.
+
+It applies to Architect recommendations and Implementation Agent
+investigation alike.
+
+Verification process: `Docs/Development/QA_PIPELINE.md`  
+Collaboration constraints: `Docs/AI/AGENTS.md`
+
+------------------------------------------------------------------------
+
+# 25. Documentation Freshness Rule
 
 ## Why This Exists
 

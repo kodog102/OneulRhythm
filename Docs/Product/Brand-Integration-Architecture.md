@@ -427,6 +427,7 @@ If the answer is no, it does not belong in Brand Integration Architecture.
 - `Docs/Architecture/Decisions/DR-015-first-rhythm-onboarding-lifecycle.md`
 - `Docs/Architecture/Decisions/DR-016-launch-experience.md`
 - `Docs/Architecture/Decisions/DR-017-brand-integration.md`
+- `Docs/Architecture/Decisions/DR-021-visual-identity-warm-light-appearance.md`
 - `Docs/Product/Welcome-Experience.md`
 - `Docs/Product/Welcome-UI-Specification.md`
 - `Docs/Product/Launch-Architecture-Specification.md`

@@ -353,7 +353,7 @@ struct RoutineManagementView: View {
                 }
 
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(ORTypography.font(for: .caption, weight: .semibold))
                     .foregroundStyle(ORColors.textTertiary)
                     .accessibilityHidden(true)
             }
