@@ -25,7 +25,7 @@ Platform Expansion
 3. **Brand Assets & Experience** — Apply the completed Brand Foundation across icon, launch, README, widget consistency, and product surfaces.
 4. **Platform Expansion** — Extend the same meaning to Widget, Apple Watch, and other surfaces once foundation and assets are ready to reuse.
 
-Today's experience together with Live Activity already provides the primary quick-access experience. After Brand Foundation and Brand Assets, Sprint 15 locked in-app Product Experience documentation. Platform Expansion (Widget, Watch) remains intentionally postponed.
+Today's experience together with Live Activity already provides the primary quick-access experience. After Brand Foundation and Brand Assets, Sprint 15 completed the in-app Product Experience (Welcome through Settings). Platform Expansion (Widget, Watch) remains intentionally postponed pending Product Owner review after real-world use.
 
 ---
 
@@ -33,40 +33,42 @@ Today's experience together with Live Activity already provides the primary quic
 
 ## Current Phase
 
-Product Experience (Sprint 15) → Platform Expansion (next)
+Product Experience (Sprint 15) complete → Next Sprint (pending Product Owner review)
 
 ## Current Sprint
 
-Sprint 15 — Product Experience (Settings Implementation 15-6D next)
+Next Sprint — scope not finalized
 
 ## Status
 
 ✅ Sprint 14 Brand Assets & Design System complete; Brand Lock v1.0 Approved  
-✅ Sprint 15 documentation complete through Settings UI Specification (15-6C)  
-➡️ Next: Sprint 15-6D — Settings Implementation
+✅ Sprint 15 Product Experience complete (documentation + implementation through Settings)  
+➡️ Next: Product Owner review after real-world testing; Platform Expansion remains postponed until explicitly scheduled
 
 ## Current Goal
 
-Implement Settings against the approved Settings Architecture (DR-020) and Settings UI Specification — without redesigning product or architecture.
+Validate the shipped in-app Product Experience in real use before committing the next Sprint scope.
+
+Do not invent new product direction in planning documents. Leave room for Product Owner review.
 
 ## Current Priority
 
-Sprint 15 Product Experience documentation is approved. Prefer implementation fidelity over new metaphors.
+Sprint 15 is complete. Prefer learning from the shipped experience over opening new metaphors or platform work.
 
 Immediate focus:
 
-- Sprint 15-6D — Settings Implementation (authority: DR-020 / `Settings-Architecture.md` / `Settings-UI-Specification.md`)  
 - Keep Widget / Watch postponed until explicitly scheduled under Platform Expansion  
 - Do not reopen Brand Lock geometry  
-- Do not reopen Sprint 15 experience architecture (DR-017 ~ DR-020)
+- Do not reopen Sprint 15 experience architecture (DR-017 ~ DR-020)  
+- Finalize Next Sprint only after Product Owner review
 
 Sprint 12 Brand Foundation is complete.  
 Sprint 13 Brand Assets & Experience is complete (Brand Lock v1.0 Approved).  
 Sprint 14 Brand Assets & Design System is complete.
 
-Sprint 15 Product Experience documentation (Welcome, Launch, Brand Integration, My Rhythms, Create Rhythm, Settings) is complete through 15-6C.
+Sprint 15 Product Experience is complete — documentation (Welcome through Settings UI Specification) and implementation (Welcome, Launch, Today refinements, My Rhythms, Create Rhythm, Settings), plus engineering workflow and documentation system updates.
 
-Former Sprint 10 Settings planning is **superseded** by Sprint 15-6 (DR-020). Settings ownership is unique under Sprint 15.
+Former Sprint 10 Settings planning is **superseded** by Sprint 15-6 (DR-020). Settings ownership remains unique under Sprint 15 and is implemented.
 
 Widget Experience remains on the long-term roadmap (relocated to Sprint 16) and is intentionally postponed because Live Activity already satisfies the primary quick-access experience.
 
@@ -91,18 +93,18 @@ Sprints 8–11 validated the in-app Core Experience (Today, Management, UX Polis
 
 Sprints 12–14 established Brand Foundation and Brand Assets.
 
-Sprint 15 locked Product Experience documentation (Welcome through Settings).
+Sprint 15 completed Product Experience documentation and implementation (Welcome through Settings).
 
-The next validation value comes from Settings Implementation (15-6D), then Platform Expansion—not from immediately expanding Widget or Watch.
+The next validation value comes from real-world use of the shipped Product Experience, then an explicitly scheduled Next Sprint—not from immediately expanding Widget or Watch.
 
 Widget and Apple Watch remain intentional long-term surfaces under Platform Expansion (Sprint 16 / Sprint 17). They are postponed—not cancelled—so that:
 
-- Brand Foundation and Brand Assets can be completed first
+- Brand Foundation and Brand Assets stay stable before platform reuse
 - Existing architecture stays stable
 - Widget and Watch can reuse a finalized brand language and visual system
 - Duplicate UI work and architectural churn are avoided
 
-Widget implementation is intentionally postponed because Today and Live Activity already provide the primary quick-access experience. Widget remains part of the long-term roadmap.
+Widget implementation is intentionally postponed because Today and Live Activity already provide the primary quick-access experience. Widget remains part of the long-term roadmap and is not the automatic next Sprint until Product Owner review.
 
 This is a planning change only. It is not an architecture redesign.
 
@@ -523,13 +525,13 @@ Settings product ownership is defined by:
 - `Docs/Product/Settings-Architecture.md`
 - `Docs/Product/Settings-UI-Specification.md`
 
-Implementation remaining: **Sprint 15-6D — Settings Implementation**.
+Settings was implemented under **Sprint 15-6D**.
 
 Do not plan a parallel Settings sprint. Do not duplicate Settings architecture here.
 
 **Status**
 
-♻️ Superseded by Sprint 15-6 (DR-020)
+♻️ Superseded by Sprint 15-6 (DR-020) — implemented in Sprint 15
 
 ---
 
@@ -663,7 +665,7 @@ Lock the in-app Product Experience after Brand Assets — Welcome through Settin
 
 ### Intent
 
-Sprint 15 is Product Experience documentation and contracts, not Platform Expansion.
+Sprint 15 is Product Experience documentation, contracts, and implementation — not Platform Expansion.
 
 It establishes surface purpose, ownership boundaries, and UI specifications for:
 
@@ -684,11 +686,17 @@ Architecture authority remains in Decision Records and Product documents (DR-015
 - My Rhythms Architecture + UI Specification (DR-018)  
 - Create Rhythm Architecture + UI Specification (DR-019)  
 - Settings Architecture + UI Specification (DR-020 / Sprint 15-6A ~ 15-6C)  
-- Planning sync (ROADMAP / CHANGELOG / README)
 
-### Next
+### Completed (implementation)
 
-- **Sprint 15-6D — Settings Implementation** (code against approved Settings UI Specification)
+- Welcome Experience  
+- Launch Experience (Launch Screen + startup continuity)  
+- Today Experience refinements aligned with Product Experience contracts  
+- My Rhythms  
+- Create Rhythm  
+- Settings (Sprint 15-6D against DR-020)  
+- Engineering workflow refinement (Experience Review → Planning Sync)  
+- Documentation system improvements and planning sync
 
 ### Explicitly out of scope for Sprint 15
 
@@ -698,8 +706,7 @@ Architecture authority remains in Decision Records and Product documents (DR-015
 
 **Status**
 
-✅ Documentation complete through 15-6C  
-➡️ Settings Implementation (15-6D) next
+✅ Completed
 
 ---
 
@@ -719,6 +726,8 @@ Widget implementation remains intentionally postponed because Today and Live Act
 
 Widget should consume the existing Snapshot, mapping architecture, and finalized Brand Foundation / Brand Assets rather than redefine business logic.
 
+Next Sprint scope is not automatically Widget. Schedule only after Product Owner review.
+
 ### Scope Direction
 
 - Home Widget
@@ -727,7 +736,7 @@ Widget should consume the existing Snapshot, mapping architecture, and finalized
 
 **Status**
 
-📅 Planned (postponed until after Sprint 15 Settings Implementation)
+📅 Planned (postponed; not current active scope)
 
 ---
 

@@ -22,22 +22,35 @@ For future plans, see `ROADMAP.md`.
 - My Rhythms Architecture + My Rhythms UI Specification (DR-018)  
 - Create Rhythm Architecture + Create Rhythm UI Specification (DR-019)  
 - Settings Architecture + Settings UI Specification (DR-020 / Sprint 15-6A ~ 15-6C)  
-- Planning sync: `Docs/ROADMAP.md`, this changelog, root `README.md`
+
+### Implementation
+
+- Welcome Experience  
+- Launch Experience (Launch Screen + App Icon / startup continuity)  
+- Today Experience refinements aligned with Product Experience contracts  
+- My Rhythms  
+- Create Rhythm  
+- Settings (Sprint 15-6D) — app reminder preference, OS notification entry, support / about documents  
+
+### Engineering & documentation system
+
+- Development workflow refinement (Experience Review → Architecture Review → UI Specification → Implementation → Product QA → DIR → Planning Sync → Product Owner Approval)  
+- AI collaboration / Sprint process document updates  
+- Documentation hub and planning synchronization  
 
 ### Major Outcomes
 
-- Sprint 15 defined as in-app Product Experience (not Widget)  
-- Surface ownership locked: Welcome / Launch / Today / My Rhythms / Create / Settings  
-- Settings established as quiet support utility (DR-020); Sprint 10 Settings planning superseded  
-- Widget Experience relocated to Sprint 16 (postponed); Apple Watch to Sprint 17  
+- Sprint 15 completed as in-app Product Experience (not Widget)  
+- Surface ownership locked and shipped: Welcome / Launch / Today / My Rhythms / Create / Settings  
+- Settings established as quiet support utility (DR-020); Sprint 10 Settings planning superseded and implemented under Sprint 15  
+- Widget Experience remains relocated to Sprint 16 (postponed); Apple Watch to Sprint 17  
+- Next Sprint scope left open for Product Owner review after real-world testing  
 
 ## Notes
 
-Sprint 15 **documentation** is complete through Settings UI Specification (15-6C).
+Sprint 15 Product Experience is **complete** — documentation through Settings UI Specification and implementation through Settings.
 
-**Next:** Sprint 15-6D — Settings Implementation (code). No Settings implementation work is recorded as complete in this entry.
-
-Authority for Settings implementation:
+Authority for shipped Settings behavior:
 
 - `Docs/Architecture/Decisions/DR-020-settings.md`
 - `Docs/Product/Settings-Architecture.md`
@@ -72,7 +85,7 @@ Sprint 14 Brand Assets & Design System is complete.
 
 Motion Principle for product UI remains under `Docs/BRAND.md`.
 
-Sprint 15 — Product Experience followed (documentation through Settings UI Specification).
+Sprint 15 — Product Experience followed and is now complete.
 
 ---
 

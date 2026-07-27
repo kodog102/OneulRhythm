@@ -13,229 +13,232 @@
 </p>
 
 <p align="center">
-  <sub>Built with SwiftUI · SwiftData · ActivityKit</sub>
+  <sub>SwiftUI · SwiftData · ActivityKit</sub>
 </p>
 
 ---
 
-## ✨ Why
+## 프로젝트 소개
 
-많은 생산성 앱은 해야 할 일을 더 많이 보여주고,
-더 많은 기능을 제공합니다.
+OneulRhythm은 하루의 할 일을 모두 관리하는 앱이 아닙니다.
 
-하지만 실제로 중요한 것은 해야 할 일의 개수가 아니라,
+이미 정해 둔 오늘의 리듬 중,
+**지금 가장 중요한 하나**에 다시 머무르도록 돕는 조용한 동반자입니다.
 
-**지금 가장 먼저 해야 하는 하나**라고 생각했습니다.
-
-OneulRhythm은 사용자가 하나의 리듬에만 집중하도록 돕기 위해 만든 iOS 프로젝트입니다.
-
----
-
-## 📱 About
-
-OneulRhythm은 단순한 루틴 관리 앱이 아닙니다.
-
-13년 동안 개발하며 얻은 경험을 바탕으로,
-
-SwiftUI, SwiftData, ActivityKit을 활용해 지속 가능한 iOS 아키텍처와 사용자 경험을 함께 고민하는 프로젝트입니다.
-
-기능을 빠르게 추가하는 것보다,
-
-단순한 구조,
-예측 가능한 설계,
-그리고 꾸준히 개선 가능한 코드를 만드는 것을 목표로 개발하고 있습니다.
+사용자는 계획을 세우고,
+앱은 그 계획을 기억하며 하루 속에서 부드럽게 상기시킵니다.
 
 ---
 
-## 🚀 Features
+## 왜 OneulRhythm를 만들었는가
 
-OneulRhythm은 하루의 흐름을 자연스럽게 이어갈 수 있도록,
+많은 생산성 앱은 더 많은 목록, 더 많은 설정, 더 많은 알림으로
+사용자의 주의를 끌려고 합니다.
 
-지금 가장 중요한 하나의 리듬에 집중하는 경험을 제공합니다.
+하지만 실제로 하루를 어렵게 만드는 것은
+할 일의 개수보다, **이미 정한 것을 놓치는 순간**에 가깝습니다.
 
-### 🎯 Primary Rhythm
+OneulRhythm은 그 반대에서 출발합니다.
 
-> *(Screenshot Coming Soon)*
+- 한 번에 하나의 리듬만 강조합니다
+- 지금 필요한 것만 보여줍니다
+- 복잡함보다 차분함을 택합니다
+- 기능을 늘리기 전에, 제품이 어떤 경험이어야 하는지를 먼저 정합니다
 
-지금 가장 중요한 하나의 리듬에만 집중할 수 있도록 도와줍니다.
-
----
-
-### 📅 Smart Scheduling
-
-> *(Screenshot Coming Soon)*
-
-시간과 루틴 상태를 바탕으로 오늘의 리듬을 자연스럽게 연결합니다.
+기술은 복잡해질 수 있어도,
+사용자의 하루는 더 단순해져야 한다고 생각합니다.
 
 ---
 
-### 📱 Live Activity
+## Product Experience
 
-> *(Screenshot Coming Soon)*
+OneulRhythm의 핵심은 기능 목록이 아니라,
+하루를 이어 주는 **경험의 흐름**입니다.
 
-앱을 열지 않아도 잠금 화면에서 현재 리듬을 이어갈 수 있습니다.
+### Welcome
 
----
+처음 만나는 순간에는 Breath Flow와 짧은 철학으로
+제품이 무엇을 돕는지만 전합니다.
 
-### 🔔 Smart Reminder
+관리 화면이나 설정은 아직 드러내지 않습니다.
 
-> *(Screenshot Coming Soon)*
+### Today
 
-필요할 때만 알려주는 부담 없는 알림 경험을 제공합니다.
+오늘의 중심 화면입니다.
 
----
+Primary Rhythm 하나만 강조하고,
+완료하거나 다음으로 넘어가는 데 필요한 최소한의 행동만 남깁니다.
 
-## 🏗 Architecture
+### My Rhythms
 
-OneulRhythm은 기능을 빠르게 추가하는 것보다,
+리듬을 모으고 정리하는 유틸리티 공간입니다.
 
-예측 가능한 흐름과 유지보수하기 쉬운 구조를 만드는 것을 우선합니다.
+Today의 집중을 방해하지 않도록,
+필요할 때만 들어가는 보조 경험으로 둡니다.
 
-비즈니스 로직, 데이터 저장, 플랫폼 기능을 분리하여
+### Create Rhythm
 
-각 영역이 하나의 책임만 가지도록 설계했습니다.
+리듬을 만들고 고치는 화면입니다.
 
-```mermaid
-flowchart TD
-    A[Routine Storage] --> B[Routine Repository]
+이름과 시간처럼 본질적인 것부터 잡고,
+세부 설정은 그다음으로 둡니다.
 
-    P[Calendar Day Policy]
-    P --> C[Routine Schedule Engine]
-    P --> J[Occurrence DateTime Materializer]
+### Settings
 
-    B --> C
+조용한 지원 유틸리티입니다.
 
-    C --> D[Today Rhythm Snapshot]
-    C --> I[Planned Occurrence]
+앱 알림 선호와 시스템 알림 진입,
+약관·라이선스 같은 보조 정보만 다룹니다.
 
-    D --> E[Today ViewModel]
-    E --> F[Today View]
+### Live Activity
 
-    D --> G[Live Activity Mapper]
-    G --> H[ActivityKit Coordinator]
+앱을 열지 않아도
+잠금 화면에서 지금의 리듬을 이어갈 수 있습니다.
 
-    I --> J
-    J --> K[Materialized Occurrence]
-```
-
-`Today Rhythm Snapshot`은 **Single Source of Truth**로 동작하며,
-
-Today View와 Live Activity는 동일한 Snapshot을 기반으로 동기화됩니다.
+Today와 동일한 Snapshot을 소비하므로,
+화면마다 서로 다른 “진실”을 만들지 않습니다.
 
 ---
 
-## 🤖 AI-assisted Engineering
+## Screenshots
 
-OneulRhythm은 AI를 단순한 코드 생성 도구가 아니라,
+제품 경험은 아래 순서로 보여 줄 예정입니다.
+이미지는 `Assets/screenshots/`에 큐레이션합니다.
 
-설계부터 구현, 리뷰, QA까지 함께 고민하는 **Engineering Partner**로 활용합니다.
+| 순서 | 화면 | 경로 |
+|------|------|------|
+| 1 | Welcome | `Assets/screenshots/01-welcome.png` |
+| 2 | Today | `Assets/screenshots/02-today.png` |
+| 3 | Create Rhythm | `Assets/screenshots/03-create-rhythm.png` |
+| 4 | My Rhythms | `Assets/screenshots/04-my-rhythms.png` |
+| 5 | Settings | `Assets/screenshots/05-settings.png` |
+| 6 | Live Activity | `Assets/screenshots/06-live-activity.png` |
 
-충분한 설계와 반복적인 검증을 통해,
+현재는 hero 이미지만 포함되어 있으며,
+실제 기기 스크린샷은 정리 후 위 경로에 반영할 예정입니다.
 
-예측 가능하고 유지보수하기 쉬운 프로젝트를 만드는 것을 목표로 합니다.
+---
+
+## Architecture
+
+OneulRhythm은 빠른 기능 추가보다,
+예측 가능한 흐름과 유지하기 쉬운 경계를 우선합니다.
+
+핵심은 다음과 같습니다.
+
+- **Schedule Engine**이 오늘의 스케줄을 결정적으로 해석합니다
+- **Today Rhythm Snapshot**이 Single Source of Truth로 동작합니다
+- Today, Live Activity, 알림은 같은 Snapshot을 소비합니다
+- Presentation은 Snapshot을 렌더링하고, 비즈니스 규칙을 다시 정의하지 않습니다
 
 ```text
-Planning
-  → Architecture and Task Design
-  → Implementation
-  → Code Review
-  → Integration QA
-  → Documentation Pass
-  → Commit & Push (Developer)
+Repository
+  → Schedule Engine
+  → Today Rhythm Snapshot
+  → ViewModel / Live Activity / Notifications
 ```
 
-공식 Sprint 워크플로우는 `Docs/Development/DEVELOPMENT_WORKFLOW.md`를 따릅니다.
+자세한 구조와 Decision Record는 `Docs/Architecture/`를 참고하세요.
 
-> 설계는 구현보다 먼저 검토하고,
->
-> 구현은 프로젝트에 반영하기 전에 반드시 검증합니다.
+### Tech Stack
 
----
-
-## 🛠 Tech Stack
-
-| Category | Technologies |
-|----------|--------------|
+| 구분 | 기술 |
+|------|------|
 | Language | Swift |
 | UI | SwiftUI |
 | Data | SwiftData |
-| Architecture | MVVM, Repository Pattern, Snapshot-based State Management |
-| Apple Frameworks | ActivityKit, WidgetKit |
-| AI-assisted Development | Cursor, ChatGPT |
-| Version Control | Git, GitHub |
+| Architecture | MVVM, Repository, Snapshot-based State |
+| Frameworks | ActivityKit, WidgetKit |
+| Collaboration | Cursor, ChatGPT |
 
 ---
 
-## 📚 Documentation
+## Engineering Workflow
 
-프로젝트의 설계와 의사결정 과정은 `Docs/`에서 관리합니다.
+개발은 구현보다 경험과 경계를 먼저 고정하는 순서를 따릅니다.
 
-Start here: `Docs/README.md`
+```text
+Experience Review
+  → Architecture Review
+  → UI Specification
+  → Implementation
+  → Product QA
+  → DIR
+  → Planning Sync
+  → Product Owner Approval
+```
 
-- `Docs/Product/` — Product Principles and UX contracts
-- `Docs/BRAND.md` — Brand Foundation
-- `Docs/ADR/` — Brand Architecture Decision Records
-- `Assets/brand/` — Brand Assets (Release / Guide / Work)
-- `Docs/Architecture/` — Architecture and Architecture Decisions
-- `Docs/Design/` — subsystem implementation contracts
-- `Docs/Development/` — official Sprint workflow
-- `Docs/AI_Collaboration_Playbook_v2.2.md` — AI Collaboration Playbook
-- `Docs/GLOSSARY.md` — shared terminology
-- `Docs/ROADMAP.md` / `Docs/CHANGELOG.md` — Roadmap and product progress
+ChatGPT는 설계와 범위 정리에,
+Cursor는 구현·검증·문서 동기화에,
+개발자는 최종 승인·커밋·푸시에 집중합니다.
+
+공식 Sprint 워크플로우는 `Docs/Development/DEVELOPMENT_WORKFLOW.md`에 있습니다.
+AI 협업 규칙은 `Docs/AI_Collaboration_Playbook_v2.2.md`를 참고하세요.
 
 ---
 
-## 🗺 Roadmap
+## Documentation
 
-### ✅ Completed
+설계와 의사결정은 `Docs/`에서 관리합니다.
 
-- Primary Rhythm
-- Today Snapshot
-- Live Activity
-- Documentation Architecture
-- Development Workflow
-- Recurring Rhythm
-- Primary Rhythm Ownership
-- Notification Foundation
-- Brand Foundation (Sprint 12)
-- Brand Assets & Experience (Sprint 13) — Brand Lock v1.0 Approved
-- Brand Assets & Design System (Sprint 14)
-- Product Experience documentation (Sprint 15) — Welcome through Settings UI Spec (15-6C)
+시작점: [`Docs/README.md`](Docs/README.md)
 
-### 📅 Current Priority — Sprint 15-6D Settings Implementation
+| Hub | 역할 |
+|-----|------|
+| `Docs/Product/` | Product Principles, Experience, UI Specification |
+| `Docs/BRAND.md` / `Docs/ADR/` | Brand Foundation |
+| `Assets/brand/` | Brand Assets |
+| `Docs/Architecture/` | Architecture, Decision Records |
+| `Docs/Design/` | 서브시스템 구현 계약 |
+| `Docs/Development/` | Sprint workflow |
+| `Docs/GLOSSARY.md` | 공통 용어 |
+| `Docs/ROADMAP.md` / `Docs/CHANGELOG.md` | 계획과 완료 기록 |
 
-Sprint 15 Product Experience documentation is complete through Settings UI Specification.
+---
+
+## Roadmap
 
 ```text
 Core Experience → Brand Foundation → Brand Assets → Product Experience → Platform Expansion
 ```
 
-- **Next:** Settings Implementation (Sprint 15-6D) — against DR-020 / Settings Architecture / Settings UI Specification  
-- Widget Experience (Sprint 16) — postponed  
-- Apple Watch (Sprint 17) — postponed  
+### Completed
 
-Former Sprint 10 Settings planning is superseded by Sprint 15-6 (DR-020).
+- Primary Rhythm / Today Snapshot / Live Activity
+- Recurring Rhythm / Notification Foundation
+- Brand Foundation (Sprint 12)
+- Brand Assets & Experience (Sprint 13) — Brand Lock v1.0 Approved
+- Brand Assets & Design System (Sprint 14)
+- Product Experience (Sprint 15) — Welcome through Settings ✅ Complete
 
-### 🔮 Later (intentionally postponed)
+### Current Status
 
-- Widget Experience — postponed because Live Activity already satisfies primary quick access; remains on the long-term roadmap (Sprint 16)
-- Apple Watch (Sprint 17)
+- Sprint 15 ✅ Complete
+
+### Current Focus
+
+- Repository Polish
+- Product Experience Validation
+
+### Next Sprint
+
+Product Owner Review 이후 결정합니다.
+범위를 미리 정하지 않습니다.
+
+Widget Experience (Sprint 16)와 Apple Watch (Sprint 17)는 장기 로드맵에 남아 있으며, 명시적으로 스케줄되기 전까지 postponed입니다.
+
+### Later
+
+- Widget Experience
+- Apple Watch
 - Statistics & Insights
 - iCloud Sync
 - Siri & Shortcuts
 
-상세 로드맵은 `Docs/ROADMAP.md`를 참고하세요.
+상세 내용은 [`Docs/ROADMAP.md`](Docs/ROADMAP.md)를 참고하세요.
 
 ---
 
-## 🌱 Philosophy
+## License
 
-OneulRhythm은
-
-더 많은 기능보다,
-
-더 좋은 흐름을 만드는 것을 중요하게 생각합니다.
-
-기술은 복잡해질 수 있지만,
-
-사용자의 하루는 더 단순해져야 한다고 믿습니다.
+This project is licensed under the [MIT License](LICENSE).
