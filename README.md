@@ -210,22 +210,22 @@ Core Experience → Brand Foundation → Brand Assets → Product Experience →
 - Brand Assets & Experience (Sprint 13) — Brand Lock v1.0 Approved
 - Brand Assets & Design System (Sprint 14)
 - Product Experience (Sprint 15) — Welcome through Settings ✅ Complete
+- Visual Identity Integration (Sprint 16) ✅ Complete
+- Product Experience Polish (Sprint 17) ✅ Complete
 
 ### Current Status
 
-- Sprint 15 ✅ Complete
+- Sprint 17 ✅ Complete
 
 ### Current Focus
 
-- Repository Polish
-- Product Experience Validation
+- Product Owner Review Complete
 
 ### Next Sprint
 
-Product Owner Review 이후 결정합니다.
-범위를 미리 정하지 않습니다.
+TBD
 
-Widget Experience (Sprint 16)와 Apple Watch (Sprint 17)는 장기 로드맵에 남아 있으며, 명시적으로 스케줄되기 전까지 postponed입니다.
+Widget Experience와 Apple Watch는 장기 로드맵(Platform Expansion)에 남아 있으며, 명시적으로 스케줄되기 전까지 postponed입니다.
 
 ### Later
 

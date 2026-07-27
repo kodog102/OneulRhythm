@@ -132,7 +132,7 @@ Authority for appearance and visual language:
 - Sprint 15 completed as in-app Product Experience (not Widget)  
 - Surface ownership locked and shipped: Welcome / Launch / Today / My Rhythms / Create / Settings  
 - Settings established as quiet support utility (DR-020); Sprint 10 Settings planning superseded and implemented under Sprint 15  
-- Widget Experience remains relocated to Sprint 16 (postponed); Apple Watch to Sprint 17  
+- Widget Experience and Apple Watch remained postponed under Platform Expansion  
 - Next Sprint scope left open for Product Owner review after real-world testing  
 
 ## Notes
