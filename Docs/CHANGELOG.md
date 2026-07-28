@@ -8,6 +8,41 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 19 — Today UX Polish & Navigation Refinement
+
+**Date:** 2026-07-28
+
+## Completed
+
+### Today experience
+
+- Today North Star visual polish (shared atmosphere background, bottom-anchored layout continuity)  
+- Timeline-driven Today auto refresh while the screen remains visible  
+- Role-based presentation consistency after timeline transitions  
+- Remaining-time ring presentation fix — Past Incomplete no longer shows Upcoming (`곧`)  
+- Day Complete copy polish — `오늘의 리듬을 모두 마쳤어요.`  
+- Shared Day Complete presentation voice (Today + Live Activity)  
+
+### Rhythm Editor & navigation
+
+- Rhythm Editor North Star layout and visual refinement  
+- Project Navigation Standard with transparent navigation  
+- Floating Save button  
+- Save returns directly to Today  
+
+### Major Outcomes
+
+- Today stays truthful to the latest snapshot without leaving the screen  
+- Rhythm Editor navigation and Save flow feel continuous with Today  
+- Completion action (`이어냈어요`) and Day Complete state copy remain distinct  
+- No domain, schedule engine, repository, or persistence changes  
+
+## Notes
+
+Sprint 19 is Product Experience / navigation polish on the shipped Today foundation. Widget and Apple Watch remain postponed under Platform Expansion.
+
+---
+
 # Sprint 18 — Today North Star Experience
 
 **Date:** 2026-07-27

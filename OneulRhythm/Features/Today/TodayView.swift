@@ -55,40 +55,32 @@ struct TodayView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    // 3–4. Hero / Greeting + Date
-                    headerGroup
-
-                    // 5–6. Primary Rhythm + Supporting content
-                    screenContent
-                        .padding(.top, contentTopSpacing)
-                        .id(contentTransitionID)
-                        .transition(contentTransition)
-
-                    // Bottom action slot (North Star CTA position)
-                    if showsBottomActionSlot, let primaryRhythm = viewModel.primaryRhythm {
-                        completionButton(for: primaryRhythm)
-                            .padding(.top, ORSpacing.xl)
+            Group {
+                if usesBottomAnchoredContentLayout {
+                    if usesActiveBottomAnchoredLayout {
+                        // Active — keep Sprint 19-1D canvas (safeAreaInset CTA).
+                        activeBottomAnchoredCanvas
+                    } else {
+                        // Empty / Day Complete — bottom inset + flexible column (Sprint 19-1F).
+                        emptyOrCompleteBottomAnchoredCanvas
                     }
+                } else {
+                    topFlowTodayCanvas
                 }
-                .padding(.horizontal, ORSpacing.screenHorizontal)
-                // 7. Bottom spacing — tighter on SE-class Welcome so CTA clears the fold.
-                .padding(.bottom, usesCompactWelcomeSpacing ? ORSpacing.md : ORSpacing.scrollBottom)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .animation(contentAnimation, value: contentTransitionID)
             }
             // 1. Safe Area
             .safeAreaPadding(
                 .top,
                 usesCompactWelcomeSpacing ? ORSpacing.sm : ORSpacing.screenTop
             )
-            // 2. Background layer
+            // 2. Background layer — shared atmosphere (Sprint 19-1A)
             .background {
-                LandscapeBackground()
+                ORAtmosphereBackground()
             }
             .toolbar {
-                // Settings + My Rhythms: hidden on Welcome (First Journey). Settings UI Spec / DR-015.
+                // First Journey (Welcome) product exception — Settings UI Spec / DR-015:
+                // Settings and My Rhythms stay hidden until first successful rhythm creation.
+                // Same lifecycle gate for both entries; Welcome remains product introduction only.
                 if firstRhythmJourneyProgress.hasCompletedFirstRhythmJourney {
                     ToolbarItem(placement: .topBarLeading) {
                         Button {
@@ -141,6 +133,11 @@ struct TodayView: View {
                     onRoutinesChanged: {
                         viewModel.loadRoutines()
                     },
+                    onReturnToTodayAfterSave: {
+                        // Sprint 19-2H — after save from Editor via My Rhythms, return to Today
+                        // by dismissing the whole Management destination in one step.
+                        isManageRhythmsPresented = false
+                    },
                     nowProvider: nowProvider
                 )
             }
@@ -151,13 +148,34 @@ struct TodayView: View {
         .task(id: launchState.didCompleteInitialRhythmSync) {
             guard launchState.didCompleteInitialRhythmSync else { return }
             viewModel.loadRoutines()
+            if isTodaySurfaceVisible {
+                viewModel.startTimelineAutoRefresh()
+            }
         }
         .onChange(of: scenePhase) { _, phase in
             guard launchState.didCompleteInitialRhythmSync else { return }
             if phase == .active {
                 onAppBecomeActive()
                 viewModel.loadRoutines()
+                if isTodaySurfaceVisible {
+                    viewModel.startTimelineAutoRefresh()
+                }
+            } else {
+                viewModel.stopTimelineAutoRefresh()
             }
+        }
+        .onChange(of: isTodaySurfaceVisible) { _, visible in
+            guard launchState.didCompleteInitialRhythmSync else { return }
+            if visible, scenePhase == .active {
+                // Catch up any boundaries that elapsed while Today was covered.
+                viewModel.loadRoutines()
+                viewModel.startTimelineAutoRefresh()
+            } else {
+                viewModel.stopTimelineAutoRefresh()
+            }
+        }
+        .onDisappear {
+            viewModel.stopTimelineAutoRefresh()
         }
         .background {
             TodayWindowHeightReader(height: $viewportHeight)
@@ -177,6 +195,11 @@ struct TodayView: View {
         } message: {
             Text(viewModel.completionErrorMessage ?? "잠시 후 다시 시도해주세요.")
         }
+    }
+
+    /// Today is the uncovered foreground surface (not under create / manage / settings).
+    private var isTodaySurfaceVisible: Bool {
+        !isCreateRhythmPresented && !isManageRhythmsPresented && !isSettingsPresented
     }
 
     // MARK: - Always Visible
@@ -214,6 +237,227 @@ struct TodayView: View {
             && viewModel.primaryRhythm != nil
     }
 
+    /// Active / Empty / Day Complete — pin content from the bottom safe area upward (Sprint 19-1D/E).
+    private var usesBottomAnchoredContentLayout: Bool {
+        !isAwaitingInitialToday
+            && !viewModel.isLoading
+            && viewModel.loadErrorMessage == nil
+            && {
+                switch viewModel.screenPresentation {
+                case .upcoming, .current, .pastIncomplete, .empty, .dayComplete:
+                    return true
+                }
+            }()
+    }
+
+    /// Active Today only — existing 19-1D GeometryReader + safeAreaInset canvas.
+    private var usesActiveBottomAnchoredLayout: Bool {
+        usesBottomAnchoredContentLayout
+            && {
+                switch viewModel.screenPresentation {
+                case .upcoming, .current, .pastIncomplete:
+                    return true
+                case .empty, .dayComplete:
+                    return false
+                }
+            }()
+    }
+
+    /// Short Today canvas (SE-class / Visual QA 320×568).
+    private var usesShortTodayCanvas: Bool {
+        (viewportHeight > 0 && viewportHeight < 700)
+            || verticalSizeClass == .compact
+    }
+
+    /// Bottom inset for Empty / Day Complete fill layout.
+    private var bottomContentPadding: CGFloat {
+        if usesCompactWelcomeSpacing || usesShortTodayCanvas {
+            return ORSpacing.md
+        }
+        return ORSpacing.scrollBottom
+    }
+
+    // MARK: - Active bottom-anchored canvas (unchanged Sprint 19-1D)
+
+    /// Active Today — header top, cards pinned above bottom CTA inset.
+    private var activeBottomAnchoredCanvas: some View {
+        GeometryReader { geometry in
+            let canvasSize = geometry.size
+            let isShortCanvas = canvasSize.height < 620
+
+            ViewThatFits(in: .vertical) {
+                activeBottomAnchoredStack(isShortCanvas: isShortCanvas)
+                    .frame(width: canvasSize.width, height: canvasSize.height, alignment: .top)
+
+                ScrollView {
+                    activeBottomAnchoredStack(isShortCanvas: isShortCanvas)
+                        .frame(minHeight: canvasSize.height, alignment: .top)
+                }
+            }
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if showsBottomActionSlot, let primaryRhythm = viewModel.primaryRhythm {
+                completionButton(for: primaryRhythm)
+                    .padding(.horizontal, ORSpacing.screenHorizontal)
+                    .padding(.top, ORSpacing.md)
+                    .padding(.bottom, ORSpacing.md)
+            }
+        }
+    }
+
+    private func activeBottomAnchoredStack(isShortCanvas: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            headerGroup
+            Spacer(minLength: isShortCanvas ? ORSpacing.xxs : ORSpacing.md)
+            screenContent(isShortCanvas: isShortCanvas)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .id(contentTransitionID)
+                .transition(contentTransition)
+        }
+        .padding(.horizontal, ORSpacing.screenHorizontal)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .animation(contentAnimation, value: contentTransitionID)
+    }
+
+    // MARK: - Empty / Day Complete bottom-anchored canvas (Sprint 19-1F)
+
+    /// Empty / Day Complete — top header, flexible space, bottom stack via safeAreaInset (Sprint 19-1F).
+    /// No GeometryReader: a full-height reader + external inset overflowed SE; padding inside the
+    /// inset is reserved by the safe-area layout so CTA/card cannot paint under the bottom edge.
+    @ViewBuilder
+    private var emptyOrCompleteBottomAnchoredCanvas: some View {
+        let isShortCanvas = usesShortTodayCanvas
+        let bottomPad = emptyOrCompleteBottomPad(isShortCanvas: isShortCanvas)
+
+        Group {
+            if isWelcomeExperienceActive && isShortCanvas {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        headerGroup
+                        emptyOrCompleteScrollableBody(isShortCanvas: isShortCanvas)
+                            .padding(.top, ORSpacing.md)
+                            .id(contentTransitionID)
+                            .transition(contentTransition)
+                    }
+                    .padding(.horizontal, ORSpacing.screenHorizontal)
+                    .padding(.bottom, ORSpacing.md)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            } else {
+                VStack(alignment: .leading, spacing: 0) {
+                    headerGroup
+                    Spacer(minLength: 0)
+                    emptyOrCompleteInsetBody(isShortCanvas: isShortCanvas)
+                        .id(contentTransitionID)
+                        .transition(contentTransition)
+                }
+                .padding(.horizontal, ORSpacing.screenHorizontal)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            }
+        }
+        .animation(contentAnimation, value: contentTransitionID)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            emptyOrCompleteBottomInset(isShortCanvas: isShortCanvas, bottomPad: bottomPad)
+        }
+    }
+
+    /// Bottom clearance above the physical bottom edge (SE keeps lg; taller canvases use scrollBottom).
+    private func emptyOrCompleteBottomPad(isShortCanvas: Bool) -> CGFloat {
+        isShortCanvas ? ORSpacing.lg : bottomContentPadding
+    }
+
+    /// Main-column body above the bottom inset (message/card only — Empty CTA lives in the inset).
+    @ViewBuilder
+    private func emptyOrCompleteInsetBody(isShortCanvas: Bool) -> some View {
+        switch viewModel.screenPresentation {
+        case .empty:
+            TodayEmptyStateView(
+                phase: emptyPhase,
+                usesCompactVerticalSpacing: usesCompactWelcomeSpacing || isShortCanvas,
+                embedsPrimaryAction: false,
+                onCreateRhythm: { isCreateRhythmPresented = true }
+            )
+        case .dayComplete:
+            // Day Complete card is the bottom inset itself (no duplicate in the column).
+            EmptyView()
+        default:
+            EmptyView()
+        }
+    }
+
+    /// Scroll body for First Journey short canvas (CTA remains in the bottom inset).
+    @ViewBuilder
+    private func emptyOrCompleteScrollableBody(isShortCanvas: Bool) -> some View {
+        switch viewModel.screenPresentation {
+        case .empty:
+            TodayEmptyStateView(
+                phase: emptyPhase,
+                usesCompactVerticalSpacing: usesCompactWelcomeSpacing || isShortCanvas,
+                embedsPrimaryAction: false,
+                onCreateRhythm: { isCreateRhythmPresented = true }
+            )
+        case .dayComplete:
+            EmptyView()
+        default:
+            EmptyView()
+        }
+    }
+
+    /// Bottom safe-area inset: Empty CTA, or Day Complete card. Padding is part of the inset.
+    @ViewBuilder
+    private func emptyOrCompleteBottomInset(isShortCanvas: Bool, bottomPad: CGFloat) -> some View {
+        VStack(spacing: 0) {
+            switch viewModel.screenPresentation {
+            case .empty:
+                if showsEmptyPrimaryActionInset {
+                    emptyPrimaryActionInset
+                        .padding(.horizontal, ORSpacing.screenHorizontal)
+                        .padding(.top, ORSpacing.md)
+                }
+            case .dayComplete:
+                dayCompleteMessage
+                    .padding(.horizontal, ORSpacing.screenHorizontal)
+            default:
+                EmptyView()
+            }
+
+            Color.clear
+                .frame(height: bottomPad)
+                .accessibilityHidden(true)
+        }
+    }
+
+    private var showsEmptyPrimaryActionInset: Bool {
+        !isAwaitingInitialToday
+            && !viewModel.isLoading
+            && viewModel.loadErrorMessage == nil
+            && viewModel.screenPresentation == .empty
+    }
+
+    /// Loading / error / awaiting — top-flow scroll layout (not bottom-anchored states).
+    private var topFlowTodayCanvas: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                headerGroup
+
+                screenContent(isShortCanvas: false)
+                    .padding(.top, contentTopSpacing)
+                    .id(contentTransitionID)
+                    .transition(contentTransition)
+
+                if showsBottomActionSlot, let primaryRhythm = viewModel.primaryRhythm {
+                    completionButton(for: primaryRhythm)
+                        .padding(.top, ORSpacing.xl)
+                }
+            }
+            .padding(.horizontal, ORSpacing.screenHorizontal)
+            .padding(.bottom, bottomContentPadding)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .animation(contentAnimation, value: contentTransitionID)
+        }
+    }
+
     /// True until initial sync finishes and the first Today load has resolved.
     /// Holds the cream shell so Empty / Welcome / Create never flash on launch.
     private var isAwaitingInitialToday: Bool {
@@ -233,7 +477,7 @@ struct TodayView: View {
     // MARK: - Screen Content
 
     @ViewBuilder
-    private var screenContent: some View {
+    private func screenContent(isShortCanvas: Bool) -> some View {
         if isAwaitingInitialToday {
             initialTodayHold
         } else if viewModel.isLoading {
@@ -247,7 +491,7 @@ struct TodayView: View {
             case .dayComplete:
                 dayCompleteMessage
             case .upcoming, .current, .pastIncomplete:
-                primaryRhythmArea
+                primaryRhythmArea(isShortCanvas: isShortCanvas)
             }
         }
     }
@@ -323,12 +567,26 @@ struct TodayView: View {
     }
 
     /// Empty phases from DR-015 — Welcome (First Journey) vs Normal Experience.
+    /// Top-flow / Active paths only — Empty bottom-anchored canvas builds its own stack.
     private var emptyState: some View {
         TodayEmptyStateView(
             phase: emptyPhase,
             usesCompactVerticalSpacing: usesCompactWelcomeSpacing,
+            embedsPrimaryAction: true,
             onCreateRhythm: { isCreateRhythmPresented = true }
         )
+    }
+
+    /// Create action for Empty scroll fallback (safeAreaInset).
+    @ViewBuilder
+    private var emptyPrimaryActionInset: some View {
+        TodayEmptyStateView(
+            phase: emptyPhase,
+            usesCompactVerticalSpacing: usesCompactWelcomeSpacing || usesShortTodayCanvas,
+            embedsPrimaryAction: true,
+            onCreateRhythm: { isCreateRhythmPresented = true }
+        )
+        .primaryActionView
     }
 
     private var emptyPhase: TodayEmptyPhase {
@@ -357,7 +615,7 @@ struct TodayView: View {
     /// Approved Day Complete copy. Quiet closure — never celebratory.
     /// Soft secondary glass — lighter than Active primary stack; peaceful, not empty.
     private var dayCompleteMessage: some View {
-        Text("오늘의 리듬을 모두 이어냈어요.")
+        Text("오늘의 리듬을 모두 마쳤어요.")
             .todayPrimaryTitleTypography()
             .foregroundStyle(ORTodayTypography.displayInk)
             .fixedSize(horizontal: false, vertical: true)
@@ -372,9 +630,9 @@ struct TodayView: View {
 
     /// North Star stack: Primary card → Supporting cards.
     @ViewBuilder
-    private var primaryRhythmArea: some View {
+    private func primaryRhythmArea(isShortCanvas: Bool) -> some View {
         if let primaryRhythm = viewModel.primaryRhythm {
-            VStack(alignment: .leading, spacing: ORSpacing.md) {
+            VStack(alignment: .leading, spacing: isShortCanvas ? ORSpacing.sm : ORSpacing.md) {
                 primaryRhythmCard(for: primaryRhythm)
 
                 if hasSupportingContent {
@@ -456,8 +714,16 @@ struct TodayView: View {
     /// Remaining-time ring — soft stroke, optically balanced beside the title.
     /// Trim follows remaining/total duration (presentation only). Falls back when duration is unknown.
     private func remainingTimeRing(for routine: Routine) -> some View {
-        let label = remainingTimeLabel(for: routine)
-        let trim = remainingTimeRingTrim(for: routine)
+        let label = TodayPrimaryRingPresentation.label(
+            role: viewModel.primaryRole,
+            routine: routine,
+            now: nowProvider()
+        )
+        let trim = TodayPrimaryRingPresentation.trim(
+            role: viewModel.primaryRole,
+            routine: routine,
+            now: nowProvider()
+        )
 
         return ZStack {
             Circle()
@@ -480,28 +746,6 @@ struct TodayView: View {
         }
         .frame(width: 76, height: 76)
         .accessibilityLabel(label)
-    }
-
-    /// `remainingDuration / totalDuration`, clamped to 0...1. Fallback `0.72` if duration is unavailable.
-    private func remainingTimeRingTrim(for routine: Routine) -> CGFloat {
-        guard let endTime = routine.endTime else { return 0.72 }
-        let totalDuration = endTime.timeIntervalSince(routine.startTime)
-        guard totalDuration > 0 else { return 0.72 }
-
-        let remainingDuration = max(0, endTime.timeIntervalSince(nowProvider()))
-        return CGFloat(min(1, remainingDuration / totalDuration))
-    }
-
-    private func remainingTimeLabel(for routine: Routine) -> String {
-        guard let endTime = routine.endTime else {
-            return routine.formattedTime
-        }
-
-        let remaining = max(0, Int(endTime.timeIntervalSince(nowProvider()) / 60))
-        if remaining <= 0 {
-            return "곧"
-        }
-        return "\(remaining)분\n남음"
     }
 
     private func primaryMetaText(for routine: Routine) -> String {

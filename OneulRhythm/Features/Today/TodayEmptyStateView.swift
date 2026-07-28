@@ -17,10 +17,13 @@ enum TodayEmptyPhase: Equatable {
 /// First Journey presents the Welcome Experience (`Welcome-UI-Specification.md`).
 /// Sprint 18-6: presentation aligned to Morning Landscape / Today shell — lifecycle unchanged.
 /// Sprint 18.8: optional compact vertical rhythm for SE-class first-fold CTA visibility.
+/// Sprint 19-1E: `embedsPrimaryAction` lets TodayView bottom-anchor the CTA via safeAreaInset.
 struct TodayEmptyStateView: View {
     let phase: TodayEmptyPhase
     /// When true, tighten Welcome vertical spacing only — content and hierarchy unchanged.
     var usesCompactVerticalSpacing: Bool = false
+    /// When false, omit the create CTA so the parent can pin it near the bottom safe area.
+    var embedsPrimaryAction: Bool = true
     let onCreateRhythm: () -> Void
 
     @Environment(\.sizeCategory) private var sizeCategory
@@ -32,6 +35,20 @@ struct TodayEmptyStateView: View {
             welcomeExperience
         case .normalExperience:
             normalExperienceEmpty
+        }
+    }
+
+    /// Create action for bottom safe-area inset when `embedsPrimaryAction` is false.
+    @ViewBuilder
+    var primaryActionView: some View {
+        switch phase {
+        case .firstJourney:
+            primaryCTA
+        case .normalExperience:
+            AddRoutineCardView(
+                title: "리듬 만들기",
+                action: onCreateRhythm
+            )
         }
     }
 
@@ -49,9 +66,11 @@ struct TodayEmptyStateView: View {
                 .padding(.bottom, heroToPhilosophySpacing)
 
             philosophy
-                .padding(.bottom, philosophyToCTASpacing)
 
-            primaryCTA
+            if embedsPrimaryAction {
+                primaryCTA
+                    .padding(.top, philosophyToCTASpacing)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -194,10 +213,12 @@ struct TodayEmptyStateView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            AddRoutineCardView(
-                title: "리듬 만들기",
-                action: onCreateRhythm
-            )
+            if embedsPrimaryAction {
+                AddRoutineCardView(
+                    title: "리듬 만들기",
+                    action: onCreateRhythm
+                )
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -209,7 +230,7 @@ struct TodayEmptyStateView: View {
         onCreateRhythm: {}
     )
     .padding(.horizontal, ORSpacing.screenHorizontal)
-    .background { LandscapeBackground() }
+    .background { ORAtmosphereBackground() }
 }
 
 #Preview("Welcome — Compact Height") {
@@ -219,7 +240,7 @@ struct TodayEmptyStateView: View {
         onCreateRhythm: {}
     )
     .padding(.horizontal, ORSpacing.screenHorizontal)
-    .background { LandscapeBackground() }
+    .background { ORAtmosphereBackground() }
 }
 
 #Preview("Normal Experience Empty") {
@@ -228,7 +249,7 @@ struct TodayEmptyStateView: View {
         onCreateRhythm: {}
     )
     .padding(.horizontal, ORSpacing.screenHorizontal)
-    .background { LandscapeBackground() }
+    .background { ORAtmosphereBackground() }
 }
 
 #Preview("Welcome — Large Dynamic Type") {
@@ -237,6 +258,6 @@ struct TodayEmptyStateView: View {
         onCreateRhythm: {}
     )
     .padding(.horizontal, ORSpacing.screenHorizontal)
-    .background { LandscapeBackground() }
+    .background { ORAtmosphereBackground() }
     .environment(\.sizeCategory, .accessibilityLarge)
 }

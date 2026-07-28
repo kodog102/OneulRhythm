@@ -33,6 +33,9 @@ struct AddRoutineView: View {
 
     private let mode: RoutineFormMode
     private let onSave: (RoutineCreationInput) throws -> Void
+    /// Called after a successful save instead of a single-level `dismiss` when provided
+    /// (e.g. My Rhythms → Editor should return to Today without flashing Management).
+    private let onSaveSuccess: (() -> Void)?
     private let notificationScheduler: NotificationScheduling
     private let nowProvider: () -> Date
     private let calendar: Calendar
@@ -63,6 +66,7 @@ struct AddRoutineView: View {
         reminderEnabled: Bool = false,
         reminderMinutes: Int = 10,
         onSave: @escaping (RoutineCreationInput) throws -> Void = { _ in },
+        onSaveSuccess: (() -> Void)? = nil,
         notificationScheduler: NotificationScheduling = NotificationService(),
         nowProvider: @escaping () -> Date = Date.init,
         calendar: Calendar = .current
@@ -84,29 +88,63 @@ struct AddRoutineView: View {
         _reminderEnabled = State(initialValue: reminderEnabled)
         _reminderMinutes = State(initialValue: reminderMinutes)
         self.onSave = onSave
+        self.onSaveSuccess = onSaveSuccess
         self.notificationScheduler = notificationScheduler
         self.nowProvider = nowProvider
         self.calendar = calendar
     }
 
+    /// Fixed bottom action chrome height (pads + button), excluding device safe area.
+    private static let bottomActionChromeHeight: CGFloat =
+        ORSpacing.md + ORSpacing.primaryButtonHeight + ORSpacing.md
+
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                captureSection
+        GeometryReader { geometry in
+            // Dedicated Save row height (pads + button + air). Must be excluded from
+            // ScrollView’s frame — safeAreaInset alone only adds contentInset and still
+            // lets form content paint under a transparent floating Save.
+            let saveRegionHeight = Self.bottomActionChromeHeight + ORSpacing.sm
+            let scrollHeight = max(0, geometry.size.height - saveRegionHeight)
 
-                configureSection
-                    .padding(.top, ORSpacing.xxl)
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        // Sprint 19-2D — Capture starts immediately; no decorative header / section label.
+                        captureCard
 
+                        scheduleCard
+                            .padding(.top, ORSpacing.lg) // 24pt
+
+                        categoryCard
+                            .padding(.top, ORSpacing.lg) // 24pt
+
+                        reminderCard
+                            .padding(.top, ORSpacing.lg) // 24pt
+                    }
+                    .padding(.horizontal, ORSpacing.screenHorizontal)
+                    .padding(.top, ORSpacing.md)
+                    .padding(.bottom, ORSpacing.md)
+                }
+                .scrollDismissesKeyboard(.interactively)
+                .frame(width: geometry.size.width, height: scrollHeight, alignment: .top)
+                .clipped()
+
+                // Fixed bottom action row (safe-area sibling). Landscape shows through;
+                // no material scrim. ScrollView cannot draw into this band.
                 saveButton
-                    .padding(.top, ORSpacing.xl)
+                    .padding(.horizontal, ORSpacing.screenHorizontal)
+                    .padding(.top, ORSpacing.md)
+                    .padding(.bottom, ORSpacing.md)
+                    .frame(width: geometry.size.width)
+                    .frame(height: saveRegionHeight, alignment: .center)
             }
-            .padding(.horizontal, ORSpacing.screenHorizontal)
-            .padding(.top, ORSpacing.lg)
-            .padding(.bottom, ORSpacing.scrollBottom)
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .top)
         }
-        .background(ORColors.background.ignoresSafeArea())
-        .navigationTitle(navigationTitle)
-        .navigationBarTitleDisplayMode(.inline)
+        .background {
+            ORAtmosphereBackground()
+        }
+        // Sprint 19-2G — project navigation standard (transparent bar, landscape behind).
+        .orNavigationStandard()
         .tint(ORColors.primary)
         .environment(\.locale, Locale(identifier: "ko_KR"))
         .alert("리듬을 저장하지 못했어요", isPresented: $isShowingSaveError) {
@@ -166,50 +204,33 @@ struct AddRoutineView: View {
         }
     }
 
-    // MARK: - Capture (DR-019 Primary)
+    // MARK: - Capture Card (DR-019 Primary)
 
     /// Name + start time — strongest emphasis; first reading order.
-    private var captureSection: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.md) {
-            Text("리듬 이름")
-                .orTypography(.caption, weight: .medium)
-                .foregroundStyle(ORColors.textSecondary)
-                .accessibilityAddTraits(.isHeader)
+    private var captureCard: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            TextField("예: 따뜻한 차 한잔 마시기", text: $title)
+                .orTypography(.title, weight: .semibold)
+                .foregroundStyle(ORTodayTypography.displayInk)
+                .submitLabel(.done)
+                .focused($isTitleFocused)
+                .accessibilityLabel("리듬 이름")
 
-            VStack(alignment: .leading, spacing: 0) {
-                TextField("예: 따뜻한 차 한잔 마시기", text: $title)
-                    .orTypography(.title, weight: .semibold)
-                    .foregroundStyle(ORColors.textPrimary)
-                    .submitLabel(.done)
-                    .focused($isTitleFocused)
-                    .accessibilityLabel("리듬 이름")
+            Divider()
+                .overlay(ORColors.divider)
+                .padding(.vertical, ORSpacing.md)
 
-                Divider()
-                    .overlay(ORColors.divider)
-                    .padding(.vertical, ORSpacing.md)
-
-                timePickerRow(title: "시작 시간", selection: $startTime)
-            }
-            .padding(ORSpacing.cardPadding)
-            .orCard()
+            timePickerRow(title: "시작 시간", selection: $startTime)
         }
+        .padding(ORSpacing.cardPadding)
+        .editorCaptureSurface()
         .accessibilityElement(children: .contain)
     }
 
-    // MARK: - Configure (DR-019 Advanced)
+    // MARK: - Schedule Card (end time + repeat)
 
-    /// End time, category, repeat, reminder — secondary hierarchy below Capture.
-    private var configureSection: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.lg) {
-            endTimeConfigureBlock
-            categoryConfigureBlock
-            recurrenceConfigureBlock
-            reminderConfigureBlock
-        }
-        .accessibilityElement(children: .contain)
-    }
-
-    private var endTimeConfigureBlock: some View {
+    /// End time and recurrence share one quieter Configure surface (Sprint 19-2B regroup).
+    private var scheduleCard: some View {
         VStack(alignment: .leading, spacing: ORSpacing.md) {
             Toggle("종료 시간", isOn: $hasEndTime)
                 .orTypography(.body)
@@ -222,12 +243,39 @@ struct AddRoutineView: View {
 
                 timePickerRow(title: "종료 시간", selection: $endTime)
             }
+
+            Divider()
+                .overlay(ORColors.divider)
+
+            Text("반복")
+                .orTypography(.caption, weight: .medium)
+                .foregroundStyle(ORColors.textTertiary)
+
+            LazyVGrid(
+                columns: [
+                    GridItem(.flexible(), spacing: ORSpacing.sm),
+                    GridItem(.flexible(), spacing: ORSpacing.sm)
+                ],
+                spacing: ORSpacing.sm
+            ) {
+                ForEach(recurrenceOptions) { option in
+                    selectionChip(
+                        title: option.title,
+                        isSelected: selectedRecurrence == option.rule
+                    ) {
+                        selectedRecurrence = option.rule
+                    }
+                }
+            }
         }
         .padding(ORSpacing.cardPadding)
         .configureSurface()
+        .accessibilityElement(children: .contain)
     }
 
-    private var categoryConfigureBlock: some View {
+    // MARK: - Category Card
+
+    private var categoryCard: some View {
         VStack(alignment: .leading, spacing: ORSpacing.md) {
             Text("카테고리")
                 .orTypography(.caption, weight: .medium)
@@ -253,36 +301,12 @@ struct AddRoutineView: View {
         }
         .padding(ORSpacing.cardPadding)
         .configureSurface()
+        .accessibilityElement(children: .contain)
     }
 
-    private var recurrenceConfigureBlock: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.md) {
-            Text("반복")
-                .orTypography(.caption, weight: .medium)
-                .foregroundStyle(ORColors.textTertiary)
+    // MARK: - Reminder Card
 
-            LazyVGrid(
-                columns: [
-                    GridItem(.flexible(), spacing: ORSpacing.sm),
-                    GridItem(.flexible(), spacing: ORSpacing.sm)
-                ],
-                spacing: ORSpacing.sm
-            ) {
-                ForEach(recurrenceOptions) { option in
-                    selectionChip(
-                        title: option.title,
-                        isSelected: selectedRecurrence == option.rule
-                    ) {
-                        selectedRecurrence = option.rule
-                    }
-                }
-            }
-        }
-        .padding(ORSpacing.cardPadding)
-        .configureSurface()
-    }
-
-    private var reminderConfigureBlock: some View {
+    private var reminderCard: some View {
         VStack(alignment: .leading, spacing: ORSpacing.md) {
             Toggle("시작 전에 알려주기", isOn: $reminderEnabled)
                 .orTypography(.body)
@@ -316,7 +340,10 @@ struct AddRoutineView: View {
         }
         .padding(ORSpacing.cardPadding)
         .configureSurface()
+        .accessibilityElement(children: .contain)
     }
+
+    // MARK: - Save (bottom safe-area inset)
 
     private var saveButton: some View {
         Button(action: handleSaveTapped) {
@@ -328,14 +355,15 @@ struct AddRoutineView: View {
                 } else {
                     Text(saveButtonTitle)
                         .orTypography(.body, weight: .semibold)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Color.white.opacity(isTitleEmpty ? 0.95 : 1))
                         .multilineTextAlignment(.center)
                 }
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, ORSpacing.md)
             .frame(minHeight: ORSpacing.primaryButtonHeight)
-            .background(ORColors.primary)
+            // Sprint 19-2C — disabled stays obvious/readable, never as strong as enabled.
+            .background(ORColors.primary.opacity(isTitleEmpty ? 0.68 : 1))
             .clipShape(
                 RoundedRectangle(
                     cornerRadius: ORRadius.button,
@@ -345,7 +373,6 @@ struct AddRoutineView: View {
         }
         .buttonStyle(.plain)
         .disabled(isSaveDisabled)
-        .opacity(isTitleEmpty ? 0.45 : 1)
         .accessibilityHint(saveAccessibilityHint)
     }
 
@@ -356,7 +383,7 @@ struct AddRoutineView: View {
         HStack(spacing: ORSpacing.md) {
             Text(title)
                 .orTypography(.body)
-                .foregroundStyle(ORColors.textPrimary)
+                .foregroundStyle(ORTodayTypography.displayInk)
 
             Spacer(minLength: ORSpacing.sm)
 
@@ -392,15 +419,6 @@ struct AddRoutineView: View {
         .buttonStyle(.plain)
         .accessibilityLabel(title)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
-    }
-
-    private var navigationTitle: String {
-        switch mode {
-        case .create:
-            return "리듬 추가"
-        case .edit:
-            return "리듬 편집"
-        }
     }
 
     private var saveButtonTitle: String {
@@ -544,7 +562,12 @@ struct AddRoutineView: View {
                         )
                     )
                 }
-                dismiss()
+                // Sprint 19-2H — optional root pop (Today) after save from My Rhythms.
+                if let onSaveSuccess {
+                    onSaveSuccess()
+                } else {
+                    dismiss()
+                }
             } catch {
                 isShowingSaveError = true
             }
@@ -661,13 +684,29 @@ struct AddRoutineView: View {
     }
 }
 
-// MARK: - Configure surface (quieter than Capture card)
+// MARK: - Editor surfaces (Sprint 19-2C visual polish — local to this form)
 
 private extension View {
-    /// Secondary Configure band — same field tokens, reduced optical competition with Capture.
+    /// Capture glass — translucent float aligned to Today card depth, without redesigning layout.
+    func editorCaptureSurface() -> some View {
+        background {
+            RoundedRectangle(cornerRadius: ORRadius.lg, style: .continuous)
+                .fill(Color.white.opacity(0.84))
+                .compositingGroup()
+                .shadow(color: ORTodaySurface.warmShadow.opacity(0.22), radius: 26, x: 0, y: 12)
+                .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
+        }
+    }
+
+    /// Secondary Configure band — quieter than Capture; soft elevation for Today consistency.
     func configureSurface() -> some View {
-        background(ORColors.card.opacity(0.72))
-            .clipShape(RoundedRectangle(cornerRadius: ORRadius.lg, style: .continuous))
+        background {
+            RoundedRectangle(cornerRadius: ORRadius.lg, style: .continuous)
+                .fill(ORColors.card.opacity(0.78))
+                .compositingGroup()
+                .shadow(color: ORTodaySurface.warmShadow.opacity(0.14), radius: 18, x: 0, y: 8)
+                .shadow(color: Color.black.opacity(0.04), radius: 3, x: 0, y: 1)
+        }
     }
 }
 

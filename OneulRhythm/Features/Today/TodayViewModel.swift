@@ -32,6 +32,10 @@ final class TodayViewModel: ObservableObject {
     private let nowProvider: () -> Date
     private let calendar: Calendar
 
+    /// When true, a one-shot task is kept armed for the next timeline transition.
+    private var isTimelineAutoRefreshEnabled = false
+    private var timelineRefreshTask: Task<Void, Never>?
+
     init(
         repository: RoutineRepository,
         scheduleEngine: RoutineScheduleEngine = RoutineScheduleEngine(),
@@ -194,6 +198,19 @@ final class TodayViewModel: ObservableObject {
         }
     }
 
+    /// Sprint 19-2I — arm timeline-driven refresh while Today is the visible surface.
+    func startTimelineAutoRefresh() {
+        isTimelineAutoRefreshEnabled = true
+        rescheduleTimelineRefresh()
+    }
+
+    /// Sprint 19-2I — cancel pending wake-ups when Today is covered or leaves the hierarchy.
+    func stopTimelineAutoRefresh() {
+        isTimelineAutoRefreshEnabled = false
+        timelineRefreshTask?.cancel()
+        timelineRefreshTask = nil
+    }
+
     func completeRoutine(_ routine: Routine) {
         guard completingRoutineID == nil else { return }
         guard !routine.isCompleted else { return }
@@ -231,5 +248,54 @@ final class TodayViewModel: ObservableObject {
 
         snapshot = TodayRhythmSnapshot(schedule: schedule, date: now)
         liveActivityCoordinator.sync(snapshot: snapshot)
+        rescheduleTimelineRefresh()
+    }
+
+    /// Quiet re-resolve at a timeline boundary — no loading chrome (avoids flicker).
+    private func performTimelineRefresh() {
+        guard isTimelineAutoRefreshEnabled else { return }
+        loadErrorMessage = nil
+        do {
+            try refreshRoutines()
+        } catch {
+            loadErrorMessage = "리듬을 불러오지 못했어요.\n잠시 후 다시 시도해주세요."
+            rescheduleTimelineRefresh()
+        }
+    }
+
+    private func rescheduleTimelineRefresh() {
+        timelineRefreshTask?.cancel()
+        timelineRefreshTask = nil
+        guard isTimelineAutoRefreshEnabled else { return }
+
+        let now = nowProvider()
+        guard let next = TodayTimelineRefresh.nextTransitionDate(
+            snapshot: snapshot,
+            now: now,
+            calendar: calendar
+        ) else {
+            return
+        }
+
+        let delay = next.timeIntervalSince(now)
+        let sleepNanoseconds: UInt64
+        if delay <= 0 {
+            // Boundary already due (skew / exact hit) — refresh on the next run loop turn.
+            sleepNanoseconds = 50_000_000
+        } else {
+            // Cap to avoid UInt64 overflow on distant dates; midnight is well within range.
+            let capped = min(delay, 60 * 60 * 24 * 2)
+            sleepNanoseconds = UInt64(capped * 1_000_000_000)
+        }
+
+        timelineRefreshTask = Task { @MainActor [weak self] in
+            do {
+                try await Task.sleep(nanoseconds: sleepNanoseconds)
+            } catch {
+                return
+            }
+            guard let self, !Task.isCancelled else { return }
+            self.performTimelineRefresh()
+        }
     }
 }

@@ -48,7 +48,12 @@ When one exists:
 ```text
 Docs/Visual/README.md     ← you are here (router)
     │
-    ├─ NorthStars/           ← versioned North Star images
+    ├─ NorthStars/           ← versioned North Star images (see NorthStars/README.md)
+    │     ├─ Today/
+    │     ├─ RhythmEditor/
+    │     ├─ MyRhythms/
+    │     ├─ Settings/
+    │     └─ LiveActivity/
     ├─ DesignExtractions/     ← Visual Analysis sheets (when present)
     └─ ReviewGuides/         ← Visual QA criteria (when present)
 ```
@@ -113,15 +118,17 @@ Link to Product / Design authorities instead of copying their content here.
 
 ---
 
-# Current official image
+# Current official images
 
 | Surface | Path | Version | Sprint | Status |
 |---------|------|---------|--------|--------|
-| Today | `NorthStars/Today-NorthStar-v1.jpg` | v1 | 18 | Active — Visual Source of Truth |
+| Today | `NorthStars/Today/Today-NorthStar-v1.jpg` | v1 | 18 | Active — Visual Source of Truth |
+| Rhythm Editor | `NorthStars/RhythmEditor/RhythmEditor-NorthStar-v1.png` | v1 | 19 | Active — Visual Source of Truth |
+| My Rhythms | `NorthStars/MyRhythms/MyRhythms-NorthStar-v1.png` | v1 | 19 | Active — Visual Source of Truth |
+| Settings | `NorthStars/Settings/Settings-NorthStar-v1.png` | v1 | 19 | Active — Visual Source of Truth |
+| Live Activity | `NorthStars/LiveActivity/LiveActivity-NorthStar-v1.png` | v1 | 19 | Active — Visual Source of Truth |
 
-This is the project's current official North Star for Today.
-
-Sprint 18 implemented the Today Experience against this North Star (Morning Landscape, card chrome, Progress Ratio, and Active / First Journey / Normal Empty / Day Complete alignment). Further visual / theme work is planned after Sprint 19.
+Today was implemented against its North Star in Sprint 18. Rhythm Editor, My Rhythms, Settings, and Live Activity North Stars are indexed for Sprint 19 Image-Driven work. Screen details: `NorthStars/README.md`.
 
 ---
 
@@ -129,7 +136,11 @@ Sprint 18 implemented the Today Experience against this North Star (Morning Land
 
 | Kind | Path | Sprint | Status |
 |------|------|--------|--------|
-| North Star | `NorthStars/Today-NorthStar-v1.jpg` | 18 | Active — Visual Source of Truth |
+| North Star | `NorthStars/Today/Today-NorthStar-v1.jpg` | 18 | Active — Visual Source of Truth |
+| North Star | `NorthStars/RhythmEditor/RhythmEditor-NorthStar-v1.png` | 19 | Active — Visual Source of Truth |
+| North Star | `NorthStars/MyRhythms/MyRhythms-NorthStar-v1.png` | 19 | Active — Visual Source of Truth |
+| North Star | `NorthStars/Settings/Settings-NorthStar-v1.png` | 19 | Active — Visual Source of Truth |
+| North Star | `NorthStars/LiveActivity/LiveActivity-NorthStar-v1.png` | 19 | Active — Visual Source of Truth |
 
 When a Sprint adds visual artifacts, list them here as Active and keep Product / Design owner documents authoritative for behavior.
 

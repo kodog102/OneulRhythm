@@ -195,6 +195,147 @@ final class TodaySceneVisualQATests: XCTestCase {
         )
     }
 
+    /// Sprint 19-1A — shared atmosphere background presentation (Today Active).
+    func testRenderSprint191AAtmosphereBackground() throws {
+        guard ProcessInfo.processInfo.environment["TODAY_NORTH_STAR_VISUAL_QA"] == "1" else {
+            throw XCTSkip("Set TODAY_NORTH_STAR_VISUAL_QA=1 in the test scheme to generate Today layout artifacts.")
+        }
+
+        try FileManager.default.createDirectory(
+            at: artifactsDirectory,
+            withIntermediateDirectories: true
+        )
+
+        try snapshot(
+            name: "19-1A-after-active-atmosphere",
+            view: activeTodayView(),
+            size: CGSize(width: 390, height: 844)
+        )
+    }
+
+    /// Sprint 19-1B — atmosphere calibration (localized light, preserved landscape).
+    func testRenderSprint191BAtmosphereCalibration() throws {
+        guard ProcessInfo.processInfo.environment["TODAY_NORTH_STAR_VISUAL_QA"] == "1" else {
+            throw XCTSkip("Set TODAY_NORTH_STAR_VISUAL_QA=1 in the test scheme to generate Today layout artifacts.")
+        }
+
+        try FileManager.default.createDirectory(
+            at: artifactsDirectory,
+            withIntermediateDirectories: true
+        )
+
+        try snapshot(
+            name: "19-1B-after-active-atmosphere",
+            view: activeTodayView(),
+            size: CGSize(width: 390, height: 844)
+        )
+    }
+
+    /// Sprint 19-1C — bottom-only fog gradient (upper landscape clear; content untouched).
+    func testRenderSprint191CBottomFogCorrection() throws {
+        guard ProcessInfo.processInfo.environment["TODAY_NORTH_STAR_VISUAL_QA"] == "1" else {
+            throw XCTSkip("Set TODAY_NORTH_STAR_VISUAL_QA=1 in the test scheme to generate Today layout artifacts.")
+        }
+
+        try FileManager.default.createDirectory(
+            at: artifactsDirectory,
+            withIntermediateDirectories: true
+        )
+
+        try snapshot(
+            name: "19-1C-after-active-atmosphere",
+            view: activeTodayView(),
+            size: CGSize(width: 390, height: 844)
+        )
+    }
+
+    /// Sprint 19-1D — bottom-anchored Active content (header top / stack from bottom).
+    func testRenderSprint191DBottomAnchoredLayout() throws {
+        guard ProcessInfo.processInfo.environment["TODAY_NORTH_STAR_VISUAL_QA"] == "1" else {
+            throw XCTSkip("Set TODAY_NORTH_STAR_VISUAL_QA=1 in the test scheme to generate Today layout artifacts.")
+        }
+
+        try FileManager.default.createDirectory(
+            at: artifactsDirectory,
+            withIntermediateDirectories: true
+        )
+
+        try snapshot(
+            name: "19-1D-after-active-small",
+            view: activeTodayView(),
+            size: CGSize(width: 320, height: 568)
+        )
+        try snapshot(
+            name: "19-1D-after-active-standard",
+            view: activeTodayView(),
+            size: CGSize(width: 390, height: 844)
+        )
+        try snapshot(
+            name: "19-1D-after-active-promax",
+            view: activeTodayView(),
+            size: CGSize(width: 430, height: 932)
+        )
+    }
+
+    /// Sprint 19-1E — bottom-anchored First Journey / Normal Empty / Day Complete.
+    func testRenderSprint191EStateLayoutAlignment() throws {
+        guard ProcessInfo.processInfo.environment["TODAY_NORTH_STAR_VISUAL_QA"] == "1" else {
+            throw XCTSkip("Set TODAY_NORTH_STAR_VISUAL_QA=1 in the test scheme to generate Today layout artifacts.")
+        }
+
+        try FileManager.default.createDirectory(
+            at: artifactsDirectory,
+            withIntermediateDirectories: true
+        )
+
+        let devices: [(suffix: String, size: CGSize)] = [
+            ("small", CGSize(width: 320, height: 568)),
+            ("standard", CGSize(width: 390, height: 844)),
+            ("promax", CGSize(width: 430, height: 932))
+        ]
+
+        for device in devices {
+            try snapshot(
+                name: "19-1E-after-first-journey-\(device.suffix)",
+                view: firstJourneyView(),
+                size: device.size
+            )
+            try snapshot(
+                name: "19-1E-after-normal-empty-\(device.suffix)",
+                view: normalEmptyView(),
+                size: device.size
+            )
+            try snapshot(
+                name: "19-1E-after-day-complete-\(device.suffix)",
+                view: dayCompleteView(),
+                size: device.size
+            )
+        }
+    }
+
+    /// Sprint 19-1F — SE-class clipping correction + Standard regression.
+    func testRenderSprint191FSmallHeightCorrection() throws {
+        guard ProcessInfo.processInfo.environment["TODAY_NORTH_STAR_VISUAL_QA"] == "1" else {
+            throw XCTSkip("Set TODAY_NORTH_STAR_VISUAL_QA=1 in the test scheme to generate Today layout artifacts.")
+        }
+
+        try FileManager.default.createDirectory(
+            at: artifactsDirectory,
+            withIntermediateDirectories: true
+        )
+
+        let small = CGSize(width: 320, height: 568)
+        let standard = CGSize(width: 390, height: 844)
+
+        try snapshot(name: "19-1F-after-first-journey-small", view: firstJourneyView(), size: small)
+        try snapshot(name: "19-1F-after-normal-empty-small", view: normalEmptyView(), size: small)
+        try snapshot(name: "19-1F-after-day-complete-small", view: dayCompleteView(), size: small)
+
+        try snapshot(name: "19-1F-after-first-journey-standard", view: firstJourneyView(), size: standard)
+        try snapshot(name: "19-1F-after-normal-empty-standard", view: normalEmptyView(), size: standard)
+        try snapshot(name: "19-1F-after-day-complete-standard", view: dayCompleteView(), size: standard)
+    }
+
     private func activeTodayView() -> some View {
         TodayView(
             repository: TodayScenePreviewRoutineRepository(
@@ -320,8 +461,13 @@ final class TodaySceneVisualQATests: XCTestCase {
             .frame(width: size.width, height: size.height)
 
         let host = UIHostingController(rootView: root)
+        // Decouple from the host simulator's safe-area chrome (e.g. Pro home indicator on an
+        // SE-sized UIWindow). Otherwise bottom inset content is laid out below the window bounds
+        // and SE-class artifacts clip CTA / card / padding.
+        host.safeAreaRegions = []
         host.view.bounds = CGRect(origin: .zero, size: size)
         host.view.backgroundColor = .clear
+        host.view.clipsToBounds = true
 
         let window = UIWindow(frame: CGRect(origin: .zero, size: size))
         window.rootViewController = host

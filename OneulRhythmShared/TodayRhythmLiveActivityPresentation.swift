@@ -168,7 +168,7 @@ enum TodayRhythmLiveActivityCopy {
             return state.nextTitle
         case .dayComplete:
             // Shared closure voice with Today (DR-017).
-            return "오늘의 리듬을 모두 이어냈어요."
+            return "오늘의 리듬을 모두 마쳤어요."
         case .none:
             return state.focusTitle ?? state.nextTitle
         }

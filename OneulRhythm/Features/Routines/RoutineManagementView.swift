@@ -15,6 +15,8 @@ struct RoutineManagementView: View {
     private let onSaveRoutine: (RoutineCreationInput) throws -> Void
     private let onUpdateRoutine: (RoutineCreationInput) throws -> Void
     private let onRoutinesChanged: () -> Void
+    /// Pops the entire Management stack (including Editor) back to Today after a successful save.
+    private let onReturnToTodayAfterSave: () -> Void
     private let nowProvider: () -> Date
     private let dayPolicy: CalendarDayPolicy
     private let calendar: Calendar
@@ -32,6 +34,7 @@ struct RoutineManagementView: View {
         onUpdateRoutine: @escaping (RoutineCreationInput) throws -> Void,
         onDeleteRoutine: @escaping (UUID) throws -> Void,
         onRoutinesChanged: @escaping () -> Void = {},
+        onReturnToTodayAfterSave: @escaping () -> Void = {},
         nowProvider: @escaping () -> Date = Date.init,
         dayPolicy: CalendarDayPolicy = CalendarDayPolicy()
     ) {
@@ -47,6 +50,7 @@ struct RoutineManagementView: View {
         self.onSaveRoutine = onSaveRoutine
         self.onUpdateRoutine = onUpdateRoutine
         self.onRoutinesChanged = onRoutinesChanged
+        self.onReturnToTodayAfterSave = onReturnToTodayAfterSave
         self.nowProvider = nowProvider
         self.dayPolicy = dayPolicy
         self.calendar = dayPolicy.calendar
@@ -90,6 +94,10 @@ struct RoutineManagementView: View {
                     try onSaveRoutine(input)
                     viewModel.loadItems()
                     onRoutinesChanged()
+                },
+                onSaveSuccess: {
+                    // Pop Management + Editor together so Today appears without a Management flash.
+                    onReturnToTodayAfterSave()
                 },
                 nowProvider: nowProvider
             )
@@ -199,6 +207,9 @@ struct RoutineManagementView: View {
                 try onUpdateRoutine(input)
                 viewModel.loadItems()
                 onRoutinesChanged()
+            },
+            onSaveSuccess: {
+                onReturnToTodayAfterSave()
             },
             nowProvider: nowProvider,
             calendar: calendar
