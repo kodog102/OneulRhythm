@@ -2,7 +2,7 @@
 //  LiveActivityVisualQATests.swift
 //  OneulRhythmTests
 //
-//  Renders Live Activity presentation views for Sprint 16-6 visual QA.
+//  Renders Live Activity presentation views for Sprint 21-1 visual QA.
 //
 
 import SwiftUI
@@ -16,7 +16,7 @@ final class LiveActivityVisualQATests: XCTestCase {
         URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
             .deletingLastPathComponent()
-            .appendingPathComponent(".qa-artifacts/sprint-16-6-live-activity/after", isDirectory: true)
+            .appendingPathComponent(".qa-artifacts/sprint-21-1-live-activity/after", isDirectory: true)
     }
 
     private let fixedNow: Date = {
@@ -30,18 +30,21 @@ final class LiveActivityVisualQATests: XCTestCase {
     /// Test-local fixture — not part of the production Attributes API.
     private func fixtureState(
         now: Date,
-        title: String = "따뜻한 차 한잔 마시기",
+        title: String = "아침 스트레칭",
         nextTitle: String? = "가벼운 산책",
-        minutesUntilFocusEnd: Double = 3
+        minutesUntilFocusEnd: Double = 7,
+        minutesSinceFocusStart: Double = 3
     ) -> TodayRhythmActivityAttributes.ContentState {
         TodayRhythmActivityAttributes.ContentState(
             phase: .active,
             focusRoutineID: "visual-qa-focus",
             focusTitle: title,
-            focusStart: now.addingTimeInterval(-10 * 60),
+            focusCategoryRawValue: "morning",
+            focusStart: now.addingTimeInterval(-minutesSinceFocusStart * 60),
             focusEnd: now.addingTimeInterval(minutesUntilFocusEnd * 60),
             nextRoutineID: nextTitle == nil ? nil : "visual-qa-next",
             nextTitle: nextTitle,
+            nextCategoryRawValue: nextTitle == nil ? nil : "movement",
             nextStart: nextTitle == nil ? nil : now.addingTimeInterval(30 * 60),
             updatedAt: now
         )
@@ -58,17 +61,32 @@ final class LiveActivityVisualQATests: XCTestCase {
         let state = fixtureState(now: fixedNow)
 
         try snapshot(
-            name: "01-lock-screen",
-            size: CGSize(width: 360, height: 160),
-            view: TodayRhythmLockScreenView(state: state, now: fixedNow)
-                .background(ORColors.background)
+            name: "01-expanded",
+            size: CGSize(width: 360, height: 100),
+            view: TodayRhythmExpandedCardView(state: state, now: fixedNow)
         )
 
         try snapshot(
-            name: "02-expanded-island",
+            name: "02-notification-compact",
+            size: CGSize(width: 360, height: 64),
+            view: TodayRhythmNotificationCompactView(state: state, now: fixedNow)
+        )
+
+        try snapshot(
+            name: "03-standby",
+            size: CGSize(width: 520, height: 120),
+            view: TodayRhythmStandByView(state: state, now: fixedNow)
+        )
+
+        try snapshot(
+            name: "04-expanded-island",
             size: CGSize(width: 280, height: 72),
             view: HStack(alignment: .center, spacing: ORSpacing.sm) {
-                BreathFlowMark(size: TodayRhythmLiveActivityIslandMetrics.expandedMark)
+                TodayRhythmIslandCategoryMark(
+                    state: state,
+                    now: fixedNow,
+                    size: TodayRhythmLiveActivityIslandMetrics.expandedMark
+                )
                 TodayRhythmIslandExpandedView(state: state, now: fixedNow)
             }
             .padding(ORSpacing.sm)
@@ -76,17 +94,15 @@ final class LiveActivityVisualQATests: XCTestCase {
         )
 
         try snapshot(
-            name: "03-compact",
+            name: "05-compact",
             size: CGSize(width: 200, height: 40),
             view: HStack(spacing: ORSpacing.xs) {
-                BreathFlowMark(size: TodayRhythmLiveActivityIslandMetrics.compactMark)
-                if let title = TodayRhythmLiveActivityCopy.primaryTitle(state: state, now: fixedNow) {
-                    Text(title)
-                        .font(.caption2)
-                        .foregroundStyle(.white)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                }
+                TodayRhythmIslandCategoryMark(
+                    state: state,
+                    now: fixedNow,
+                    size: TodayRhythmLiveActivityIslandMetrics.compactMark
+                )
+                TodayRhythmIslandCompactTrailingView(state: state, now: fixedNow)
             }
             .padding(.horizontal, ORSpacing.sm)
             .padding(.vertical, ORSpacing.xs)
@@ -94,11 +110,22 @@ final class LiveActivityVisualQATests: XCTestCase {
         )
 
         try snapshot(
-            name: "04-minimal",
+            name: "06-minimal",
             size: CGSize(width: 44, height: 44),
-            view: BreathFlowMark(size: TodayRhythmLiveActivityIslandMetrics.minimalMark)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Circle().fill(Color.black))
+            view: TodayRhythmIslandCategoryMark(
+                state: state,
+                now: fixedNow,
+                size: TodayRhythmLiveActivityIslandMetrics.minimalMark
+            )
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Circle().fill(Color.black))
+        )
+
+        try snapshot(
+            name: "07-lock-screen-host",
+            size: CGSize(width: 360, height: 100),
+            view: TodayRhythmLockScreenView(state: state, now: fixedNow)
+                .padding(.horizontal, 8)
         )
     }
 

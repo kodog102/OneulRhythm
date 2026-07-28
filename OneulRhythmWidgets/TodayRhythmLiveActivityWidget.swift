@@ -2,6 +2,9 @@
 //  TodayRhythmLiveActivityWidget.swift
 //  OneulRhythmWidgets
 //
+//  Live Activity ActivityKit configuration — Sprint 21-4 category identity.
+//  Visual Source of Truth: Docs/Visual/NorthStars/LiveActivity/LiveActivity-NorthStar-v1.png
+//
 
 import ActivityKit
 import SwiftUI
@@ -14,12 +17,22 @@ struct TodayRhythmLiveActivityWidget: Widget {
                 state: context.state,
                 now: Date()
             )
-            .activityBackgroundTint(ORColors.background)
-            .activitySystemActionForegroundColor(ORColors.primary)
+            .activityBackgroundTint(TodayRhythmLiveActivityPalette.expandedField.opacity(0.85))
+            .activitySystemActionForegroundColor(
+                LiveActivityStateAccent.resolve(
+                    state: context.state,
+                    now: Date()
+                ).color
+            )
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    BreathFlowMark(size: TodayRhythmLiveActivityIslandMetrics.expandedMark)
+                    TodayRhythmIslandCategoryMark(
+                        state: context.state,
+                        now: Date(),
+                        size: TodayRhythmLiveActivityIslandMetrics.expandedMark
+                    )
+                    .padding(.leading, 2)
                 }
                 DynamicIslandExpandedRegion(.center) {
                     TodayRhythmIslandExpandedView(
@@ -27,19 +40,26 @@ struct TodayRhythmLiveActivityWidget: Widget {
                         now: Date()
                     )
                 }
-            } compactLeading: {
-                BreathFlowMark(size: TodayRhythmLiveActivityIslandMetrics.compactMark)
-            } compactTrailing: {
-                if let title = TodayRhythmLiveActivityCopy.primaryTitle(state: context.state, now: Date()) {
-                    Text(title)
-                        // Platform compact slot — caption2 stays glanceable at Island scale.
-                        .font(.caption2)
-                        .foregroundStyle(.white)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
+                DynamicIslandExpandedRegion(.trailing) {
+                    EmptyView()
                 }
+            } compactLeading: {
+                TodayRhythmIslandCategoryMark(
+                    state: context.state,
+                    now: Date(),
+                    size: TodayRhythmLiveActivityIslandMetrics.compactMark
+                )
+            } compactTrailing: {
+                TodayRhythmIslandCompactTrailingView(
+                    state: context.state,
+                    now: Date()
+                )
             } minimal: {
-                BreathFlowMark(size: TodayRhythmLiveActivityIslandMetrics.minimalMark)
+                TodayRhythmIslandCategoryMark(
+                    state: context.state,
+                    now: Date(),
+                    size: TodayRhythmLiveActivityIslandMetrics.minimalMark
+                )
             }
         }
     }
@@ -53,9 +73,28 @@ struct TodayRhythmLiveActivityWidget_Previews: PreviewProvider {
                 state: .previewActive,
                 now: Date()
             )
+            .frame(height: 88)
             .padding()
-            .background(ORColors.background)
-            .previewDisplayName("Lock Screen")
+            .background(Color.black)
+            .previewDisplayName("Expanded")
+
+            TodayRhythmNotificationCompactView(
+                state: .previewActive,
+                now: Date()
+            )
+            .frame(height: 64)
+            .padding()
+            .background(Color.gray.opacity(0.2))
+            .previewDisplayName("Notification Compact")
+
+            TodayRhythmStandByView(
+                state: .previewActive,
+                now: Date()
+            )
+            .frame(width: 520, height: 120)
+            .padding()
+            .background(Color.black)
+            .previewDisplayName("StandBy")
 
             TodayRhythmIslandExpandedView(
                 state: .previewActive,

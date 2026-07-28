@@ -16,6 +16,11 @@
 import SwiftUI
 
 /// Full-bleed atmospheric field for major product surfaces.
+///
+/// Today is the visual source of truth. Primary screens (Today, My Rhythms,
+/// Rhythm Editor, Settings) must use this component with default parameters —
+/// do not locally customize opacity, overlays, or safe-area behavior.
+///
 /// Landscape stays visible above mid-screen; soft cream fog dissolves only the lower field.
 struct ORAtmosphereBackground: View {
     private enum Palette {

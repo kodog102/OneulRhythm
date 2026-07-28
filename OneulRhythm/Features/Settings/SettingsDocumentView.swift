@@ -19,8 +19,9 @@ struct SettingsDocumentView: View {
                 .padding(.horizontal, ORSpacing.screenHorizontal)
                 .padding(.vertical, ORSpacing.lg)
         }
-        .background(ORColors.background.ignoresSafeArea())
-        .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.inline)
+        .background {
+            ORAtmosphereBackground()
+        }
+        .orNavigationStandard(title: title)
     }
 }

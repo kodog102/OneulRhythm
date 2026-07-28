@@ -6,9 +6,15 @@
 import Foundation
 
 /// Mapped payload for starting or updating today's Live Activity.
-struct TodayRhythmActivityPayload {
+struct TodayRhythmActivityPayload: Equatable {
     let attributes: TodayRhythmActivityAttributes
     let contentState: TodayRhythmActivityAttributes.ContentState
+
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.attributes.dayID == rhs.attributes.dayID
+            && lhs.attributes.calendarDayStart == rhs.attributes.calendarDayStart
+            && lhs.contentState == rhs.contentState
+    }
 }
 
 /// Pure mapper from `TodayRhythmSnapshot` to Live Activity data.
@@ -46,10 +52,12 @@ enum TodayRhythmActivityMapper {
             phase: phase,
             focusRoutineID: focusRoutine.map { $0.id.uuidString },
             focusTitle: focusRoutine?.title,
+            focusCategoryRawValue: focusRoutine?.category.rawValue,
             focusStart: focusRoutine?.startTime,
             focusEnd: focusRoutine.map(RoutineTimingPolicy.activeEndTime(for:)),
             nextRoutineID: nextRoutine.map { $0.id.uuidString },
             nextTitle: nextRoutine?.title,
+            nextCategoryRawValue: nextRoutine?.category.rawValue,
             nextStart: nextRoutine?.startTime,
             updatedAt: updatedAt
         )

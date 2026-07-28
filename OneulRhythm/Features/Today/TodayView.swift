@@ -155,12 +155,15 @@ struct TodayView: View {
         .onChange(of: scenePhase) { _, phase in
             guard launchState.didCompleteInitialRhythmSync else { return }
             if phase == .active {
+                // Foreground catch-up: rebuild Snapshot + Live Activity sync
+                // for any boundaries missed while inactive/backgrounded.
                 onAppBecomeActive()
                 viewModel.loadRoutines()
                 if isTodaySurfaceVisible {
                     viewModel.startTimelineAutoRefresh()
                 }
             } else {
+                // No guaranteed ContentState push while inactive/backgrounded.
                 viewModel.stopTimelineAutoRefresh()
             }
         }

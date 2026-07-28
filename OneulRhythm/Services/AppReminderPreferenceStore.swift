@@ -7,8 +7,8 @@ import Foundation
 
 /// Persists the app-wide reminder preference (Settings → 알림 → 리마인더).
 ///
-/// Owns product preference only. Does not grant OS permission or schedule
-/// notifications. Notification pipeline consumption is deferred.
+/// Owns product preference only. Does not grant OS permission.
+/// Delivery gating is applied through `ReminderNotificationGate`.
 struct AppReminderPreferenceStore {
     static let storageKey = "oneulRhythm.settings.remindersEnabled"
 

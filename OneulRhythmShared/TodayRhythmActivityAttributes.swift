@@ -24,10 +24,14 @@ struct TodayRhythmActivityAttributes: ActivityAttributes {
         var phase: Phase
         var focusRoutineID: String?
         var focusTitle: String?
+        /// `RoutineCategory.rawValue` for the focused rhythm (presentation identity).
+        var focusCategoryRawValue: String?
         var focusStart: Date?
         var focusEnd: Date?
         var nextRoutineID: String?
         var nextTitle: String?
+        /// `RoutineCategory.rawValue` for the next rhythm (presentation identity).
+        var nextCategoryRawValue: String?
         var nextStart: Date?
         var updatedAt: Date
     }
@@ -57,10 +61,12 @@ extension TodayRhythmActivityAttributes.ContentState {
             phase: .active,
             focusRoutineID: UUID().uuidString,
             focusTitle: "따뜻한 차 한잔 마시기",
+            focusCategoryRawValue: "rest",
             focusStart: now.addingTimeInterval(-10 * 60),
             focusEnd: now.addingTimeInterval(20 * 60),
             nextRoutineID: UUID().uuidString,
             nextTitle: "가벼운 산책",
+            nextCategoryRawValue: "movement",
             nextStart: now.addingTimeInterval(30 * 60),
             updatedAt: now
         )

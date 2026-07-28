@@ -37,6 +37,8 @@ struct AddRoutineView: View {
     /// (e.g. My Rhythms → Editor should return to Today without flashing Management).
     private let onSaveSuccess: (() -> Void)?
     private let notificationScheduler: NotificationScheduling
+    private let reminderPreferences: AppReminderPreferenceStore
+    private let quietHoursPreferences: QuietHoursPreferenceStore
     private let nowProvider: () -> Date
     private let calendar: Calendar
 
@@ -68,6 +70,8 @@ struct AddRoutineView: View {
         onSave: @escaping (RoutineCreationInput) throws -> Void = { _ in },
         onSaveSuccess: (() -> Void)? = nil,
         notificationScheduler: NotificationScheduling = NotificationService(),
+        reminderPreferences: AppReminderPreferenceStore = AppReminderPreferenceStore(),
+        quietHoursPreferences: QuietHoursPreferenceStore = QuietHoursPreferenceStore(),
         nowProvider: @escaping () -> Date = Date.init,
         calendar: Calendar = .current
     ) {
@@ -90,6 +94,8 @@ struct AddRoutineView: View {
         self.onSave = onSave
         self.onSaveSuccess = onSaveSuccess
         self.notificationScheduler = notificationScheduler
+        self.reminderPreferences = reminderPreferences
+        self.quietHoursPreferences = quietHoursPreferences
         self.nowProvider = nowProvider
         self.calendar = calendar
     }
@@ -562,7 +568,9 @@ struct AddRoutineView: View {
                         )
                     )
                 }
-                // Sprint 19-2H — optional root pop (Today) after save from My Rhythms.
+                // Sprint 19-2H / 20-2 — optional post-save destination.
+                // When provided (e.g. create from My Rhythms → Today), run it.
+                // When nil (e.g. edit from My Rhythms), dismiss one level to the caller.
                 if let onSaveSuccess {
                     onSaveSuccess()
                 } else {
@@ -634,18 +642,26 @@ struct AddRoutineView: View {
 
     @MainActor
     private func scheduleReminderIfNeeded(for routine: Routine) async {
+        guard reminderPreferences.isEnabled else { return }
+
         let plan = NotificationMapper.makePlan(
             routines: [routine],
             now: nowProvider(),
             calendar: calendar
         )
+        let deliverable = ReminderNotificationGate.filter(
+            plan: plan,
+            remindersEnabled: true,
+            quietHours: quietHoursPreferences.configuration,
+            calendar: calendar
+        )
 
-        guard !plan.items.isEmpty else { return }
+        guard !deliverable.items.isEmpty else { return }
 
         let status = await notificationScheduler.authorizationStatus()
         guard status == .authorized else { return }
 
-        for item in plan.items {
+        for item in deliverable.items {
             do {
                 try await notificationScheduler.schedule(
                     identifier: item.identifier,

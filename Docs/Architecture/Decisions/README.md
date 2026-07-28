@@ -27,7 +27,7 @@ Decision Records are intended to be read in numerical order when learning the fo
 | DR-003 | Repository Layer | Accepted |
 | DR-004 | Schedule Engine | Accepted |
 | DR-005 | Today Snapshot | Accepted |
-| DR-006 | Live Activity Architecture | Accepted |
+| DR-006 | Live Activity Architecture | Accepted — amended Sprint 21 (Foreground Sync / visual states) |
 | DR-007 | Schedule Resolution | Accepted |
 | DR-008 | Single Focus Experience | Accepted |
 | DR-009 | Single Primary Rhythm | Accepted |

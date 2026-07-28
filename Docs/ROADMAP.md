@@ -25,7 +25,7 @@ Platform Expansion
 3. **Brand Assets & Experience** — Apply the completed Brand Foundation across icon, launch, README, widget consistency, and product surfaces.
 4. **Platform Expansion** — Extend the same meaning to Widget, Apple Watch, and other surfaces once foundation and assets are ready to reuse.
 
-Today's experience together with Live Activity already provides the primary quick-access experience. After Brand Foundation and Brand Assets, Sprint 15 completed the in-app Product Experience (Welcome through Settings). Sprint 16 completed Visual Identity Integration (Warm Light Appearance, shared Design System, Live Activity presentation). Sprint 17 completed Product Experience Polish on Today / Create. Sprint 18 completed the Today North Star Experience (Image-Driven Development, Morning Landscape, card chrome, Progress Ratio, and state alignment). Sprint 19 completed Today UX polish and navigation refinement (atmosphere, Rhythm Editor North Star, transparent navigation, floating Save, timeline auto refresh, presentation consistency, Day Complete copy). Platform Expansion (Widget, Watch) remains intentionally postponed. Next focus is Sprint 20.
+Today's experience together with Live Activity already provides the primary quick-access experience. After Brand Foundation and Brand Assets, Sprint 15 completed the in-app Product Experience (Welcome through Settings). Sprint 16 completed Visual Identity Integration (Warm Light Appearance, shared Design System, Live Activity presentation). Sprint 17 completed Product Experience Polish on Today / Create. Sprint 18 completed the Today North Star Experience (Image-Driven Development, Morning Landscape, card chrome, Progress Ratio, and state alignment). Sprint 19 completed Today UX polish and navigation refinement (atmosphere, Rhythm Editor North Star, transparent navigation, floating Save, timeline auto refresh, presentation consistency, Day Complete copy). Sprint 20 completed the My Rhythms North Star (shared Today visual language, transparent navigation, bottom CTA, working filters, type badges, edit-return context, final polish). Sprint 21 completed the Live Activity flagship experience (unified visual states, hybrid Near Completion, Foreground Sync policy, ActivityKit boundary documentation). Platform Expansion (Widget, Watch) remains intentionally postponed.
 
 ---
 
@@ -33,11 +33,11 @@ Today's experience together with Live Activity already provides the primary quic
 
 ## Current Phase
 
-Today UX Polish & Navigation Refinement (Sprint 19) ✅ Complete
+Live Activity Flagship Experience (Sprint 21) ✅ Complete
 
 ## Current Sprint
 
-Sprint 19 ✅ Complete
+Sprint 21 ✅ Complete
 
 ## Status
 
@@ -47,25 +47,23 @@ Sprint 19 ✅ Complete
 ✅ Sprint 17 Product Experience Polish complete (PE-01 ~ PE-12)  
 ✅ Sprint 18 Today North Star Experience complete (Image-Driven Development, Morning Landscape, card chrome, Progress Ratio, state alignment, Final QA, 18.8 polish)  
 ✅ Sprint 19 Today UX polish & navigation refinement complete (atmosphere, Rhythm Editor North Star, navigation standard, floating Save → Today, timeline auto refresh, role-based ring presentation, Day Complete copy)  
-➡️ Current Focus: Sprint 20  
-➡️ Later: My Rhythms / Live Activity Settings depth, further visual / theme work; Widget / Watch under Platform Expansion  
+✅ Sprint 20 My Rhythms North Star complete (20-1 UI, 20-2 UX review, 20-3 final polish — filters 전체/반복/원타임, type badges, edit-return context, CTA / a11y polish)  
+✅ Sprint 21 Live Activity Flagship Experience complete (unified visual states, scheduled / hybrid Near Completion, Foreground Sync, ActivityKit boundary documentation)  
+➡️ Later: further visual / theme work as approved; Widget / Watch under Platform Expansion  
 
 ## Current Goal
 
-Advance Sprint 20 on the shipped Today and Rhythm Editor foundation from Sprint 18–19.
-
-Do not invent new product direction outside the approved Sprint 20 scope.
+Keep the Sprint 18–21 Core Experience stable. Prefer Platform Expansion or newly approved visual work over reopening Today / Editor / My Rhythms / Live Activity contracts.
 
 ## Current Priority
 
-Sprint 19 is complete. Prefer Sprint 20 delivery over reopening Today / Rhythm Editor polish or Platform Expansion.
+Sprint 21 is complete. Prefer explicit Product Owner prioritization for next work over reopening Sprint 18–21 presentation or Live Activity sync policy.
 
 Immediate focus:
 
-- Sprint 20  
 - Keep Widget / Watch postponed until explicitly scheduled under Platform Expansion  
 - Do not reopen Brand Lock geometry  
-- Do not reopen Sprint 15 experience architecture (DR-017 ~ DR-020), Sprint 16 appearance policy (DR-021), Sprint 18 Today North Star presentation, or Sprint 19 navigation / timeline behavior without a new Decision Record / North Star revision  
+- Do not reopen Sprint 15 experience architecture (DR-017 ~ DR-020), Sprint 16 appearance policy (DR-021), Sprint 18–20 Today / Editor / My Rhythms contracts, or Sprint 21 Live Activity policy (DR-006) without a new Decision Record / North Star revision  
 
 Sprint 12 Brand Foundation is complete.  
 Sprint 13 Brand Assets & Experience is complete (Brand Lock v1.0 Approved).  
@@ -80,6 +78,10 @@ Sprint 17 Product Experience Polish is complete — Today launch first-frame, Cr
 Sprint 18 Today North Star Experience is complete — Image-Driven Development workflow, official Today North Star, Morning Landscape asset strategy, premium card chrome, Progress Ratio indicator, Active / First Journey / Normal Empty / Day Complete alignment, Final QA, and Sprint 18.8 polish (SE-class First Journey CTA fold; remaining-time ring ratio).
 
 Sprint 19 Today UX polish & navigation refinement is complete — shared atmosphere, Rhythm Editor North Star, project navigation standard / transparent navigation, floating Save returning to Today, timeline-driven auto refresh, role-based ring presentation, and Day Complete copy aligned across Today and Live Activity.
+
+Sprint 20 My Rhythms North Star is complete — shared Today visual language, transparent navigation, bottom create CTA, presentation filters (`전체` / `반복` / `원타임`), type badges, edit-return by presentation context, and final visual / accessibility polish.
+
+Sprint 21 Live Activity Flagship Experience is complete — Settings / Live Activity North Star presentation, unified visual states (scheduled → running → nearCompletion → completed), hybrid Near Completion, Foreground Sync (Option A), and ActivityKit platform-boundary documentation in DR-006.
 
 Former Sprint 10 Settings planning is **superseded** by Sprint 15-6 (DR-020). Settings ownership remains unique under Sprint 15 and is implemented.
 
@@ -108,7 +110,7 @@ Sprints 12–14 established Brand Foundation and Brand Assets.
 
 Sprint 15 completed Product Experience documentation and implementation (Welcome through Settings).
 
-The next delivery value comes from Sprint 20 on the shipped Today and Rhythm Editor foundation—not from immediately expanding Widget or Watch, and not from reopening Sprint 18–19 presentation without a new North Star.
+The next delivery value comes from explicit Product Owner prioritization after Sprint 21—typically Platform Expansion or newly approved visual work—not from immediately expanding Widget or Watch without approval, and not from reopening Sprint 18–21 presentation or Live Activity sync policy without a new North Star / Decision Record.
 
 Widget and Apple Watch remain intentional long-term surfaces under Platform Expansion. They are postponed—not cancelled—so that:
 
@@ -863,30 +865,65 @@ Sprint 19 builds on the Sprint 18 Today North Star. It strengthens atmosphere, e
 
 ---
 
-## Sprint 20
+## Sprint 20 — My Rhythms North Star
 
 ### Goal
 
-Continue product delivery on the Sprint 18–19 foundation.
+Bring My Rhythms to the approved North Star visual language and calm utility UX—without changing domain or repository behavior.
 
 ### Intent
 
-Sprint 20 advances remaining product surfaces and approved polish without reopening Today / Rhythm Editor navigation behavior or expanding to Widget / Watch unless newly scheduled.
+Sprint 20 builds on the Sprint 18–19 Today / Rhythm Editor foundation. It refines the existing Management surface into the My Rhythms North Star experience.
 
-### Scope Direction
+### Completed
 
-- Remaining supporting surfaces (e.g. My Rhythms depth, Live Activity Settings) as approved  
-- Further visual / theme work only with Product Owner prioritization  
+- **20-1** — My Rhythms North Star UI; shared Today visual language; transparent navigation; bottom CTA only  
+- **20-2** — Working presentation filters; type badges (`반복` / `원타임`); edit-return by presentation context; atmosphere refinement  
+- **20-3** — Final polish; filters `전체` / `반복` / `원타임`; filter animation; card / CTA / empty / Dynamic Type / VoiceOver polish  
 
-### Explicitly out of scope for Sprint 20 (unless newly approved)
+### Explicitly out of scope for Sprint 20
 
-- Reopening Sprint 18–19 Today / Rhythm Editor contracts without a new Decision Record / North Star revision  
+- Repository / domain / inactive-loading changes  
+- Search, sort, Settings on My Rhythms  
 - Home Screen Widget Experience  
 - Apple Watch  
 
 **Status**
 
-📅 Planned — Current Focus
+✅ Completed
+
+---
+
+## Sprint 21 — Live Activity Flagship Experience
+
+### Goal
+
+Ship Live Activity as a calm, state-consistent flagship companion to Today on the Sprint 18–20 foundation.
+
+### Intent
+
+Finalize Live Activity presentation, visual-state policy, and Foreground Sync without reopening Today / Rhythm Editor / My Rhythms contracts or expanding to Widget / Watch.
+
+### Completed
+
+- Settings / Live Activity North Star presentation (Lock Screen, Dynamic Island, notification, StandBy)  
+- Category identity + state accents  
+- Unified visual states: scheduled → running → nearCompletion → completed  
+- Hybrid Near Completion policy  
+- Foreground Sync (Option A) and ActivityKit platform-boundary clarification  
+- DR-006 / architecture documentation alignment  
+- Quiet Hours (reminder-only) on the Settings surface  
+
+### Explicitly out of scope (unchanged)
+
+- Home Screen Widget Experience  
+- Apple Watch  
+- BGTaskScheduler / Push-to-Live-Activity  
+- Schedule Engine / repository / domain redesign  
+
+**Status**
+
+✅ Complete
 
 ---
 
@@ -900,7 +937,7 @@ Bring today's rhythm to Apple Watch.
 
 Apple Watch remains a future surface under Platform Expansion. It should reuse the finalized Brand Foundation, Brand Assets, Visual Identity, Today North Star language, and existing architecture.
 
-Schedule Widget / Watch only after Sprint 20 prioritization and explicit Product Owner approval. Further visual / theme work may precede or accompany platform reuse as approved.
+Schedule Widget / Watch only after explicit Product Owner approval. Further visual / theme work may precede or accompany platform reuse as approved.
 
 ### Scope Direction
 

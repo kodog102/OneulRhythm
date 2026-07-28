@@ -147,10 +147,12 @@ enum LiveActivityPlatformQA {
             phase: .active,
             focusRoutineID: "platform-qa-focus",
             focusTitle: title,
+            focusCategoryRawValue: "morning",
             focusStart: now.addingTimeInterval(-10 * 60),
             focusEnd: focusEnd,
             nextRoutineID: "platform-qa-next",
             nextTitle: next,
+            nextCategoryRawValue: "movement",
             nextStart: now.addingTimeInterval(30 * 60),
             updatedAt: now
         )

@@ -8,6 +8,90 @@ For future plans, see `ROADMAP.md`.
 
 ---
 
+# Sprint 21 — Live Activity Flagship Experience
+
+**Date:** 2026-07-28
+
+## Completed
+
+### Live Activity presentation
+
+- Settings and Live Activity North Star–aligned presentation (Lock Screen, Dynamic Island, notification, StandBy)  
+- Category identity shared with My Rhythms; state accents separate from category color  
+- Quiet Hours (reminder-only suppression) and Settings atmosphere alignment  
+
+### Visual state model
+
+- Unified mutually exclusive visual states: **scheduled** → **running** → **nearCompletion** → **completed**  
+- Dedicated scheduled status (`시작 전`); inferred “일시정지” removed from production path  
+- Hybrid Near Completion (`min(5m, duration × 20%)` with minimum running window)  
+- Single visual-state resolver drives status, accent, Lock Screen dots, and Island state dot  
+
+### Sync & ActivityKit boundary
+
+- Foreground Sync policy (Option A): Snapshot rebuild → Mapper → Coordinator is authoritative  
+- Widget may derive presentation-only running / nearCompletion / completed from focus dates while suspended  
+- Widget must not invent next-rhythm handoff, overdue phase, or dayComplete  
+- Day Complete immediate Activity dismissal unchanged (DR-010)  
+- BGTaskScheduler / Push-to-Live-Activity intentionally not adopted  
+
+### Documentation
+
+- DR-006 amended for foreground sync, presentation bridge, and visual-state policy  
+- Architecture Live Activity flow aligned to production Snapshot → Mapper path  
+
+### Major Outcomes
+
+- Live Activity ships as a calm, state-consistent companion to Today  
+- Platform limitations documented; no background push/timer infrastructure  
+- No Schedule Engine, repository, or domain-rule redesign  
+
+## Notes
+
+Sprint 21 finalizes Live Activity as the flagship quick-access surface on the Sprint 18–20 foundation. Home Screen Widget and Apple Watch remain postponed under Platform Expansion.
+
+---
+
+# Sprint 20 — My Rhythms North Star
+
+**Date:** 2026-07-28
+
+## Completed
+
+### Sprint 20-1 — My Rhythms North Star UI
+
+- My Rhythms North Star presentation on the existing Management surface  
+- Shared visual language with Today (atmosphere, typography ink, CTA fill)  
+- Transparent navigation — landscape extends behind the bar  
+- Bottom CTA only (`리듬 만들기`); Search / Settings shortcuts not added  
+
+### Sprint 20-2 — UX review improvements
+
+- Presentation-layer filters with working list filtering  
+- Rhythm type badge clarified (`반복` / `원타임` — not state labels such as `활성`)  
+- Edit save returns by presentation context: My Rhythms → Edit → My Rhythms; create-from-My-Rhythms still returns to Today  
+- Softened My Rhythms atmosphere so cards remain primary  
+
+### Sprint 20-3 — Final visual polish
+
+- Filters simplified to `전체` / `반복` / `원타임` (removed impractical `비활성` tab; no inactive loading)  
+- Soft filter selection chrome and calm filter transition animation  
+- Card spacing / alignment refinement  
+- Bottom CTA polish (radius, shadow, press, safe-area)  
+- Empty-state balance; Dynamic Type (`@ScaledMetric`) and VoiceOver hint improvements  
+
+### Major Outcomes
+
+- My Rhythms ships as a North Star–aligned utility collection on the Sprint 18–19 foundation  
+- No repository, domain, schedule engine, or architecture changes  
+- Settings remain Today-only entry; My Rhythms stays rhythms-only  
+
+## Notes
+
+Sprint 20 is Product Experience / presentation polish for My Rhythms. Widget and Apple Watch remain postponed under Platform Expansion.
+
+---
+
 # Sprint 19 — Today UX Polish & Navigation Refinement
 
 **Date:** 2026-07-28

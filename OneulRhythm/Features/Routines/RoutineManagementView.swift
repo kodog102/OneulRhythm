@@ -11,21 +11,25 @@ struct RoutineManagementView: View {
     @State private var isAddingRoutine = false
     @State private var editingItemID: UUID?
     @State private var itemPendingDeletion: ManagementRhythmItem?
+    /// Filter tabs — presentation-layer filtering only (Sprint 20-2 / 20-3).
+    @State private var selectedFilterTab: MyRhythmsFilterTab = .all
+    @ScaledMetric(relativeTo: .body) private var categoryGlyphSize: CGFloat = 40
+    @ScaledMetric(relativeTo: .body) private var filterTabHeight: CGFloat = 36
+    @ScaledMetric(relativeTo: .title) private var heroTitleSize: CGFloat = 32
 
     private let onSaveRoutine: (RoutineCreationInput) throws -> Void
     private let onUpdateRoutine: (RoutineCreationInput) throws -> Void
     private let onRoutinesChanged: () -> Void
-    /// Pops the entire Management stack (including Editor) back to Today after a successful save.
+    /// Pops Management (and Editor) back to Today after a successful *create* from My Rhythms.
     private let onReturnToTodayAfterSave: () -> Void
     private let nowProvider: () -> Date
     private let dayPolicy: CalendarDayPolicy
     private let calendar: Calendar
 
-    private static let recurringSectionTitle = "반복되는 리듬"
-    private static let oneTimeSectionTitle = "예정된 리듬"
-
-    private static let minimumRowHeight: CGFloat = 72
+    private static let minimumRowHeight: CGFloat = 84
     private static let contentMotionDuration: TimeInterval = 0.25
+    private static let filterMotionDuration: TimeInterval = 0.22
+    private static let bottomCTAHeight: CGFloat = ORTodaySurface.ctaHeight
 
     init(
         repository: RoutineRepository,
@@ -59,32 +63,23 @@ struct RoutineManagementView: View {
     var body: some View {
         Group {
             if viewModel.isLoading && viewModel.isEmpty {
-                loadingState
+                managementScrollCanvas { loadingState }
             } else if let loadErrorMessage = viewModel.loadErrorMessage,
                       viewModel.isEmpty {
-                errorState(message: loadErrorMessage)
-            } else if viewModel.isEmpty {
-                emptyState
+                managementScrollCanvas { errorState(message: loadErrorMessage) }
             } else {
                 itemList
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(ORColors.background.ignoresSafeArea())
-        .navigationTitle("내 리듬")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    isAddingRoutine = true
-                } label: {
-                    Image(systemName: "plus")
-                        .foregroundStyle(ORColors.primary)
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("새 리듬 만들기")
+        .background {
+            // Today is the atmosphere source of truth — identical shared component / defaults.
+            ORAtmosphereBackground()
+        }
+        .orNavigationStandard()
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if showsBottomCreateCTA {
+                createRhythmCTA
             }
         }
         .navigationDestination(isPresented: $isAddingRoutine) {
@@ -96,7 +91,7 @@ struct RoutineManagementView: View {
                     onRoutinesChanged()
                 },
                 onSaveSuccess: {
-                    // Pop Management + Editor together so Today appears without a Management flash.
+                    // Create from My Rhythms still returns to Today (Sprint 19-2H).
                     onReturnToTodayAfterSave()
                 },
                 nowProvider: nowProvider
@@ -114,6 +109,7 @@ struct RoutineManagementView: View {
         }
         .animation(contentAnimation, value: viewModel.isEmpty)
         .animation(contentAnimation, value: viewModel.catalog.contentIdentity)
+        .animation(contentAnimation, value: selectedFilterTab)
         .alert(
             "리듬을 삭제할까요?",
             isPresented: deletionConfirmBinding
@@ -141,8 +137,34 @@ struct RoutineManagementView: View {
         }
     }
 
+    private var showsBottomCreateCTA: Bool {
+        if viewModel.isLoading && viewModel.isEmpty { return false }
+        if viewModel.loadErrorMessage != nil && viewModel.isEmpty { return false }
+        return true
+    }
+
+    private var allItems: [ManagementRhythmItem] {
+        viewModel.catalog.recurring + viewModel.catalog.oneTime
+    }
+
+    /// Presentation-only filter over the loaded catalog (no repository changes).
+    private var filteredItems: [ManagementRhythmItem] {
+        switch selectedFilterTab {
+        case .all:
+            return allItems
+        case .recurring:
+            return viewModel.catalog.recurring
+        case .oneTime:
+            return viewModel.catalog.oneTime
+        }
+    }
+
     private var contentAnimation: Animation? {
         reduceMotion ? nil : .easeInOut(duration: Self.contentMotionDuration)
+    }
+
+    private var filterAnimation: Animation? {
+        reduceMotion ? nil : .easeInOut(duration: Self.filterMotionDuration)
     }
 
     private var editingItem: ManagementRhythmItem? {
@@ -208,13 +230,138 @@ struct RoutineManagementView: View {
                 viewModel.loadItems()
                 onRoutinesChanged()
             },
-            onSaveSuccess: {
-                onReturnToTodayAfterSave()
-            },
+            // Edit from My Rhythms — omit onSaveSuccess so the editor dismisses
+            // back to My Rhythms (explicit presentation return; not Today).
             nowProvider: nowProvider,
             calendar: calendar
         )
     }
+
+    // MARK: - Chrome
+
+    private var createRhythmCTA: some View {
+        Button {
+            isAddingRoutine = true
+        } label: {
+            Text("리듬 만들기")
+                .font(ORTodayTypography.cta)
+                .tracking(ORTodayTypography.ctaTracking)
+                .foregroundStyle(Color.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: Self.bottomCTAHeight)
+                .background(
+                    RoundedRectangle(cornerRadius: ORRadius.button, style: .continuous)
+                        .fill(ORTodaySurface.ctaFill)
+                )
+                .compositingGroup()
+                .shadow(color: ORTodaySurface.ctaFill.opacity(0.32), radius: 16, x: 0, y: 8)
+                .shadow(color: ORTodaySurface.ctaFill.opacity(0.16), radius: 4, x: 0, y: 2)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(MyRhythmsCalmPressButtonStyle(reduceMotion: reduceMotion))
+        .padding(.horizontal, ORSpacing.screenHorizontal)
+        .padding(.top, ORSpacing.sm)
+        .padding(.bottom, ORSpacing.sm)
+        .accessibilityLabel("리듬 만들기")
+        .accessibilityHint("새 리듬을 만듭니다")
+    }
+
+    private func managementScrollCanvas<Content: View>(
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: ORSpacing.lg) {
+                heroHeader
+                filterTabs
+                content()
+            }
+            .padding(.horizontal, ORSpacing.screenHorizontal)
+            .padding(.top, ORSpacing.xs)
+            .padding(.bottom, ORSpacing.xl)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .scrollIndicators(.hidden)
+    }
+
+    private var heroHeader: some View {
+        VStack(alignment: .leading, spacing: ORSpacing.xs) {
+            Text("내 리듬")
+                .font(.system(size: heroTitleSize, weight: .bold, design: .default))
+                .foregroundStyle(ORTodayTypography.displayInk)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityAddTraits(.isHeader)
+
+            Text("나만의 리듬들을 관리해보세요.")
+                .font(ORTodayTypography.date)
+                .tracking(ORTodayTypography.dateTracking)
+                .foregroundStyle(ORTodayTypography.supportingInk)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
+    }
+
+    private var filterTabs: some View {
+        HStack(spacing: ORSpacing.xs) {
+            ForEach(MyRhythmsFilterTab.allCases) { tab in
+                filterTabButton(tab)
+            }
+            Spacer(minLength: 0)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("리듬 필터")
+    }
+
+    private func filterTabButton(_ tab: MyRhythmsFilterTab) -> some View {
+        let isSelected = selectedFilterTab == tab
+        return Button {
+            guard selectedFilterTab != tab else { return }
+            withAnimation(filterAnimation) {
+                selectedFilterTab = tab
+            }
+        } label: {
+            Text(tab.title)
+                .font(.system(size: 14, weight: isSelected ? .semibold : .medium))
+                .foregroundStyle(
+                    isSelected
+                        ? ORTodayTypography.displayInk
+                        : ORTodayTypography.quietInk
+                )
+                .padding(.horizontal, ORSpacing.md)
+                .frame(height: filterTabHeight)
+                .background {
+                    Capsule(style: .continuous)
+                        .fill(
+                            isSelected
+                                ? Color.white.opacity(0.88)
+                                : Color.white.opacity(0.42)
+                        )
+                        .overlay(
+                            Capsule(style: .continuous)
+                                .strokeBorder(
+                                    isSelected
+                                        ? ORTodaySurface.ctaFill.opacity(0.35)
+                                        : Color.black.opacity(0.04),
+                                    lineWidth: 1
+                                )
+                        )
+                        .shadow(
+                            color: isSelected
+                                ? ORTodaySurface.warmShadow.opacity(0.10)
+                                : .clear,
+                            radius: isSelected ? 8 : 0,
+                            x: 0,
+                            y: isSelected ? 3 : 0
+                        )
+                }
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
+        .accessibilityLabel(tab.title)
+        .accessibilityHint(isSelected ? "선택됨" : "이 필터로 목록을 봅니다")
+    }
+
+    // MARK: - States
 
     private var loadingState: some View {
         HStack(spacing: ORSpacing.md) {
@@ -224,119 +371,158 @@ struct RoutineManagementView: View {
                 .orTypography(.body)
                 .foregroundStyle(ORColors.textSecondary)
         }
-        .padding(.horizontal, ORSpacing.screenHorizontal)
-        .padding(.top, ORSpacing.xl)
+        .padding(.top, ORSpacing.md)
     }
 
     private func errorState(message: String) -> some View {
         Text(message)
             .orTypography(.body)
             .foregroundStyle(ORColors.textSecondary)
-            .padding(.horizontal, ORSpacing.screenHorizontal)
-            .padding(.top, ORSpacing.xl)
+            .padding(.top, ORSpacing.md)
     }
 
-    private var emptyState: some View {
-        VStack(alignment: .leading, spacing: ORSpacing.xs) {
-            Text("아직 만든 리듬이 없어요.")
-                .orTypography(.title)
-                .foregroundStyle(ORColors.textPrimary)
+    private var filterEmptyState: some View {
+        let copy = emptyCopy(for: selectedFilterTab, catalogIsEmpty: viewModel.isEmpty)
+        return VStack(spacing: ORSpacing.sm) {
+            Spacer(minLength: ORSpacing.xxl)
+
+            Image(systemName: "leaf.fill")
+                .font(.system(size: 26, weight: .regular))
+                .foregroundStyle(ORTodaySurface.ctaFill.opacity(0.75))
+                .padding(.bottom, ORSpacing.xxs)
+                .accessibilityHidden(true)
+
+            Text(copy.title)
+                .font(ORTodayTypography.secondaryValue)
+                .tracking(ORTodayTypography.secondaryValueTracking)
+                .foregroundStyle(ORTodayTypography.displayInk)
+                .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityAddTraits(.isHeader)
 
-            Text("첫 리듬을 만들어보세요.")
-                .orTypography(.body)
-                .foregroundStyle(ORColors.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.top, ORSpacing.xxs)
+            if let subtitle = copy.subtitle {
+                Text(subtitle)
+                    .font(ORTodayTypography.meta)
+                    .tracking(ORTodayTypography.metaTracking)
+                    .foregroundStyle(ORTodayTypography.supportingInk)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.top, ORSpacing.xxs)
+            }
+
+            Spacer(minLength: ORSpacing.xxxl)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, ORSpacing.screenHorizontal)
-        .padding(.top, ORSpacing.xl)
+        .frame(maxWidth: .infinity, minHeight: 280)
         .accessibilityElement(children: .combine)
     }
 
-    private var itemList: some View {
-        List {
-            if !viewModel.catalog.recurring.isEmpty {
-                managementSection(
-                    title: Self.recurringSectionTitle,
-                    items: viewModel.catalog.recurring
-                )
-            }
-
-            if !viewModel.catalog.oneTime.isEmpty {
-                managementSection(
-                    title: Self.oneTimeSectionTitle,
-                    items: viewModel.catalog.oneTime
-                )
-            }
+    private func emptyCopy(
+        for tab: MyRhythmsFilterTab,
+        catalogIsEmpty: Bool
+    ) -> (title: String, subtitle: String?) {
+        switch tab {
+        case .all:
+            return (
+                "아직 만든 리듬이 없어요.",
+                catalogIsEmpty ? "리듬을 만들면 여기에 표시됩니다." : nil
+            )
+        case .recurring:
+            return ("반복 리듬이 없어요.", nil)
+        case .oneTime:
+            return ("원타임 리듬이 없어요.", nil)
         }
-        .listStyle(.plain)
-        .scrollContentBackground(.hidden)
-        .listSectionSpacing(ORSpacing.sectionGap)
-        .contentMargins(.top, ORSpacing.xxs, for: .scrollContent)
-        .environment(\.defaultMinListRowHeight, Self.minimumRowHeight)
     }
 
-    private func managementSection(
-        title: String,
-        items: [ManagementRhythmItem]
-    ) -> some View {
-        Section {
-            ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
-                managementRow(item)
+    // MARK: - List
+
+    private var itemList: some View {
+        List {
+            Section {
+                heroHeader
+                    .listRowInsets(
+                        EdgeInsets(
+                            top: ORSpacing.xs,
+                            leading: ORSpacing.screenHorizontal,
+                            bottom: ORSpacing.sm,
+                            trailing: ORSpacing.screenHorizontal
+                        )
+                    )
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+
+                filterTabs
                     .listRowInsets(
                         EdgeInsets(
                             top: 0,
                             leading: ORSpacing.screenHorizontal,
-                            bottom: 0,
+                            bottom: ORSpacing.sm,
                             trailing: ORSpacing.screenHorizontal
                         )
                     )
-                    .listRowBackground(
-                        ManagementSectionRowBackground(
-                            isFirst: index == 0,
-                            isLast: index == items.count - 1
-                        )
-                    )
-                    .listRowSeparator(
-                        index == items.count - 1 ? .hidden : .visible,
-                        edges: .bottom
-                    )
-                    .listRowSeparatorTint(ORColors.divider)
-                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button(role: .destructive) {
-                            itemPendingDeletion = item
-                        } label: {
-                            Text("삭제")
-                        }
-                    }
-                    .contextMenu {
-                        Button(role: .destructive) {
-                            itemPendingDeletion = item
-                        } label: {
-                            Label("삭제", systemImage: "trash")
-                        }
-                    }
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
             }
-        } header: {
-            ORSectionLabel(text: title)
-                .textCase(nil)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, ORSpacing.screenHorizontal)
-                .padding(.bottom, ORSpacing.xxs)
-                .accessibilityAddTraits(.isHeader)
+
+            Section {
+                if filteredItems.isEmpty {
+                    filterEmptyState
+                        .listRowInsets(
+                            EdgeInsets(
+                                top: ORSpacing.sm,
+                                leading: ORSpacing.screenHorizontal,
+                                bottom: ORSpacing.sm,
+                                trailing: ORSpacing.screenHorizontal
+                            )
+                        )
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                } else {
+                    ForEach(Array(filteredItems.enumerated()), id: \.element.id) { index, item in
+                        managementRow(item)
+                            .listRowInsets(
+                                EdgeInsets(
+                                    top: 6,
+                                    leading: ORSpacing.screenHorizontal,
+                                    bottom: 6,
+                                    trailing: ORSpacing.screenHorizontal
+                                )
+                            )
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button(role: .destructive) {
+                                    itemPendingDeletion = item
+                                } label: {
+                                    Text("삭제")
+                                }
+                            }
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    itemPendingDeletion = item
+                                } label: {
+                                    Label("삭제", systemImage: "trash")
+                                }
+                            }
+                            .accessibilitySortPriority(Double(filteredItems.count - index))
+                            .transition(.opacity)
+                    }
+                }
+            }
         }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .listSectionSpacing(0)
+        .scrollIndicators(.hidden)
+        .environment(\.defaultMinListRowHeight, Self.minimumRowHeight)
     }
 
     private func managementRow(_ item: ManagementRhythmItem) -> some View {
         let now = nowProvider()
-        let scheduleSummary = item.formattedScheduleSummary(
-            referenceDay: now,
-            now: now,
-            dayPolicy: dayPolicy
-        )
+        let scheduleLine = scheduleLine(for: item, now: now)
+        let timeText = startTimeText(for: item)
+        let reminderText = reminderLine(for: item)
+        let typeBadge = typePresentation(for: item)
         let accessibilityFragments = item.accessibilityScheduleFragments(
             referenceDay: now,
             now: now,
@@ -347,37 +533,139 @@ struct RoutineManagementView: View {
             editingItemID = item.id
         } label: {
             HStack(alignment: .center, spacing: ORSpacing.sm) {
-                VStack(alignment: .leading, spacing: ORSpacing.xxs) {
+                categoryGlyph(for: item.category)
+
+                VStack(alignment: .leading, spacing: 6) {
                     Text(item.title)
-                        .orTypography(.body, weight: .medium)
-                        .foregroundStyle(ORColors.textPrimary)
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(ORTodayTypography.displayInk)
                         .multilineTextAlignment(.leading)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.9)
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                    Text(scheduleSummary)
-                        .orTypography(.caption)
-                        .foregroundStyle(ORColors.textSecondary)
+                    Text(scheduleLine)
+                        .font(ORTodayTypography.meta)
+                        .tracking(ORTodayTypography.metaTracking)
+                        .foregroundStyle(ORTodayTypography.supportingInk)
                         .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
+                        .lineLimit(1)
                         .frame(maxWidth: .infinity, alignment: .leading)
+
+                    if let reminderText {
+                        HStack(spacing: ORSpacing.xxs) {
+                            Image(systemName: "bell.fill")
+                                .font(.system(size: 10, weight: .medium))
+                            Text(reminderText)
+                                .font(ORTodayTypography.meta)
+                        }
+                        .foregroundStyle(ORTodayTypography.quietInk)
+                    }
                 }
 
+                VStack(alignment: .trailing, spacing: 6) {
+                    Text(timeText)
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .foregroundStyle(ORTodayTypography.supportingInk)
+                        .monospacedDigit()
+
+                    HStack(spacing: ORSpacing.xxs) {
+                        Circle()
+                            .fill(typeBadge.dot)
+                            .frame(width: 6, height: 6)
+                        Text(typeBadge.title)
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(ORTodayTypography.supportingInk)
+                    }
+                }
+                .frame(minWidth: 52, alignment: .trailing)
+
                 Image(systemName: "chevron.right")
-                    .font(ORTypography.font(for: .caption, weight: .semibold))
-                    .foregroundStyle(ORColors.textTertiary)
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(ORTodayTypography.quietInk)
+                    .frame(width: 12, alignment: .center)
                     .accessibilityHidden(true)
             }
-            .padding(.vertical, ORSpacing.sm)
+            .padding(.vertical, 14)
             .padding(.horizontal, ORSpacing.md)
             .frame(maxWidth: .infinity, minHeight: Self.minimumRowHeight, alignment: .leading)
+            .background {
+                rhythmCardChrome
+            }
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilityLabel(title: item.title, fragments: accessibilityFragments))
+        .accessibilityLabel(
+            accessibilityLabel(
+                title: item.title,
+                fragments: accessibilityFragments + [typeBadge.title]
+            )
+        )
         .accessibilityAddTraits(.isButton)
         .accessibilityHint("편집하려면 탭하세요")
+    }
+
+    private var rhythmCardChrome: some View {
+        RoundedRectangle(cornerRadius: ORRadius.md, style: .continuous)
+            .fill(Color.white.opacity(0.92))
+            .overlay(
+                RoundedRectangle(cornerRadius: ORRadius.md, style: .continuous)
+                    .strokeBorder(Color.black.opacity(0.04), lineWidth: 1)
+            )
+            .shadow(color: ORTodaySurface.warmShadow.opacity(0.10), radius: 10, x: 0, y: 4)
+    }
+
+    private func categoryGlyph(for category: RoutineCategory) -> some View {
+        let style = ORRhythmCategoryStyle.style(forRawValue: category.rawValue)
+        return Image(systemName: style.symbolName)
+            .font(.system(size: 15, weight: .semibold))
+            .foregroundStyle(style.foreground)
+            .frame(width: categoryGlyphSize, height: categoryGlyphSize)
+            .background(
+                Circle()
+                    .fill(style.background)
+            )
+            .accessibilityHidden(true)
+    }
+
+    private func scheduleLine(for item: ManagementRhythmItem, now: Date) -> String {
+        switch item {
+        case .recurring(let rhythm):
+            return MyRhythmsScheduleCopy.recurring(rhythm.recurrence)
+        case .oneTime(let routine):
+            return MyRhythmsScheduleCopy.oneTimeDate(
+                startTime: routine.startTime,
+                now: now,
+                dayPolicy: dayPolicy
+            )
+        }
+    }
+
+    private func startTimeText(for item: ManagementRhythmItem) -> String {
+        let start = item.displayStartTime(referenceDay: nowProvider(), calendar: calendar)
+        return start.formatted(MyRhythmsScheduleCopy.compactTimeFormat)
+    }
+
+    private func reminderLine(for item: ManagementRhythmItem) -> String? {
+        guard let minutes = item.reminderMinutes else { return nil }
+        return "\(minutes)분 전"
+    }
+
+    /// Rhythm *type* only — never state labels such as "활성".
+    private func typePresentation(
+        for item: ManagementRhythmItem
+    ) -> (title: String, dot: Color) {
+        switch item {
+        case .recurring:
+            return ("반복", ORTodaySurface.ctaFill)
+        case .oneTime:
+            return (
+                "원타임",
+                Color(red: 0.86, green: 0.58, blue: 0.38)
+            )
+        }
     }
 
     private func accessibilityLabel(title: String, fragments: [String]) -> String {
@@ -385,33 +673,76 @@ struct RoutineManagementView: View {
     }
 }
 
-// MARK: - Section Surface
+// MARK: - Filter Tabs
 
-/// Card-token section surface for List rows without a parallel card style.
-///
-/// Uses `ORColors.card`, `ORRadius.lg`, and a single section-level shadow on
-/// the first row only so multi-row groups stay connected.
-private struct ManagementSectionRowBackground: View {
-    let isFirst: Bool
-    let isLast: Bool
+private enum MyRhythmsFilterTab: String, CaseIterable, Identifiable {
+    case all
+    case recurring
+    case oneTime
 
-    var body: some View {
-        let shape = UnevenRoundedRectangle(
-            topLeadingRadius: isFirst ? ORRadius.lg : 0,
-            bottomLeadingRadius: isLast ? ORRadius.lg : 0,
-            bottomTrailingRadius: isLast ? ORRadius.lg : 0,
-            topTrailingRadius: isFirst ? ORRadius.lg : 0,
-            style: .continuous
-        )
+    var id: String { rawValue }
 
-        return shape
-            .fill(ORColors.card)
-            .shadow(
-                color: isFirst ? ORColors.cardShadow : .clear,
-                radius: isFirst ? 10 : 0,
-                x: 0,
-                y: isFirst ? 4 : 0
+    var title: String {
+        switch self {
+        case .all: return "전체"
+        case .recurring: return "반복"
+        case .oneTime: return "원타임"
+        }
+    }
+}
+
+// MARK: - Calm Press
+
+private struct MyRhythmsCalmPressButtonStyle: ButtonStyle {
+    let reduceMotion: Bool
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.985 : 1)
+            .opacity(configuration.isPressed ? 0.92 : 1)
+            .animation(
+                reduceMotion ? nil : .easeOut(duration: 0.16),
+                value: configuration.isPressed
             )
+    }
+}
+
+// MARK: - Presentation Helpers
+
+private enum MyRhythmsScheduleCopy {
+    static let compactTimeFormat = Date.FormatStyle()
+        .hour(.twoDigits(amPM: .omitted))
+        .minute(.twoDigits)
+        .locale(Locale(identifier: "ko_KR"))
+
+    static func recurring(_ rule: RecurrenceRule) -> String {
+        switch rule {
+        case .daily:
+            return "매일"
+        case .weekdays:
+            return "매주 평일"
+        case .weekends:
+            return "매주 주말"
+        }
+    }
+
+    static func oneTimeDate(
+        startTime: Date,
+        now: Date,
+        dayPolicy: CalendarDayPolicy
+    ) -> String {
+        let today = dayPolicy.day(for: now)
+        let routineDay = dayPolicy.day(for: startTime)
+        if routineDay == today {
+            return "오늘"
+        }
+
+        var format = Date.FormatStyle()
+            .month(.abbreviated)
+            .day()
+            .locale(Locale(identifier: "ko_KR"))
+        format.calendar = dayPolicy.calendar
+        return startTime.formatted(format)
     }
 }
 

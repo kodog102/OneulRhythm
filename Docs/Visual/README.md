@@ -124,11 +124,11 @@ Link to Product / Design authorities instead of copying their content here.
 |---------|------|---------|--------|--------|
 | Today | `NorthStars/Today/Today-NorthStar-v1.jpg` | v1 | 18 | Active — Visual Source of Truth |
 | Rhythm Editor | `NorthStars/RhythmEditor/RhythmEditor-NorthStar-v1.png` | v1 | 19 | Active — Visual Source of Truth |
-| My Rhythms | `NorthStars/MyRhythms/MyRhythms-NorthStar-v1.png` | v1 | 19 | Active — Visual Source of Truth |
+| My Rhythms | `NorthStars/MyRhythms/MyRhythms-NorthStar-v1.png` | v1 | 20 | Active — Visual Source of Truth (implemented) |
 | Settings | `NorthStars/Settings/Settings-NorthStar-v1.png` | v1 | 19 | Active — Visual Source of Truth |
 | Live Activity | `NorthStars/LiveActivity/LiveActivity-NorthStar-v1.png` | v1 | 19 | Active — Visual Source of Truth |
 
-Today was implemented against its North Star in Sprint 18. Rhythm Editor, My Rhythms, Settings, and Live Activity North Stars are indexed for Sprint 19 Image-Driven work. Screen details: `NorthStars/README.md`.
+Today was implemented against its North Star in Sprint 18. Rhythm Editor shipped under Sprint 19. My Rhythms shipped against its North Star in Sprint 20. Settings and Live Activity North Stars were applied under Sprint 21. Screen details: `NorthStars/README.md`.
 
 ---
 
@@ -138,7 +138,7 @@ Today was implemented against its North Star in Sprint 18. Rhythm Editor, My Rhy
 |------|------|--------|--------|
 | North Star | `NorthStars/Today/Today-NorthStar-v1.jpg` | 18 | Active — Visual Source of Truth |
 | North Star | `NorthStars/RhythmEditor/RhythmEditor-NorthStar-v1.png` | 19 | Active — Visual Source of Truth |
-| North Star | `NorthStars/MyRhythms/MyRhythms-NorthStar-v1.png` | 19 | Active — Visual Source of Truth |
+| North Star | `NorthStars/MyRhythms/MyRhythms-NorthStar-v1.png` | 20 | Active — Visual Source of Truth (implemented) |
 | North Star | `NorthStars/Settings/Settings-NorthStar-v1.png` | 19 | Active — Visual Source of Truth |
 | North Star | `NorthStars/LiveActivity/LiveActivity-NorthStar-v1.png` | 19 | Active — Visual Source of Truth |
 

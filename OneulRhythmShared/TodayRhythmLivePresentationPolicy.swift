@@ -59,6 +59,8 @@ struct TodayRhythmLivePresentationDecision: Equatable {
 /// Owns product behavior thresholds. UI owns appearance and copy.
 enum TodayRhythmLivePresentationPolicy {
     /// Show next preview during an active focus when this much time (or less) remains.
+    /// Layout / secondary-preview only — not the visual near-completion state
+    /// (see `LiveActivityNearCompletionPolicy`).
     static let activeNextPreviewThreshold: TimeInterval = 5 * 60
 
     /// Treat the next rhythm as near when it starts within this interval.

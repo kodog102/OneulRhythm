@@ -99,7 +99,7 @@ Visual surfaces in the product fall into four levels. Higher levels carry more e
 |--|--|
 | **Purpose** | Clear operational reading — manage, configure preferences, trust copy. |
 | **Visual weight** | Plain; mark-free; still Warm Light. |
-| **Expression today** | My Rhythms sectioned list with connected cream-family row chrome; Settings inset-grouped list on cream page background; system light chrome under Warm Light lock. |
+| **Expression today** | My Rhythms name-first floating cards on softened atmosphere; Settings inset-grouped list on cream page background; system light chrome under Warm Light lock. |
 | **Where used** | My Rhythms, Settings, Settings document pages, destructive confirmations (system roles). |
 | **Where not used** | Product introduction; Today hero; Launch meaning. |
 

@@ -40,6 +40,6 @@ Hub index: `Docs/Visual/README.md`.
 |---------|------|--------|
 | Today | `Today/` | Active — Visual Source of Truth |
 | Rhythm Editor | `RhythmEditor/` | Active — Visual Source of Truth |
-| My Rhythms | `MyRhythms/` | Active — Visual Source of Truth |
-| Settings | `Settings/` | Active — Visual Source of Truth |
-| Live Activity | `LiveActivity/` | Active — Visual Source of Truth |
+| My Rhythms | `MyRhythms/` | Active — Visual Source of Truth (Sprint 20 implemented) |
+| Settings | `Settings/` | Active — Visual Source of Truth (Sprint 21 applied) |
+| Live Activity | `LiveActivity/` | Active — Visual Source of Truth (Sprint 21 applied) |

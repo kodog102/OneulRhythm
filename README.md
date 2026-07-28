@@ -241,20 +241,22 @@ Core Experience → Brand Foundation → Brand Assets → Product Experience →
 - Visual Identity Integration (Sprint 16) ✅ Complete
 - Product Experience Polish (Sprint 17) ✅ Complete
 - Today North Star Experience (Sprint 18) ✅ Complete
+- Today UX polish & navigation refinement (Sprint 19) ✅ Complete
+- My Rhythms North Star (Sprint 20) ✅ Complete
 
 ### Current Status
 
-- Sprint 18 ✅ Complete
+- Sprint 20 ✅ Complete
 
 ### Current Focus
 
-- Sprint 19 — Rhythm Editor, My Rhythms, Live Activity Settings
+- Sprint 21
 
 ### Next Sprint
 
-Sprint 19
+Sprint 21
 
-Further visual / theme work follows Sprint 19. Widget Experience와 Apple Watch는 장기 로드맵(Platform Expansion)에 남아 있으며, 명시적으로 스케줄되기 전까지 postponed입니다.
+Further visual / theme work and remaining utility surfaces (e.g. Live Activity Settings) follow Product Owner prioritization. Widget Experience와 Apple Watch는 장기 로드맵(Platform Expansion)에 남아 있으며, 명시적으로 스케줄되기 전까지 postponed입니다.
 
 ### Later
 

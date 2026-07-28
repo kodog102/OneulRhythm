@@ -7,7 +7,22 @@ It translates the approved My Rhythms Architecture (`Docs/Product/My-Rhythms-Arc
 It does not redefine product philosophy, Brand Integration, or Create / Edit form internals.
 
 **Status:** Implementation-ready UI contract.  
-**Architecture authority:** `My-Rhythms-Architecture.md` / DR-018.
+**Architecture authority:** `My-Rhythms-Architecture.md` / DR-018.  
+**Shipping note (Sprint 20):** My Rhythms North Star is implemented. Where older rows below conflict with the Sprint 20 shipping alignment section, Sprint 20 shipping wins. DR-018 role/ownership is unchanged.
+
+---
+
+# Sprint 20 shipping alignment
+
+Presentation updates shipped in Sprint 20 (no repository / domain changes):
+
+- Transparent navigation; shared Today atmosphere (softened for card focus)  
+- Hero title `내 리듬` + subtitle; create via bottom CTA `리듬 만들기` only (no trailing `+`, no Search / Settings)  
+- Presentation filters: `전체` / `반복` / `원타임`  
+- Type badge: `반복` or `원타임` (not state labels such as `활성`)  
+- Edit save returns to My Rhythms; create-from-My-Rhythms still returns to Today  
+- Empty (전체 / catalog empty): title `아직 만든 리듬이 없어요.` · supporting `리듬을 만들면 여기에 표시됩니다.`  
+- Filter-empty copy: `반복 리듬이 없어요.` / `원타임 리듬이 없어요.`
 
 ---
 
@@ -209,18 +224,19 @@ Quiet ownership gap — not Welcome, not CRUD tutorial.
 ```text
 아직 만든 리듬이 없어요.
 
-첫 리듬을 만들어보세요.
+리듬을 만들면 여기에 표시됩니다.
 ```
 
 | Element | Copy | Role |
 |---------|------|------|
 | Title | `아직 만든 리듬이 없어요.` | Ownership acknowledgment |
-| Supporting | `첫 리듬을 만들어보세요.` | Quiet invitation |
-| In-content CTA | **None** | Create remains the trailing plus |
+| Supporting | `리듬을 만들면 여기에 표시됩니다.` | Quiet invitation |
+| Create | Bottom CTA `리듬 만들기` | Primary create affordance (Sprint 20) |
 
 ## Replaces (non-canonical)
 
 ```text
+첫 리듬을 만들어보세요.
 + 버튼으로 첫 리듬을 만들어보세요.
 ```
 
@@ -229,8 +245,8 @@ Quiet ownership gap — not Welcome, not CRUD tutorial.
 | Must | Must not |
 |------|----------|
 | Feel calm and owned | Repeat Welcome philosophy |
-| Invite creation softly | Name toolbar controls (`+ 버튼`) |
-| Keep trailing plus available | Show Breath Flow / Hero Meaning |
+| Invite creation softly | Name toolbar create as the only path |
+| Keep bottom create CTA available | Show Breath Flow / Hero Meaning |
 | Stay shorter than Welcome | Use dashboard / “nothing here” failure tone |
 | Combine for VoiceOver | Add secondary tips, dots, or setup steps |
 
@@ -350,11 +366,11 @@ Motion confirms quiet change only.
 ## Visible My Rhythms UI (this contract)
 
 1. Today entry: caption-weight `내 리듬` (secondary)  
-2. Screen: title `내 리듬` + trailing create + sectioned name-first list  
-3. Empty: ownership acknowledgment + soft invitation; no control tutorial; no in-content CTA  
+2. Screen: hero `내 리듬` + filters (`전체` / `반복` / `원타임`) + name-first cards + bottom create CTA  
+3. Empty: ownership acknowledgment + soft invitation; filter-specific empties when applicable  
 4. Delete: confirm → quiet update; failure titled as delete failure  
-5. Motion: calm; Reduce Motion respected  
-6. Accessibility: ownership-aligned labels; rows as edit buttons  
+5. Motion: calm filter / content transitions; Reduce Motion respected  
+6. Accessibility: ownership-aligned labels; rows as edit buttons; Dynamic Type–friendly chrome  
 
 ## Success condition
 

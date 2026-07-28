@@ -5,10 +5,21 @@
 
 import ActivityKit
 import Foundation
+import os
 
 /// Owns the one-day Live Activity lifecycle via ActivityKit.
 ///
 /// Flow: `TodayRhythmSnapshot` → mapper → reconciliation.
+///
+/// **Foreground sync is authoritative** (Sprint 21-11 / Option A):
+/// ContentState pushes happen when Today rebuilds a Snapshot (launch, scene
+/// active, Today visible, timeline boundary while Today is active, mutations).
+/// There is no BGTaskScheduler, push-to-Live-Activity, or background polling.
+///
+/// While suspended/locked/backgrounded, ContentState updates are not guaranteed.
+/// The widget may derive presentation-only running → nearCompletion → completed
+/// from existing focus dates; it must not invent next-rhythm handoff, overdue
+/// phase, or dayComplete. Next-rhythm handoff waits for the next foreground sync.
 ///
 /// All ActivityKit-mutating calls (request/update/end) are serialized through
 /// `pendingActivityTask` so repeated `sync()` calls can never race or apply out
@@ -21,6 +32,11 @@ import Foundation
 /// never re-acts on an activity ActivityKit already considers `.ended`.
 @MainActor
 final class LiveActivityCoordinator: LiveActivityCoordinating {
+    private static let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier ?? "OneulRhythm",
+        category: "LiveActivity"
+    )
+
     private let calendar: Calendar
     private let nowProvider: () -> Date
     private var pendingActivityTask: Task<Void, Never>?
@@ -96,69 +112,58 @@ final class LiveActivityCoordinator: LiveActivityCoordinating {
     ///
     /// `nil` means the snapshot was empty: end everything active/stale, start nothing.
     private func reconcile(desiredPayload: TodayRhythmActivityPayload?) async {
-        guard let desiredPayload else {
-            await endEligibleActivities { _ in true }
-            return
-        }
-
-        let dayID = desiredPayload.attributes.dayID
         let allActivities = Activity<TodayRhythmActivityAttributes>.activities
-
-        // Previous-day cleanup: never let a different day's activity linger
-        // once today has something to show.
-        await endEligibleActivities(in: allActivities) { $0.attributes.dayID != dayID }
-
-        // Only activities that can still receive updates are candidates.
-        // Already-`.ended`/`.dismissed` activities are never re-acted upon.
-        let sameDayEligible = allActivities.filter {
-            $0.attributes.dayID == dayID && isEligibleForUpdate($0)
+        let sessions = allActivities.map { activity in
+            LiveActivitySessionDescriptor(
+                id: activity.id,
+                dayID: activity.attributes.dayID,
+                phase: activity.content.state.phase,
+                updatedAt: activity.content.state.updatedAt,
+                isEligible: isEligibleForUpdate(activity)
+            )
         }
 
-        if desiredPayload.contentState.phase == .dayComplete {
-            // Day complete ends the day's Live Activity immediately. There is
-            // no lingering state: the peaceful completion experience lives in
-            // TodayView, not on the Lock Screen. Never request a replacement.
-            let content = ActivityContent(state: desiredPayload.contentState, staleDate: nil)
-            for activity in sameDayEligible {
+        let commands = LiveActivityReconcilePlanner.plan(
+            desiredPayload: desiredPayload,
+            sessions: sessions
+        )
+
+        for command in commands {
+            await execute(command, activities: allActivities)
+        }
+    }
+
+    private func execute(
+        _ command: LiveActivityReconcileCommand,
+        activities: [Activity<TodayRhythmActivityAttributes>]
+    ) async {
+        switch command {
+        case .endAllEligible:
+            await endEligibleActivities(in: activities) { _ in true }
+
+        case let .endOtherDays(keepingDayID):
+            await endEligibleActivities(in: activities) { $0.attributes.dayID != keepingDayID }
+
+        case let .endDayComplete(activityIDs, content):
+            let content = ActivityContent(state: content, staleDate: nil)
+            for activity in activities where activityIDs.contains(activity.id) {
+                guard isEligibleForUpdate(activity) else { continue }
                 await activity.end(content, dismissalPolicy: .immediate)
             }
-            return
-        }
 
-        let canonical = selectCanonical(from: sameDayEligible)
-
-        // Same-day duplicate cleanup: only ever expected transiently, but
-        // reconciliation must never rely on array order to decide the winner.
-        for activity in sameDayEligible where activity.id != canonical?.id {
-            await activity.end(nil, dismissalPolicy: .immediate)
-        }
-
-        if let canonical {
-            await update(canonical, with: desiredPayload)
-        } else {
-            requestActivity(payload: desiredPayload)
-        }
-    }
-
-    private func update(
-        _ activity: Activity<TodayRhythmActivityAttributes>,
-        with payload: TodayRhythmActivityPayload
-    ) async {
-        await activity.update(ActivityContent(state: payload.contentState, staleDate: nil))
-    }
-
-    /// Latest `content.state.updatedAt` wins; ties break on the
-    /// lexicographically smallest `id` so selection never depends on array order.
-    private func selectCanonical(
-        from activities: [Activity<TodayRhythmActivityAttributes>]
-    ) -> Activity<TodayRhythmActivityAttributes>? {
-        activities.min { lhs, rhs in
-            let lhsUpdatedAt = lhs.content.state.updatedAt
-            let rhsUpdatedAt = rhs.content.state.updatedAt
-            if lhsUpdatedAt != rhsUpdatedAt {
-                return lhsUpdatedAt > rhsUpdatedAt
+        case let .endDuplicates(activityIDs):
+            for activity in activities where activityIDs.contains(activity.id) {
+                guard isEligibleForUpdate(activity) else { continue }
+                await activity.end(nil, dismissalPolicy: .immediate)
             }
-            return lhs.id < rhs.id
+
+        case let .update(activityID, content):
+            guard let activity = activities.first(where: { $0.id == activityID }),
+                  isEligibleForUpdate(activity) else { return }
+            await activity.update(ActivityContent(state: content, staleDate: nil))
+
+        case let .request(payload):
+            requestActivity(payload: payload)
         }
     }
 
@@ -190,6 +195,7 @@ final class LiveActivityCoordinator: LiveActivityCoordinating {
 
     private func requestActivity(payload: TodayRhythmActivityPayload) {
         do {
+            // Local Live Activity only — no Push-to-Live-Activity (`pushType: nil`).
             _ = try Activity.request(
                 attributes: payload.attributes,
                 content: ActivityContent(
@@ -199,7 +205,12 @@ final class LiveActivityCoordinator: LiveActivityCoordinating {
                 pushType: nil
             )
         } catch {
-            // Live Activity is best-effort; Today screen stays authoritative.
+            // Best-effort: Today remains authoritative. No user-facing error UI.
+            #if DEBUG
+            Self.logger.error(
+                "Activity.request failed: \(String(describing: error), privacy: .public)"
+            )
+            #endif
         }
     }
 }

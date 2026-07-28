@@ -151,41 +151,35 @@ The Mapping Layer is not responsible for:
 
 Each presentation surface has its own mapper.
 
-Mappers do not depend on the output of other mappers.
-
-```text
-                         ┌──────────────────────┐
-                         │ Today Snapshot Mapper│
-                         └──────────┬───────────┘
-                                    ▼
-Resolved Schedule ─────────► Today Snapshot
-
-                         ┌──────────────────────┐
-                         │ Live Activity Mapper │
-                         └──────────┬───────────┘
-                                    ▼
-Resolved Schedule ─────────► Activity Content
-
-                         ┌──────────────────────┐
-                         │ Notification Mapper  │
-                         └──────────┬───────────┘
-                                    ▼
-Domain Routine ────────────► Notification Plan
-```
-
-The following chained mapping structure is forbidden:
+Today and Live Activity both consume the same Schedule Engine result. In production, Live Activity ContentState is mapped from `TodayRhythmSnapshot` so both surfaces share one day-presentation source of truth (DR-006). Notification mapping remains domain/plan based and does not consume Snapshot.
 
 ```text
 Resolved Schedule
         │
         ▼
-Today Snapshot
+TodayRhythmSnapshot
         │
-        ▼
-Live Activity Content
+        ├──────────────────────────────┐
+        ▼                              ▼
+Today View / ViewModel        Live Activity Mapper
+                                       │
+                                       ▼
+                              Activity ContentState
+                                       │
+                                       ▼
+                              LiveActivityCoordinator
+
+Domain Routine ────────────► Notification Plan
 ```
 
-A presentation surface must not depend on another presentation surface's model.
+Mappers must not depend on another surface’s **UI** models (views, ViewModels, or ActivityKit types in the business layer). Sharing Snapshot facts between Today and Live Activity is intentional and required for consistency.
+
+The following structure remains forbidden — resolving schedule independently inside Live Activity or reading persistence from the widget:
+
+```text
+Live Activity → Schedule Engine
+Live Activity → Repository / SwiftData
+```
 
 ---
 
@@ -280,19 +274,25 @@ Schedule Engine
     ▼
 ResolvedSchedule
     │
+    ▼
+TodayRhythmSnapshot
+    │
     ├───────────────────────────┐
     │                           │
     ▼                           ▼
-Today Snapshot Mapper     Live Activity Mapper
-    │                           │
-    ▼                           ▼
-Today Snapshot            Activity Content
-    │                           │
-    ▼                           ▼
-Today View                Live Activity
+Today View / ViewModel    Live Activity Mapper
+                                │
+                                ▼
+                          Activity ContentState
+                                │
+                                ▼
+                          LiveActivityCoordinator
+                                │
+                                ▼
+                          Live Activity (ActivityKit)
 ```
 
-Persisted data flows upward through business interpretation and surface-specific mapping.
+Persisted data flows upward through business interpretation and Snapshot-backed surface mapping.
 
 Presentation layers never reconstruct the schedule independently.
 
@@ -426,23 +426,42 @@ This preserves the separation between business interpretation and presentation i
 
 Live Activity is an additional presentation surface, not an independent scheduling system.
 
+Production flow (Sprint 21 / DR-006):
+
 ```text
-ResolvedSchedule
+Repository
         │
         ▼
-Live Activity Mapper
+Schedule Engine
         │
         ▼
-Activity Content
+TodayRhythmSnapshot          ← single source of truth for day presentation facts
         │
         ▼
-Activity Coordinator
+Live Activity Mapper         ← ContentState only
+        │
+        ▼
+LiveActivityCoordinator      ← ActivityKit request / update / end
         │
         ▼
 ActivityKit
 ```
 
-The Live Activity Mapper transforms business state into ActivityKit-compatible presentation data.
+### Foreground vs background
+
+```text
+Foreground
+  Snapshot rebuild → Mapper → Coordinator.sync
+  (authoritative ContentState)
+
+Background / locked / suspended
+  Presentation-only visual bridge from existing focus dates
+  (running / nearCompletion / completed)
+  No guaranteed Activity.update
+  Next-rhythm handoff waits for foreground catch-up
+```
+
+The Live Activity Mapper transforms Snapshot facts into ActivityKit-compatible ContentState.
 
 The Activity Coordinator owns framework lifecycle operations such as:
 
@@ -454,6 +473,10 @@ The Activity Coordinator owns framework lifecycle operations such as:
 The Mapper does not perform lifecycle operations.
 
 The Coordinator does not resolve schedules.
+
+Day Complete still ends the Live Activity immediately; the peaceful completion experience continues in Today.
+
+Visual presentation states (scheduled → running → nearCompletion → completed) are owned by the Live Activity presentation layer and must not invent Snapshot phase or primary-rhythm handoff.
 
 ---
 
@@ -566,7 +589,7 @@ In particular:
 
 - SwiftData entities must not reach views.
 - `ResolvedSchedule` must not contain UI labels or visual styling.
-- Today Snapshot must not be reused as Live Activity input.
+- Live Activity ContentState is mapped from `TodayRhythmSnapshot` (shared day facts); ActivityKit types still must not enter the Business Layer.
 - ActivityKit models must not enter the Business Layer.
 
 ---
@@ -623,8 +646,8 @@ The following rules must remain true as the project evolves:
 4. Presentation models are produced through surface-specific mappers.
 5. Views do not derive business state.
 6. Mappers do not access persistence or control framework lifecycles.
-7. Presentation surfaces do not depend on one another.
-8. Live Activity uses the same resolved business state as the application.
+7. Presentation surfaces do not depend on one another’s UI models; Today and Live Activity may share Snapshot day facts (DR-006).
+8. Live Activity uses the same Snapshot-backed day facts as Today; Foreground Sync is authoritative for ContentState.
 9. Derived state is regenerated from the source of truth after mutations.
 10. New abstractions are introduced only when they preserve or simplify these boundaries.
 

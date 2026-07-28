@@ -246,12 +246,16 @@ final class TodayViewModel: ObservableObject {
             calendar: calendar
         )
 
+        // Foreground-sync ownership: every Snapshot rebuild pushes Live Activity
+        // ContentState. No background timer or push path exists (DR-006 / Sprint 21-11).
         snapshot = TodayRhythmSnapshot(schedule: schedule, date: now)
         liveActivityCoordinator.sync(snapshot: snapshot)
         rescheduleTimelineRefresh()
     }
 
     /// Quiet re-resolve at a timeline boundary — no loading chrome (avoids flicker).
+    /// Armed only while Today is visible and the scene is active; cancelled when
+    /// backgrounded/covered — ContentState updates are not guaranteed then.
     private func performTimelineRefresh() {
         guard isTimelineAutoRefreshEnabled else { return }
         loadErrorMessage = nil
