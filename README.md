@@ -182,18 +182,25 @@ Core Experience → Brand Foundation → Brand Assets → Product Experience →
 - Today UX polish & navigation refinement (Sprint 19)
 - My Rhythms North Star (Sprint 20)
 - Live Activity Flagship Experience (Sprint 21)
+- GitHub Showcase Refresh (Sprint 23)
 
 ### Current Status
 
-Sprint 21 ✅ Complete
+Project milestone achieved. Active feature development is paused.
 
-### Next
-
-Further visual / theme work follows Product Owner prioritization.
 Widget Experience와 Apple Watch는 장기 로드맵(Platform Expansion)에 남아 있으며,
 명시적으로 스케줄되기 전까지 postponed입니다.
 
 상세 내용은 [`Docs/ROADMAP.md`](Docs/ROADMAP.md)를 참고하세요.
+
+---
+
+## Project Status
+
+This repository is a completed AI-assisted personal project and portfolio.
+
+Active feature development is currently paused.
+Future improvements remain possible when product or business motivation returns.
 
 ---
 

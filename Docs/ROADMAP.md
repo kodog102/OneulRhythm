@@ -31,13 +31,24 @@ Today's experience together with Live Activity already provides the primary quic
 
 # Current Status
 
-## Current Phase
+## Project Milestone
 
-Live Activity Flagship Experience (Sprint 21) ✅ Complete
+OneulRhythm has reached its intended milestone as an AI-assisted personal project and portfolio.
 
-## Current Sprint
+Core Experience through Live Activity (Sprints 18–21) is complete.  
+Sprint 23 GitHub Showcase Refresh is complete.
 
-Sprint 21 ✅ Complete
+## Development Freeze
+
+Active feature development is paused.
+
+The repository remains a stable record of the shipped product, architecture, and collaboration workflow.
+
+Future development may resume when product or business motivation exists. Until then:
+
+- Do not reopen Brand Lock geometry  
+- Do not reopen Sprint 15–21 experience, appearance, or Live Activity contracts without a new Decision Record / North Star revision  
+- Widget / Watch remain postponed under Platform Expansion  
 
 ## Status
 
@@ -49,21 +60,8 @@ Sprint 21 ✅ Complete
 ✅ Sprint 19 Today UX polish & navigation refinement complete (atmosphere, Rhythm Editor North Star, navigation standard, floating Save → Today, timeline auto refresh, role-based ring presentation, Day Complete copy)  
 ✅ Sprint 20 My Rhythms North Star complete (20-1 UI, 20-2 UX review, 20-3 final polish — filters 전체/반복/원타임, type badges, edit-return context, CTA / a11y polish)  
 ✅ Sprint 21 Live Activity Flagship Experience complete (unified visual states, scheduled / hybrid Near Completion, Foreground Sync, ActivityKit boundary documentation)  
-➡️ Later: further visual / theme work as approved; Widget / Watch under Platform Expansion  
-
-## Current Goal
-
-Keep the Sprint 18–21 Core Experience stable. Prefer Platform Expansion or newly approved visual work over reopening Today / Editor / My Rhythms / Live Activity contracts.
-
-## Current Priority
-
-Sprint 21 is complete. Prefer explicit Product Owner prioritization for next work over reopening Sprint 18–21 presentation or Live Activity sync policy.
-
-Immediate focus:
-
-- Keep Widget / Watch postponed until explicitly scheduled under Platform Expansion  
-- Do not reopen Brand Lock geometry  
-- Do not reopen Sprint 15 experience architecture (DR-017 ~ DR-020), Sprint 16 appearance policy (DR-021), Sprint 18–20 Today / Editor / My Rhythms contracts, or Sprint 21 Live Activity policy (DR-006) without a new Decision Record / North Star revision  
+✅ Sprint 23 GitHub Showcase Refresh complete (presentation screenshots, README showcase, documentation alignment)  
+❄️ Active feature development paused — future work may resume when motivation exists  
 
 Sprint 12 Brand Foundation is complete.  
 Sprint 13 Brand Assets & Experience is complete (Brand Lock v1.0 Approved).  
@@ -82,6 +80,8 @@ Sprint 19 Today UX polish & navigation refinement is complete — shared atmosph
 Sprint 20 My Rhythms North Star is complete — shared Today visual language, transparent navigation, bottom create CTA, presentation filters (`전체` / `반복` / `원타임`), type badges, edit-return by presentation context, and final visual / accessibility polish.
 
 Sprint 21 Live Activity Flagship Experience is complete — Settings / Live Activity North Star presentation, unified visual states (scheduled → running → nearCompletion → completed), hybrid Near Completion, Foreground Sync (Option A), and ActivityKit platform-boundary documentation in DR-006.
+
+Sprint 23 GitHub Showcase Refresh is complete — public README showcase screenshots under `Docs/Visual/Showcase/`, documentation presentation alignment, no product behavior change.
 
 Former Sprint 10 Settings planning is **superseded** by Sprint 15-6 (DR-020). Settings ownership remains unique under Sprint 15 and is implemented.
 
@@ -110,7 +110,7 @@ Sprints 12–14 established Brand Foundation and Brand Assets.
 
 Sprint 15 completed Product Experience documentation and implementation (Welcome through Settings).
 
-The next delivery value comes from explicit Product Owner prioritization after Sprint 21—typically Platform Expansion or newly approved visual work—not from immediately expanding Widget or Watch without approval, and not from reopening Sprint 18–21 presentation or Live Activity sync policy without a new North Star / Decision Record.
+After Sprint 21 (and Sprint 23 showcase close), the intended portfolio milestone is achieved. Active feature development is paused. When work resumes, delivery value should come from explicit Product Owner prioritization—typically Platform Expansion or newly approved visual work—not from immediately expanding Widget or Watch without approval, and not from reopening Sprint 18–21 presentation or Live Activity sync policy without a new North Star / Decision Record.
 
 Widget and Apple Watch remain intentional long-term surfaces under Platform Expansion. They are postponed—not cancelled—so that:
 
@@ -924,6 +924,35 @@ Finalize Live Activity presentation, visual-state policy, and Foreground Sync wi
 **Status**
 
 ✅ Complete
+
+---
+
+## Sprint 23 — GitHub Showcase Refresh
+
+### Goal
+
+Produce a polished GitHub showcase of the shipped application without changing product behavior.
+
+### Intent
+
+Sprint 23 is documentation and presentation only. It refreshes the public README and showcase screenshots so the repository accurately presents the completed Core Experience.
+
+### Completed
+
+- Showcase screenshots under `Docs/Visual/Showcase/` (Today, Today Flow, My Rhythms, Create Rhythm, First Journey, Live Activity)  
+- Root README restructured for public presentation  
+- Showcase inventory documentation  
+
+### Explicitly out of scope
+
+- Product redesign  
+- New features  
+- Production behavior changes  
+- Architecture / Decision Record changes  
+
+**Status**
+
+✅ Completed
 
 ---
 
