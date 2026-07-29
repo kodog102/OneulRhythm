@@ -5,12 +5,26 @@
 </p>
 
 <p align="center">
-  <strong>One rhythm at a time.</strong>
+  <img src="./Docs/Visual/Showcase/01-today.png" alt="Today — OneulRhythm" width="220">
+  &nbsp;
+  <img src="./Docs/Visual/Showcase/02-today-flow.png" alt="Today Flow — OneulRhythm" width="220">
+  &nbsp;
+  <img src="./Docs/Visual/Showcase/03-my-rhythms.png" alt="My Rhythms — OneulRhythm" width="220">
+  &nbsp;
+  <img src="./Docs/Visual/Showcase/04-create-rhythm.png" alt="Create Rhythm — OneulRhythm" width="220">
 </p>
 
 <p align="center">
-  지금 가장 중요한 하나의 리듬에 집중하도록 돕는 iOS 앱
+  <img src="./Docs/Visual/Showcase/05-first-journey.png" alt="First Journey — OneulRhythm" width="220">
+  &nbsp;
+  <img src="./Docs/Visual/Showcase/06-live-activity.png" alt="Live Activity — OneulRhythm" width="280">
 </p>
+
+---
+
+## One rhythm at a time.
+
+지금 가장 중요한 하나의 리듬에 집중하도록 돕는 iOS 앱.
 
 <p align="center">
   <sub>SwiftUI · SwiftData · ActivityKit</sub>
@@ -18,7 +32,7 @@
 
 ---
 
-## 프로젝트 소개
+## Product Introduction
 
 OneulRhythm은 하루의 할 일을 모두 관리하는 앱이 아닙니다.
 
@@ -28,39 +42,18 @@ OneulRhythm은 하루의 할 일을 모두 관리하는 앱이 아닙니다.
 사용자는 계획을 세우고,
 앱은 그 계획을 기억하며 하루 속에서 부드럽게 상기시킵니다.
 
----
-
-## 왜 OneulRhythm를 만들었는가
-
-많은 생산성 앱은 더 많은 목록, 더 많은 설정, 더 많은 알림으로
-사용자의 주의를 끌려고 합니다.
-
-하지만 실제로 하루를 어렵게 만드는 것은
-할 일의 개수보다, **이미 정한 것을 놓치는 순간**에 가깝습니다.
-
+많은 생산성 앱은 더 많은 목록과 설정으로 주의를 끌려고 합니다.
 OneulRhythm은 그 반대에서 출발합니다.
 
 - 한 번에 하나의 리듬만 강조합니다
 - 지금 필요한 것만 보여줍니다
 - 복잡함보다 차분함을 택합니다
-- 기능을 늘리기 전에, 제품이 어떤 경험이어야 하는지를 먼저 정합니다
-
-기술은 복잡해질 수 있어도,
-사용자의 하루는 더 단순해져야 한다고 생각합니다.
 
 ---
 
-## Product Experience
+## Core Experience
 
-OneulRhythm의 핵심은 기능 목록이 아니라,
-하루를 이어 주는 **경험의 흐름**입니다.
-
-### Welcome
-
-처음 만나는 순간에는 Breath Flow와 짧은 철학으로
-제품이 무엇을 돕는지만 전합니다.
-
-관리 화면이나 설정은 아직 드러내지 않습니다.
+하루를 이어 주는 것은 기능 목록이 아니라 **경험의 흐름**입니다.
 
 ### Today
 
@@ -72,27 +65,6 @@ Morning Landscape 위에 Primary Rhythm 카드 하나만 강조하고,
 Active뿐 아니라 First Journey, Normal Empty, Day Complete도
 같은 Today 시각 언어 안에서 의도적으로 구분됩니다.
 
-### My Rhythms
-
-리듬을 모으고 정리하는 유틸리티 공간입니다.
-
-Today의 집중을 방해하지 않도록,
-필요할 때만 들어가는 보조 경험으로 둡니다.
-
-### Create Rhythm
-
-리듬을 만들고 고치는 화면입니다.
-
-이름과 시간처럼 본질적인 것부터 잡고,
-세부 설정은 그다음으로 둡니다.
-
-### Settings
-
-조용한 지원 유틸리티입니다.
-
-앱 알림 선호와 시스템 알림 진입,
-약관·라이선스 같은 보조 정보만 다룹니다.
-
 ### Live Activity
 
 앱을 열지 않아도
@@ -101,49 +73,41 @@ Today의 집중을 방해하지 않도록,
 Today와 동일한 Snapshot을 소비하므로,
 화면마다 서로 다른 “진실”을 만들지 않습니다.
 
----
+### My Rhythms
 
-## Screenshots
+리듬을 모으고 정리하는 유틸리티 공간입니다.
 
-제품 경험은 아래 순서로 보여 줄 예정입니다.
-이미지는 `Assets/screenshots/`에 큐레이션합니다.
+Today의 집중을 방해하지 않도록,
+필요할 때만 들어가는 보조 계층으로 둡니다.
 
-| 순서 | 화면 | 경로 |
-|------|------|------|
-| 1 | Welcome | `Assets/screenshots/01-welcome.png` |
-| 2 | Today | `Assets/screenshots/02-today.png` |
-| 3 | Create Rhythm | `Assets/screenshots/03-create-rhythm.png` |
-| 4 | My Rhythms | `Assets/screenshots/04-my-rhythms.png` |
-| 5 | Settings | `Assets/screenshots/05-settings.png` |
-| 6 | Live Activity | `Assets/screenshots/06-live-activity.png` |
+### Create Rhythm
 
-현재는 hero 이미지만 포함되어 있으며,
-실제 기기 스크린샷은 정리 후 위 경로에 반영할 예정입니다.
+리듬을 만들고 고치는 화면입니다.
+
+이름과 시간처럼 본질적인 것부터 잡고,
+세부 설정은 그다음으로 둡니다.
 
 ---
 
-## Architecture
+## Features
 
-OneulRhythm은 빠른 기능 추가보다,
-예측 가능한 흐름과 유지하기 쉬운 경계를 우선합니다.
+| Feature | Status |
+|---------|--------|
+| Today — Single Primary Rhythm | Shipped |
+| Progress Ratio (오늘의 흐름) | Shipped |
+| First Journey / Empty / Day Complete | Shipped |
+| My Rhythms (반복 / 원타임) | Shipped |
+| Create / Edit Rhythm | Shipped |
+| Recurring Rhythm | Shipped |
+| Live Activity | Shipped |
+| Notifications | Shipped |
+| Settings | Shipped |
+| Home Screen Widget | Planned (Platform Expansion) |
+| Apple Watch | Planned (Platform Expansion) |
 
-핵심은 다음과 같습니다.
+---
 
-- **Schedule Engine**이 오늘의 스케줄을 결정적으로 해석합니다
-- **Today Rhythm Snapshot**이 Single Source of Truth로 동작합니다
-- Today, Live Activity, 알림은 같은 Snapshot을 소비합니다
-- Presentation은 Snapshot을 렌더링하고, 비즈니스 규칙을 다시 정의하지 않습니다
-
-```text
-Repository
-  → Schedule Engine
-  → Today Rhythm Snapshot
-  → ViewModel / Live Activity / Notifications
-```
-
-자세한 구조와 Decision Record는 `Docs/Architecture/`를 참고하세요.
-
-### Tech Stack
+## Tech Stack
 
 | 구분 | 기술 |
 |------|------|
@@ -156,51 +120,24 @@ Repository
 
 ---
 
-## Engineering Workflow
+## Architecture
 
-개발은 구현보다 경험과 경계를 먼저 고정하는 순서를 따릅니다.
+OneulRhythm은 빠른 기능 추가보다,
+예측 가능한 흐름과 유지하기 쉬운 경계를 우선합니다.
 
-```text
-Experience Review
-  → Architecture Review
-  → UI Specification
-  → Implementation
-  → Product QA
-  → DIR
-  → Planning Sync
-  → Product Owner Approval
-```
-
-Sprint 18부터 Product Experience / visual Sprint는 Image-Driven Development를 따릅니다.
+- **Schedule Engine**이 오늘의 스케줄을 결정적으로 해석합니다
+- **Today Rhythm Snapshot**이 day-presentation Single Source of Truth로 동작합니다
+- Today와 Live Activity는 같은 Snapshot을 소비합니다
+- Presentation은 Snapshot을 렌더링하고, 비즈니스 규칙을 다시 정의하지 않습니다
 
 ```text
-Requirements
-  → North Star
-  → Visual Analysis
-  → Implementation
-  → Visual QA
-  → Approval
+Repository
+  → Schedule Engine
+  → Today Rhythm Snapshot
+  → ViewModel / Live Activity
 ```
 
-ChatGPT는 설계와 범위 정리에,
-Cursor는 구현·검증·문서 동기화에,
-개발자는 최종 승인·커밋·푸시에 집중합니다.
-
-공식 Sprint 워크플로우는 `Docs/Development/DEVELOPMENT_WORKFLOW.md`에 있습니다.
-AI 협업 규칙은 `Docs/AI_Collaboration_Playbook_v2.2.md`를 참고하세요.
-시각 산출물과 Visual Source of Truth는 `Docs/Visual/README.md`입니다.
-
----
-
-## Sources of Truth
-
-| Domain | Authority |
-|--------|-----------|
-| Architecture | `Docs/Architecture/` |
-| Product | `Docs/Product/` |
-| Visual | `Docs/Visual/` |
-
-Visual specifications — including official North Star images — live under `Docs/Visual/`. The latest approved North Star is the Visual Source of Truth for its surface.
+자세한 구조와 Decision Record는 [`Docs/Architecture/`](Docs/Architecture/)를 참고하세요.
 
 ---
 
@@ -217,10 +154,13 @@ Visual specifications — including official North Star images — live under `D
 | `Assets/brand/` | Brand Assets |
 | `Docs/Architecture/` | Architecture, Decision Records |
 | `Docs/Design/` | 서브시스템 구현 계약 |
-| `Docs/Visual/` | North Star images, Visual Analysis, Visual Review Guides |
+| `Docs/Visual/` | North Star images, Showcase screenshots |
 | `Docs/Development/` | Sprint workflow |
 | `Docs/GLOSSARY.md` | 공통 용어 |
 | `Docs/ROADMAP.md` / `Docs/CHANGELOG.md` | 계획과 완료 기록 |
+
+Visual Source of Truth (North Star)는 [`Docs/Visual/README.md`](Docs/Visual/README.md)입니다.
+공개용 스크린샷은 [`Docs/Visual/Showcase/`](Docs/Visual/Showcase/)입니다.
 
 ---
 
@@ -234,37 +174,24 @@ Core Experience → Brand Foundation → Brand Assets → Product Experience →
 
 - Primary Rhythm / Today Snapshot / Live Activity
 - Recurring Rhythm / Notification Foundation
-- Brand Foundation (Sprint 12)
-- Brand Assets & Experience (Sprint 13) — Brand Lock v1.0 Approved
-- Brand Assets & Design System (Sprint 14)
-- Product Experience (Sprint 15) — Welcome through Settings ✅ Complete
-- Visual Identity Integration (Sprint 16) ✅ Complete
-- Product Experience Polish (Sprint 17) ✅ Complete
-- Today North Star Experience (Sprint 18) ✅ Complete
-- Today UX polish & navigation refinement (Sprint 19) ✅ Complete
-- My Rhythms North Star (Sprint 20) ✅ Complete
+- Brand Foundation · Brand Assets · Design System (Sprints 12–14)
+- Product Experience through Settings (Sprint 15)
+- Visual Identity Integration (Sprint 16)
+- Product Experience Polish (Sprint 17)
+- Today North Star Experience (Sprint 18)
+- Today UX polish & navigation refinement (Sprint 19)
+- My Rhythms North Star (Sprint 20)
+- Live Activity Flagship Experience (Sprint 21)
 
 ### Current Status
 
-- Sprint 20 ✅ Complete
+Sprint 21 ✅ Complete
 
-### Current Focus
+### Next
 
-- Sprint 21
-
-### Next Sprint
-
-Sprint 21
-
-Further visual / theme work and remaining utility surfaces (e.g. Live Activity Settings) follow Product Owner prioritization. Widget Experience와 Apple Watch는 장기 로드맵(Platform Expansion)에 남아 있으며, 명시적으로 스케줄되기 전까지 postponed입니다.
-
-### Later
-
-- Widget Experience
-- Apple Watch
-- Statistics & Insights
-- iCloud Sync
-- Siri & Shortcuts
+Further visual / theme work follows Product Owner prioritization.
+Widget Experience와 Apple Watch는 장기 로드맵(Platform Expansion)에 남아 있으며,
+명시적으로 스케줄되기 전까지 postponed입니다.
 
 상세 내용은 [`Docs/ROADMAP.md`](Docs/ROADMAP.md)를 참고하세요.
 
